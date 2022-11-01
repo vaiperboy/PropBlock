@@ -4,7 +4,7 @@ import stats from './stats.png';
 class LeftSidebar extends React.Component{
 
 	state={
-        
+		isBuyer:false
     }
 
 	componentDidMount=()=>{
@@ -15,22 +15,100 @@ class LeftSidebar extends React.Component{
 
 	}
 
-	render(){
+	switchToBuyer = () => {
+		this.setState({ isBuyer: true });
+	};
+	
+	switchToSeller = () => {
+		this.setState({ isBuyer: false });
+	};
 
-		return(
-				<div className='leftsidebar_container'>
-					<div style={{width:'100%', display:'flex'}}>
+	render(){
+		return (
+			<div className='leftsidebar_container'>
+				<div style={{width:'100%', display:'flex'}}>
 						<div style={{display: 'flex', gap: '15px'}}>
-							<button className='leftsidebar_button_outlined' style={{userSelect:'none'}}>
+							<button className={this.state.isBuyer ? 'leftsidebar_button_outlined' : "leftsidebar_button"} style={{userSelect:'none'}} onClick={this.switchToSeller}>
 								Buyer
 							</button>
-							<button className='leftsidebar_button' style={{userSelect:'none'}}>
+							<button className={this.state.isBuyer ? 'leftsidebar_button' : "leftsidebar_button_outlined"} style={{userSelect:'none'}} onClick={this.switchToBuyer}>
 								Seller
 							</button>
 						</div>
 					</div>
-					<div className='leftsidebar_content' style={{width:'100%', display:'flex', border:''}}>
-						<div className='leftsidebar_item' style={{color: (this.props.menuState.dashboardView)?'#3DAEEE':""}} onClick={()=>{this.props.toggleDashboardView(true)}}>
+					<div className='leftsidebar_content' style={{width:'100%', display:'flex', border:'', height:"800px", position:"relative"}}>
+						{
+							this.state.isBuyer ? (
+								<>
+								<div className='leftsidebar_item' style={{color: (this.props.menuState.dashboardView)?'#3DAEEE':""}} onClick={()=>{this.props.toggleDashboardView(true)}}>
+							<svg width="18" height="22" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M13 3H15C15.5304 3 16.0391 3.21071 16.4142 3.58579C16.7893 3.96086 17 4.46957 17 5V19C17 19.5304 16.7893 20.0391 16.4142 20.4142C16.0391 20.7893 15.5304 21 15 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V5C1 4.46957 1.21071 3.96086 1.58579 3.58579C1.96086 3.21071 2.46957 3 3 3H5" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								<path d="M12 1H6C5.44772 1 5 1.44772 5 2V4C5 4.55228 5.44772 5 6 5H12C12.5523 5 13 4.55228 13 4V2C13 1.44772 12.5523 1 12 1Z" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+							Dashboard
+						</div>
+						<div className='leftsidebar_item' style={{color: (this.props.menuState.propertiesView )?'#3DAEEE':""}} onClick={()=>{this.props.togglePropertiesView(true)}}>
+							<svg width="20" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M1 8L10 1L19 8V19C19 19.5304 18.7893 20.0391 18.4142 20.4142C18.0391 20.7893 17.5304 21 17 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V8Z" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								<path d="M7 21V11H13V21" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+							My Properties
+						</div>
+						<div className='leftsidebar_item' style={{color: (this.props.menuState.purchaseRequestView)?'#3DAEEE':""}} onClick={()=>{this.props.togglePurchaseRequestView(true)}}>
+							<svg width="18" height="21" viewBox="0 0 18 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M16.0591 15.44V2.34523C16.0591 2.12099 15.875 1.93753 15.6499 1.93753H11.3027V0.184423C11.3027 0.031536 11.1237 -0.0550999 11.0035 0.0391805L7.74059 2.60768C7.71851 2.62468 7.70063 2.6465 7.68833 2.67146C7.67603 2.69641 7.66963 2.72385 7.66963 2.75165C7.66963 2.77946 7.67603 2.80689 7.68833 2.83185C7.70063 2.85681 7.71851 2.87862 7.74059 2.89562L11.001 5.46412C11.1212 5.5584 11.3002 5.47432 11.3002 5.31888V3.56832H14.2154V15.44C13.0851 15.8222 12.2719 16.8899 12.2719 18.1436C12.2719 19.7183 13.5556 20.9975 15.136 20.9975C16.7163 20.9975 18 19.7183 18 18.1436C18.0026 16.8899 17.1894 15.8248 16.0591 15.44ZM15.1385 19.3667C14.8173 19.3601 14.5115 19.2284 14.2866 18.9997C14.0618 18.7711 13.9359 18.4637 13.9359 18.1436C13.9359 17.8234 14.0618 17.5161 14.2866 17.2874C14.5115 17.0587 14.8173 16.927 15.1385 16.9205C15.4597 16.927 15.7655 17.0587 15.9904 17.2874C16.2152 17.5161 16.3412 17.8234 16.3412 18.1436C16.3412 18.4637 16.2152 18.7711 15.9904 18.9997C15.7655 19.2284 15.4597 19.3601 15.1385 19.3667ZM5.72808 2.85485C5.72808 1.28011 4.44438 0.000958689 2.86404 0.000958689C1.2837 0.000958689 0 1.28011 0 2.85485C0 4.10853 0.813183 5.17364 1.94346 5.5584V15.4426C0.813183 15.8248 0 16.8924 0 18.1461C0 19.7208 1.2837 21 2.86404 21C4.44438 21 5.72808 19.7208 5.72808 18.1461C5.72808 16.8924 4.9149 15.8273 3.78463 15.4426V5.5584C4.9149 5.17364 5.72808 4.10853 5.72808 2.85485ZM1.6366 2.85485C1.64315 2.53479 1.77535 2.23004 2.00483 2.006C2.23431 1.78195 2.54277 1.65647 2.86404 1.65647C3.18531 1.65647 3.49378 1.78195 3.72325 2.006C3.95273 2.23004 4.08493 2.53479 4.09149 2.85485C4.08493 3.17491 3.95273 3.47966 3.72325 3.70371C3.49378 3.92775 3.18531 4.05324 2.86404 4.05324C2.54277 4.05324 2.23431 3.92775 2.00483 3.70371C1.77535 3.47966 1.64315 3.17491 1.6366 2.85485ZM4.09149 18.1436C4.08493 18.4636 3.95273 18.7684 3.72325 18.9924C3.49378 19.2165 3.18531 19.3419 2.86404 19.3419C2.54277 19.3419 2.23431 19.2165 2.00483 18.9924C1.77535 18.7684 1.64315 18.4636 1.6366 18.1436C1.64315 17.8235 1.77535 17.5187 2.00483 17.2947C2.23431 17.0707 2.54277 16.9452 2.86404 16.9452C3.18531 16.9452 3.49378 17.0707 3.72325 17.2947C3.95273 17.5187 4.08493 17.8235 4.09149 18.1436Z" fill="#666666" fill-opacity="0.8"/>
+							</svg>
+							Purchase for buyer
+						</div>
+						<div className='leftsidebar_item' style={{color: (this.props.menuState.agreementView||this.props.menuState.uploadMode)?'#3DAEEE':""}} onClick={()=>{this.props.toggleView(false); this.props.toggleAgreementView(1);}}>
+							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<g clip-path="url(#clip0_27_10197)">
+								<path d="M13.3334 12.5002H7.50004V10.8335H13.3334V12.5002ZM15.8334 9.16683H7.50004V7.50016H15.8334V9.16683ZM15.8334 5.8335H7.50004V4.16683H15.8334V5.8335ZM2.50004 4.16683V17.5002H15.8334V19.1668H2.50004C2.05801 19.1668 1.63409 18.9912 1.32153 18.6787C1.00897 18.3661 0.833374 17.9422 0.833374 17.5002V4.16683H2.50004ZM17.5 0.833496C17.9421 0.833496 18.366 1.00909 18.6786 1.32165C18.9911 1.63421 19.1667 2.05814 19.1667 2.50016V14.1668C19.1667 15.0918 18.425 15.8335 17.5 15.8335H5.83337C5.39135 15.8335 4.96742 15.6579 4.65486 15.3453C4.3423 15.0328 4.16671 14.6089 4.16671 14.1668V2.50016C4.16671 1.57516 4.90837 0.833496 5.83337 0.833496H17.5ZM5.83337 2.50016V14.1668H17.5V2.50016H5.83337Z" fill="#666666" fill-opacity="0.8"/>
+								</g>
+								<defs>
+								<clipPath id="clip0_27_10197">
+								<rect width="20" height="20" fill="white"/>
+								</clipPath>
+								</defs>
+							</svg>
+							Agreements
+						</div>
+						<div className='leftsidebar_item' style={{color: (this.props.menuState.statsView)?'#3DAEEE':""}} onClick={()=>{this.props.toggleStatsView(true)}}>
+							<img src={stats}/>
+							Statistics
+						</div>
+						<div className='leftsidebar_item' style={{color: (this.props.menuState.paymentView)?'#3DAEEE':""}} onClick={()=>{this.props.togglePaymentView(true)}}>
+							<svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M7 1V23" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								<path d="M12 5H4.5C3.57174 5 2.6815 5.36875 2.02513 6.02513C1.36875 6.6815 1 7.57174 1 8.5C1 9.42826 1.36875 10.3185 2.02513 10.9749C2.6815 11.6313 3.57174 12 4.5 12H9.5C10.4283 12 11.3185 12.3687 11.9749 13.0251C12.6313 13.6815 13 14.5717 13 15.5C13 16.4283 12.6313 17.3185 11.9749 17.9749C11.3185 18.6313 10.4283 19 9.5 19H1" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+							Payments
+						</div>
+						<div className='leftsidebar_item'  style={{color: (this.props.menuState.profileView)?'#3DAEEE':""}} onClick={()=>{this.props.toggleProfileView(true)}}>
+							<svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M17 19V17C17 15.9391 16.5786 14.9217 15.8284 14.1716C15.0783 13.4214 14.0609 13 13 13H5C3.93913 13 2.92172 13.4214 2.17157 14.1716C1.42143 14.9217 1 15.9391 1 17V19" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								<path d="M9 9C11.2091 9 13 7.20914 13 5C13 2.79086 11.2091 1 9 1C6.79086 1 5 2.79086 5 5C5 7.20914 6.79086 9 9 9Z" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+							Profile
+						</div>
+						<div className='leftsidebar_item' style={{color: (this.props.menuState.settingView)?'#3DAEEE':""}} onClick={()=>{this.props.toggleSettingView(true)}}>
+							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<g clip-path="url(#clip0_27_10181)">
+								<path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								<path d="M19.4 15C19.2669 15.3016 19.2272 15.6362 19.286 15.9606C19.3448 16.285 19.4995 16.5843 19.73 16.82L19.79 16.88C19.976 17.0657 20.1235 17.2863 20.2241 17.5291C20.3248 17.7719 20.3766 18.0322 20.3766 18.295C20.3766 18.5578 20.3248 18.8181 20.2241 19.0609C20.1235 19.3037 19.976 19.5243 19.79 19.71C19.6043 19.896 19.3837 20.0435 19.1409 20.1441C18.8981 20.2448 18.6378 20.2966 18.375 20.2966C18.1122 20.2966 17.8519 20.2448 17.6091 20.1441C17.3663 20.0435 17.1457 19.896 16.96 19.71L16.9 19.65C16.6643 19.4195 16.365 19.2648 16.0406 19.206C15.7162 19.1472 15.3816 19.1869 15.08 19.32C14.7842 19.4468 14.532 19.6572 14.3543 19.9255C14.1766 20.1938 14.0813 20.5082 14.08 20.83V21C14.08 21.5304 13.8693 22.0391 13.4942 22.4142C13.1191 22.7893 12.6104 23 12.08 23C11.5496 23 11.0409 22.7893 10.6658 22.4142C10.2907 22.0391 10.08 21.5304 10.08 21V20.91C10.0723 20.579 9.96512 20.258 9.77251 19.9887C9.5799 19.7194 9.31074 19.5143 9 19.4C8.69838 19.2669 8.36381 19.2272 8.03941 19.286C7.71502 19.3448 7.41568 19.4995 7.18 19.73L7.12 19.79C6.93425 19.976 6.71368 20.1235 6.47088 20.2241C6.22808 20.3248 5.96783 20.3766 5.705 20.3766C5.44217 20.3766 5.18192 20.3248 4.93912 20.2241C4.69632 20.1235 4.47575 19.976 4.29 19.79C4.10405 19.6043 3.95653 19.3837 3.85588 19.1409C3.75523 18.8981 3.70343 18.6378 3.70343 18.375C3.70343 18.1122 3.75523 17.8519 3.85588 17.6091C3.95653 17.3663 4.10405 17.1457 4.29 16.96L4.35 16.9C4.58054 16.6643 4.73519 16.365 4.794 16.0406C4.85282 15.7162 4.81312 15.3816 4.68 15.08C4.55324 14.7842 4.34276 14.532 4.07447 14.3543C3.80618 14.1766 3.49179 14.0813 3.17 14.08H3C2.46957 14.08 1.96086 13.8693 1.58579 13.4942C1.21071 13.1191 1 12.6104 1 12.08C1 11.5496 1.21071 11.0409 1.58579 10.6658C1.96086 10.2907 2.46957 10.08 3 10.08H3.09C3.42099 10.0723 3.742 9.96512 4.0113 9.77251C4.28059 9.5799 4.48572 9.31074 4.6 9C4.73312 8.69838 4.77282 8.36381 4.714 8.03941C4.65519 7.71502 4.50054 7.41568 4.27 7.18L4.21 7.12C4.02405 6.93425 3.87653 6.71368 3.77588 6.47088C3.67523 6.22808 3.62343 5.96783 3.62343 5.705C3.62343 5.44217 3.67523 5.18192 3.77588 4.93912C3.87653 4.69632 4.02405 4.47575 4.21 4.29C4.39575 4.10405 4.61632 3.95653 4.85912 3.85588C5.10192 3.75523 5.36217 3.70343 5.625 3.70343C5.88783 3.70343 6.14808 3.75523 6.39088 3.85588C6.63368 3.95653 6.85425 4.10405 7.04 4.29L7.1 4.35C7.33568 4.58054 7.63502 4.73519 7.95941 4.794C8.28381 4.85282 8.61838 4.81312 8.92 4.68H9C9.29577 4.55324 9.54802 4.34276 9.72569 4.07447C9.90337 3.80618 9.99872 3.49179 10 3.17V3C10 2.46957 10.2107 1.96086 10.5858 1.58579C10.9609 1.21071 11.4696 1 12 1C12.5304 1 13.0391 1.21071 13.4142 1.58579C13.7893 1.96086 14 2.46957 14 3V3.09C14.0013 3.41179 14.0966 3.72618 14.2743 3.99447C14.452 4.26276 14.7042 4.47324 15 4.6C15.3016 4.73312 15.6362 4.77282 15.9606 4.714C16.285 4.65519 16.5843 4.50054 16.82 4.27L16.88 4.21C17.0657 4.02405 17.2863 3.87653 17.5291 3.77588C17.7719 3.67523 18.0322 3.62343 18.295 3.62343C18.5578 3.62343 18.8181 3.67523 19.0609 3.77588C19.3037 3.87653 19.5243 4.02405 19.71 4.21C19.896 4.39575 20.0435 4.61632 20.1441 4.85912C20.2448 5.10192 20.2966 5.36217 20.2966 5.625C20.2966 5.88783 20.2448 6.14808 20.1441 6.39088C20.0435 6.63368 19.896 6.85425 19.71 7.04L19.65 7.1C19.4195 7.33568 19.2648 7.63502 19.206 7.95941C19.1472 8.28381 19.1869 8.61838 19.32 8.92V9C19.4468 9.29577 19.6572 9.54802 19.9255 9.72569C20.1938 9.90337 20.5082 9.99872 20.83 10H21C21.5304 10 22.0391 10.2107 22.4142 10.5858C22.7893 10.9609 23 11.4696 23 12C23 12.5304 22.7893 13.0391 22.4142 13.4142C22.0391 13.7893 21.5304 14 21 14H20.91C20.5882 14.0013 20.2738 14.0966 20.0055 14.2743C19.7372 14.452 19.5268 14.7042 19.4 15V15Z" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+								</g>
+								<defs>
+								<clipPath id="clip0_27_10181">
+								<rect width="24" height="24" fill="white"/>
+								</clipPath>
+								</defs>
+							</svg>
+							Settings
+						</div>
+								</>
+							) : (
+								<>
+								<div className='leftsidebar_item' style={{color: (this.props.menuState.dashboardView)?'#3DAEEE':""}} onClick={()=>{this.props.toggleDashboardView(true)}}>
 							<svg width="18" height="22" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M13 3H15C15.5304 3 16.0391 3.21071 16.4142 3.58579C16.7893 3.96086 17 4.46957 17 5V19C17 19.5304 16.7893 20.0391 16.4142 20.4142C16.0391 20.7893 15.5304 21 15 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V5C1 4.46957 1.21071 3.96086 1.58579 3.58579C1.96086 3.21071 2.46957 3 3 3H5" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 								<path d="M12 1H6C5.44772 1 5 1.44772 5 2V4C5 4.55228 5.44772 5 6 5H12C12.5523 5 13 4.55228 13 4V2C13 1.44772 12.5523 1 12 1Z" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -95,7 +173,10 @@ class LeftSidebar extends React.Component{
 							</svg>
 							Settings
 						</div>
-						<div className='leftsidebar_item' style={{marginTop: 115}}>
+								</>
+							)
+						}
+						<div className='leftsidebar_item' style={{color: "red", position:"absolute", bottom: 0}}>
 							<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 								<path d="M16 17L21 12L16 7" stroke="#666666" stroke-opacity="0.8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -104,8 +185,10 @@ class LeftSidebar extends React.Component{
 							Logout
 						</div>
 					</div>
-				</div>
-		);
+			
+			</div>
+		)
+
 	}
 };
 
