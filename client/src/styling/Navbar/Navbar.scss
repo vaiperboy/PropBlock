@@ -1,0 +1,175 @@
+.Navbar {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    align-items: center;
+    text-align: center;
+    margin: 2rem auto 1.5rem auto;
+    position: sticky;
+
+
+    .avatar {
+        &:hover {
+            transition: all ease 0.2s;
+            scale: (1.35);
+            transform: translateY(-0.2rem);
+            background-color: #2994d2;
+            cursor: pointer;
+        }
+    }
+
+    .leftSide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 4rem;
+        img {
+            width: 4rem;
+            margin-right: 1rem;
+        }
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 500;
+            margin: 0;
+            padding: 0;
+            color: #3daeee;
+            letter-spacing: 0.1rem;
+            &:hover {
+                color: rgba(#3daeee, 0.7);
+            }
+            // margin-left: 1rem;
+        }
+        .homeLink {
+            text-decoration: none;
+            color: #333333;
+            &:visited {
+                color: #333333;
+            }
+        }
+    }
+    .rightSide {
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 2vw;
+            .getStarted {
+                border: 0;
+                padding: 0.7rem 0.5rem;
+                width: 12rem;
+                border-radius: 1rem;
+                font-size: 1.5rem;
+                font-weight: 600;
+                text-align: center;
+                color: #ffffff;
+                background-color: #3daeee;
+                text-decoration: none;
+                box-shadow: 0px 4px 13px #85c3e6;
+                transition: all ease 0.3s;
+                &:hover {
+                    transition: all ease 0.3s;
+                    transform: scale(1.05);
+                    background-color: #2994d2;
+                    cursor: pointer;
+                }
+            }
+            .login {
+                border: 0;
+                padding: 0.7rem 0.5rem;
+                width: 8rem;
+                border-radius: 1rem;
+                font-size: 1.5rem;
+                font-weight: 600;
+                text-align: center;
+                color: #3daeee;
+                background-color: #ffffff;
+                text-decoration: none;
+                box-shadow: 0px 4px 13px #c1c1c1;
+                transition: all ease 0.2s;
+                &:hover {
+                    transition: all ease 0.2s;
+                    transform: scale(1.05);
+                    cursor: pointer;
+                }
+            }
+            .link {
+                font-size: 1.7rem;
+                font-weight: 500;
+                text-decoration: none;
+                position: relative;
+                color: #3daeee;
+                padding: 0.3rem 0;
+                &:visited {
+                    color: #3daeee;
+                }
+                &::after {
+                    content: "";
+                    position: absolute;
+                    width: 100%;
+                    transform: scaleX(0);
+                    height: 2px;
+                    bottom: 0;
+                    left: 0;
+                    background-color: #2393d4;
+                    transform-origin: bottom right;
+                    transition: transform 0.25s ease-out;
+                }
+                &:hover {
+                    color: #117bb8;
+                }
+                &:hover::after {
+                    color: red;
+                    transform: scaleX(1);
+                    transform-origin: bottom left;
+                }
+            }
+            .linkDisabled {
+                font-size: 1.5rem;
+                text-decoration: none;
+                position: relative;
+                padding: 0.3rem 0;
+                cursor: no-drop;
+            }
+            .current {
+                color: #05659d;
+                font-weight: 500;
+            }
+            .disabled {
+                color: grey;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .Navbar {
+        background-color: red;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .Navbar {
+        background-color: green;
+    }
+}
+
+// .navBar {
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     padding: 2rem 6vw;
+//     .leftSideNav {
+//         .logo {
+//             font-size: 1.6rem;
+//         }
+//     }
+//     .rightSideNav {
+//         display: flex;
+//         align-items: center;
+//         gap: 1rem;
+//         .link {
+//             text-decoration: none;
+//             Button {
+//             }
+//         }
+//     }
+// }

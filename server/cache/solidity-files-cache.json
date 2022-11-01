@@ -1,0 +1,41 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "C:\\Users\\Ahmed\\Desktop\\PropBlock\\server\\contracts\\realEstate.sol": {
+      "lastModificationDate": 1665498278480,
+      "contentHash": "b42ee2cb12137c647a70d5a24f6732f9",
+      "sourceName": "contracts/realEstate.sol",
+      "solcConfig": {
+        "version": "0.8.9",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "Ownable",
+        "realEstate"
+      ]
+    }
+  }
+}

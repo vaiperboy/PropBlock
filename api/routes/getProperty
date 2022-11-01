@@ -1,0 +1,32 @@
+var express = require("express");
+require("dotenv").config();
+var Moralis = require("../modules/moralis");
+var config = require('../config');
+var helper = require("../functions/Helper");
+
+var router = express.Router();
+
+
+//getting all properties from Moralis
+router.get("/:id", async function(req, res, next) {
+    const objectId = req.params.id;
+
+    const query = new Moralis.Query("Properties");
+    query.limit(1);
+    query.equalTo("objectId", objectId);
+    const _result = await query.find();
+    if (_result.length == 0) {
+        res.sendStatus(404);
+        return;
+    }
+
+    //copy object to add another parameter(s)
+    var results = JSON.parse(JSON.stringify(_result));
+    for (var i = 0; i < results.length; i++) {
+        //add image link to object
+        results[i].images = await helper.getLinks(results[i].ipfsHash);
+    }
+    res.send(results);
+});
+
+module.exports = router;
