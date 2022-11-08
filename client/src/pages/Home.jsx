@@ -508,7 +508,7 @@ function Home() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar signedIn2={isAuthenticated} />
       <main>
         <div className="heroSection">
           <div className="leftSide">

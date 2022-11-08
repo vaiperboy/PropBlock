@@ -354,7 +354,7 @@ const Signup2 = () => {
                             SignUpUser(fullName, email);
                           }}
                           type="submit"
-                          text="Sign Up"
+                          text="Proceed"
                           theme="colored"
                           color="green"
                           size="large"
