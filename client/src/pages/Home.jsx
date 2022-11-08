@@ -505,6 +505,7 @@ function Home() {
   ];
 
   const { Option } = Select;
+
   return (
     <div>
       <Navbar />
