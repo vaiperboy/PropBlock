@@ -12,7 +12,7 @@ import Property from "./pages/Property";
 import NoMatch from "./pages/NoMatch";
 import Scrollbar from "smooth-scrollbar";
 import Aboutus from "./pages/Aboutus";
-import MainContainer from './pages/MainContainer/MainContainer';
+import MainContainer from "./pages/MainContainer/MainContainer";
 
 function App() {
   let optionsForScroll = {
@@ -33,8 +33,7 @@ function App() {
         <Route path="/AgreementFunctions" element={<AgreementFunc />}></Route>
         <Route path="/properties" element={<Properties />}></Route>
         <Route path="/property/:id" element={<Property />}></Route>
-        <Route path="/dashboard" element={<MainContainer />}>
-        </Route>
+        <Route path="/dashboard" element={<MainContainer />}></Route>
         <Route path="*" element={<NoMatch />}></Route>
       </Routes>
     </Router>

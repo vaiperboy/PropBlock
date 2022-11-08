@@ -22,6 +22,7 @@ import Navbar from "../components/Navbar";
 // Importing images
 import signupsvg from "../assets/signupIllustration2-min.svg";
 import metamask from "../assets/icons8-metamask-logo-96-min.png";
+import { useEffect } from "react";
 
 // import { ArrowLeftOutlined } from "@ant-design/icons";
 const console = require("console-browserify");
@@ -269,9 +270,13 @@ const Signup2 = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("isauthenticated: ", isAuthenticated);
+  }, [isAuthenticated]);
+
   return (
     <div>
-      <Navbar />
+      <Navbar signedIn2={isAuthenticated} />
       <div className="signup">
         <div className="leftSide">
           <div className="illustrationDiv">
