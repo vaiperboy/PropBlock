@@ -13,7 +13,8 @@ import { useNavigate } from "react-router-dom";
 
 // -----------------
 // importing images
-import loginSvg from "../assets/login-image-min.png";
+import login_illustration from "../assets/login_illustration.png";
+import login_svg from "../assets/login-image-min.png";
 import metamask from "../assets/icons8-metamask-logo-96-min.png";
 
 const console = require("console-browserify");
@@ -143,7 +144,7 @@ const Login2 = () => {
     return accounts.length > 0;
   };
 
-  // // disconnects the metamask wallet
+  // disconnects the metamask wallet
   // const disconnectWallet = async () => {
   //   try {
   //     await checkWalletConnected().then((connected) => {
@@ -173,7 +174,7 @@ const Login2 = () => {
       <div className="loginPage">
         <div className="leftSide">
           <div className="illustrationDiv">
-            <img src={loginSvg} alt="man illustration" />
+            <img src={login_illustration} alt="man illustration" />
           </div>
         </div>
         <div className="rightSide">

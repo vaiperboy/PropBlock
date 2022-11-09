@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route, Redirect, Link, BrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import PropertyFunc from "./Functions/PropertyFunc";
@@ -12,7 +12,12 @@ import Property from "./pages/Property";
 import NoMatch from "./pages/NoMatch";
 import Scrollbar from "smooth-scrollbar";
 import Aboutus from "./pages/Aboutus";
+import ProtectedRoute from "./ProtectedRoute";
+import FAQ from "./pages/FAQ";
 import MainContainer from "./pages/MainContainer/MainContainer";
+import { useMoralis, useMoralisQuery } from "react-moralis";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import ContactUs from "./pages/ContactUs";
 
 function App() {
   let optionsForScroll = {
@@ -21,22 +26,34 @@ function App() {
   Scrollbar.init(document.querySelector("body"), optionsForScroll);
 
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        {/* <Route path="/About" element={<About />}></Route> */}
         <Route path="/" element={<Home />}></Route>
         <Route path="/buy" element={<Buy />}></Route>
         <Route path="/aboutus" element={<Aboutus />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/FAQ" element={<FAQ />}></Route>
+        <Route
+          path="/Terms&Conditions"
+          element={<TermsAndConditions />}
+        ></Route>
+        <Route path="/ContactUs" element={<ContactUs />}></Route>
+        <Route path="/login" element={<Login />}></Route>
         <Route path="/PropertyFunctions" element={<PropertyFunc />}></Route>
         <Route path="/AgreementFunctions" element={<AgreementFunc />}></Route>
         <Route path="/properties" element={<Properties />}></Route>
         <Route path="/property/:id" element={<Property />}></Route>
-        <Route path="/dashboard" element={<MainContainer />}></Route>
+        {/* <Route path="/dashboard" element={<MainContainer />}></Route> */}
+
         <Route path="*" element={<NoMatch />}></Route>
+        <Route
+          exact
+          path="/dashboard"
+          element={<ProtectedRoute component={<MainContainer />} />}
+        />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 export default App;

@@ -17,6 +17,10 @@ import MySettings from "./MySettings";
 import { useMoralis } from "react-moralis";
 
 class MainContainer extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   state = {
     menuState: {
       uploadMode: false,
@@ -30,10 +34,6 @@ class MainContainer extends React.Component {
       settingView: false,
     },
   };
-
-  componentDidMount = () => {};
-
-  componentWillUnmount = () => {};
 
   toggleView = (val) => {
     this.setState({
@@ -180,17 +180,9 @@ class MainContainer extends React.Component {
   };
 
   render() {
-    // const {
-    //   Moralis,
-    //   isAuthenticated,
-    //   authenticate,
-    //   user,
-    //   useMoralisCloudFunction,
-    // } = useMoralis();
-
     return (
       <div>
-        {/* <Navbar signedIn2={isAuthenticated} /> */}
+        {/* <Navbar signedIn2={isAuthenticated} />}  */}
         <Navbar />
         <main>
           <div

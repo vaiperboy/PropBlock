@@ -7,10 +7,11 @@ import {
   Input,
   Stepper,
   Upload,
-  Checkbox,
   TextArea,
+  VerifyCode,
+  CodeArea,
 } from "@web3uikit/core";
-import { message, Alert, notification } from "antd";
+import { message, Alert, notification, Checkbox } from "antd";
 import realEstate from "../artifacts/contracts/realEstate.sol/realEstate.json";
 import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
 import "../styling/SignUp/SignUp.scss";
@@ -20,7 +21,7 @@ import Navbar from "../components/Navbar";
 
 // -----------------
 // Importing images
-import signupsvg from "../assets/signupIllustration2-min.svg";
+import signup_illustration from "../assets/signup_illustration.png";
 import metamask from "../assets/icons8-metamask-logo-96-min.png";
 import { useEffect } from "react";
 
@@ -60,11 +61,17 @@ const Signup2 = () => {
   const [fullName, setFullName] = useState("");
   // const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [emailVerified, setEmailVerified] = useState("");
+  const [otpCode, setOTPCode] = useState("");
+
   const [signedUpSuccessfully, setSignedUpSuccessfully] = useState(true);
-  const [emailVerified, setEmailVerified] = useState(false);
-  const [idDocumentsVerified, setIdDocumentsVerified] = useState(true);
+  const [codeVerified, setCodeVerified] = useState(false);
+  const [userAddress, setUserAddress] = useState("");
+  const [walletConnected, setWalletConnected] = useState(false);
+
+  const [idDocumentsVerified, setIdDocumentsVerified] = useState(false);
   const [passportDocumentsVerfied, setPassportDocumentsVerfied] =
-    useState(true);
+    useState(false);
 
   const {
     setUserData,
@@ -82,17 +89,6 @@ const Signup2 = () => {
     ...rest
   } = useMoralis();
   let navigate = useNavigate();
-
-  // connect the metamask wallet
-  const connectWallet = async () => {
-    try {
-      if (!isAuthenticated) {
-        await authenticate().then(function (user) {});
-      }
-    } catch (error) {
-      message.error(error);
-    }
-  };
 
   // disconnects the metamask wallet
   const disconnectWallet = async () => {
@@ -127,7 +123,7 @@ const Signup2 = () => {
   // check if email
   const emailAlreadyExists = async (email) => {
     try {
-      const userEmails = Moralis.Object.extend("UserEmails");
+      const userEmails = Moralis.Object.extend("usersSignedUp");
       const query = new Moralis.Query(userEmails);
       query.equalTo("email", email.toLowerCase());
       const results = await query.find();
@@ -160,6 +156,23 @@ const Signup2 = () => {
       }
     } catch (error) {
       message.error("Error: " + error);
+    }
+  };
+
+  // connect the metamask wallet
+  const connectWallet = async () => {
+    try {
+      // A Web3Provider wraps a standard Web3 provider, which is
+      // what MetaMask injects as window.ethereum into each page
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // MetaMask requires requesting permission to connect users accounts
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      // console.log("Account:", await signer.getAddress());
+      setUserAddress(await signer.getAddress());
+      setWalletConnected(true);
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
 
@@ -245,9 +258,9 @@ const Signup2 = () => {
 
   const openNotification = () => {
     notification["success"]({
-      message: "Confirmation Link sent!",
+      message: "New code sent successfully!",
       description:
-        "A new email confirmation link was sent to your email successfully. Please click on the link to continue.",
+        "A new confirmation code was sent to your email successfully. Please note the code and enter the code below to continue.",
       onClick: () => {},
       style: {
         backgroundColor: "#ffffff",
@@ -270,6 +283,36 @@ const Signup2 = () => {
     }
   };
 
+  const checkOTPCode = async (code) => {
+    if (code === "1112") {
+      message.success("Code Validated Successfully!");
+      setCodeVerified(true);
+      return;
+    } else {
+      message.error(
+        "Invalid OTP Code entered! Please enter the correct code to continue"
+      );
+      setCodeVerified(false);
+    }
+    console.log("code", code);
+  };
+
+  const checkPassportDocumentsVerfied = (e) => {
+    if (e.target.checked) {
+      setPassportDocumentsVerfied(true);
+    } else {
+      setPassportDocumentsVerfied(false);
+    }
+  };
+
+  const checkIdDocumentsVerified = (e) => {
+    if (e.target.checked) {
+      setIdDocumentsVerified(true);
+    } else {
+      setIdDocumentsVerified(false);
+    }
+  };
+
   useEffect(() => {
     console.log("isauthenticated: ", isAuthenticated);
   }, [isAuthenticated]);
@@ -280,7 +323,7 @@ const Signup2 = () => {
       <div className="signup">
         <div className="leftSide">
           <div className="illustrationDiv">
-            <img src={signupsvg} alt="man illustration" />
+            <img src={signup_illustration} alt="man illustration" />
           </div>
         </div>
         <div className="rightSide">
@@ -353,10 +396,10 @@ const Signup2 = () => {
                           onClick={() => {
                             SignUpUser(fullName, email);
                           }}
-                          type="submit"
+                          type="Proceed"
                           text="Proceed"
                           theme="colored"
-                          color="green"
+                          color="blue"
                           size="large"
                           isFullWidth="true"
                           disabled={isAuthenticating}
@@ -391,22 +434,28 @@ const Signup2 = () => {
                       </button>
                       <h2>Confirm your email address</h2>
                       <p>
-                        Please click on the below button to confirm your email
-                        address.
+                        A 4-digit code has been sent to your email. Please enter
+                        the code below.
                       </p>
+                      <VerifyCode
+                        onCompleted={(data) => setOTPCode(data)}
+                        length={4}
+                        placeholder={"0"}
+                        label={""}
+                      />
                       <button
                         className="resendEmailButton"
                         onClick={() => {
                           openNotification();
                         }}
                       >
-                        Resend confirmation link
+                        Resend Code
                       </button>
                       <Button
                         onClick={() => {
-                          setEmailVerified(true);
+                          checkOTPCode(otpCode);
                         }}
-                        text="Confirm Email"
+                        text="Submit"
                         theme="colored"
                         color="blue"
                         size="large"
@@ -418,20 +467,16 @@ const Signup2 = () => {
                           marginTop: "2rem",
                         }}
                       />
-                      {emailVerified && (
+                      {codeVerified && (
                         <Alert
-                          message="Email verification completed successfully! Please click next to complete the sign up process."
+                          message="OTP Code verified successfully! Please click next to complete the sign up process."
                           style={{ marginTop: "1rem", width: "fit-content" }}
                         />
                       )}
                       <div className="emailSection">
-                        {emailVerified ? (
+                        {codeVerified && (
                           <button id="next" className="nextButton">
                             Next
-                          </button>
-                        ) : (
-                          <button id="next" className="skipButton">
-                            Skip
                           </button>
                         )}
                       </div>
@@ -445,6 +490,7 @@ const Signup2 = () => {
                       <button
                         id="prev"
                         className="prevButton"
+                        onClick={() => setOTPCode(false)}
                         style={{ marginTop: "3.2rem" }}
                       >
                         <ArrowLeftOutlined /> Back
@@ -463,20 +509,35 @@ const Signup2 = () => {
                         theme="textOnly"
                       />
                       <div>
-                        <Checkbox
-                          id="passportCheckBox"
-                          label="I confirm that the Passport is valid until expiry date and is in color."
-                          name="passportCheckBox"
-                          onBlur={function noRefCheck() {}}
-                          onChange={function noRefCheck() {}}
-                        />
+                        <div className="checkBoxDiv">
+                          <input
+                            type="checkbox"
+                            name="passportCheckBox"
+                            id="passportCheckBox"
+                            onClick={checkPassportDocumentsVerfied}
+                          />
+                          <p>
+                            I confirm that the ID is valid until expiry date and
+                            is in color.
+                          </p>
+                        </div>
                       </div>
                       {passportDocumentsVerfied ? (
                         <button id="next" className="nextButton">
                           Next
                         </button>
                       ) : (
-                        <div></div>
+                        <button
+                          id="next"
+                          className="nextButton"
+                          style={{
+                            pointerEvents: "none",
+                            cursor: "not-allowed",
+                            backgroundColor: "#74b7dd",
+                          }}
+                        >
+                          Next
+                        </button>
                       )}
                     </div>
                   ),
@@ -503,21 +564,34 @@ const Signup2 = () => {
                         onChange={function noRefCheck() {}}
                         theme="textOnly"
                       />
-                      <div>
-                        <Checkbox
-                          id="passportCheckBox"
-                          label="I confirm that the ID is valid until expiry date and is in color."
-                          name="passportCheckBox"
-                          onBlur={function noRefCheck() {}}
-                          onChange={function noRefCheck() {}}
+                      <div className="checkBoxDiv">
+                        <input
+                          type="checkbox"
+                          name="idCheckBox"
+                          id="idCheckBox"
+                          onClick={checkIdDocumentsVerified}
                         />
-                      </div>{" "}
-                      {passportDocumentsVerfied ? (
+                        <p>
+                          I confirm that the ID is valid until expiry date and
+                          is in color.
+                        </p>
+                      </div>
+                      {idDocumentsVerified ? (
                         <button id="next" className="nextButton">
                           Next
                         </button>
                       ) : (
-                        <div> </div>
+                        <button
+                          id="next"
+                          className="nextButton"
+                          style={{
+                            pointerEvents: "none",
+                            cursor: "not-allowed",
+                            backgroundColor: "#74b7dd",
+                          }}
+                        >
+                          Next
+                        </button>
                       )}
                     </div>
                   ),
@@ -526,7 +600,11 @@ const Signup2 = () => {
                 {
                   content: (
                     <div>
-                      <button id="prev" className="prevButton">
+                      <button
+                        id="prev"
+                        className="prevButton"
+                        onClick={() => setIdDocumentsVerified(false)}
+                      >
                         <ArrowLeftOutlined /> Back
                       </button>
                       <h2>Terms & Conditions</h2>
@@ -1453,13 +1531,18 @@ const Signup2 = () => {
                         </p>
                       </div>
                       <div>
-                        <Checkbox
-                          id="termsCheckBox"
-                          label="I have read and agree to the terms and conditions of PropBlock."
-                          name="passportCheckBox"
-                          onBlur={function noRefCheck() {}}
-                          onChange={function noRefCheck() {}}
-                        />
+                        <div className="checkBoxDiv">
+                          <input
+                            type="checkbox"
+                            name="termsCheckBox"
+                            id="termsCheckBox"
+                            onClick={checkIdDocumentsVerified}
+                          />
+                          <p>
+                            I have read and agree to the terms and conditions of
+                            PropBlock.
+                          </p>
+                        </div>
                       </div>
                       <div className="termsSectionBottom">
                         <Button
@@ -1475,22 +1558,6 @@ const Signup2 = () => {
                           className="SignUpButton"
                           style={{
                             width: "35%",
-                          }}
-                        />{" "}
-                        <Button
-                          onClick={() => {
-                            setEmailVerified(true);
-                          }}
-                          text="Decline"
-                          theme="colored"
-                          color="red"
-                          size="large"
-                          isFullWidth="true"
-                          disabled={isAuthenticating}
-                          className="SignUpButton"
-                          style={{
-                            width: "20%",
-                            margin: " 0 2rem",
                           }}
                         />
                       </div>

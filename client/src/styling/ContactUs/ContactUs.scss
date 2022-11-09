@@ -1,0 +1,131 @@
+@font-face {
+    font-family: "Harmony";
+    src: url("../../assets/Fonts/Harmony.ttf");
+}
+
+.contactUs {
+    .topSection {
+        display: flex;
+        justify-content: space-between;
+        background-color: rgba(#3daeee, 0.15);
+        padding: 10rem 10rem 5rem 25rem;
+        .blog-top {
+        }
+        .leftSide {
+            padding-top: 15rem;
+            h1 {
+                font-size: 6rem;
+                letter-spacing: -0.1rem;
+                font-family: monospace;
+            }
+            p {
+                width: 80%;
+                font-size: 2rem;
+                font-family: Helvetica;
+                font-weight: 500;
+            }
+            .email {
+                text-decoration: underline;
+                color: #3daeee;
+            }
+        }
+        .rightSide {
+            background-color: #ffffff;
+            padding: 7rem 5rem 7rem 5rem;
+            width: 50%;
+            margin: 3rem 0 0 2rem;
+            box-shadow: rgba(0, 0, 0, 0.2) 0px 0.5rem 1rem;
+
+            h1 {
+                font-size: 2.8rem;
+                letter-spacing: 0.2rem;
+                font-weight: 400;
+                color: #333;
+            }
+            p {
+                color: #444444;
+                font-size: 2rem;
+                margin-top: 1rem;
+            }
+            .fullName {
+                width: 100%;
+                display: flex;
+                gap: 2rem;
+                margin-bottom: 1rem;
+            }
+            input,
+            .textAreaClass {
+                margin-top: 2rem;
+                border-radius: 0.5rem;
+                padding: 1rem 2rem;
+                border: 1px solid #bcbcbc;
+                font-size: 1.5rem;
+                width: 100%;
+
+                &:active,
+                &:focus {
+                    border: 1px solid #3daeee;
+                    outline: none;
+                    box-shadow: rgba(#3daeee, 0.1) 0px 0.3rem 0.5rem;
+                }
+                &::placeholder {
+                    color: #333;
+                    opacity: 0.5;
+                }
+            }
+            .textAreaClass {
+                font-size: 1.7rem;
+                margin-top: 2rem;
+                border-radius: 0.5rem;
+                padding: 1rem 2rem;
+                resize: none;
+                &::placeholder {
+                    color: #333;
+                    opacity: 0.5;
+                }
+            }
+            .disclaimer {
+                margin: 2rem 0;
+                font-size: 1.4rem;
+                color: #444444;
+                text-align: justify;
+            }
+            .submitMessage {
+                background-color: #3daeee;
+                border: none;
+                color: #ffffff;
+                font-size: 2rem;
+                width: 30%;
+                border-radius: 3rem;
+                border: 2px solid #3daeee;
+                padding: 0.5rem 0;
+                &:hover {
+                    background-color: #ffffff;
+                    cursor: pointer;
+                    color: #3daeee;
+                }
+            }
+        }
+    }
+    .bottomSection {
+        background-color: rgba(#3daeee, 0.15);
+        padding: 10rem 0 5rem 0;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: 0.1rem;
+            color: #444444;
+        }
+        .logosContainer {
+            img {
+                width: 15rem;
+                margin: 3rem 3rem;
+                filter: grayscale(1);
+                -webkit-filter: grayscale(100%);
+            }
+        }
+    }
+}

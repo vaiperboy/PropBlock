@@ -45,7 +45,7 @@ const Navbar = (props) => {
 
   return (
     <>
-      {props.signedIn2 ? (
+      {isAuthenticated ? (
         <div className="Navbar">
           <div className="leftSide">
             <img src={NavbarIcon} alt="NavbarIcon" />

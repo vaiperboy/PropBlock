@@ -1,0 +1,38 @@
+.termsAndConditions {
+    .topSection {
+        display: flex;
+        justify-content: center;
+        height: 50rem;
+        .leftSide {
+            display: flex;
+            flex-direction: column;
+            padding: 15rem 15rem 0 20rem;
+            h1 {
+                font-size: 4rem;
+            }
+            p {
+                text-align: justify;
+            }
+        }
+        .rightSide {
+            padding: 5rem 0 0 5rem;
+            width: 70%;
+            img {
+                width: 43rem;
+            }
+        }
+    }
+    .termsSection {
+        margin-top: -10rem;
+        margin-bottom: 5rem;
+        padding: 0 30rem 0 20rem;
+        text-align: justify;
+        h1 {
+            margin: 0 0 3rem 0;
+        }
+        .heading {
+            font-weight: 600;
+            margin: 1rem 0;
+        }
+    }
+}
