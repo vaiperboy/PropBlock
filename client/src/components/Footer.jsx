@@ -24,9 +24,6 @@ const Footer = () => {
             <Link to="/terms&conditions" className="link">
               Terms & Conditions
             </Link>
-            <Link to="/privacy" className="link">
-              Privacy Policy
-            </Link>
           </div>
           <div className="col2">
             <h3>Services</h3>
@@ -48,15 +45,6 @@ const Footer = () => {
             <h3>About</h3>
             <Link to="/aboutus" className="link">
               Our Story
-            </Link>
-            <Link to="/aboutus" className="link">
-              Company
-            </Link>
-            <Link to="/aboutus" className="link">
-              Team
-            </Link>
-            <Link to="/aboutus" className="link">
-              Careers
             </Link>
           </div>
           <div className="col4">

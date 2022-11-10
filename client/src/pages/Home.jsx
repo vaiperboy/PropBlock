@@ -21,7 +21,7 @@ import {
 
 // -------
 // Importing Images
-import HeroImage from "../assets/featuredimage-realestate-1@2x-min.png";
+// import HeroImage from "../assets/featuredimage-realestate-1@2x-min.png";
 import realEstateImage1 from "../assets/realEstate_1-min.png";
 import realEstateImage2 from "../assets/realEstate_2-min.png";
 import realEstateImage3 from "../assets/realEstate_3-min.png";
@@ -33,6 +33,7 @@ import location_icon_blue from "../assets/location-icon-blue.png";
 import property_type_icon from "../assets/home-icon.png";
 import beds_icon from "../assets/beds-icon.svg";
 import price_tag_icon from "../assets/tag-icon.png";
+import hero_image from "../assets/hero-section-image.png";
 
 const items = [
   { value: "Dubai" },
@@ -505,9 +506,10 @@ function Home() {
   ];
 
   const { Option } = Select;
+
   return (
     <div>
-      <Navbar />
+      <Navbar signedIn2={isAuthenticated} />
       <main>
         <div className="heroSection">
           <div className="leftSide">
@@ -526,7 +528,7 @@ function Home() {
             </div>
           </div>
           <div className="rightSide">
-            <img src={HeroImage} alt="hero_Section_Image" />
+            <img src={hero_image} alt="hero_Section_Image" />
           </div>
         </div>
         <div className="searchSection">
@@ -575,6 +577,7 @@ function Home() {
                   <Option value="Villa">Villa</Option>
                   <Option value="Townhouse">Townhouse</Option>
                   <Option value="Penthouse">Penthouse</Option>
+                  <Option value="Duplex">Duplex</Option>
                 </Select>
               </div>
             </div>

@@ -7,7 +7,11 @@ import NavbarIcon from "../assets/framer-1.png";
 
 const console = require("console-browserify");
 
+<<<<<<< HEAD
 const Navbar = () => {
+=======
+const Navbar = (props) => {
+>>>>>>> 4705f937249bc6baab4742834d3e37d0e8365846
   const [signedIn, setSignedIn] = useState(false);
   const {
     authenticate,
@@ -45,7 +49,7 @@ const Navbar = () => {
 
   return (
     <>
-      {signedIn ? (
+      {isAuthenticated ? (
         <div className="Navbar">
           <div className="leftSide">
             <img src={NavbarIcon} alt="NavbarIcon" />
@@ -92,13 +96,8 @@ const Navbar = () => {
                 </Link>
               )}
               <Link to="/dashboard">
-                <Avatar
-                  isRounded
-                  theme="image"
-                  className="avatar"
-                />
+                <Avatar isRounded theme="image" className="avatar" />
               </Link>
-
             </nav>
           </div>
         </div>

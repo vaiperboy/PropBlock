@@ -1,0 +1,59 @@
+@font-face {
+    font-family: "FS_Me";
+    src: url("../../assets/Fonts//FS\ Me-Regular.otf");
+}
+
+.FAQ {
+    .heading {
+        font-size: 5rem;
+        font-weight: 600;
+        font-style: italic;
+        text-align: center;
+        padding: 2rem 0;
+        margin-top: 10rem;
+        background: linear-gradient(to right, #ff9517 20%, #3daeee 40%, #3daeee 60%, #888888 80%, #ff9517 100%);
+        background-size: 200% auto;
+        background-clip: text;
+        text-fill-color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shine 4s linear infinite;
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+    }
+    .questionsSection {
+        width: 60%;
+        margin: 3rem 0 10rem 25%;
+        .question {
+            font-size: 2.5rem;
+            font-weight: 500;
+            font-family: "FS_Me";
+            .answer {
+                font-family: "FS_Me";
+                font-size: 1.7rem;
+                font-weight: 500;
+                padding-left: 2.5rem;
+            }
+        }
+    }
+    .blob {
+        width: 40rem;
+        height: 48rem;
+        border-radius: 20rem;
+        margin: -25rem 0 -20rem -15rem;
+        position: relative;
+        z-index: -1;
+        opacity: 0.6;
+        background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%),
+            radial-gradient(ellipse at 70% 60%, #3daeee 0%, rgba(195, 224, 96, 0) 90%),
+            radial-gradient(ellipse at 30% 30%, #3daeee 0%, rgba(195, 224, 96, 0) 60%),
+            radial-gradient(ellipse at bottom left, #3daeee 0%, rgba(0, 163, 203, 0) 70%),
+            linear-gradient(135deg, rgba(18, 46, 119, 0) 0%, rgba(18, 46, 119, 0) 75%, #122e77 100%),
+            linear-gradient(to right, #3daeee 0%, #8dcaed 35%, #8dcaed 65%, #8dcaed 100%);
+        background-blend-mode: overlay, luminosity, multiply, saturation, color-dodge, lighten;
+        filter: blur(44px);
+    }
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../styling/About/About.scss";
@@ -9,10 +9,15 @@ import light_icon from "../assets/Light-icon.png";
 import people_icon from "../assets/People-icon.png";
 import team_card_image from "../assets/team-image.jpg";
 import moralis_logo from "../assets/moralis-logo.png";
+import government_logo from "../assets/Government_of_Dubai_logo.png";
 import ethereum_logo from "../assets/ethereum-logo.png";
 import curved_vector from "../assets/Vector 1.svg";
 
 const Aboutus = () => {
+  useEffect(() => {
+    // 👇️ scroll to top on page load
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
   return (
     <div>
       <Navbar />
@@ -194,7 +199,7 @@ const Aboutus = () => {
             <div className="partner-cards">
               <div className="partner-card">
                 <div className="image-div">
-                  <img alt="Government_logo" />
+                  <img src={government_logo} alt="Government_logo" />
                 </div>
                 <h1>Dubai Land Department</h1>
                 <div className="description">

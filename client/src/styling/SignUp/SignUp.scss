@@ -8,9 +8,10 @@
         width: 45%;
         background-image: linear-gradient(to bottom, #ffffff, #a3c9de);
         .illustrationDiv {
-            margin-top: 10rem;
+            margin-top: 5rem;
             img {
                 width: 65rem;
+                transform: scaleX(-1);
             }
         }
     }
@@ -39,19 +40,10 @@
                 background-color: #3daeee;
                 border: #3daeee;
                 svg {
-                    // color: white;
-                    // background-color: white;
+                    fill: white;
                 }
             }
-            .jypqEU {
-                background-color: white;
-                border: 1px solid #3daeee;
-                svg {
-                    path {
-                        fill: #3daeee;
-                    }
-                }
-            }
+
             ol {
                 margin: 0;
                 span {
@@ -92,6 +84,7 @@
                     background-color: #5ab6eb;
                 }
             }
+
             #step-1 {
                 margin: 0;
                 .SignUpMain {
@@ -183,7 +176,7 @@
                 }
             }
             #step-2 {
-                margin: 0;
+                margin: 5.3rem 0 0 0;
                 div {
                     width: 100%;
                     display: flex;
@@ -191,6 +184,17 @@
                     justify-content: left;
                     text-align: left;
                     margin: 0;
+                    .verify-code {
+                        display: flex;
+                        flex-direction: row;
+                        padding: 1rem 0 3rem 0;
+                        input[type="number"] {
+                            -moz-appearance: textfield;
+                        }
+                    }
+                    #codeSection {
+                        display: flex;
+                    }
                     h2 {
                         font-size: 2rem;
                         font-weight: 500;
@@ -276,7 +280,6 @@
                     }
                     p {
                         font-size: 1.5rem;
-                        margin-top: 1rem;
                     }
                 }
                 label {
@@ -340,7 +343,20 @@
                 }
                 .termsSectionBottom {
                     display: flex;
-                    margin: 2rem 0;
+                }
+            }
+            .checkBoxDiv {
+                display: flex;
+                align-items: center;
+                padding: 2rem 0;
+                p {
+                    margin: 0;
+                    padding: 0;
+                }
+                input[type="checkbox"] {
+                    margin-right: 1rem;
+                    width: 2rem;
+                    height: 2rem;
                 }
             }
         }

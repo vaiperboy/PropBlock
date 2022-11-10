@@ -13,7 +13,8 @@ import { useNavigate } from "react-router-dom";
 
 // -----------------
 // importing images
-import loginSvg from "../assets/login-image-min.png";
+import login_illustration from "../assets/login_illustration.png";
+import login_svg from "../assets/login-image-min.png";
 import metamask from "../assets/icons8-metamask-logo-96-min.png";
 
 const console = require("console-browserify");
@@ -23,7 +24,9 @@ const { ethereum } = window;
 // main function
 const Login2 = () => {
   const [email, setEmail] = useState("");
+  const [userAddress, setUserAddress] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [walletConnected, setWalletConnected] = useState(false);
   const nav = useNavigate();
   const {
     Moralis,
@@ -57,9 +60,9 @@ const Login2 = () => {
   // checks if the user with the address exists already in the db
   const checkUserExists = async (address) => {
     try {
-      const userEmails = Moralis.Object.extend("UserEmails");
+      const userEmails = Moralis.Object.extend("usersSignedUp");
       const query = new Moralis.Query(userEmails);
-      query.equalTo("address", address.toLowerCase());
+      query.equalTo("address", address);
       const results = await query.find();
       if (results.length === 0) {
         return false;
@@ -80,26 +83,28 @@ const Login2 = () => {
         );
         return;
       }
-      if (!isAuthenticated) {
+
+      // wallet is connected
+      // const currentUser = Moralis.User.current();
+      // const userExists = await checkUserExists(currentUser.get("ethAddress"));
+      console.log("useraddress: ", userAddress);
+      const userExists = await checkUserExists(userAddress);
+      if (!userExists) {
         message.error(
-          "Wallet is not connected! Please connect the wallet to login."
+          "Invalid email or wrong wallet address connected! \nPlease connect a wallet that is signed up. "
         );
         return;
-        // wallet is connected
       } else {
-        const currentUser = Moralis.User.current();
-        const userExists = await checkUserExists(currentUser.get("ethAddress"));
-        if (!userExists) {
-          message.error(
-            "Invalid email or wrong wallet address connected! \nPlease connect a wallet that is signed up. "
-          );
+        let value = await authenticate();
+        if (value === undefined) {
+          message.error("Wallet signature rejected!");
           return;
         } else {
           message.success("User is successfully logged In!");
           setIsLoggedIn(true);
-          await sleep(2500);
-          await nav("/");
         }
+        await sleep(2500);
+        await nav("/");
       }
     } catch (error) {
       message.error("Error " + error.code + ": ", error.message);
@@ -107,35 +112,69 @@ const Login2 = () => {
   };
 
   // connect the metamask wallet
+  // const connectWallet = async () => {
+  //   try {
+  //     if (!isAuthenticated) {
+  //       await authenticate().then(function (user) {});
+  //     }
+  //   } catch (error) {
+  //     message.error(error);
+  //   }
+  // };
+
   const connectWallet = async () => {
     try {
-      if (!isAuthenticated) {
-        await authenticate().then(function (user) {});
-      }
+      // A Web3Provider wraps a standard Web3 provider, which is
+      // what MetaMask injects as window.ethereum into each page
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      // MetaMask requires requesting permission to connect users accounts
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      // console.log("Account:", await signer.getAddress());
+      setUserAddress(await signer.getAddress());
+      setWalletConnected(true);
     } catch (error) {
-      message.error(error);
+      console.log("error: ", error);
     }
+  };
+
+  const checkWalletConnected = async () => {
+    var provider = new ethers.providers.Web3Provider(ethereum);
+    const accounts = await provider.listAccounts();
+    return accounts.length > 0;
   };
 
   // disconnects the metamask wallet
-  const disconnectWallet = async () => {
-    try {
-      const loggedout = await logout();
-      if (loggedout) {
-        setIsLoggedIn(true);
-      }
-    } catch (error) {
-      message.error("Error " + error.code + ": ", error.message);
-    }
-  };
+  // const disconnectWallet = async () => {
+  //   try {
+  //     await checkWalletConnected().then((connected) => {
+  //       if (connected) {
+
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.error("Error: ", error);
+  //   }
+  // };
+
+  // const disconnectWallet = async () => {
+  //   try {
+  //     const loggedout = await logout();
+  //     if (loggedout) {
+  //       setIsLoggedIn(true);
+  //     }
+  //   } catch (error) {
+  //     message.error("Error " + error.code + ": ", error.message);
+  //   }
+  // };
 
   return (
     <div>
-      <Navbar />
+      <Navbar signedIn2={isAuthenticated} />
       <div className="loginPage">
         <div className="leftSide">
           <div className="illustrationDiv">
-            <img src={loginSvg} alt="man illustration" />
+            <img src={login_illustration} alt="man illustration" />
           </div>
         </div>
         <div className="rightSide">
@@ -143,7 +182,7 @@ const Login2 = () => {
           <h1>Glad to see you back!</h1>
           <div className="loginSection">
             <p>Connect your wallet to login</p>
-            {!false ? (
+            {!walletConnected ? (
               <button className="connectWalletButton" onClick={connectWallet}>
                 <span className="text">Connect Wallet</span>{" "}
                 <img src={metamask} alt="metamask icon" />
@@ -152,15 +191,15 @@ const Login2 = () => {
               <button
                 className="disconnectWalletButton"
                 onClick={() => {
-                  disconnectWallet();
+                  // disconnectWallet();
                 }}
               >
-                <span className="text">Disconnect Wallet</span>
+                <span className="text">Wallet Connected</span>
               </button>
             )}
             <div className="linkToSignUpPage">
               Don't have an account?{" "}
-              <Link to="/signup2" className="signupText">
+              <Link to="/signup" className="signupText">
                 Sign Up
               </Link>{" "}
               instead.
