@@ -56,7 +56,6 @@ class PurchaseRequests extends React.Component{
 	}
 
 	render(){
-
 		return(
 				<div className='rightsidebar_container'>
 					<div style={{width:'100%', display:'flex', justifyContent:'space-between', alignItems:'center'}}>

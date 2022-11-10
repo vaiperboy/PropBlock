@@ -31,15 +31,11 @@ const { ethereum } = window;
 
 const validateEmail = (email) => {
   var validRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-  if (validRegex.test(email)) {
-    return true;
-  } else {
-    return false;
-  }
+  return validRegex.test(email)
 };
 
 // main function
-const Signup2 = () => {
+const App = () => {
   const API_KEY = process.env.REACT_APP_API_KEY;
   const API_URL = `https://eth-goerli.g.alchemy.com/v2/${API_KEY}`;
   const PRIVATE_KEY = process.env.REACT_APP_PRIVATE_KEY;
@@ -86,7 +82,8 @@ const Signup2 = () => {
   const connectWallet = async () => {
     try {
       if (!isAuthenticated) {
-        await authenticate().then(function (user) {});
+        await authenticate()
+        .then(function (user) {});
       }
     } catch (error) {
       message.error(error);
@@ -229,12 +226,6 @@ const Signup2 = () => {
     }
   };
 
-  const addLandlord = (address) => {
-    try {
-    } catch (error) {
-      message.error("Error: " + error);
-    }
-  };
 
   // links to the Login Page
   const goBackToLoginPage = () => {
@@ -1503,4 +1494,4 @@ const Signup2 = () => {
   );
 };
 
-export default Signup2;
+export default App;

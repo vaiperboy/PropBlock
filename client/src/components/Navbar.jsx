@@ -8,7 +8,7 @@ import NavbarIcon from "../assets/framer-1.png";
 const console = require("console-browserify");
 
 const Navbar = () => {
-  const [signedIn, setSignedIn] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
   const {
     authenticate,
     isAuthenticated,
