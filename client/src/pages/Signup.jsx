@@ -58,20 +58,24 @@ const App = () => {
   const [email, setEmail] = useState("");
   const [emailVerified, setEmailVerified] = useState(false);
   const [otpCode, setOTPCode] = useState("");
-  const [isValidated, setIsValidated] = useState(true);
-  const [codeVerified, setCodeVerified] = useState(true);
+  
   const [userAddress, setUserAddress] = useState("");
   const [walletConnected, setWalletConnected] = useState(false);
 
-  const [idDocumentsVerified, setIdDocumentsVerified] = useState(true);
-  const [passportDocumentsVerified, setPassportDocumentsVerified] = useState(true);
+  //change all of these to 'false' in production
+  const [isValidated, setIsValidated] = useState(false);
+  const [codeVerified, setCodeVerified] = useState(true);
+  const [idDocumentsVerified, setIdDocumentsVerified] = useState(false);
+  const [passportDocumentsVerified, setPassportDocumentsVerified] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
+  //
 
   const [frontIdDocument, setFrontIdDocument] = useState({});
   const [backIdDocument, setBackIdDocument] = useState({});
   const [frontPassportDocument, setFrontPassportDocument] = useState({});
   const [backPassportDocument, setBackPassportDocument] = useState({});
 
+  const [isRegistering, setRegistering] = useState(false);
 
   const {
     setUserData,
@@ -185,6 +189,7 @@ const App = () => {
       if (errors.length == 0) {
         setIsValidated(true);
         message.info("yla continue");
+        return true;
       }
 
       else {
@@ -193,9 +198,11 @@ const App = () => {
         errors.forEach((e) => {
           message.error(e);
         });
+        return false;
       }
     } catch (error) {
       message.error("error: " + error);
+      return false;
     }
   }
 
@@ -220,27 +227,70 @@ const App = () => {
   const { save } = useNewMoralisObject("usersSignedUp");
 
   const uploadDocuments = async () => {
-
+    return new Promise(async (resolve, reject) => {
+      try {
+        const options = {
+          wrapWithDirectory: true,
+          //progress: (prog) => console.log(`[ipfs] received: ${prog}`)
+        };
+  
+        const files = [
+          frontIdDocument,
+          backIdDocument,
+          frontPassportDocument,
+          backPassportDocument
+        ];
+  
+        var hash = "";
+        console.log(files);
+        for await (const result of ipfs.addAll(files, options)) {
+          console.log(result);
+          hash = result.cid._baseCache.entries().next().value[1];
+        }
+  
+        resolve(hash)
+      } catch (error) {
+        message.error("error with IPFS: " + error);
+        resolve("");
+      }
+    });
+    
   }
+  window.uploadDocuments = uploadDocuments;
 
-  const SignUpUser2 = async () => {
+  const SignUpUser = async () => {
+    setRegistering(true);
     message.info("Registring into database....");
     try {
-      const data = {
-        "address": userAddress,
-        "fullName": fullName,
-        "email": email
-      };
-      save(data, {
-        onSuccess: (obj) => {
-          message.info("New object created with objectId: " + obj.id);
-        },
-        onError: (error) => {
-          message.error("Failed to create new object, with error code: " + error.message);
-        }
-      })
+      message.info("Uploading documents....");
+      var ipfs = await uploadDocuments();
+      if (ipfs.length == 0) {
+        message.error("Failure in uploading documents...");
+      }
+      else {
+        message.info("registering with: " + ipfs);
+        const data = {
+          "address": userAddress,
+          "fullName": fullName,
+          "email": email,
+          "ipfsHash": ipfs
+        };
+        
+        save(data, {
+          onSuccess: (obj) => {
+            //message.info("New object created with objectId: " + obj.id);
+            accountCreated();
+            setRegistering(false);
+          },
+          onError: (error) => {
+            //message.error("Failed to create new object, with error code: " + error.message);
+            message.error("Failture in creating account...");
+          }
+        })
+      }
+      
     } catch (error) {
-      message.error("parent error: " + error);
+      message.error("ERROR: " + error);
     }
   }
 
@@ -264,18 +314,9 @@ const App = () => {
   };
 
   const accountCreated = async () => {
-    const cb = document.getElementById("termsCheckBox");
-
-    if (cb.checked) {
-      message.success(
-        `Account created successfully! Redirecting to login page ...`
-      );
+      message.success("Account created successfully! Redirecting to login page ...");
       await sleep(2500);
       await navigate("/login");
-    } else {
-      message.error("Please accept the terms and conditions to continue.");
-      return;
-    }
   };
 
   const checkOTPCode = async (code) => {
@@ -302,7 +343,7 @@ const App = () => {
     return arr.indexOf(val) != -1;
   }
 
-  const extensionsAllowed = ["pdf", "png", "jpg", "jpeg"];
+  const extensionsAllowed = ["pdf", "png", "jpg", "jpeg", "gif"];
   //for renaming files when uploading to IPFS
   const renameFile = (originalFile, newName) => {
     return new File([originalFile], newName, {
@@ -311,7 +352,7 @@ const App = () => {
     });
   }
 
-  const verifyIdDocuments = (e) => {
+  const verifyIdDocuments = async (e) => {
     if (e.target.checked) {
       var errors = [];
       var frontExtension = "";
@@ -327,6 +368,7 @@ const App = () => {
           errors.push("Make sure back ID has the following format: " + extensionsAllowed.join(", "));
       }
       if (errors.length == 0) {
+        e.target.checked = true;
         setIdDocumentsVerified(true);
 
         //rename files
@@ -336,16 +378,17 @@ const App = () => {
         setBackIdDocument(back);
       }
       else {
+        e.target.checked = false;
         setIdDocumentsVerified(false);
         errors.forEach((e) => message.error(e));
       }
-      e.target.checked = idDocumentsVerified;
     }
+    else setIdDocumentsVerified(false);
   }
 
 
 
-  const verifyPassportDocuments = (e) => {
+  const verifyPassportDocuments = async (e) => {
     if (e.target.checked) {
       var errors = [];
       var frontExtension = "";
@@ -362,6 +405,7 @@ const App = () => {
       }
 
       if (errors.length == 0) {
+        e.target.checked = true;
         setPassportDocumentsVerified(true);
 
         //rename files
@@ -371,11 +415,11 @@ const App = () => {
         setBackPassportDocument(back);
       }
       else {
+        e.target.checked = false;
         setPassportDocumentsVerified(false);
         errors.forEach((e) => message.error(e));
-      }
-      e.target.checked = passportDocumentsVerified;
-    }
+      }      
+    } else setPassportDocumentsVerified(false);
   }
 
 
@@ -462,7 +506,6 @@ const App = () => {
                         )}
                         <Button
                           onClick={() => {
-                            //SignUpUser(fullName, email);
                             validateUser(email, userAddress);
                           }}
                           type="Proceed"
@@ -559,7 +602,6 @@ const App = () => {
                       <button
                         id="prev"
                         className="prevButton"
-                        onClick={() => setOTPCode(false)}
                         style={{ marginTop: "3.2rem" }}
                       >
                         <ArrowLeftOutlined /> Back
@@ -567,15 +609,17 @@ const App = () => {
                       <h2>Upload Identification Documents</h2>
                       <p>Upload passport - Front Page</p>
                       <Upload
-                        theme="textOnly"
-                        onChange={(file) => setFrontPassportDocument(file)}
+                      value=""
+                        theme="withIcon"
+                        onChange={setFrontPassportDocument}
                       />
                       <p style={{ marginTop: "1.5rem" }}>
                         Upload passport - Back Page
                       </p>
                       <Upload
-                        onChange={(file) => setBackPassportDocument(file)}
-                        theme="textOnly"
+                      value=""
+                        onChange={setBackPassportDocument}
+                        theme="withIcon"
                       />
                       <div>
                         <div className="checkBoxDiv">
@@ -583,7 +627,6 @@ const App = () => {
                             type="checkbox"
                             name="passportCheckBox"
                             id="passportCheckBox"
-                            value={passportDocumentsVerified}
                             onClick={verifyPassportDocuments}
                           />
                           <p>
@@ -626,14 +669,16 @@ const App = () => {
                       <h2>Upload Identification Documents</h2>
                       <p>Upload ID - Front Page</p>
                       <Upload
-                        onChange={(file) => setFrontIdDocument(file)}
-                        theme="textOnly"
+                      value=""
+                        onChange={setFrontIdDocument}
+                        theme="withIcon"
                       />
                       <p style={{ marginTop: "1.5rem" }}></p>
                       <p>Upload ID - Back Page</p>
                       <Upload
-                        onChange={(file) => setBackIdDocument(file)}
-                        theme="textOnly"
+                      value=""
+                        onChange={setBackIdDocument}
+                        theme="withIcon"
                       />
                       <div className="checkBoxDiv">
                         <input
@@ -641,7 +686,6 @@ const App = () => {
                           name="idCheckBox"
                           id="idCheckBox"
                           onChange={verifyIdDocuments}
-                          value={passportDocumentsVerified}
                         />
                         <p>
                           I confirm that the <strong>ID</strong> is valid until expiry date and
@@ -675,7 +719,7 @@ const App = () => {
                       <button
                         id="prev"
                         className="prevButton"
-                        onClick={() => setIdDocumentsVerified(false)}
+                        style={{ marginTop: "3.2rem" }}
                       >
                         <ArrowLeftOutlined /> Back
                       </button>
@@ -1617,21 +1661,39 @@ const App = () => {
                         </div>
                       </div>
                       <div className="termsSectionBottom">
-                        <Button
-                          onClick={() => {
-                            SignUpUser2();
-                          }}
-                          text="Create Account"
-                          theme="colored"
-                          color="blue"
-                          size="large"
-                          isFullWidth="true"
-                          disabled={!termsAccepted}
-                          className="SignUpButton"
-                          style={{
-                            width: "35%",
-                          }}
-                        />
+                        {
+                          !isRegistering ?
+                          <Button
+                            onClick={async () => {
+                              await SignUpUser();
+                            }}
+                            text="Create Account"
+                            theme="colored"
+                            color="blue"
+                            size="large"
+                            isFullWidth="true"
+                            disabled={(!termsAccepted)}
+                            className="SignUpButton"
+                            style={{
+                              width: "35%",
+                            }}
+                          />
+                           :
+                           <Button
+                            text="Creating account..."
+                            theme="colored"
+                            color="blue"
+                            size="large"
+                            isFullWidth="true"
+                            disabled={false}
+                            className="SignUpButton"
+                            style={{
+                              width: "35%",
+                            }}
+                          />
+                        }
+                        
+                        
                       </div>
                     </div>
                   ),
