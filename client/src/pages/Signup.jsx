@@ -316,7 +316,7 @@ const App = () => {
   const accountCreated = async () => {
       message.success("Account created successfully! Redirecting to login page ...");
       await sleep(2500);
-      await navigate("/login");
+      navigate("/login");
   };
 
   const checkOTPCode = async (code) => {

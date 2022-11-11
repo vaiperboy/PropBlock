@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styling/MainContainer/MainContainer.css";
+import "../../styling/MainContainer/MainContainer.scss";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import LeftSidebar from "./LeftSidebar";

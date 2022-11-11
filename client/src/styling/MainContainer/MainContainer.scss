@@ -69,6 +69,30 @@
     font-family: Poppins;
 }
 
+.disconnectWalletButton {
+    height: 4rem;
+    font-size: 1.5rem;
+    font-family: "Roboto Mono", monospace;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transform: translate(0);
+    background-image: linear-gradient(45deg, #2bc0e4, #edb037);
+    border-radius: 0.6rem;
+    box-shadow: 0 22px 44px rgba(gray, 0.1);
+    transition: box-shadow 0.25s;
+    border: none;
+    transition: all 0.3s ease;
+    .text {
+        color: white;
+    }
+    &:hover {
+        transition: all 0.3s ease;
+        background-image: linear-gradient(45deg, rgba(#2bc0e4, 0.8), rgba(#edb037, 0.9));
+        box-shadow: 0 12px 24px rgba(#3daeee, 0.15);
+    }
+}
+
 .footer_button{
     padding: 10px 36px;
     color: #FFFFFF;

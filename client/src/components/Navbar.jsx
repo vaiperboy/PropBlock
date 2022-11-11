@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styling/Navbar/Navbar.scss";
 import { Link } from "react-router-dom";
-import { Avatar } from "@web3uikit/core";
+import { Avatar, Blockie } from "@web3uikit/core";
 import { useMoralis } from "react-moralis";
 import NavbarIcon from "../assets/framer-1.png";
 
@@ -17,25 +17,7 @@ const Navbar = (props) => {
     account,
     logout,
   } = useMoralis();
-
-  const login = async () => {
-    if (!isAuthenticated) {
-      await authenticate({ signingMessage: "Log in using Moralis" })
-        .then(function (user) {
-          console.log("logged in user:", user);
-          console.log(user.get("ethAddress"));
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
-  };
-
-  const logOut = async () => {
-    await logout();
-    console.log("logged out");
-  };
-
+  
   useEffect(() => {
     if (isAuthenticated) {
       // add your logic here

@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { useMoralis } from "react-moralis";
 import { Link } from "react-router-dom";
-import { Form, Button, Input, Dropdown, Typography } from "@web3uikit/core";
-import { ConnectButton } from "@web3uikit/web3";
-import { AddUser } from "@web3uikit/icons";
 import { message, Alert } from "antd";
 import "../styling/Login/Login.scss";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 // -----------------
@@ -24,9 +20,7 @@ const { ethereum } = window;
 
 // main function
 const Login2 = () => {
-  const [email, setEmail] = useState("");
   const [userAddress, setUserAddress] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [walletConnected, setWalletConnected] = useState(false);
   const nav = useNavigate();
   const {
@@ -48,15 +42,6 @@ const Login2 = () => {
   } = useMoralis();
   let sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 
-  // validates the email entered
-  const validateEmail = (email) => {
-    var validRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    if (validRegex.test(email)) {
-      return true;
-    } else {
-      return false;
-    }
-  };
 
   // checks if the user with the address exists already in the db
   const checkUserExists = async (address) => {
@@ -73,7 +58,7 @@ const Login2 = () => {
 
 
   // logs the user in using the email & address
-  const loginUser = async (email) => {
+  const loginUser = async () => {
     try {
       if (!window.ethereum) {
         message.error(
@@ -93,32 +78,27 @@ const Login2 = () => {
         );
         return;
       } else {
-        let value = await authenticate();
-        if (value === undefined) {
-          message.error("Wallet signature rejected!");
-          return;
+        let user = Moralis.User.current();
+        if (!user) {
+          if (!isAuthenticated) {
+            await authenticate()
+              .then(function (user) {
+                
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          }
         } else {
-          message.success("User is successfully logged In!");
-          setIsLoggedIn(true);
+          console.log("logged in user: " + user);
         }
-        await sleep(2500);
-        await nav("/");
       }
-    } catch (error) {
-      message.error("Error " + error.code + ": ", error.message);
+    }
+    catch (error) {
+      message.error(error);
     }
   };
 
-  // connect the metamask wallet
-  // const connectWallet = async () => {
-  //   try {
-  //     if (!isAuthenticated) {
-  //       await authenticate().then(function (user) {});
-  //     }
-  //   } catch (error) {
-  //     message.error(error);
-  //   }
-  // };
 
   const connectWallet = async () => {
     try {
@@ -136,39 +116,9 @@ const Login2 = () => {
     }
   };
 
-  const checkWalletConnected = async () => {
-    var provider = new ethers.providers.Web3Provider(ethereum);
-    const accounts = await provider.listAccounts();
-    return accounts.length > 0;
-  };
-
-  // disconnects the metamask wallet
-  // const disconnectWallet = async () => {
-  //   try {
-  //     await checkWalletConnected().then((connected) => {
-  //       if (connected) {
-
-  //       }
-  //     });
-  //   } catch (error) {
-  //     console.error("Error: ", error);
-  //   }
-  // };
-
-  // const disconnectWallet = async () => {
-  //   try {
-  //     const loggedout = await logout();
-  //     if (loggedout) {
-  //       setIsLoggedIn(true);
-  //     }
-  //   } catch (error) {
-  //     message.error("Error " + error.code + ": ", error.message);
-  //   }
-  // };
-
   return (
     <div>
-      <Navbar signedIn2={isAuthenticated} />
+      <Navbar />
       <div className="loginPage">
         <div className="leftSide">
           <div className="illustrationDiv">
@@ -204,14 +154,14 @@ const Login2 = () => {
             </div>
             <button
               onClick={() => {
-                loginUser(email);
+                loginUser();
               }}
               disabled={isAuthenticating}
               className="loginButton"
             >
               Login
             </button>
-            {isLoggedIn && (
+            {isAuthenticated && (
               <Alert
                 message="Login successful. Redirecting to home page."
                 type="success"
