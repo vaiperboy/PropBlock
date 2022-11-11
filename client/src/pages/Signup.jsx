@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { useMoralis, useMoralisQuery } from "react-moralis";
+import { useMoralis, useNewMoralisObject } from "react-moralis";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  Form,
   Button,
   Input,
   Stepper,
   Upload,
-  TextArea,
   VerifyCode,
-  CodeArea,
 } from "@web3uikit/core";
 import { message, Alert, notification, Checkbox } from "antd";
 import realEstate from "../artifacts/contracts/realEstate.sol/realEstate.json";
@@ -24,17 +21,19 @@ import Navbar from "../components/Navbar";
 import signup_illustration from "../assets/signup_illustration.png";
 import metamask from "../assets/icons8-metamask-logo-96-min.png";
 import { useEffect } from "react";
+import ipfs from "../modules/ipfs";
 
 // import { ArrowLeftOutlined } from "@ant-design/icons";
 const console = require("console-browserify");
 
 const { ethers } = require("ethers");
-const { ethereum } = window;
 
 const validateEmail = (email) => {
   var validRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
   return validRegex.test(email)
 };
+
+
 
 // main function
 const App = () => {
@@ -57,17 +56,22 @@ const App = () => {
   const [fullName, setFullName] = useState("");
   // const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [emailVerified, setEmailVerified] = useState("");
+  const [emailVerified, setEmailVerified] = useState(false);
   const [otpCode, setOTPCode] = useState("");
-
-  const [signedUpSuccessfully, setSignedUpSuccessfully] = useState(true);
-  const [codeVerified, setCodeVerified] = useState(false);
+  const [isValidated, setIsValidated] = useState(true);
+  const [codeVerified, setCodeVerified] = useState(true);
   const [userAddress, setUserAddress] = useState("");
   const [walletConnected, setWalletConnected] = useState(false);
 
-  const [idDocumentsVerified, setIdDocumentsVerified] = useState(false);
-  const [passportDocumentsVerfied, setPassportDocumentsVerfied] =
-    useState(false);
+  const [idDocumentsVerified, setIdDocumentsVerified] = useState(true);
+  const [passportDocumentsVerified, setPassportDocumentsVerified] = useState(true);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const [frontIdDocument, setFrontIdDocument] = useState({});
+  const [backIdDocument, setBackIdDocument] = useState({});
+  const [frontPassportDocument, setFrontPassportDocument] = useState({});
+  const [backPassportDocument, setBackPassportDocument] = useState({});
+
 
   const {
     setUserData,
@@ -95,26 +99,6 @@ const App = () => {
     }
   };
 
-  // add an email and address of user to UserEmails table in moralis
-  const addEmail = async (address, email) => {
-    const Users = Moralis.Object.extend("UserEmails");
-    const user = new Users();
-    const addrNew = address.toLowerCase();
-    const emailNew = email.toLowerCase();
-    user
-      .save({
-        address: `${addrNew}`,
-        email: `${emailNew}`,
-      })
-      .then(
-        (user) => {},
-        (error) => {
-          // The save failed.
-          message.error("Error: " + error);
-          // error is a Moralis.Error with an error code and message.
-        }
-      );
-  };
 
   // check if email
   const emailAlreadyExists = async (email) => {
@@ -123,40 +107,100 @@ const App = () => {
       const query = new Moralis.Query(userEmails);
       query.equalTo("email", email.toLowerCase());
       const results = await query.find();
-      if (results.length === 0) {
-        return false;
-      } else {
-        return true;
-      }
+      console.log(email);
+      if (results.length > 0) return (email + " already exists!");
+      return "";
     } catch (error) {
       message.error("Error: " + error);
     }
   };
 
   // checks if the user with the address exists already in the db
-  const checkUserExists = async (address) => {
+  const checkAddressExists = async (address) => {
     try {
-      const userEmails = Moralis.Object.extend("UserEmails");
-      const query = new Moralis.Query(userEmails);
-      query.equalTo("address", address.toLowerCase());
+      const users = Moralis.Object.extend("usersSignedUp");
+      const query = new Moralis.Query(users);
+      query.equalTo("address", address);
+      query.limit(1);
+      query.withCount();
       const results = await query.find();
-      if (results.length === 0) {
-        return false;
+      if (results.count == 0) {
+        return "";
       } else {
-        message.error(
+        return ("User with the address (" +
+          address +
+          " ) already exists! Please connect a new wallet address.");
+        /*message.error(
           "User with the address (" +
             user.get("ethAddress") +
             " ) already exists! Please connect a new wallet address."
-        );
-        return true;
+        );*/
       }
     } catch (error) {
       message.error("Error: " + error);
+      return error;
     }
   };
 
-  // connect the metamask wallet
-  const connectWallet = async () => {
+  //check if account doesn't exist (1st step)
+  const validateUser = async (email, address) => {
+    try {
+      const errors = [];
+
+      if (!walletConnected)
+        errors.push("Connect a wallet!");
+      if (fullName === "" || email === "") {
+        errors.push("Please make sure Name & Email inputs are filled!");
+      } else {
+        const nameReg = /^[a-zA-Z]+$/;
+        if (!nameReg.test(fullName)) {
+          errors.push("Error: Full Name can only contain characters");
+        }
+        const isValid = validateEmail(email);
+        if (!isValid) {
+          errors.push(
+            "Invalid Email address! Enter a valid email address to continue."
+          );
+        }
+      }
+
+      //first step of validation
+      if (errors.length > 0) {
+        errors.forEach((e) => message.error(e));
+        return;
+      }
+
+      var mailExists = (await emailAlreadyExists(email));
+      if (mailExists.length > 0) {
+        errors.push(mailExists);
+      }
+
+      var addressExists = (await checkAddressExists(address));
+      if (addressExists.length > 0) {
+        errors.push(addressExists);
+      }
+
+      //if no errors means user does not exist
+      //means he can proceed
+      if (errors.length == 0) {
+        setIsValidated(true);
+        message.info("yla continue");
+      }
+
+      else {
+        //incase
+        setIsValidated(false);
+        errors.forEach((e) => {
+          message.error(e);
+        });
+      }
+    } catch (error) {
+      message.error("error: " + error);
+    }
+  }
+
+  // connect wallet for verification (1st step)
+  const connectWallet1 = async () => {
     try {
       // A Web3Provider wraps a standard Web3 provider, which is
       // what MetaMask injects as window.ethereum into each page
@@ -167,78 +211,38 @@ const App = () => {
       console.log("Account:", await signer.getAddress());
       setUserAddress(await signer.getAddress());
       setWalletConnected(true);
-      console.log(isAuthenticated);
     } catch (error) {
       console.log("error: ", error);
     }
   };
 
   // sign up a user
-  const SignUpUser = async (fullName, email) => {
-    try {
-      if (fullName === "" || email === "") {
-        message.error("Please fill out the input fields to Sign up.");
-        return;
-      }
-      const nameReg = /^[a-zA-Z]+$/;
-      if (!nameReg.test(fullName)) {
-        message.error("Error: Full Name can only contain characters");
-        return;
-      }
-      const isValid = await validateEmail(email);
-      if (!isValid) {
-        message.error(
-          "Invalid Email address! Enter a valid email address to continue."
-        );
-        return;
-      }
-      const emailExists = await emailAlreadyExists(email);
-      if (emailExists) {
-        message.error("Email already exists! Enter another email.");
-        return;
-      }
-      if (!window.ethereum) {
-        message.error(
-          "Metamask not detected! Please install metamask to continue."
-        );
-        return;
-      }
+  const { save } = useNewMoralisObject("usersSignedUp");
 
-      // wallet is connected
-      if (!isAuthenticated) {
-        message.error("Please connect a wallet to continue.");
-        return;
-      } else {
-        const currentUser = Moralis.User.current();
-        const userExists = await checkUserExists(currentUser.get("ethAddress"));
-        if (!userExists) {
-          const currentUser = Moralis.User.current(); // this will now be null
-          currentUser.set("fullName", `${fullName}`);
-          currentUser.set("email", `${email}`);
-          // user is signed up
-          const saved = await currentUser.save();
-          if (saved) {
-            const emailAdded = await addEmail(
-              currentUser.get("ethAddress"),
-              email
-            );
-            if (emailAdded) {
-              await realEstateContract.addLandlord(user.get("ethAddress"));
-              setSignedUpSuccessfully(true);
-              message.success(
-                "User (" +
-                  user.get("ethAddress").slice(0, 10) +
-                  "...) signed up successfully."
-              );
-            }
-          }
+  const uploadDocuments = async () => {
+
+  }
+
+  const SignUpUser2 = async () => {
+    message.info("Registring into database....");
+    try {
+      const data = {
+        "address": userAddress,
+        "fullName": fullName,
+        "email": email
+      };
+      save(data, {
+        onSuccess: (obj) => {
+          message.info("New object created with objectId: " + obj.id);
+        },
+        onError: (error) => {
+          message.error("Failed to create new object, with error code: " + error.message);
         }
-      }
+      })
     } catch (error) {
-      // Show the error message somewhere and let the user try again.
-      message.error("Error1: ", error.message);
+      message.error("parent error: " + error);
     }
-  };
+  }
 
 
   // links to the Login Page
@@ -252,7 +256,7 @@ const App = () => {
       message: "New code sent successfully!",
       description:
         "A new confirmation code was sent to your email successfully. Please note the code and enter the code below to continue.",
-      onClick: () => {},
+      onClick: () => { },
       style: {
         backgroundColor: "#ffffff",
       },
@@ -288,23 +292,95 @@ const App = () => {
     console.log("code", code);
   };
 
-  const checkPassportDocumentsVerfied = (e) => {
-    if (e.target.checked) {
-      setPassportDocumentsVerfied(true);
-    } else {
-      setPassportDocumentsVerfied(false);
-    }
-  };
+  const getExtension = (file) => {
+    return file.slice((file.lastIndexOf(".") - 1 >>> 0) + 2);
+  }
 
-  const checkIdDocumentsVerified = (e) => {
+
+  //true if extension within range
+  const checkExtension = (val, arr) => {
+    return arr.indexOf(val) != -1;
+  }
+
+  const extensionsAllowed = ["pdf", "png", "jpg", "jpeg"];
+  //for renaming files when uploading to IPFS
+  const renameFile = (originalFile, newName) => {
+    return new File([originalFile], newName, {
+      type: originalFile.type,
+      lastModified: originalFile.lastModified,
+    });
+  }
+
+  const verifyIdDocuments = (e) => {
     if (e.target.checked) {
-      setIdDocumentsVerified(true);
-    } else {
-      setIdDocumentsVerified(false);
+      var errors = [];
+      var frontExtension = "";
+      var backExtension = "";
+      if (frontIdDocument.name == undefined || backIdDocument.name == undefined) {
+        errors.push("Please make sure you upload files for both fields!");
+      } else {
+        frontExtension = getExtension(frontIdDocument.name);
+        backExtension = getExtension(backIdDocument.name);
+        if (!checkExtension(frontExtension, extensionsAllowed))
+          errors.push("Make sure front ID has the following format: " + extensionsAllowed.join(", "));
+        if (!checkExtension(backExtension, extensionsAllowed))
+          errors.push("Make sure back ID has the following format: " + extensionsAllowed.join(", "));
+      }
+      if (errors.length == 0) {
+        setIdDocumentsVerified(true);
+
+        //rename files
+        const front = renameFile(frontIdDocument, "front ID." + frontExtension);
+        const back = renameFile(backIdDocument, "back ID." + backExtension);
+        setFrontIdDocument(front);
+        setBackIdDocument(back);
+      }
+      else {
+        setIdDocumentsVerified(false);
+        errors.forEach((e) => message.error(e));
+      }
+      e.target.checked = idDocumentsVerified;
     }
-  };
+  }
+
+
+
+  const verifyPassportDocuments = (e) => {
+    if (e.target.checked) {
+      var errors = [];
+      var frontExtension = "";
+      var backExtension = "";
+      if (frontPassportDocument.name == undefined || backPassportDocument.name == undefined) {
+        errors.push("Please make sure you upload files for both fields!");
+      } else {
+        frontExtension = getExtension(frontPassportDocument.name);
+        backExtension = getExtension(backPassportDocument.name)
+        if (!checkExtension(frontExtension, extensionsAllowed))
+          errors.push("Make sure front passport has the following format: " + extensionsAllowed.join(", "));
+        if (!checkExtension(backExtension, extensionsAllowed))
+          errors.push("Make sure back passport has the following format: " + extensionsAllowed.join(", "));
+      }
+
+      if (errors.length == 0) {
+        setPassportDocumentsVerified(true);
+
+        //rename files
+        const front = renameFile(frontPassportDocument, "front passport." + frontExtension);
+        const back = renameFile(backPassportDocument, "back passport." + backExtension);
+        setFrontPassportDocument(front);
+        setBackPassportDocument(back);
+      }
+      else {
+        setPassportDocumentsVerified(false);
+        errors.forEach((e) => message.error(e));
+      }
+      e.target.checked = passportDocumentsVerified;
+    }
+  }
+
 
   useEffect(() => {
+    console.log("is wallet connected: ", walletConnected)
     console.log("isauthenticated: ", isAuthenticated);
   }, [isAuthenticated]);
 
@@ -344,7 +420,6 @@ const App = () => {
                             onChange={(e) => {
                               setFullName(e.target.value);
                             }}
-                            state="confirmed ? 'confirmed' : error"
                           />
                         </div>
                         <div className="email">
@@ -365,9 +440,9 @@ const App = () => {
                             style={{ marginTop: "3rem" }}
                           />
                         </div>
-                        {(!isAuthenticated || !walletConnected) ? (
+                        {(!walletConnected || userAddress.length == 0) ? (
                           <button
-                            onClick={connectWallet}
+                            onClick={connectWallet1}
                             className="connectWalletButton"
                           >
                             Connect Wallet
@@ -377,15 +452,18 @@ const App = () => {
                           <button
                             className="disconnectWalletButton"
                             onClick={() => {
-                              disconnectWallet();
+                              //disconnectWallet();
+                              //setWalletConnected(false);
+                              //setUserAddress("");
                             }}
                           >
-                            Disconnect Wallet
+                            Disconnect Wallet from metamask & refresh
                           </button>
                         )}
                         <Button
                           onClick={() => {
-                            SignUpUser(fullName, email);
+                            //SignUpUser(fullName, email);
+                            validateUser(email, userAddress);
                           }}
                           type="Proceed"
                           text="Proceed"
@@ -407,7 +485,7 @@ const App = () => {
                           </Link>{" "}
                           instead.
                         </div>
-                        {signedUpSuccessfully && (
+                        {isValidated && (
                           <button id="next" className="nextButton">
                             Next
                           </button>
@@ -489,14 +567,14 @@ const App = () => {
                       <h2>Upload Identification Documents</h2>
                       <p>Upload passport - Front Page</p>
                       <Upload
-                        onChange={function noRefCheck() {}}
                         theme="textOnly"
+                        onChange={(file) => setFrontPassportDocument(file)}
                       />
-                      <p style={{ marginTop: "2rem" }}>
+                      <p style={{ marginTop: "1.5rem" }}>
                         Upload passport - Back Page
                       </p>
                       <Upload
-                        onChange={function noRefCheck() {}}
+                        onChange={(file) => setBackPassportDocument(file)}
                         theme="textOnly"
                       />
                       <div>
@@ -505,15 +583,16 @@ const App = () => {
                             type="checkbox"
                             name="passportCheckBox"
                             id="passportCheckBox"
-                            onClick={checkPassportDocumentsVerfied}
+                            value={passportDocumentsVerified}
+                            onClick={verifyPassportDocuments}
                           />
                           <p>
-                            I confirm that the ID is valid until expiry date and
+                            I confirm that the <strong>passport</strong> is valid until expiry date and
                             is in color.
                           </p>
                         </div>
                       </div>
-                      {passportDocumentsVerfied ? (
+                      {passportDocumentsVerified ? (
                         <button id="next" className="nextButton">
                           Next
                         </button>
@@ -547,12 +626,13 @@ const App = () => {
                       <h2>Upload Identification Documents</h2>
                       <p>Upload ID - Front Page</p>
                       <Upload
-                        onChange={function noRefCheck() {}}
+                        onChange={(file) => setFrontIdDocument(file)}
                         theme="textOnly"
                       />
+                      <p style={{ marginTop: "1.5rem" }}></p>
                       <p>Upload ID - Back Page</p>
                       <Upload
-                        onChange={function noRefCheck() {}}
+                        onChange={(file) => setBackIdDocument(file)}
                         theme="textOnly"
                       />
                       <div className="checkBoxDiv">
@@ -560,10 +640,11 @@ const App = () => {
                           type="checkbox"
                           name="idCheckBox"
                           id="idCheckBox"
-                          onClick={checkIdDocumentsVerified}
+                          onChange={verifyIdDocuments}
+                          value={passportDocumentsVerified}
                         />
                         <p>
-                          I confirm that the ID is valid until expiry date and
+                          I confirm that the <strong>ID</strong> is valid until expiry date and
                           is in color.
                         </p>
                       </div>
@@ -1527,7 +1608,7 @@ const App = () => {
                             type="checkbox"
                             name="termsCheckBox"
                             id="termsCheckBox"
-                            onClick={checkIdDocumentsVerified}
+                            onClick={(e) => setTermsAccepted(e.target.checked)}
                           />
                           <p>
                             I have read and agree to the terms and conditions of
@@ -1538,14 +1619,14 @@ const App = () => {
                       <div className="termsSectionBottom">
                         <Button
                           onClick={() => {
-                            accountCreated();
+                            SignUpUser2();
                           }}
                           text="Create Account"
                           theme="colored"
                           color="blue"
                           size="large"
                           isFullWidth="true"
-                          disabled={isAuthenticating}
+                          disabled={!termsAccepted}
                           className="SignUpButton"
                           style={{
                             width: "35%",

@@ -19,7 +19,4 @@ const ipfs = create({
 //for retriving files
 const _ipfs = create(new URL("https://dweb.link/api/v0"));
 
-export {
-    ipfs,
-    _ipfs
-} 
+export default ipfs;

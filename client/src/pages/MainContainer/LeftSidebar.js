@@ -4,7 +4,7 @@ import stats from './stats.png';
 class LeftSidebar extends React.Component{
 
 	state={
-		isBuyer:false
+		isBuyer:true
     }
 
 	componentDidMount=()=>{
@@ -28,10 +28,10 @@ class LeftSidebar extends React.Component{
 			<div className='leftsidebar_container'>
 				<div style={{width:'100%', display:'flex'}}>
 						<div style={{display: 'flex', gap: '15px'}}>
-							<button className={this.state.isBuyer ? 'leftsidebar_button_outlined' : "leftsidebar_button"} style={{userSelect:'none'}} onClick={this.switchToSeller}>
+							<button className={this.state.isBuyer ? 'leftsidebar_button' : "leftsidebar_button_outlined"} style={{userSelect:'none'}} onClick={this.switchToBuyer}>
 								Buyer
 							</button>
-							<button className={this.state.isBuyer ? 'leftsidebar_button' : "leftsidebar_button_outlined"} style={{userSelect:'none'}} onClick={this.switchToBuyer}>
+							<button className={this.state.isBuyer ? 'leftsidebar_button_outlined' : "leftsidebar_button"} style={{userSelect:'none'}} onClick={this.switchToSeller}>
 								Seller
 							</button>
 						</div>
@@ -72,10 +72,6 @@ class LeftSidebar extends React.Component{
 								</defs>
 							</svg>
 							Agreements
-						</div>
-						<div className='leftsidebar_item' style={{color: (this.props.menuState.statsView)?'#3DAEEE':""}} onClick={()=>{this.props.toggleStatsView(true)}}>
-							<img src={stats}/>
-							Statistics
 						</div>
 						<div className='leftsidebar_item' style={{color: (this.props.menuState.paymentView)?'#3DAEEE':""}} onClick={()=>{this.props.togglePaymentView(true)}}>
 							<svg width="14" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">

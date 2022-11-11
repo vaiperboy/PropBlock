@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Routes, Route, Redirect, Link, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import PropertyFunc from "./Functions/PropertyFunc";
@@ -15,7 +15,6 @@ import Aboutus from "./pages/Aboutus";
 import ProtectedRoute from "./ProtectedRoute";
 import FAQ from "./pages/FAQ";
 import MainContainer from "./pages/MainContainer/MainContainer";
-import { useMoralis, useMoralisQuery } from "react-moralis";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import ContactUs from "./pages/ContactUs";
 

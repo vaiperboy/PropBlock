@@ -65,11 +65,7 @@ const Login2 = () => {
       const query = new Moralis.Query(userEmails);
       query.equalTo("address", address);
       const results = await query.find();
-      if (results.length === 0) {
-        return false;
-      } else {
-        return true;
-      }
+      return results.length != 0;
     } catch (error) {
       message.error("Error: " + error);
     }
