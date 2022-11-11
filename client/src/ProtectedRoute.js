@@ -38,7 +38,8 @@ function ProtectedRoute({ component }) {
     ...rest
   } = useMoralis();
 
-  return isAuthenticated ? { ...component } : <NoMatch />;
+  //return isAuthenticated ? { ...component } : <NoMatch />;
+  return { ...component }
 }
 
 export default ProtectedRoute;

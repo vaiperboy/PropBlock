@@ -164,9 +164,10 @@ const App = () => {
       // MetaMask requires requesting permission to connect users accounts
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
-      // console.log("Account:", await signer.getAddress());
+      console.log("Account:", await signer.getAddress());
       setUserAddress(await signer.getAddress());
       setWalletConnected(true);
+      console.log(isAuthenticated);
     } catch (error) {
       console.log("error: ", error);
     }
@@ -364,7 +365,7 @@ const App = () => {
                             style={{ marginTop: "3rem" }}
                           />
                         </div>
-                        {!isAuthenticated ? (
+                        {(!isAuthenticated || !walletConnected) ? (
                           <button
                             onClick={connectWallet}
                             className="connectWalletButton"

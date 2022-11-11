@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import login_illustration from "../assets/login_illustration.png";
 import login_svg from "../assets/login-image-min.png";
 import metamask from "../assets/icons8-metamask-logo-96-min.png";
+import MoralisType from "moralis-v1";
 
 const console = require("console-browserify");
 const { ethers } = require("ethers");
@@ -74,6 +75,7 @@ const Login2 = () => {
     }
   };
 
+
   // logs the user in using the email & address
   const loginUser = async (email) => {
     try {
@@ -91,7 +93,7 @@ const Login2 = () => {
       const userExists = await checkUserExists(userAddress);
       if (!userExists) {
         message.error(
-          "Invalid email or wrong wallet address connected! \nPlease connect a wallet that is signed up. "
+          "Invalid wallet connected! \nPlease connect a wallet that is signed up. "
         );
         return;
       } else {
