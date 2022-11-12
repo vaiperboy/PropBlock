@@ -76,10 +76,10 @@ class LeftSidebar extends React.Component {
 			<div className='leftsidebar_container'>
 				<div style={{ width: '100%', display: 'flex' }}>
 					<div style={{ display: 'flex', gap: '15px' }}>
-						<button className={this.state.isBuyer ? 'leftsidebar_button_outlined' : "leftsidebar_button"} style={{ userSelect: 'none' }} onClick={this.switchToSeller}>
+						<button className={this.state.isBuyer ? 'leftsidebar_button' : "leftsidebar_button_outlined"} style={{ userSelect: 'none' }} onClick={this.switchToBuyer}>
 							Buyer
 						</button>
-						<button className={this.state.isBuyer ? 'leftsidebar_button' : "leftsidebar_button_outlined"} style={{ userSelect: 'none' }} onClick={this.switchToBuyer}>
+						<button className={this.state.isBuyer ? 'leftsidebar_button_outlined' : "leftsidebar_button"} style={{ userSelect: 'none' }} onClick={this.switchToSeller}>
 							Seller
 						</button>
 					</div>
