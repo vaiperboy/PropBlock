@@ -40,20 +40,51 @@ const MyProfile = () => {
 	)
 
 	useEffect(() => {
-		async function loadData() {
-			try {
-				const result = await fetch();
-				if (result.length == 1) {
-					result = result[0];
-					message.info(result.get("email"));
-				}
-			} catch (error) {
-				message.error(error);
-			}
-			
+		setEmailAddress(user.get("email"));
+		setFullName(user.get("fullName"));
+		setDescription("big data");
+	}, [user])
+
+	const validateEmail = (email) => {
+		var validRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+		return validRegex.test(email)
+	};
+
+	const validateProfile = () => {
+		var errors = [];
+		const nameReg = /^[a-zA-Z]+$/;
+		if (!nameReg.test(fullName)) {
+			errors.push("Error: Full Name can only contain characters");
 		}
-		loadData();
-	})
+		const isValid = validateEmail(emailAddress);
+		if (!isValid) {
+			errors.push(
+				"Invalid Email address! Enter a valid email address to continue."
+			);
+		}
+
+		if (errors.length == 0) return true;
+		errors.forEach((e) => message.error(e));
+		return false;
+	}
+
+	const updateProfile = () => {
+		if (Moralis.User.current()) {
+			if (validateProfile()) {
+				try {
+					user.set("fullName", fullName);
+					user.set("email", emailAddress);
+					user.save();
+					message.success("Updated profile!");
+				}
+				catch (error) {
+					message.error("Error in updating profile: " + error);
+				}
+
+			}
+		} else message.error("you are not logged in??");
+
+	}
 
 	return (
 		<div className='rightsidebar_container'>
@@ -69,7 +100,7 @@ const MyProfile = () => {
 						<div style={{ display: 'flex', justifyContent: 'space-between', width: '80%', alignItems: 'center' }}>
 							<p className='profile_address'>Address - [{shortenAddress(user.get("ethAddress"), 18)}]</p>
 							<div style={{ display: 'flex', gap: '15px' }}>
-								<button className='profile_button' style={{ userSelect: 'none', height: 'fit-content' }}>
+								<button className='profile_button' style={{ userSelect: 'none', height: 'fit-content' }} onClick={updateProfile}>
 									Edit Profile
 								</button>
 							</div>
@@ -80,22 +111,32 @@ const MyProfile = () => {
 					<div>
 						<p>Name</p>
 						<Input
-							className="profile_form_input"
 							type="text"
-							placeholder="asd"
+							placeholder={fullName}
+							validation={{
+								required: true,
+								characterMinLength: 3,
+							}}
+							onChange={(e) => setFullName(e.target.value)}
 						/>
 					</div>
 					<div>
 						<p>Email</p>
 						<Input
-							className="profile_form_input"
 							type="text"
 							style={{ width: "550px" }}
+							placeholder={emailAddress}
+							validation={{
+								required: true,
+								regExp: "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$",
+								regExpInvalidMessage: "Invalid email address",
+							}}
+							onChange={(e) => setEmailAddress(e.target.value)}
 						/>
 					</div>
 					<div>
 						<p>Description</p>
-						<textarea className="profile_form_textarea" type="text" value="None" />
+						<textarea className="profile_form_textarea" type="text" placeholder={description} />
 					</div>
 				</div>
 			</div>

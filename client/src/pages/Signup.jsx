@@ -1697,7 +1697,7 @@ const App = () => {
                               color="blue"
                               size="large"
                               isFullWidth="true"
-                              disabled={false}
+                              disabled={true}
                               className="SignUpButton"
                               style={{
                                 width: "35%",
