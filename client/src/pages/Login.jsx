@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMoralis } from "react-moralis";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { message, Alert } from "antd";
 import "../styling/Login/Login.scss";
 import Navbar from "../components/Navbar";
@@ -83,7 +83,7 @@ const Login2 = () => {
           if (!isAuthenticated) {
             await authenticate()
               .then(function (user) {
-                
+                loggedin();
               })
               .catch(function (error) {
                 console.log(error);
@@ -115,6 +115,13 @@ const Login2 = () => {
       console.log("error: ", error);
     }
   };
+
+  let navigate = useNavigate();
+  const loggedin = async () => {
+    message.success("Login successful. Redirecting to home page.");
+    await sleep(2500);
+    navigate("/");
+  }
 
   return (
     <div>
@@ -161,12 +168,6 @@ const Login2 = () => {
             >
               Login
             </button>
-            {isAuthenticated && (
-              <Alert
-                message="Login successful. Redirecting to home page."
-                type="success"
-              />
-            )}
           </div>
         </div>
       </div>
