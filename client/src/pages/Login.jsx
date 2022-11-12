@@ -48,7 +48,7 @@ const Login2 = () => {
     try {
       const userEmails = Moralis.Object.extend("usersSignedUp");
       const query = new Moralis.Query(userEmails);
-      query.equalTo("address", address);
+      query.equalTo("address", address.toLowerCase());
       const results = await query.find();
       return results.length != 0;
     } catch (error) {

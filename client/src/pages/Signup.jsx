@@ -58,7 +58,7 @@ const App = () => {
   const [email, setEmail] = useState("");
   const [emailVerified, setEmailVerified] = useState(false);
   const [otpCode, setOTPCode] = useState("");
-  
+
   const [userAddress, setUserAddress] = useState("");
   const [walletConnected, setWalletConnected] = useState(false);
 
@@ -107,7 +107,7 @@ const App = () => {
   // check if email
   const emailAlreadyExists = async (email) => {
     try {
-      const userEmails = Moralis.Object.extend("usersSignedUp");
+      const userEmails = Moralis.Object.extend("_Users");
       const query = new Moralis.Query(userEmails);
       query.equalTo("email", email.toLowerCase());
       const results = await query.find();
@@ -122,7 +122,7 @@ const App = () => {
   // checks if the user with the address exists already in the db
   const checkAddressExists = async (address) => {
     try {
-      const users = Moralis.Object.extend("usersSignedUp");
+      const users = Moralis.Object.extend("ethAddress");
       const query = new Moralis.Query(users);
       query.equalTo("address", address);
       query.limit(1);
@@ -233,28 +233,28 @@ const App = () => {
           wrapWithDirectory: true,
           //progress: (prog) => console.log(`[ipfs] received: ${prog}`)
         };
-  
+
         const files = [
           frontIdDocument,
           backIdDocument,
           frontPassportDocument,
           backPassportDocument
         ];
-  
+
         var hash = "";
         console.log(files);
         for await (const result of ipfs.addAll(files, options)) {
           console.log(result);
           hash = result.cid._baseCache.entries().next().value[1];
         }
-  
+
         resolve(hash)
       } catch (error) {
         message.error("error with IPFS: " + error);
         resolve("");
       }
     });
-    
+
   }
   window.uploadDocuments = uploadDocuments;
 
@@ -268,27 +268,39 @@ const App = () => {
         message.error("Failure in uploading documents...");
       }
       else {
-        message.info("registering with: " + ipfs);
-        const data = {
-          "address": userAddress,
-          "fullName": fullName,
-          "email": email,
-          "ipfsHash": ipfs
-        };
-        
-        save(data, {
-          onSuccess: (obj) => {
-            //message.info("New object created with objectId: " + obj.id);
-            accountCreated();
-            setRegistering(false);
-          },
-          onError: (error) => {
-            //message.error("Failed to create new object, with error code: " + error.message);
-            message.error("Failture in creating account...");
-          }
-        })
+        if (!Moralis.User.current()) {
+          await authenticate()
+            .then(function (user) {
+              user.set("fullName", fullName);
+              user.set("email", email);
+              user.set("ipfsHash", ipfs);
+              user.save();
+              const data = {
+                "address": user.get("ethAddress")
+              };
+
+              save(data, {
+                onSuccess: (obj) => {
+                  //message.info("New object created with objectId: " + obj.id);
+                  accountCreated();
+                  setRegistering(false);
+                },
+                onError: (error) => {
+                  //message.error("Failed to create new object, with error code: " + error.message);
+                  message.error("Failure in registering account");
+                  logout().then();
+                }
+              })
+            })
+            .catch(function(error) {
+              message.error("Couldn't authorize wallet: " + error);
+            }); 
+            
+          
+        }
+
       }
-      
+
     } catch (error) {
       message.error("ERROR: " + error);
     }
@@ -314,9 +326,9 @@ const App = () => {
   };
 
   const accountCreated = async () => {
-      message.success("Account created successfully! Redirecting to login page ...");
-      await sleep(2500);
-      navigate("/login");
+    message.success("Account created successfully! Redirecting to login page ...");
+    await sleep(2500);
+    navigate("/login");
   };
 
   const checkOTPCode = async (code) => {
@@ -418,7 +430,7 @@ const App = () => {
         e.target.checked = false;
         setPassportDocumentsVerified(false);
         errors.forEach((e) => message.error(e));
-      }      
+      }
     } else setPassportDocumentsVerified(false);
   }
 
@@ -609,7 +621,7 @@ const App = () => {
                       <h2>Upload Identification Documents</h2>
                       <p>Upload passport - Front Page</p>
                       <Upload
-                      value=""
+                        value=""
                         theme="withIcon"
                         onChange={setFrontPassportDocument}
                       />
@@ -617,7 +629,7 @@ const App = () => {
                         Upload passport - Back Page
                       </p>
                       <Upload
-                      value=""
+                        value=""
                         onChange={setBackPassportDocument}
                         theme="withIcon"
                       />
@@ -669,14 +681,14 @@ const App = () => {
                       <h2>Upload Identification Documents</h2>
                       <p>Upload ID - Front Page</p>
                       <Upload
-                      value=""
+                        value=""
                         onChange={setFrontIdDocument}
                         theme="withIcon"
                       />
                       <p style={{ marginTop: "1.5rem" }}></p>
                       <p>Upload ID - Back Page</p>
                       <Upload
-                      value=""
+                        value=""
                         onChange={setBackIdDocument}
                         theme="withIcon"
                       />
@@ -1663,37 +1675,37 @@ const App = () => {
                       <div className="termsSectionBottom">
                         {
                           !isRegistering ?
-                          <Button
-                            onClick={async () => {
-                              await SignUpUser();
-                            }}
-                            text="Create Account"
-                            theme="colored"
-                            color="blue"
-                            size="large"
-                            isFullWidth="true"
-                            disabled={(!termsAccepted)}
-                            className="SignUpButton"
-                            style={{
-                              width: "35%",
-                            }}
-                          />
-                           :
-                           <Button
-                            text="Creating account..."
-                            theme="colored"
-                            color="blue"
-                            size="large"
-                            isFullWidth="true"
-                            disabled={false}
-                            className="SignUpButton"
-                            style={{
-                              width: "35%",
-                            }}
-                          />
+                            <Button
+                              onClick={async () => {
+                                await SignUpUser();
+                              }}
+                              text="Create Account"
+                              theme="colored"
+                              color="blue"
+                              size="large"
+                              isFullWidth="true"
+                              disabled={(!termsAccepted)}
+                              className="SignUpButton"
+                              style={{
+                                width: "35%",
+                              }}
+                            />
+                            :
+                            <Button
+                              text="Creating account..."
+                              theme="colored"
+                              color="blue"
+                              size="large"
+                              isFullWidth="true"
+                              disabled={false}
+                              className="SignUpButton"
+                              style={{
+                                width: "35%",
+                              }}
+                            />
                         }
-                        
-                        
+
+
                       </div>
                     </div>
                   ),

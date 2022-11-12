@@ -69,7 +69,12 @@
     font-family: Poppins;
 }
 
+.disconnect_item {
+   margin-left: 18px;
+}
+
 .disconnectWalletButton {
+    width: 200px;
     height: 4rem;
     font-size: 1.5rem;
     font-family: "Roboto Mono", monospace;
@@ -331,6 +336,12 @@
     box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     cursor: pointer;
+    &:hover {
+        transition: all ease 0.5s;
+        scale: (1.13);
+        transform: translateY(-0.2rem);
+        cursor: pointer;
+    }
 }
 
 .dashboard_card_icon{
@@ -346,7 +357,10 @@
 .dashboard_card_text{
     font-size: 20px;
     color: #858585;
+  
 }
+
+
 
 .dashboard_card_container{
     display: flex;
@@ -500,10 +514,8 @@ tr{
 }
 
 .profile_form_input{
-    color: #979797;
     font-size: 18px;
-    height: 50px;
-    max-width: 300px;
+    width: 500px;
     padding: 16px;
     background-color: #FFFFFF;
     border: 1px solid #E3E3E3;
