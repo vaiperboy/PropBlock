@@ -1,0 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@300;500&display=swap');
+
+.property-listing {
+    .property-button {
+        position: absolute;
+        float: right;
+        right: 0;
+        top: 75%;
+        margin: 2rem 0;
+        width: 10rem;
+        height: 4rem;
+        font-weight: 500;
+        background-color: #3daeee;
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-size: 1.5rem;
+        -webkit-transition: all 0.2s ease;
+        transition: all 0.2s ease;
+        -webkit-box-shadow: 0px 4px 13px #85c3e6;
+                box-shadow: 0px 4px 13px #85c3e6;
+        -webkit-transition: all ease 0.2s;
+        transition: all ease 0.2s;
+    }
+
+    .property-button:hover {
+        background-color: green;
+        -webkit-transition: all ease 0.2s;
+        transition: all ease 0.2s;
+        scale: 1.05;
+        -webkit-transform: translateY(-0.2rem);
+                transform: translateY(-0.2rem);
+        background-color: #2994d2;
+        cursor: pointer;
+    }
+    
+    .dot {
+        width: 7px;
+        height: 7px;
+        background-color: #555555;
+        margin-top: 8px;
+        margin-right: 5px;
+        margin-left: 5px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    
+    .rectangle {
+        border: 1px solid;
+        border-radius: 9px;
+        box-shadow: 0px 0px 4px 1px #d4d4d4;
+        height: 280px;
+        width: 811px;
+        position: relative;
+    }
+    
+    .property {
+        /*border: 1px solid;
+        border-radius: 9px;
+        box-shadow: 0px 0px 4px 1px #d4d4d4;*/
+        width: 98%;
+        height: 90%;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    #property-image {
+        height: 250px;
+        width: 278px;
+        float: left;
+    }
+    
+    .right-child {
+        /*border: 1px solid;
+        border-radius: 9px;
+        box-shadow: 0px 0px 3px 1px #d4d4d4;*/
+        float: left;
+        margin-left: 10px;
+        width: 63%;
+    }
+    
+    #propertyName {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        font-size: 20px;
+        color: #444444;
+    }
+    
+    #locationName {
+        float: left;
+        margin-left: 3px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        color: #3DAEEE;
+    }
+    
+    .property-inline {
+        float: left;
+    }
+    
+    p {
+        margin-bottom: 0px;
+    }
+
+    
+    .link {
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 10px;
+        line-height: 12px;
+        color: #0075B7;
+        margin-left: 4px;
+        text-decoration-line: underline;
+    }
+    
+    #propertyPrice {
+        position: absolute;
+        right: 1%;
+        top: 0;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 24px;
+        color: #3DAEEE;
+    }
+    
+    #favImg {
+        position: absolute;
+        right: 1%;
+        top: 1;
+        height: 20px;
+        width: 19px;
+    }
+    
+    .property-upper-body {
+        display: inline-block;
+        color: #555555;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    
+    .features {
+        color: #555555;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        font-size: 13px;
+    }
+    
+    .content {
+        margin-top: 5px;
+        color: #555555;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 400;
+        font-size: 12px;
+    }
+    
+    .address-box {
+        padding: 16px 0px 16px 16px;
+        border: 1px solid #BCC0C4;
+        border-radius: 10px;
+        width: 251px;
+        height: 48px;
+        position: absolute;
+        bottom: 1%;
+    }
+    
+    .property #walletImage {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 8%;
+        bottom: 0;
+    }
+    
+    .property #walletAddress {
+        position: absolute;
+        left: 30%;
+        bottom: 0;
+        top: 30%;
+        float: left;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    
+    
+}

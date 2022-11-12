@@ -1,0 +1,140 @@
+.loginPage {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    .leftSide {
+        display: flex;
+        justify-content: center;
+        width: 45%;
+        height: 55rem;
+        background-image: linear-gradient(to bottom, #ffffff, #a3c9de);
+        .illustrationDiv {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            img {
+                width: 55rem;
+            }
+        }
+    }
+    .rightSide {
+        width: 55%;
+        height: 55rem;
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        padding-left: 2rem;
+        div {
+            margin: 3rem 0;
+        }
+        h1 {
+            font-size: 4rem;
+            padding-left: 2rem;
+            color: #3daeee;
+        }
+        .loginSection {
+            display: flex;
+            flex-direction: column;
+            padding: 0 0 0 2rem;
+            gap: 0.5rem;
+            p {
+                color: #333333;
+                font-weight: normal;
+                font-size: 2rem;
+                margin: 0 0 0.5rem 0;
+            }
+            .connectWalletButton {
+                border: none;
+                cursor: pointer;
+                outline: none;
+                width: 50%;
+                height: 4rem;
+                font-family: "Roboto Mono", monospace;
+                font-size: 1.8rem;
+                transform: translate(0);
+                background-image: linear-gradient(45deg, #2bc0e4, #edb037);
+                border-radius: 5px;
+                box-shadow: 0 22px 44px rgba(gray, 0.1);
+                transition: box-shadow 0.25s;
+                border: none;
+                .text {
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-image: linear-gradient(45deg, #2bc0e4, #edb037);
+                }
+                .text {
+                    text-align: center;
+                    background-image: linear-gradient(-45deg, #2bc0e4, #edb037);
+                }
+                img {
+                    width: 3rem;
+                }
+                &:after {
+                    content: "";
+                    border-radius: 4px;
+                    position: absolute;
+                    margin: 2px;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    z-index: -1;
+                    background: white;
+                }
+                &:hover {
+                    background-image: linear-gradient(-45deg, #2bc0e4, #edb037);
+                    box-shadow: 0 12px 24px rgba(#3daeee, 0.15);
+                }
+            }
+            .disconnectWalletButton {
+                width: 50%;
+                height: 4.5rem;
+                font-size: 2rem;
+                font-family: "Roboto Mono", monospace;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                transform: translate(0);
+                background-image: linear-gradient(45deg, #2bc0e4, #edb037);
+                border-radius: 5px;
+                box-shadow: 0 22px 44px rgba(gray, 0.1);
+                transition: box-shadow 0.25s;
+                border: none;
+                transition: all 0.3s ease;
+                .text {
+                    color: white;
+                }
+                &:hover {
+                    transition: all 0.3s ease;
+                    background-image: linear-gradient(45deg, rgba(#2bc0e4, 0.8), rgba(#edb037, 0.9));
+                    box-shadow: 0 12px 24px rgba(#3daeee, 0.15);
+                }
+            }
+            .linkToSignUpPage {
+                font-size: 1.4rem;
+                margin: 1rem 0 2rem 0;
+                .signupText {
+                }
+            }
+            .loginButton {
+                background-color: #3daeee;
+                color: #ffffff;
+                width: 50%;
+                height: 3.5rem;
+                // margin: 0;
+                font-size: 1.5rem;
+                border-radius: 0.5rem;
+                border: none;
+                cursor: pointer;
+                font-size: 2rem;
+                font-weight: 500;
+                transition: all 0.2s ease;
+                &:hover {
+                    transition: all 0.2s ease;
+                    transform: translateY(-1px);
+                    box-shadow: 0 3px 8px rgba(#333333, 0.3);
+                }
+            }
+        }
+    }
+}

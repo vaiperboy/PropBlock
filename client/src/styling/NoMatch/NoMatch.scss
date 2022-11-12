@@ -1,0 +1,120 @@
+.main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .leftSide {
+        width: 50%;
+        margin: 0 0 0 8rem;
+        .illustrationStyle {
+            width: 90%;
+            margin: auto;
+        }
+    }
+    .rightSide {
+        width: 40%;
+        margin-bottom: 10vw;
+        .errorHeading {
+            text-align: center;
+            font-size: 8rem;
+            margin: 1rem 0 0 0;
+            font-weight: 500;
+        }
+        .message {
+            text-align: center;
+            font-size: 2rem;
+            margin: 1rem 1rem 0 1rem;
+            word-wrap: break-word;
+        }
+        .backToHomeButton {
+            background-color: #3daeee;
+            border: none;
+            width: 15rem;
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            font-weight: 500;
+            border-radius: 0.7rem;
+            text-align: center;
+            color: #ffffff;
+            &:hover {
+                background-color: #1582c2;
+            }
+        }
+    }
+}
+
+#loading-spinner-3 {
+    animation: wheel 3s linear infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+#loading-spinner-2 {
+    animation: wheel 2s linear infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+#loading-spinner-5 {
+    animation: wheel 5s linear infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+#loading-spinner-reverse-2 {
+    animation: wheel-reverse 2s linear infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+#loading-spinner-reverse-5 {
+    animation: wheel-reverse 5s linear infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+#loading-spinner-reverse-10 {
+    animation: wheel-reverse 10s linear infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+#eye-animation {
+    animation: eye-movement 2s ease infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+@keyframes eye-movement {
+    0% {
+        transform: translateX(0rem);
+    }
+    25% {
+        transform: translateX(-0.5rem);
+    }
+    50% {
+        transform: translateY(0.2rem);
+    }
+    75% {
+        transform: translateY(0.1rem);
+    }
+    100% {
+        transform: translateX(0rem);
+        transform: translateY(0rem);
+    }
+}
+@keyframes wheel {
+    0% {
+        transform: rotateZ(0deg);
+    }
+    100% {
+        transform: rotateZ(360deg);
+    }
+}
+
+@keyframes wheel-reverse {
+    0% {
+        transform: rotateZ(360deg);
+    }
+    100% {
+        transform: rotateZ(0deg);
+    }
+}

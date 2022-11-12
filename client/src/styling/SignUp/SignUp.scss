@@ -1,0 +1,364 @@
+.signup {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    min-height: 83rem;
+    .leftSide {
+        display: flex;
+        width: 45%;
+        background-image: linear-gradient(to bottom, #ffffff, #a3c9de);
+        .illustrationDiv {
+            margin-top: 5rem;
+            img {
+                width: 65rem;
+                transform: scaleX(-1);
+            }
+        }
+    }
+    .rightSide {
+        overflow: auto;
+        width: 55%;
+        padding: 0 0 6rem 0;
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        padding-left: 2rem;
+        div {
+            margin: 2rem 0;
+        }
+        h1 {
+            font-size: 3rem;
+            padding-left: 2rem;
+            color: #3daeee;
+        }
+        .signupSection {
+            height: 1px;
+            min-height: 40rem;
+            width: 90%;
+            padding-left: 2rem;
+            li {
+                background-color: #3daeee;
+                border: #3daeee;
+                svg {
+                    fill: white;
+                }
+            }
+
+            ol {
+                margin: 0;
+                span {
+                    background-color: rgba(#3daeee, 0.3);
+                }
+            }
+            .nextButton {
+                background-color: #3daeee;
+                border: none;
+                cursor: pointer;
+                padding: 0.5rem 2rem;
+                border-radius: 1rem;
+                font-size: 1.5rem;
+                letter-spacing: 1px;
+                margin-top: 2rem;
+                font-weight: 500;
+                color: #ffffff;
+                text-align: left;
+                width: fit-content;
+                &:hover {
+                    background-color: #5ab6eb;
+                }
+            }
+            .prevButton {
+                background-color: #3daeee;
+                border: none;
+                cursor: pointer;
+                padding: 0.5rem 1rem;
+                border-radius: 1rem;
+                font-size: 1.5rem;
+                letter-spacing: 1px;
+                font-weight: 500;
+                color: #ffffff;
+                text-align: left;
+                width: fit-content;
+                margin-bottom: 2rem;
+                &:hover {
+                    background-color: #5ab6eb;
+                }
+            }
+
+            #step-1 {
+                margin: 0;
+                .SignUpMain {
+                    width: 95%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    text-align: left;
+                    margin: 0;
+                    .fullName {
+                        margin: 0;
+                    }
+                    .email {
+                        margin: 0;
+                    }
+                    .connectWalletButton {
+                        border: none;
+                        cursor: pointer;
+                        outline: none;
+                        margin: 1.5rem 0 0 0;
+                        width: 50%;
+                        height: 4rem;
+                        font-family: "Roboto Mono", monospace;
+                        font-size: 1.5rem;
+                        transform: translate(0);
+                        background-image: linear-gradient(45deg, #2bc0e4, #edb037);
+                        border-radius: 0.6rem;
+                        box-shadow: 0 22px 44px rgba(gray, 0.1);
+                        transition: box-shadow 0.25s;
+                        border: none;
+                        .text {
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            background-image: linear-gradient(45deg, #2bc0e4, #edb037);
+                        }
+                        .text {
+                            text-align: center;
+                            background-image: linear-gradient(-45deg, #2bc0e4, #edb037);
+                        }
+                        img {
+                            width: 3rem;
+                            margin-left: 1rem;
+                        }
+                        &:after {
+                            content: "";
+                            border-radius: 4px;
+                            position: absolute;
+                            margin: 2px;
+                            top: 0;
+                            left: 0;
+                            bottom: 0;
+                            right: 0;
+                            z-index: -1;
+                            background: white;
+                        }
+                        &:hover {
+                            background-image: linear-gradient(-45deg, #2bc0e4, #edb037);
+                            box-shadow: 0 12px 24px rgba(#3daeee, 0.15);
+                        }
+                    }
+                    .disconnectWalletButton {
+                        width: 50%;
+                        height: 4rem;
+                        font-size: 1.5rem;
+                        font-family: "Roboto Mono", monospace;
+                        border: none;
+                        outline: none;
+                        cursor: pointer;
+                        transform: translate(0);
+                        background-image: linear-gradient(45deg, #2bc0e4, #edb037);
+                        border-radius: 0.6rem;
+                        box-shadow: 0 22px 44px rgba(gray, 0.1);
+                        transition: box-shadow 0.25s;
+                        border: none;
+                        transition: all 0.3s ease;
+                        .text {
+                            color: white;
+                        }
+                        &:hover {
+                            transition: all 0.3s ease;
+                            background-image: linear-gradient(45deg, rgba(#2bc0e4, 0.8), rgba(#edb037, 0.9));
+                            box-shadow: 0 12px 24px rgba(#3daeee, 0.15);
+                        }
+                    }
+                    .linkToLoginPage {
+                        margin: 0.5rem 0;
+                        font-size: 1.3rem;
+                    }
+                }
+            }
+            #step-2 {
+                margin: 5.3rem 0 0 0;
+                div {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: left;
+                    text-align: left;
+                    margin: 0;
+                    .verify-code {
+                        display: flex;
+                        flex-direction: row;
+                        padding: 1rem 0 3rem 0;
+                        input[type="number"] {
+                            -moz-appearance: textfield;
+                        }
+                    }
+                    #codeSection {
+                        display: flex;
+                    }
+                    h2 {
+                        font-size: 2rem;
+                        font-weight: 500;
+                        color: #3daeee;
+                        margin-top: 0;
+                    }
+                    p {
+                        font-size: 1.5rem;
+                    }
+                    .resendEmailButton {
+                        background-color: #ffffff;
+                        padding: 0;
+                        border: none;
+                        text-align: left;
+                        width: fit-content;
+                        text-decoration: underline;
+                        cursor: pointer;
+                        color: rgb(0, 174, 255);
+                    }
+                    .emailSection {
+                        display: flex;
+                        flex-direction: row;
+                        gap: 2rem;
+                        .skipButton {
+                            background-color: #3daeee;
+                            border: none;
+                            cursor: pointer;
+                            padding: 0.5rem 2rem;
+                            border-radius: 1rem;
+                            font-size: 1.5rem;
+                            letter-spacing: 1px;
+                            margin-top: 2rem;
+                            font-weight: 500;
+                            color: #ffffff;
+                            text-align: left;
+                            width: fit-content;
+                            &:hover {
+                                background-color: #5ab6eb;
+                            }
+                        }
+                    }
+                }
+            }
+            #step-3 {
+                display: flex;
+                flex-direction: column;
+                justify-content: left;
+                margin: 2rem 0 0 0;
+                text-align: left;
+                div {
+                    margin: 0;
+                    h2 {
+                        font-size: 2rem;
+                        color: #3daeee;
+                        margin-top: 0;
+                    }
+                    p {
+                        font-size: 1.5rem;
+                    }
+                }
+                label {
+                    margin-top: 2rem;
+                    span {
+                        font-size: 1.5rem;
+                    }
+                }
+                .nextButton {
+                    margin: 1rem 0 2rem 0;
+                }
+            }
+            #step-4 {
+                display: flex;
+                flex-direction: column;
+                justify-content: left;
+                margin: 2rem 0 0 0;
+                text-align: left;
+                div {
+                    margin: 0;
+                    h2 {
+                        font-size: 2rem;
+                        color: #3daeee;
+                        margin-top: 0;
+                    }
+                    p {
+                        font-size: 1.5rem;
+                    }
+                }
+                label {
+                    margin-top: 2rem;
+                    span {
+                        font-size: 1.5rem;
+                    }
+                }
+                .nextButton {
+                    margin: 1rem 0 2rem 0;
+                }
+            }
+            #step-5 {
+                display: flex;
+                flex-direction: column;
+                justify-content: left;
+                margin: 2rem 0 0 0;
+                text-align: left;
+                div {
+                    margin: 0;
+                    h2 {
+                        font-size: 2rem;
+                        color: #3daeee;
+                        margin-top: 0;
+                    }
+                    .termsDiv {
+                        border-radius: 1rem;
+                        height: 40rem;
+                        font-size: 1.2rem;
+                        border: 1px solid rgba(#333333, 0.3);
+                        padding: 2rem;
+                        margin-top: 2rem;
+                        text-align: justify;
+                        overflow: auto;
+                        h1 {
+                            color: #333333;
+                            font-size: 1.5rem;
+                            font-weight: 600;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .heading {
+                            font-weight: bold;
+                            color: #333333;
+                        }
+                        .terms {
+                            li {
+                                background-color: #ffffff;
+                            }
+                        }
+                    }
+                }
+                label {
+                    margin-top: 2rem;
+                    span {
+                        font-size: 1.5rem;
+                    }
+                }
+                .nextButton {
+                    margin: 1rem 0 2rem 0;
+                }
+                .termsSectionBottom {
+                    display: flex;
+                }
+            }
+            .checkBoxDiv {
+                display: flex;
+                align-items: center;
+                padding: 2rem 0;
+                p {
+                    margin: 0;
+                    padding: 0;
+                }
+                input[type="checkbox"] {
+                    margin-right: 1rem;
+                    width: 2rem;
+                    height: 2rem;
+                }
+            }
+        }
+    }
+}
