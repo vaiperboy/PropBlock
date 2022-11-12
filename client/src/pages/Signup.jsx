@@ -122,9 +122,9 @@ const App = () => {
   // checks if the user with the address exists already in the db
   const checkAddressExists = async (address) => {
     try {
-      const users = Moralis.Object.extend("ethAddress");
+      const users = Moralis.Object.extend("usersSignedUp");
       const query = new Moralis.Query(users);
-      query.equalTo("address", address);
+      query.equalTo("address", address.toLowerCase());
       query.limit(1);
       query.withCount();
       const results = await query.find();
