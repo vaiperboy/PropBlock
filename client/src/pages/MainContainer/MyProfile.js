@@ -32,13 +32,6 @@ const MyProfile = () => {
 	const [fullName, setFullName] = useState("");
 	const [description, setDescription] = useState("");
 
-	const { fetch } = useMoralisQuery(
-		"usersSignedUp",
-		(query) => query.equalTo("address", user.get("ethAddress").toLowerCase()),
-		[],
-		{ autoFetch: false }
-	)
-
 	useEffect(() => {
 		setEmailAddress(user.get("email"));
 		setFullName(user.get("fullName"));

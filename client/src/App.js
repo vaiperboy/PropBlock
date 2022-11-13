@@ -43,8 +43,6 @@ function App() {
         <Route path="/AgreementFunctions" element={<AgreementFunc />}></Route>
         <Route path="/properties" element={<Properties />}></Route>
         <Route path="/property/:id" element={<Property />}></Route>
-        {/* <Route path="/dashboard" element={<MainContainer />}></Route> */}
-
         <Route path="*" element={<NoMatch />}></Route>
         <Route
           exact

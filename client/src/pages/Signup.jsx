@@ -258,6 +258,7 @@ const App = () => {
   }
   window.uploadDocuments = uploadDocuments;
 
+  //Create Account
   const SignUpUser = async () => {
     setRegistering(true);
     message.info("Registring into database....");
@@ -298,9 +299,7 @@ const App = () => {
             
           
         }
-
       }
-
     } catch (error) {
       message.error("ERROR: " + error);
     }
