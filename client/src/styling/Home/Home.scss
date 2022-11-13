@@ -3,6 +3,7 @@
     src: url("../../assets/TT-Travels-Next/TT\ Travels\ Next\ Medium.ttf") format("truetype");
 }
 
+
 main {
     .heroSection {
         display: flex;
@@ -135,120 +136,7 @@ main {
                 cursor: no-drop;
             }
         }
-        .searchBar {
-            margin-top: 1rem;
-            width: 100%;
-            border: 2px solid #3daeee;
-            height: 11rem;
-            border-radius: 0.5rem;
-
-            display: flex;
-            align-items: center;
-            flex-direction: row;
-            .horizontal_line {
-                width: 4px;
-                margin: 0 1rem;
-                height: 75%;
-                background-color: rgba(#555555, 0.6);
-            }
-            .locationFilter {
-                display: flex;
-                flex-direction: column;
-                width: 50rem;
-                padding: 0 0 2rem 0;
-                .filterDiv {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    margin: 1.5rem;
-                    label {
-                        font-size: 1.5rem;
-                        font-weight: 500;
-                    }
-                }
-                .inputDiv {
-                    margin: 0 auto;
-                    width: 90%;
-                }
-            }
-            .propertyTypeFilter {
-                display: flex;
-                flex-direction: column;
-                width: 40rem;
-                padding: 0 0 2rem 0;
-                .filterDiv {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    margin: 1.5rem 1rem;
-                    label {
-                        font-size: 1.5rem;
-                        font-weight: 500;
-                    }
-                }
-                .inputDiv {
-                    margin: 0 auto;
-                    width: 92%;
-                }
-            }
-            .bedsFilter {
-                display: flex;
-                flex-direction: column;
-                width: 25rem;
-                padding: 0 0 2rem 0;
-                .filterDiv {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    margin: 1.5rem 1rem;
-                    label {
-                        font-size: 1.5rem;
-                        font-weight: 500;
-                    }
-                }
-                .inputDiv {
-                    margin: 0 auto;
-                    width: 90%;
-                }
-            }
-            .priceFilter {
-                display: flex;
-                flex-direction: column;
-                width: 25rem;
-                padding: 0 0 2rem 0;
-                .filterDiv {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    margin: 1.5rem 1rem;
-                    label {
-                        font-size: 1.5rem;
-                        font-weight: 500;
-                    }
-                }
-                .inputDiv {
-                    margin: 0 auto;
-                    width: 90%;
-                }
-            }
-            #searchButton {
-                width: 10rem;
-                background-color: rgba(#3daeee, 1);
-                height: 5.5rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin: 1rem 1rem;
-                border-radius: 0.5rem;
-                cursor: pointer;
-                &:hover {
-                    background-color: rgba(#3daeee, 0.7);
-                }
-                .searchBarIcon {
-                    font-size: 3rem;
-                }
-            }
-        }
+        
     }
     .horizontal-breaker {
         width: 88%;

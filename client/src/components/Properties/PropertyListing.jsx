@@ -78,8 +78,9 @@ class PropetyListing extends React.Component {
                                     src={HeartNotFilled} />
 
                             </div>
-                            <hr className="property-line-break"></hr>
+                          
                             <div className="property-inline">
+                            <hr className="property-line-break"></hr>
                                 <div className="property-upper-body">
                                     <p>Details</p>
                                     <div className="features">

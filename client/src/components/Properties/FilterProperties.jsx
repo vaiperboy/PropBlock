@@ -2,7 +2,9 @@ import React from "react";
 import "../../styling/Properties/FilterProperties.scss";
 import MultiRangeSlider from "./multiRangeSlider/MultiRangeSlider";
 import { Checkbox, Input, Button } from "@web3uikit/core";
+import { Select} from "antd";
 const console = require("console-browserify");
+const {Option} = Select;
 
 class FilterProperties extends React.Component {
   constructor(props) {
@@ -40,46 +42,21 @@ class FilterProperties extends React.Component {
             />
             <hr></hr>
             <p>Property Type</p>
-            <Checkbox
-              label="Villa"
-              name="isVilla"
-              onChange={(e) =>
-                this.props.parentCallBack("isVilla", e.target.checked)
-              }
-              checked="true"
-            />
-            <Checkbox
-              label="Apartment"
-              name="isApartment"
-              onChange={(e) =>
-                this.props.parentCallBack("isApartment", e.target.checked)
-              }
-              checked="true"
-            />
-            <Checkbox
-              label="Townhouse"
-              name="isTownhouse"
-              onChange={(e) =>
-                this.props.parentCallBack("isTownhouse", e.target.checked)
-              }
-              checked="true"
-            />
-            <Checkbox
-              label="Penthouse"
-              name="isPenthouse"
-              onChange={(e) =>
-                this.props.parentCallBack("isPenthouse", e.target.checked)
-              }
-              checked="true"
-            />
-            <Checkbox
-              label="Duplex"
-              name="isDuplex"
-              onChange={(e) =>
-                this.props.parentCallBack("isDuplex", e.target.checked)
-              }
-              checked="true"
-            />
+            <div className="inputDiv">
+              <Select
+                placeholder="Apartment "
+                style={{
+                  width: "100%",
+                }}
+              //onChange={handleChange}
+              >
+                <Option value="Apartment">Apartment</Option>
+                <Option value="Villa">Villa</Option>
+                <Option value="Townhouse">Townhouse</Option>
+                <Option value="Penthouse">Penthouse</Option>
+                <Option value="Duplex">Duplex</Option>
+              </Select>
+            </div>
             <hr></hr>
             <p>Beds</p>
 

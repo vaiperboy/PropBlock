@@ -1,8 +1,6 @@
 import "../styling/Home/Home.scss";
-import realEstate from "../artifacts/contracts/realEstate.sol/realEstate.json";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { message, Typography, AutoComplete, Select, InputNumber } from "antd";
+import { AutoComplete, Select, InputNumber } from "antd";
 // import { Loading } from "@web3uikit/core";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -11,17 +9,7 @@ import {
   SearchOutlined,
   ArrowRightOutlined,
 } from "@ant-design/icons";
-import {
-  // useMoralisQuery,
-  useMoralis,
-  // useMoralisCloudFunction,
-} from "react-moralis";
-// import Title from "antd/lib/skeleton/Title";
-// import PropertyFunc from "../Functions/PropertyFunc";
 
-// -------
-// Importing Images
-// import HeroImage from "../assets/featuredimage-realestate-1@2x-min.png";
 import realEstateImage1 from "../assets/realEstate_1-min.png";
 import realEstateImage2 from "../assets/realEstate_2-min.png";
 import realEstateImage3 from "../assets/realEstate_3-min.png";
