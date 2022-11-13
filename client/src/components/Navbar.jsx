@@ -4,11 +4,14 @@ import { Link } from "react-router-dom";
 import { Avatar, Blockie } from "@web3uikit/core";
 import { useMoralis } from "react-moralis";
 import NavbarIcon from "../assets/framer-1.png";
+import { message } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const console = require("console-browserify");
 
 const Navbar = (props) => {
   const [signedIn, setSignedIn] = useState(false);
+  const [avatarClicked, setAvatarClicked] = useState(false);
   const {
     authenticate,
     isAuthenticated,
@@ -17,7 +20,33 @@ const Navbar = (props) => {
     account,
     logout,
   } = useMoralis();
-  
+  let navigate = useNavigate();
+
+  // disconnects the metamask wallet
+  const disconnectWallet = async () => {
+    try {
+      await logout();
+      await navigate("/");
+    } catch (error) {
+      message.error("Error: ", error);
+    }
+  };
+
+  const showButtons = () => {
+    try {
+      console.log("Clicked");
+      if (avatarClicked === true) {
+        setAvatarClicked(false);
+        console.log("Buttons show: ");
+
+        return;
+      }
+      setAvatarClicked(true);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       // add your logic here
@@ -73,9 +102,32 @@ const Navbar = (props) => {
                   <div>About Us</div>
                 </Link>
               )}
-              <Link to="/dashboard">
-                <Avatar isRounded theme="image" className="avatar" />
-              </Link>
+              <div className="avatarSection">
+                <Avatar
+                  isRounded
+                  theme="image"
+                  className="avatar"
+                  onClick={() => {
+                    showButtons();
+                  }}
+                />
+                {avatarClicked && (
+                  <div className="userButtons">
+                    <div
+                      className="userButton logoutButton"
+                      onClick={() => disconnectWallet()}
+                    >
+                      Logout
+                    </div>
+
+                    <div className="userButton ">
+                      <Link to="/dashboard" className="dashboardButton">
+                        Dashboard
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
             </nav>
           </div>
         </div>

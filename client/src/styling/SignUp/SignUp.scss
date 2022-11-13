@@ -1,10 +1,12 @@
 .signup {
     display: flex;
     justify-content: center;
+
     width: 100%;
     min-height: 83rem;
     .leftSide {
         display: flex;
+        justify-content: center;
         width: 45%;
         background-image: linear-gradient(to bottom, #ffffff, #a3c9de);
         .illustrationDiv {
@@ -357,6 +359,18 @@
                     margin-right: 1rem;
                     width: 2rem;
                     height: 2rem;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1441px) {
+    .signup {
+        .leftSide {
+            display: flex;
+            .illustrationDiv {
+                img {
                 }
             }
         }
