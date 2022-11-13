@@ -127,8 +127,6 @@ const Aboutus = () => {
           </h1>
           <div className="styled-shape">
             <svg
-              width="1730"
-              height="580"
               viewBox="0 0 1730 580"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

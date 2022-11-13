@@ -28,6 +28,7 @@ main {
             z-index: -1;
             margin-top: -50rem;
             img {
+                width: 100%;
             }
         }
     }
@@ -162,9 +163,10 @@ main {
     .quote-section {
         margin: 25rem 0 12rem 0;
         h1 {
-            font-size: 5.5rem;
+            font-size: 3vw;
             color: #555555;
             text-align: center;
+            font-weight: 600;
             width: 70%;
             margin: 0 auto;
             background: linear-gradient(to right, #ff9517 20%, #3daeee 40%, #3daeee 60%, #444444 80%, #ff9517 100%);
@@ -305,6 +307,33 @@ main {
                         font-size: 1.2rem;
                         font-weight: 500;
                     }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1441px) {
+    main {
+        .hero-section {
+            // background-color: #3daeee;
+            .text {
+                h1 {
+                }
+            }
+            .vector {
+                img {
+                    width: 100%;
+                    margin-top: -6vw;
+                }
+            }
+        }
+        .quote-section {
+            h1 {
+            }
+            .styled-shape {
+                max-width: 120%;
+                svg {
                 }
             }
         }

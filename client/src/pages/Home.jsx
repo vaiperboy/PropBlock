@@ -73,38 +73,7 @@ function Home() {
     useMoralisCloudFunction,
   } = useMoralis();
 
-  // const sendEmailToUser = async (email, name) => {
-  //   const url = "www.google.com";
-  //   const params = { email, url, name };
-  //   const sendVerificationEmail = await Moralis.Cloud.run(
-  //     "sendEmailToUser",
-  //     params
-  //   );
-  // };
-
-  // const { Title } = Typography;
-  // const [address, setAddress] = useState("");
   const [addressForProperties, setAddressForProperties] = useState("");
-  const [properties, setProperties] = useState([]);
-  // const [name, setName] = useState();
-  // const [email, setEmail] = useState();
-  // const [propertyLandlordAddress, setPropertyLandlordAddress] = useState("");
-  // const [streetNum, setStreetNum] = useState("");
-  // const [area, setArea] = useState();
-  // const [apartmentNum, setApartmentNum] = useState();
-  // const [listedPrice, setListedPrice] = useState();
-  // const [addressExists, setAddressExists] = useState(false);
-
-  const [Loader, setLoader] = useState(false);
-
-  const getOwner = async () => {
-    try {
-      const owner = await realEstateContract.owner();
-      message.success("Owner: " + owner);
-    } catch (error) {
-      message.error("Error: " + error);
-    }
-  };
 
   const checkAddress = (addr) => {
     if (addr === "") {
@@ -518,10 +487,7 @@ function Home() {
               <h1>
                 Find your dream home, <br /> the <span>Web3</span> way!
               </h1>
-              <h5>
-                Harness the real power of smart contracts and find your dream
-                home.
-              </h5>
+              <h5>Harness the real power of smart contracts.</h5>
               <Link to="/properties" className="exploreLink">
                 <button className="exploreButton">Explore</button>
               </Link>
@@ -643,6 +609,15 @@ function Home() {
               himenaeos. ac aliquet odio mattis. Class aptent taciti sociosqu ad
               litora torquent per conubia nostra, per inceptos himenaeos.
             </p>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+              vulputate libero et velit interdum, ac aliquet odio mattis. Class
+              aptent taciti sociosqu ad litora torquent per conubia nostra, per
+              inceptos himenaeos. ac aliquet odio mattis. Class aptent taciti
+              sociosqu ad litora torquent per conubia nostra, per inceptos
+              himenaeos. ac aliquet odio mattis. Class aptent taciti sociosqu ad
+              litora torquent per conubia nostra, per inceptos himenaeos.
+            </p>
             <Link to="/aboutus" onClick={() => window.scrollTo(0, 0)}>
               <button className="readMoreButton">
                 Read More
@@ -741,7 +716,9 @@ function Home() {
         {/* <div className="breakLine"></div> */}
         <div className="testimonialSection">
           <div className="heading">
-            <h1>User Testomonials</h1>
+            <h1>
+              What some of our <span>Users</span> say
+            </h1>
           </div>
           <div className="customers">
             <div className="customer1">
