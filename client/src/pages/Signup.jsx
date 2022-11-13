@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { useMoralis, useNewMoralisObject } from "react-moralis";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Button,
-  Input,
-  Stepper,
-  Upload,
-  VerifyCode,
-} from "@web3uikit/core";
+import { Button, Input, Stepper, Upload, VerifyCode } from "@web3uikit/core";
 import { message, Alert, notification, Checkbox } from "antd";
 import realEstate from "../artifacts/contracts/realEstate.sol/realEstate.json";
 import "antd/dist/antd.css"; // or 'antd/dist/antd.less'
@@ -30,10 +24,8 @@ const { ethers } = require("ethers");
 
 const validateEmail = (email) => {
   var validRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-  return validRegex.test(email)
+  return validRegex.test(email);
 };
-
-
 
 // main function
 const App = () => {
@@ -66,9 +58,9 @@ const App = () => {
   const [isValidated, setIsValidated] = useState(false);
   const [codeVerified, setCodeVerified] = useState(true);
   const [idDocumentsVerified, setIdDocumentsVerified] = useState(false);
-  const [passportDocumentsVerified, setPassportDocumentsVerified] = useState(false);
+  const [passportDocumentsVerified, setPassportDocumentsVerified] =
+    useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
-  //
 
   const [frontIdDocument, setFrontIdDocument] = useState({});
   const [backIdDocument, setBackIdDocument] = useState({});
@@ -103,7 +95,6 @@ const App = () => {
     }
   };
 
-
   // check if email
   const emailAlreadyExists = async (email) => {
     try {
@@ -112,7 +103,7 @@ const App = () => {
       query.equalTo("email", email.toLowerCase());
       const results = await query.find();
       console.log(email);
-      if (results.length > 0) return (email + " already exists!");
+      if (results.length > 0) return email + " already exists!";
       return "";
     } catch (error) {
       message.error("Error: " + error);
@@ -131,9 +122,11 @@ const App = () => {
       if (results.count == 0) {
         return "";
       } else {
-        return ("User with the address (" +
+        return (
+          "User with the address (" +
           address +
-          " ) already exists! Please connect a new wallet address.");
+          " ) already exists! Please connect a new wallet address."
+        );
         /*message.error(
           "User with the address (" +
             user.get("ethAddress") +
@@ -151,8 +144,7 @@ const App = () => {
     try {
       const errors = [];
 
-      if (!walletConnected)
-        errors.push("Connect a wallet!");
+      if (!walletConnected) errors.push("Connect a wallet!");
       if (fullName === "" || email === "") {
         errors.push("Please make sure Name & Email inputs are filled!");
       } else {
@@ -174,12 +166,12 @@ const App = () => {
         return;
       }
 
-      var mailExists = (await emailAlreadyExists(email));
+      var mailExists = await emailAlreadyExists(email);
       if (mailExists.length > 0) {
         errors.push(mailExists);
       }
 
-      var addressExists = (await checkAddressExists(address));
+      var addressExists = await checkAddressExists(address);
       if (addressExists.length > 0) {
         errors.push(addressExists);
       }
@@ -190,9 +182,7 @@ const App = () => {
         setIsValidated(true);
         message.info("yla continue");
         return true;
-      }
-
-      else {
+      } else {
         //incase
         setIsValidated(false);
         errors.forEach((e) => {
@@ -204,7 +194,7 @@ const App = () => {
       message.error("error: " + error);
       return false;
     }
-  }
+  };
 
   // connect wallet for verification (1st step)
   const connectWallet1 = async () => {
@@ -238,7 +228,7 @@ const App = () => {
           frontIdDocument,
           backIdDocument,
           frontPassportDocument,
-          backPassportDocument
+          backPassportDocument,
         ];
 
         var hash = "";
@@ -248,14 +238,13 @@ const App = () => {
           hash = result.cid._baseCache.entries().next().value[1];
         }
 
-        resolve(hash)
+        resolve(hash);
       } catch (error) {
         message.error("error with IPFS: " + error);
         resolve("");
       }
     });
-
-  }
+  };
   window.uploadDocuments = uploadDocuments;
 
   const SignUpUser = async () => {
@@ -266,8 +255,7 @@ const App = () => {
       var ipfs = await uploadDocuments();
       if (ipfs.length == 0) {
         message.error("Failure in uploading documents...");
-      }
-      else {
+      } else {
         if (!Moralis.User.current()) {
           await authenticate()
             .then(function (user) {
@@ -276,7 +264,7 @@ const App = () => {
               user.set("ipfsHash", ipfs);
               user.save();
               const data = {
-                "address": user.get("ethAddress")
+                address: user.get("ethAddress"),
               };
 
               save(data, {
@@ -289,23 +277,18 @@ const App = () => {
                   //message.error("Failed to create new object, with error code: " + error.message);
                   message.error("Failure in registering account");
                   logout().then();
-                }
-              })
+                },
+              });
             })
-            .catch(function(error) {
+            .catch(function (error) {
               message.error("Couldn't authorize wallet: " + error);
-            }); 
-            
-          
+            });
         }
-
       }
-
     } catch (error) {
       message.error("ERROR: " + error);
     }
-  }
-
+  };
 
   // links to the Login Page
   const goBackToLoginPage = () => {
@@ -318,7 +301,7 @@ const App = () => {
       message: "New code sent successfully!",
       description:
         "A new confirmation code was sent to your email successfully. Please note the code and enter the code below to continue.",
-      onClick: () => { },
+      onClick: () => {},
       style: {
         backgroundColor: "#ffffff",
       },
@@ -326,7 +309,9 @@ const App = () => {
   };
 
   const accountCreated = async () => {
-    message.success("Account created successfully! Redirecting to login page ...");
+    message.success(
+      "Account created successfully! Redirecting to login page ..."
+    );
     await sleep(2500);
     navigate("/login");
   };
@@ -346,14 +331,13 @@ const App = () => {
   };
 
   const getExtension = (file) => {
-    return file.slice((file.lastIndexOf(".") - 1 >>> 0) + 2);
-  }
-
+    return file.slice(((file.lastIndexOf(".") - 1) >>> 0) + 2);
+  };
 
   //true if extension within range
   const checkExtension = (val, arr) => {
     return arr.indexOf(val) != -1;
-  }
+  };
 
   const extensionsAllowed = ["pdf", "png", "jpg", "jpeg", "gif"];
   //for renaming files when uploading to IPFS
@@ -362,22 +346,31 @@ const App = () => {
       type: originalFile.type,
       lastModified: originalFile.lastModified,
     });
-  }
+  };
 
   const verifyIdDocuments = async (e) => {
     if (e.target.checked) {
       var errors = [];
       var frontExtension = "";
       var backExtension = "";
-      if (frontIdDocument.name == undefined || backIdDocument.name == undefined) {
+      if (
+        frontIdDocument.name == undefined ||
+        backIdDocument.name == undefined
+      ) {
         errors.push("Please make sure you upload files for both fields!");
       } else {
         frontExtension = getExtension(frontIdDocument.name);
         backExtension = getExtension(backIdDocument.name);
         if (!checkExtension(frontExtension, extensionsAllowed))
-          errors.push("Make sure front ID has the following format: " + extensionsAllowed.join(", "));
+          errors.push(
+            "Make sure front ID has the following format: " +
+              extensionsAllowed.join(", ")
+          );
         if (!checkExtension(backExtension, extensionsAllowed))
-          errors.push("Make sure back ID has the following format: " + extensionsAllowed.join(", "));
+          errors.push(
+            "Make sure back ID has the following format: " +
+              extensionsAllowed.join(", ")
+          );
       }
       if (errors.length == 0) {
         e.target.checked = true;
@@ -388,32 +381,37 @@ const App = () => {
         const back = renameFile(backIdDocument, "back ID." + backExtension);
         setFrontIdDocument(front);
         setBackIdDocument(back);
-      }
-      else {
+      } else {
         e.target.checked = false;
         setIdDocumentsVerified(false);
         errors.forEach((e) => message.error(e));
       }
-    }
-    else setIdDocumentsVerified(false);
-  }
-
-
+    } else setIdDocumentsVerified(false);
+  };
 
   const verifyPassportDocuments = async (e) => {
     if (e.target.checked) {
       var errors = [];
       var frontExtension = "";
       var backExtension = "";
-      if (frontPassportDocument.name == undefined || backPassportDocument.name == undefined) {
+      if (
+        frontPassportDocument.name == undefined ||
+        backPassportDocument.name == undefined
+      ) {
         errors.push("Please make sure you upload files for both fields!");
       } else {
         frontExtension = getExtension(frontPassportDocument.name);
-        backExtension = getExtension(backPassportDocument.name)
+        backExtension = getExtension(backPassportDocument.name);
         if (!checkExtension(frontExtension, extensionsAllowed))
-          errors.push("Make sure front passport has the following format: " + extensionsAllowed.join(", "));
+          errors.push(
+            "Make sure front passport has the following format: " +
+              extensionsAllowed.join(", ")
+          );
         if (!checkExtension(backExtension, extensionsAllowed))
-          errors.push("Make sure back passport has the following format: " + extensionsAllowed.join(", "));
+          errors.push(
+            "Make sure back passport has the following format: " +
+              extensionsAllowed.join(", ")
+          );
       }
 
       if (errors.length == 0) {
@@ -421,22 +419,26 @@ const App = () => {
         setPassportDocumentsVerified(true);
 
         //rename files
-        const front = renameFile(frontPassportDocument, "front passport." + frontExtension);
-        const back = renameFile(backPassportDocument, "back passport." + backExtension);
+        const front = renameFile(
+          frontPassportDocument,
+          "front passport." + frontExtension
+        );
+        const back = renameFile(
+          backPassportDocument,
+          "back passport." + backExtension
+        );
         setFrontPassportDocument(front);
         setBackPassportDocument(back);
-      }
-      else {
+      } else {
         e.target.checked = false;
         setPassportDocumentsVerified(false);
         errors.forEach((e) => message.error(e));
       }
     } else setPassportDocumentsVerified(false);
-  }
-
+  };
 
   useEffect(() => {
-    console.log("is wallet connected: ", walletConnected)
+    console.log("is wallet connected: ", walletConnected);
     console.log("isauthenticated: ", isAuthenticated);
   }, [isAuthenticated]);
 
@@ -496,7 +498,7 @@ const App = () => {
                             style={{ marginTop: "3rem" }}
                           />
                         </div>
-                        {(!walletConnected || userAddress.length == 0) ? (
+                        {!walletConnected || userAddress.length == 0 ? (
                           <button
                             onClick={connectWallet1}
                             className="connectWalletButton"
@@ -642,8 +644,8 @@ const App = () => {
                             onClick={verifyPassportDocuments}
                           />
                           <p>
-                            I confirm that the <strong>passport</strong> is valid until expiry date and
-                            is in color.
+                            I confirm that the <strong>passport</strong> is
+                            valid until expiry date and is in color.
                           </p>
                         </div>
                       </div>
@@ -700,8 +702,8 @@ const App = () => {
                           onChange={verifyIdDocuments}
                         />
                         <p>
-                          I confirm that the <strong>ID</strong> is valid until expiry date and
-                          is in color.
+                          I confirm that the <strong>ID</strong> is valid until
+                          expiry date and is in color.
                         </p>
                       </div>
                       {idDocumentsVerified ? (
@@ -1673,39 +1675,36 @@ const App = () => {
                         </div>
                       </div>
                       <div className="termsSectionBottom">
-                        {
-                          !isRegistering ?
-                            <Button
-                              onClick={async () => {
-                                await SignUpUser();
-                              }}
-                              text="Create Account"
-                              theme="colored"
-                              color="blue"
-                              size="large"
-                              isFullWidth="true"
-                              disabled={(!termsAccepted)}
-                              className="SignUpButton"
-                              style={{
-                                width: "35%",
-                              }}
-                            />
-                            :
-                            <Button
-                              text="Creating account..."
-                              theme="colored"
-                              color="blue"
-                              size="large"
-                              isFullWidth="true"
-                              disabled={true}
-                              className="SignUpButton"
-                              style={{
-                                width: "35%",
-                              }}
-                            />
-                        }
-
-
+                        {!isRegistering ? (
+                          <Button
+                            onClick={async () => {
+                              await SignUpUser();
+                            }}
+                            text="Create Account"
+                            theme="colored"
+                            color="blue"
+                            size="large"
+                            isFullWidth="true"
+                            disabled={!termsAccepted}
+                            className="SignUpButton"
+                            style={{
+                              width: "35%",
+                            }}
+                          />
+                        ) : (
+                          <Button
+                            text="Creating account..."
+                            theme="colored"
+                            color="blue"
+                            size="large"
+                            isFullWidth="true"
+                            disabled={true}
+                            className="SignUpButton"
+                            style={{
+                              width: "35%",
+                            }}
+                          />
+                        )}
                       </div>
                     </div>
                   ),
