@@ -5,6 +5,7 @@ import { Avatar, Blockie } from "@web3uikit/core";
 import { useMoralis } from "react-moralis";
 import NavbarIcon from "../assets/framer-1.png";
 import { message } from "antd";
+import { LogoutOutlined, ProfileOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 const console = require("console-browserify");
@@ -114,16 +115,16 @@ const Navbar = (props) => {
                 {avatarClicked && (
                   <div className="userButtons">
                     <div
-                      className="userButton logoutButton"
+                      className="dashboardButton userButton"
+                      onClick={() => navigate("/dashboard")}
+                    >
+                      Dashboard <ProfileOutlined />
+                    </div>
+                    <div
+                      className="logoutButton userButton"
                       onClick={() => disconnectWallet()}
                     >
-                      Logout
-                    </div>
-
-                    <div className="userButton ">
-                      <Link to="/dashboard" className="dashboardButton">
-                        Dashboard
-                      </Link>
+                      Logout <LogoutOutlined />
                     </div>
                   </div>
                 )}

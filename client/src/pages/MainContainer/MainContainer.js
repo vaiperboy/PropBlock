@@ -15,6 +15,7 @@ import MyProfile from "./MyProfile";
 import stats from "./stats.png";
 import MySettings from "./MySettings";
 import { useMoralis } from "react-moralis";
+import { Spin, Skeleton, Avatar, List } from "antd";
 
 class MainContainer extends React.Component {
   constructor(props) {
@@ -33,6 +34,7 @@ class MainContainer extends React.Component {
       profileView: false,
       settingView: false,
     },
+    isLoading: true,
   };
 
   toggleView = (val) => {
@@ -179,10 +181,29 @@ class MainContainer extends React.Component {
     });
   };
 
+  componentDidMount = async () => {
+    // Set loading state to true initially
+    await new Promise((r) => setTimeout(r, 1500));
+    this.setState({ isLoading: false });
+  };
+
   render() {
-    return (
+    return this.state.isLoading ? (
+      <div
+        style={{
+          textAlign: "center",
+          display: "flex",
+          gap: "3rem",
+          justifyContent: "center",
+          marginTop: "30rem",
+          alignItems: "center",
+        }}
+      >
+        <Spin size="large" />
+        <h1 style={{ fontSize: "2.5rem", color: "#3daeee" }}>Loading . . . </h1>
+      </div>
+    ) : (
       <div>
-        {/* <Navbar signedIn2={isAuthenticated} />}  */}
         <Navbar />
         <main>
           <div
@@ -193,7 +214,7 @@ class MainContainer extends React.Component {
               userSelect: "text",
             }}
           >
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", marginTop: "5rem" }}>
               <LeftSidebar
                 menuState={this.state.menuState}
                 toggleSettingView={this.toggleSettingView}

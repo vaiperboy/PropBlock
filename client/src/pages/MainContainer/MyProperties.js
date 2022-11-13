@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import stats from "../../assets/etienne-beauregard-riverin.png";
 import { message, Alert, notification, Checkbox, DatePicker } from "antd";
 import "../../styling/MainContainer/CreateProperty.scss";
@@ -6,6 +6,9 @@ import { Input, Stepper, Upload, Select } from "@web3uikit/core";
 import blueTick from "./assets/blue_tick.png";
 import image from "../../assets/blue_tick.png";
 import moment from "moment";
+import { useMoralis, useMoralisQuery } from "react-moralis";
+import { useNavigate } from "react-router-dom";
+// import Moralis from "moralis-v1/types";
 const console = require("console-browserify");
 
 const MyProperties = () => {
@@ -13,11 +16,12 @@ const MyProperties = () => {
   const [addPropertyView, setAddPropertyView] = useState(true);
 
   const [address, setAddress] = useState("");
-  const [name, setName] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [ethAddress, setEthAddress] = useState("");
   const [deedyr, setDeedyr] = useState("");
   const [type, setType] = useState("");
   const [deedno, setDeedno] = useState("");
-  const [email, setEmail] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
   const [propertyid, setPropertyId] = useState("");
   const [datesub, setDateSubmitted] = useState("");
   const [street, setStreet] = useState("");
@@ -40,6 +44,7 @@ const MyProperties = () => {
   const [isValidatedSecond, setIsValidatedSecond] = useState(false);
   const [isValidatedThird, setIsValidatedThird] = useState(false);
 
+  const { user, ...rest } = useMoralis();
   const disabledDate = (current) => {
     // Can not select days before today and today
     return current && current > moment().endOf("day");
@@ -47,7 +52,7 @@ const MyProperties = () => {
 
   const clearState = () => {
     setAddress("");
-    setName("");
+    setFullName("");
     setDeedno("");
     setDeedyr("");
     setType("");
@@ -97,6 +102,13 @@ const MyProperties = () => {
       }
     } catch (error) {}
   };
+
+  useEffect(() => {
+    setEthAddress(user.get("ethAddress"));
+    setEmailAddress(user.get("email"));
+    setFullName(user.get("fullName"));
+  }, [user]);
+  let navigate = useNavigate();
 
   if (addPropertyView) {
     return (
@@ -458,112 +470,94 @@ const MyProperties = () => {
                       content: (
                         <div className="fullform">
                           <div className="inputs-container">
-                            <div className="row">
-                              <div className="col-25">
-                                <label for="InputAddress">
-                                  Owner's Address
-                                </label>
-                              </div>
-                              <div className="col-75">
-                                <Input
-                                  type="text"
-                                  id="InputAddress"
-                                  name="address"
-                                  placeholder="..."
-                                  value={address}
-                                  onChange={(e) => {
-                                    setAddress(e.target.value);
-                                  }}
-                                  validation={{
-                                    readOnly: true,
-                                  }}
-                                  disabled="true"
-                                  style={{
-                                    backgroundColor: "rgb(225, 225, 225)",
-                                  }}
-                                />
-                              </div>
+                            <div className="input-item">
+                              <label for="InputAddress">Owner's Address</label>
+                              <Input
+                                type="text"
+                                id="InputAddress"
+                                className="ethAddressInput"
+                                name="address"
+                                placeholder={`${
+                                  ethAddress.slice(0, 6) +
+                                  "..." +
+                                  ethAddress.slice(25, 35)
+                                }`}
+                                value={address}
+                                onChange={(e) => {
+                                  setAddress(e.target.value);
+                                }}
+                                validation={{
+                                  readOnly: true,
+                                }}
+                                disabled="true"
+                                style={{
+                                  backgroundColor: "#9fcbe4",
+                                }}
+                              />
                             </div>
-
-                            <div className="row">
-                              <div className="col-25">
-                                <label for="InputName">Owner's Name</label>
-                              </div>
-                              <div className="col-75">
-                                <Input
-                                  type="text"
-                                  id="InputName"
-                                  name="name"
-                                  placeholder="..."
-                                  value={name}
-                                  onChange={(e) => {
-                                    setName(e.target.value);
-                                  }}
-                                  validation={{
-                                    readOnly: true,
-                                  }}
-                                  disabled="true"
-                                  style={{
-                                    backgroundColor: "rgb(225, 225, 225)",
-                                  }}
-                                />
-                              </div>
+                            <div className="input-item">
+                              <label for="InputName">Owner's Name</label>
+                              <Input
+                                type="text"
+                                id="InputName"
+                                name="name"
+                                className="fullNameInput"
+                                placeholder={`${fullName}`}
+                                onChange={(e) => {
+                                  setFullName(e.target.value);
+                                }}
+                                validation={{
+                                  readOnly: true,
+                                }}
+                                disabled="true"
+                                style={{
+                                  backgroundColor: "#9fcbe4",
+                                }}
+                              />
                             </div>
-
-                            <div className="row">
-                              <div className="col-25">
-                                <label for="InputDeedno">Title Deed No.</label>
-                              </div>
-                              <div className="col-75">
-                                <Input
-                                  openByDefault
-                                  id="InputDeedno"
-                                  name="titleno"
-                                  placeholder="#789456"
-                                  value={deedno}
-                                  onChange={(e) => {
-                                    setDeedno(e.target.value);
-                                    setIsValidated(false);
-                                  }}
-                                  validation={{
-                                    required: true,
-                                    regExp: "[0-9]+([,.][0-9]+)?",
-                                  }}
-                                />
-                              </div>
+                            <div className="input-item">
+                              <label for="InputDeedno">Title Deed No.</label>
+                              <Input
+                                openByDefault
+                                id="InputDeedno"
+                                name="titleno"
+                                placeholder="#789456"
+                                value={deedno}
+                                onChange={(e) => {
+                                  setDeedno(e.target.value);
+                                  setIsValidated(false);
+                                }}
+                                validation={{
+                                  required: true,
+                                  regExp: "[0-9]+([,.][0-9]+)?",
+                                }}
+                              />
                             </div>
-
-                            <div className="row">
-                              <div className="col-25">
-                                <label for="type">Title Deed Year</label>
-                              </div>
-                              <div className="col-75">
-                                <Input
-                                  type="month"
-                                  id="titleyr"
-                                  name="titleyr"
-                                  placeholder="..."
-                                  value={deedyr}
-                                  onChange={(e) => {
-                                    setDeedyr(e.target.value);
-                                    setIsValidated(false);
-                                  }}
-                                  validation={{
-                                    required: true,
-                                  }}
-                                />
-                              </div>
+                            <div className="input-item">
+                              <label for="type">Title Deed Year</label>
+                              <Input
+                                type="month"
+                                id="titleyr"
+                                name="titleyr"
+                                placeholder="..."
+                                value={deedyr}
+                                onChange={(e) => {
+                                  setDeedyr(e.target.value);
+                                  setIsValidated(false);
+                                }}
+                                validation={{
+                                  required: true,
+                                }}
+                              />
                             </div>
-
-                            <div className="row">
-                              <div className="col-25">
-                                <label for="property-type">Property Type</label>
-                              </div>
-                              <div className="col-75">
+                            <div className="input-item">
+                              <label for="property-type">Property Type</label>
+                              <div>
                                 <Select
                                   id="property-type"
                                   name="property-type"
-                                  placeholder="..."
+                                  className="selectPropertyType"
+                                  placeholder="None"
                                   style={{
                                     minWidth: "75%",
                                     marginRight: "22%",
@@ -602,13 +596,15 @@ const MyProperties = () => {
                               </div>
                             </div>
                           </div>
-
                           <div className="buttons-container">
                             <button
                               className="prevButton"
                               onClick={() => setAddPropertyView(true)}
+                              style={{
+                                padding: "0.5rem 2rem",
+                                height: "fit-content",
+                              }}
                             >
-                              {" "}
                               Go Back
                             </button>
 
@@ -621,7 +617,6 @@ const MyProperties = () => {
                                   validateInputFirst(deedno, deedyr, type)
                                 }
                               >
-                                {" "}
                                 Validate
                               </button>
                             )}
@@ -646,16 +641,15 @@ const MyProperties = () => {
                     {
                       content: (
                         <div className="fullform">
-                          <div className="row">
-                            <div className="col-25">
+                          <div className="inputs-container">
+                            <div className="input-item">
                               <label for="prop-id">Property ID</label>
-                            </div>
-                            <div className="col-75">
                               <Input
                                 type="text"
                                 id="prop-id"
                                 name="propertyid"
-                                placeholder="..."
+                                className="propertyIdInput"
+                                placeholder={`${propertyid}`}
                                 value={propertyid}
                                 onChange={(e) => {
                                   setPropertyId(e.target.value);
@@ -663,43 +657,40 @@ const MyProperties = () => {
                                 }}
                                 disabled
                                 style={{
-                                  backgroundColor: "rgb(225, 225, 225)",
+                                  backgroundColor: "#9fcbe4",
                                 }}
                               />
                             </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-25">
+                            <div className="input-item">
                               <label for="InputName">Owner's Email</label>
-                            </div>
-                            <div className="col-75">
                               <Input
                                 type="text"
                                 id="InputName"
                                 name="name"
-                                placeholder="..."
-                                value={email}
+                                className="emailAddressInput"
+                                placeholder={`${emailAddress}`}
                                 onChange={(e) => {
-                                  setEmail(e.target.value);
+                                  setEmailAddress(e.target.value);
                                   setIsValidatedSecond(false);
                                 }}
                                 disabled
                                 style={{
-                                  backgroundColor: "rgb(225, 225, 225)",
+                                  backgroundColor: "#9fcbe4",
                                 }}
                               />
                             </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-25">
+                            <div className="input-item">
                               <label for="InputDeedno">Owner's Address</label>
-                            </div>
-                            <div className="col-75">
                               <Input
                                 type="text"
                                 id="InputDeedno"
                                 name="titleno"
-                                placeholder="..."
+                                className="ethAddressInput"
+                                placeholder={`${
+                                  ethAddress.slice(0, 6) +
+                                  "..." +
+                                  ethAddress.slice(25, 35)
+                                }`}
                                 value={address}
                                 onChange={(e) => {
                                   setAddress(e.target.value);
@@ -707,33 +698,31 @@ const MyProperties = () => {
                                 }}
                                 disabled
                                 style={{
-                                  backgroundColor: "rgb(225, 225, 225)",
+                                  backgroundColor: "#9fcbe4",
                                 }}
                               />
                             </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-25">
+                            <div className="input-item">
                               <label for="datesub">Date Submitted</label>
-                            </div>
-                            <div className="col-75">
                               <DatePicker
-                                format="YYYY-MM-DD"
+                                format="DD - MM - YYYY"
                                 disabledDate={disabledDate}
                                 id="datesub"
                                 name="datesub"
+                                className="datePicker"
+                                style={
+                                  {
+                                    // padding: "0.5rem 4rem"
+                                  }
+                                }
                                 onChange={(e) => {
                                   setDateSubmitted(e._d);
                                   setIsValidatedSecond(false);
                                 }}
                               />
                             </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-25">
+                            <div className="input-item">
                               <label for="street">Street Name</label>
-                            </div>
-                            <div className="col-75">
                               <Input
                                 type="text"
                                 id="street"
@@ -749,12 +738,8 @@ const MyProperties = () => {
                                 }}
                               />
                             </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-25">
+                            <div className="input-item">
                               <label for="type">Area</label>
-                            </div>
-                            <div className="col-75">
                               <Input
                                 type="text"
                                 id="area"
@@ -770,12 +755,8 @@ const MyProperties = () => {
                                 }}
                               />
                             </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-25">
+                            <div className="input-item">
                               <label for="type">Apartment No.</label>
-                            </div>
-                            <div className="col-75">
                               <Input
                                 type="text"
                                 id="apartno"
@@ -792,12 +773,8 @@ const MyProperties = () => {
                                 }}
                               />
                             </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-25">
+                            <div className="input-item">
                               <label for="type">Listing Price</label>
-                            </div>
-                            <div className="col-75">
                               <Input
                                 type="text"
                                 id="price"
@@ -815,61 +792,56 @@ const MyProperties = () => {
                               />
                             </div>
                           </div>
-
-                          <br />
-                          <div className="row">
-                            <div className="col-75">
+                          <div className="buttons-container">
+                            <button
+                              className="prevButton"
+                              id="prev"
+                              onClick={() => (
+                                setIsValidated(false), setType("")
+                              )}
+                              style={{
+                                padding: "0.5rem 2rem",
+                                height: "fit-content",
+                              }}
+                            >
+                              Back
+                            </button>
+                            {!isValidatedSecond && (
                               <button
-                                className="prevButton"
-                                id="prev"
-                                onClick={() => (
-                                  setIsValidated(false), setType("")
-                                )}
+                                id="validateButton"
+                                className="validatebtn"
+                                text="Validate"
+                                onClick={() =>
+                                  validateInputSecond(
+                                    datesub,
+                                    street,
+                                    area,
+                                    apartno,
+                                    price
+                                  )
+                                }
                               >
-                                {" "}
-                                Back
+                                Validate
                               </button>
-                            </div>
-                            <div className="col-25">
-                              {!isValidatedSecond && (
-                                <button
-                                  id="validateButton"
-                                  className="validatebtn"
-                                  text="Validate"
-                                  onClick={() =>
-                                    validateInputSecond(
-                                      datesub,
-                                      street,
-                                      area,
-                                      apartno,
-                                      price
-                                    )
-                                  }
-                                >
-                                  {" "}
-                                  Validate
-                                </button>
-                              )}
-
-                              {isValidatedSecond && (
-                                <button
-                                  id="next"
-                                  className="nextButton  "
-                                  text="Next"
-                                  onClick={() =>
-                                    validateInputSecond(
-                                      datesub,
-                                      street,
-                                      area,
-                                      apartno,
-                                      price
-                                    )
-                                  }
-                                >
-                                  Next
-                                </button>
-                              )}
-                            </div>
+                            )}
+                            {isValidatedSecond && (
+                              <button
+                                id="next"
+                                className="nextButton  "
+                                text="Next"
+                                onClick={() =>
+                                  validateInputSecond(
+                                    datesub,
+                                    street,
+                                    area,
+                                    apartno,
+                                    price
+                                  )
+                                }
+                              >
+                                Next
+                              </button>
+                            )}
                           </div>
                         </div>
                       ),
@@ -878,7 +850,7 @@ const MyProperties = () => {
                       content: (
                         <div className="fullform-third">
                           <div className="inputs-container">
-                            <p style={{ fontWeight: "bold" }}>
+                            <p style={{ fontWeight: "600", fontSize: "2rem" }}>
                               Enter Additional Property Details
                             </p>
                             <div className="first-container">
@@ -947,9 +919,15 @@ const MyProperties = () => {
                                 ></Input>
                               </div>
                             </div>
-                            <p style={{ fontWeight: "bold" }}>
+                            <p
+                              style={{
+                                fontWeight: "600",
+                                fontSize: "2rem",
+                                margin: "3rem 0 2rem 0",
+                              }}
+                            >
                               Check The Facilities that Apply
-                            </p>{" "}
+                            </p>
                             <div className="icons-container">
                               <div className="icons-row">
                                 <div className="facility">
@@ -1148,12 +1126,15 @@ const MyProperties = () => {
                               </div>
                             </div>
                           </div>
-
                           <div className="buttons-container">
                             <div className="col-75">
                               <button
                                 className="prevButton btn-submit reset"
                                 id="prev"
+                                style={{
+                                  padding: "0.5rem 2rem",
+                                  height: "fit-content",
+                                }}
                               >
                                 {" "}
                                 Back
@@ -1191,57 +1172,61 @@ const MyProperties = () => {
                         </div>
                       ),
                     },
-
                     {
                       content: (
                         <div className="fullform">
-                          <p>
-                            Upload the required title deed and images for your
-                            property. Make sure that the images are high quality
-                            for better viewing.<br></br>
-                            You can upload upto 8 images for your property.
-                          </p>
-                          <br></br>
-                          <p className="text upload">Upload Title Deed</p>
-                          <Upload />
-                          <br />
-                          <p className="text upload">Upload Images</p>
-                          <Upload />
-
-                          <div className="row">
-                            <div className="col-75">
+                          <div className="inputs-container">
+                            <p>
+                              Upload the required title deed and images for your
+                              property. Make sure that the images are high
+                              quality for better viewing. You can upload upto 8
+                              images for your property.
+                            </p>
+                            <p
+                              className="text upload"
+                              style={{ marginTop: "5rem" }}
+                            >
+                              Upload Title Deed
+                            </p>
+                            <Upload />
+                            <br />
+                            <p className="text upload">Upload Images</p>
+                            <Upload />
+                          </div>
+                          <div className="buttons-container">
+                            <button
+                              className="prevButton btn-submit reset"
+                              id="prev"
+                              style={{
+                                padding: "0.5rem 2rem",
+                                height: "fit-content",
+                              }}
+                            >
+                              {" "}
+                              Back
+                            </button>
+                            {!isValidatedSecond && (
                               <button
-                                className="prevButton btn-submit reset"
-                                id="prev"
+                                id="validateButton"
+                                className="validatebtn"
+                                text="Validate"
+                                onClick={() => validateInputThird(occupNum)}
                               >
                                 {" "}
-                                Back
+                                Validate
                               </button>
-                            </div>
-                            <div className="col-25">
-                              {!isValidatedSecond && (
-                                <button
-                                  id="validateButton"
-                                  className="validatebtn"
-                                  text="Validate"
-                                  onClick={() => validateInputThird(occupNum)}
-                                >
-                                  {" "}
-                                  Validate
-                                </button>
-                              )}
+                            )}
 
-                              {isValidatedSecond && (
-                                <button
-                                  id="next"
-                                  className="nextButton  "
-                                  text="Next"
-                                  onClick={() => validateInputThird(occupNum)}
-                                >
-                                  Next
-                                </button>
-                              )}
-                            </div>
+                            {isValidatedSecond && (
+                              <button
+                                id="next"
+                                className="nextButton  "
+                                text="Next"
+                                onClick={() => validateInputThird(occupNum)}
+                              >
+                                Next
+                              </button>
+                            )}
                           </div>
                         </div>
                       ),
@@ -1249,24 +1234,21 @@ const MyProperties = () => {
                     {
                       content: (
                         <div className="fullform">
-                          <p className="text done">
-                            Your property was created Successfully!
-                          </p>
-                          <br />
                           <div className="checkimage">
                             {<img src={image} alt=""></img>}
                           </div>
-                          <br></br>
+                          <p className="text done">
+                            Your property was created Successfully!
+                          </p>
                           <div id="dashboardend">
                             <button
                               className="nextButton btn-submit end"
                               id=""
-                              style={{
-                                left: "8em",
-                                position: "absolute",
+                              style={{}}
+                              onClick={() => {
+                                window.location.reload(false);
                               }}
                             >
-                              {" "}
                               Finish
                             </button>
                           </div>
