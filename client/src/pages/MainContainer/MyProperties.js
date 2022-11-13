@@ -6,6 +6,7 @@ import { Input, Stepper, Upload, Select } from "@web3uikit/core";
 import blueTick from "./assets/blue_tick.png";
 import image from "../../assets/blue_tick.png";
 import moment from "moment";
+const console = require("console-browserify");
 
 const MyProperties = () => {
   //set this to false to display the current properties
@@ -565,7 +566,7 @@ const MyProperties = () => {
                                   placeholder="..."
                                   style={{
                                     minWidth: "75%",
-									marginRight: "22%"
+                                    marginRight: "22%",
                                   }}
                                   onChange={(e) => {
                                     console.log(e.id);
