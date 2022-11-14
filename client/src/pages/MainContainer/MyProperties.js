@@ -12,7 +12,6 @@ import {
   Modal,
   Radio,
 } from "antd";
-
 import { PlusOutlined, InboxOutlined } from "@ant-design/icons";
 import "../../styling/MainContainer/CreateProperty.scss";
 import { Input, Stepper, Select } from "@web3uikit/core";
@@ -23,13 +22,355 @@ import { useFiatBuy, useMoralis, useMoralisQuery } from "react-moralis";
 import { useNavigate } from "react-router-dom";
 import Property_Card from "./Property_Card";
 
+// smart contract imports and defs
+import realEstate from "../../artifacts/contracts/realEstate.sol/realEstate.json";
+const { ethers } = require("ethers");
+const { ethereum } = window;
+
 // import Moralis from "moralis-v1/types";
 const console = require("console-browserify");
 const { Dragger } = Upload;
 
 const MyProperties = () => {
-  //set this to false to display the current properties
+  // ----------------------------------
+  // Smart Contract Variables
+  // ----------------------------------
 
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  const API_URL = `https://eth-goerli.g.alchemy.com/v2/${API_KEY}`;
+  const PRIVATE_KEY = process.env.REACT_APP_PRIVATE_KEY;
+  const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
+
+  const provider = new ethers.providers.JsonRpcProvider(API_URL);
+  // Signer - this represents an Ethereum account that has the ability to sign transactions.
+  const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+  // Contract - this is an Ethers.js object that represents a specific contract deployed on-chain.
+  const realEstateContract = new ethers.Contract(
+    CONTRACT_ADDRESS,
+    realEstate.abi,
+    signer
+  );
+
+  const { Moralis } = useMoralis();
+  const [properties, setProperties] = useState([]);
+
+  // -------------------------------------------
+  // Smart Contract Functions
+  // -------------------------------------------
+
+  // checks if the string only has numbers
+  const onlyNumbers = (str) => {
+    if (str.match(/^[0-9]+$/) == null) {
+      return false;
+    }
+    return true;
+  };
+
+  const checkAddress = (addr) => {
+    try {
+      if (addr === "") {
+        message.error(
+          "Address Input cannot be empty!\nPlease enter a valid address."
+        );
+        return false;
+      }
+      const newAddress = ethers.utils.getAddress(addr);
+      const isAddr = ethers.utils.isAddress(newAddress);
+      return true;
+    } catch (error) {
+      message.error("Error (Invalid Address): ", error);
+      return false;
+    }
+  };
+
+  // checks if the landlord with this addr exists
+  const checkLandlordExists = async (addr) => {
+    try {
+      if (!checkAddress(addr)) {
+        return;
+      }
+      const landlords = Moralis.Object.extend("Landlords");
+      const query = new Moralis.Query(landlords);
+      query.equalTo("landlordAddress", addr.toLowerCase());
+      query.select("landlordAddress");
+      const results = await query.find();
+      if (results.length === 0) {
+        message.error(
+          "Landlord does not exist for this address: " +
+            addr.slice(0, 10) +
+            "..." +
+            addr.slice(35, 42)
+        );
+        return false;
+      } else {
+        return true;
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
+  const getPropertiesUsingContract = async (addr) => {
+    try {
+      if (!checkAddress(addr)) {
+        return;
+      }
+      const landlordExists = await checkLandlordExists(addr);
+      if (!landlordExists) {
+        return;
+      }
+      const counter = await realEstateContract.getLandlordCounter(addr);
+      setProperties([]);
+      for (let i = 1; i <= counter; i++) {
+        const propertyExists = await checkPropertyExistsUsingContract(addr, i);
+        if (propertyExists) {
+          let property = await realEstateContract.getProperty(addr, i);
+          let _area = parseInt(property[1]._hex, 16);
+          let _apartmentNo = parseInt(property[2]._hex, 16);
+          let _listedPrice = parseInt(property[3]._hex, 16);
+          const propertyObj = {
+            landlordAddress: addr,
+            propertyId: i,
+            streetName: property[0],
+            area: _area,
+            apartmentNo: _apartmentNo,
+            listedPrice: _listedPrice,
+          };
+          setProperties((properties) => [...properties, propertyObj]);
+        }
+      }
+    } catch (error) {
+      message.error("Error1: " + error.message);
+    }
+  };
+
+  // checks if a property exists using the realEstate Contract
+  const checkPropertyExistsUsingContract = async (addr, id) => {
+    try {
+      if (!checkAddress(addr)) {
+        return;
+      }
+      const exists = await realEstateContract.checkPropertyExists(addr, id);
+      if (exists) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
+  // Adding a new property
+  const addProperty = async (
+    addr,
+    propertyType,
+    titleDeedNo,
+    titleDeedYear,
+    streetNum,
+    area,
+    apartmentNum,
+    listedPrice,
+    ipfs,
+    facilities
+  ) => {
+    try {
+      let realEstateDappContract;
+      //input error handling
+      if (
+        addr === "" ||
+        propertyType === "" ||
+        streetNum === "" ||
+        apartmentNum === "" ||
+        ipfs === ""
+      ) {
+        message.error("Invalid input! Please fill in all the field required.");
+        return;
+      }
+      if (
+        titleDeedNo === 0 ||
+        titleDeedYear === 0 ||
+        area === 0 ||
+        listedPrice === 0 ||
+        facilities === 0
+      ) {
+        message.error(
+          "Invalid input! Please fill the inputs with the right feild types."
+        );
+        return;
+      }
+      if (
+        !onlyNumbers(titleDeedNo) ||
+        !onlyNumbers(titleDeedYear) ||
+        !onlyNumbers(area) ||
+        !onlyNumbers(listedPrice) ||
+        !onlyNumbers(facilities)
+      ) {
+        message.error("Invalid Input! Enter the values in correct format.");
+        return;
+      }
+      // make change here
+      // ------ ******** ---------
+
+      // let exists = await checkLandlordExists(addr);
+      // if (!exists) {
+      //   message.error(`Landlord does not exist ${addr}`);
+      //   return;
+      // }
+      if (!window.ethereum) {
+        message.error(
+          "Metamask not detected! Please install metamask to continue."
+        );
+        return;
+      }
+      // converting the data from string to int type
+      const uintTitleDeedNo = parseInt(titleDeedNo);
+      const uintTitleDeedYear = parseInt(titleDeedYear);
+      const uintArea = parseInt(area);
+      const uintListedPrice = parseInt(listedPrice);
+      const uintFacilities = parseInt(facilities);
+      const ipfsHash = "";
+      if (ethereum) {
+        const accounts = await ethereum.request({ method: "eth_accounts" });
+        // connected
+        if (accounts.length) {
+          //set up transaction parameters
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const walletAddress = accounts[0]; // first account in MetaMask
+          const signerNew = provider.getSigner(walletAddress);
+          realEstateDappContract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            realEstate.abi,
+            signerNew
+          );
+          await realEstateDappContract.createPropertyListing(
+            addr,
+            propertyType,
+            uintTitleDeedNo,
+            uintTitleDeedYear,
+            streetNum,
+            uintArea,
+            apartmentNum,
+            uintListedPrice,
+            ipfsHash,
+            uintFacilities
+          );
+          message.success(`Property added for landlord (address: ${addr})`);
+        } else {
+          // if not connected then
+          const accounts = await ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          //set up transaction parameters
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const walletAddress = accounts[0]; // first account in MetaMask
+          const signerNew = provider.getSigner(walletAddress);
+          realEstateDappContract = new ethers.Contract(
+            CONTRACT_ADDRESS,
+            realEstate.abi,
+            signerNew
+          );
+          await realEstateDappContract.createPropertyListing(
+            addr,
+            propertyType,
+            uintTitleDeedNo,
+            uintTitleDeedYear,
+            streetNum,
+            uintArea,
+            apartmentNum,
+            uintListedPrice,
+            ipfsHash,
+            uintFacilities
+          );
+          message.success(`Property added for landlord (address: ${addr})`);
+        }
+      }
+    } catch (error) {
+      if (error.code === 4001) {
+        message.error("Error " + error.code + ": " + error.message);
+      } else {
+        message.error("Error: " + error.code);
+      }
+    }
+  };
+
+  const samplePropertyDetails = {
+    addr: "0xd1d3db802977ee31062477e37a51b0bb452275f9",
+    propertyType: "villa",
+    titleDeedNo: 12344,
+    titleDeedYear: 2020,
+    streetNum: "12 Street",
+    area: 2500,
+    apartmentNum: "12A",
+    listedPrice: 1250000,
+    ipfs: "asdasdmkalksfm",
+    facilities: 1,
+  };
+
+  const displayPropertyDetails = () => {
+    console.log(samplePropertyDetails);
+  };
+
+  // transfers the property from the landlord to the buyer
+  const transferPropertyUsingContract = async (landAddr, buyerAddr, propId) => {
+    try {
+      if (!checkAddress(landAddr) || !checkAddress(buyerAddr)) {
+        return;
+      }
+      if (landAddr === buyerAddr) {
+        message.error("Invalid Input: Addresses cannot be the same.");
+        return;
+      }
+      if (!onlyNumbers(propId)) {
+        message.error("Invalid Input: Id entered is in incorrect format.");
+        return;
+      }
+      if (propId === "0") {
+        message.error("Invalid ID! Property Id cannot be zero.");
+        return;
+      }
+      const landlordExists = await checkLandlordExists(landAddr);
+      const buyerExists = await checkLandlordExists(buyerAddr);
+      if (!landlordExists || !buyerExists) {
+        return;
+      }
+      const propertyExists = await checkPropertyExistsUsingContract(
+        landAddr,
+        propId
+      );
+      if (!propertyExists) {
+        message.error(
+          "The landlord does not have a property with this property Id (" +
+            propId +
+            ")"
+        );
+        return;
+      }
+      await realEstateContract.transferProperty(
+        landAddr,
+        parseInt(propId),
+        buyerAddr
+      );
+      message.success(
+        "Property (id: " +
+          propId +
+          ") transfered successfully from landlord (" +
+          landAddr.slice(0, 10) +
+          "..." +
+          landAddr.slice(35, 42) +
+          ") to Buyer (" +
+          buyerAddr.slice(0, 10) +
+          "..." +
+          buyerAddr.slice(35, 42) +
+          "."
+      );
+    } catch (error) {
+      message.error("Error Message: " + error);
+    }
+  };
+  //
+
+  //set this to false to display the current properties
   // validated
   const [addPropertyView, setAddPropertyView] = useState(true);
 
@@ -82,15 +423,8 @@ const MyProperties = () => {
     return current && current > moment().endOf("day");
   };
 
-  const clearState = () => {
-    setAddress("");
-    setFullName("");
-    setDeedno("");
-    setDeedyr("");
-    setType("");
-  };
-
   // Validation Functions
+  // ---------------------
   const validateInputFirst = (deedno, deedyr, type) => {
     try {
       const numbersOnly = /^[0-9]*$/;
@@ -115,7 +449,6 @@ const MyProperties = () => {
       console.log("Error Message1: " + error);
     }
   };
-
   const validateInputSecond = (street, area, apartno, price) => {
     const numbersOnly = /^[0-9]*$/;
     try {
@@ -151,27 +484,9 @@ const MyProperties = () => {
     }
   };
 
-  useEffect(() => {
-    setEthAddress(user.get("ethAddress"));
-    setEmailAddress(user.get("email"));
-    setFullName(user.get("fullName"));
-  }, [user]);
-  let navigate = useNavigate();
-
-  // html for upload button - images
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </div>
-  );
-
+  // Handling Functions
+  // -------------------
+  // function to handle the images for property
   const handleChangeImages = (info) => {
     console.log(info.fileList);
     const files = [];
@@ -198,6 +513,22 @@ const MyProperties = () => {
     },
     onRemove(e) {},
   };
+
+  useEffect(() => {
+    setEthAddress(user.get("ethAddress"));
+    setEmailAddress(user.get("email"));
+    setFullName(user.get("fullName"));
+  }, [user]);
+
+  const clearState = () => {
+    setAddress("");
+    setFullName("");
+    setDeedno("");
+    setDeedyr("");
+    setType("");
+  };
+
+  let navigate = useNavigate();
 
   const validateInputFourth = () => {
     try {
@@ -320,8 +651,19 @@ const MyProperties = () => {
               {sampleProperties.map((property, i) => (
                 <Property_Card props={property} />
               ))}
+              {/* addr,
+    propertyType,
+    titleDeedNo,
+    titleDeedYear,
+    streetNum,
+    area,
+    apartmentNum,
+    listedPrice,
+    ipfs,
+    facilities */}
               <div
-                onClick={() => setAddPropertyView(false)}
+                onClick={() => displayPropertyDetails()}
+                // onClick={() => setAddPropertyView(false)}
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -1098,7 +1440,16 @@ const MyProperties = () => {
                                 multiple={true}
                                 className="uploadImages"
                               >
-                                {uploadButton}
+                                <div>
+                                  <PlusOutlined />
+                                  <div
+                                    style={{
+                                      marginTop: 8,
+                                    }}
+                                  >
+                                    Upload
+                                  </div>
+                                </div>{" "}
                               </Upload>
                             </div>
                             {imageNames.length > 0 ? (

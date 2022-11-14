@@ -80,7 +80,7 @@ contract realEstate is Ownable {
     // ----------------------------
     // list of events emitted to log
     event newLandlordAdded(address _landlordAddress, uint _landlordId);
-    event newPropertyAdded(address payable landlordAddress, uint _propertyId, uint titleDeedNo, uint titleDeedYear, string streetName, uint area, string apartmentNum, uint listedPrice, properyStatus propStatus, string ipfsHash, uint facilities);
+    event newPropertyAdded(address payable landlordAddress, uint _propertyId, uint titleDeedNo, uint titleDeedYear, string propertyType, string streetName, uint area, string apartmentNum, uint listedPrice, properyStatus propStatus, string ipfsHash, uint facilities);
     event propertTransfered(address _landlordAddress, address _buyerAddress, uint _propertyID, uint _price);
     event propertyStatusChanged(address payable _landlordAddress, uint _propertyId, properyStatus _status);
     event amountTransfered(address _to, uint _amount);
@@ -214,7 +214,7 @@ contract realEstate is Ownable {
         // adds property to the list of lands owned by a landlord
         landlordProperties[_landlordAddress][counter] = Property(counter, _propertyType, _titleDeedNo, _titleDeedYear, _streetName, _area, _apartmentNum, _listedPrice, true, properyStatus.uninitialized, _ipfsHash, _facilities);  
         emit propertyStatusChanged(_landlordAddress, counter, properyStatus.uninitialized); 
-        emit newPropertyAdded(_landlordAddress, counter, _titleDeedNo, _titleDeedYear, _streetName, _area, _apartmentNum, _listedPrice, properyStatus.uninitialized, _ipfsHash, _facilities );
+        emit newPropertyAdded(_landlordAddress, counter, _titleDeedNo, _titleDeedYear, _propertyType, _streetName, _area, _apartmentNum, _listedPrice, properyStatus.uninitialized, _ipfsHash, _facilities );
     }
 
     /*  @dev - gets the listed price for an existing property for a landlord
