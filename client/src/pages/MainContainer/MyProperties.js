@@ -60,7 +60,8 @@ const MyProperties = () => {
 
   // checks if the string only has numbers
   const onlyNumbers = (str) => {
-    if (str.match(/^[0-9]+$/) == null) {
+    const numbersOnly = /^[0-9]*$/;
+    if (!numbersOnly.test(str)) {
       return false;
     }
     return true;
@@ -106,7 +107,7 @@ const MyProperties = () => {
         return true;
       }
     } catch (error) {
-      console.log("Error: ", error);
+      console.log("Error1: ", error);
     }
   };
 
@@ -157,7 +158,7 @@ const MyProperties = () => {
         return false;
       }
     } catch (error) {
-      console.log("Error: ", error);
+      console.log("Error2: ", error);
     }
   };
 
@@ -176,6 +177,8 @@ const MyProperties = () => {
   ) => {
     try {
       let realEstateDappContract;
+      console.log("here");
+
       //input error handling
       if (
         addr === "" ||
@@ -199,6 +202,7 @@ const MyProperties = () => {
         );
         return;
       }
+
       if (
         !onlyNumbers(titleDeedNo) ||
         !onlyNumbers(titleDeedYear) ||
@@ -209,6 +213,7 @@ const MyProperties = () => {
         message.error("Invalid Input! Enter the values in correct format.");
         return;
       }
+
       // make change here
       // ------ ******** ---------
 
@@ -223,6 +228,7 @@ const MyProperties = () => {
         );
         return;
       }
+
       // converting the data from string to int type
       const uintTitleDeedNo = parseInt(titleDeedNo);
       const uintTitleDeedYear = parseInt(titleDeedYear);
@@ -289,13 +295,14 @@ const MyProperties = () => {
       if (error.code === 4001) {
         message.error("Error " + error.code + ": " + error.message);
       } else {
-        message.error("Error: " + error.code);
+        message.error("Error: " + error);
+        console.log("Error: " + error.message);
       }
     }
   };
 
   const samplePropertyDetails = {
-    addr: "0xd1d3db802977ee31062477e37a51b0bb452275f9",
+    addr: "0x6F7CBEE1098D7b5890299FA1B16b98F458926636",
     propertyType: "villa",
     titleDeedNo: 12344,
     titleDeedYear: 2020,
@@ -308,7 +315,7 @@ const MyProperties = () => {
   };
 
   const displayPropertyDetails = () => {
-    console.log(samplePropertyDetails);
+    console.log(samplePropertyDetails.addr, samplePropertyDetails.area);
   };
 
   // transfers the property from the landlord to the buyer
@@ -651,18 +658,21 @@ const MyProperties = () => {
               {sampleProperties.map((property, i) => (
                 <Property_Card props={property} />
               ))}
-              {/* addr,
-    propertyType,
-    titleDeedNo,
-    titleDeedYear,
-    streetNum,
-    area,
-    apartmentNum,
-    listedPrice,
-    ipfs,
-    facilities */}
               <div
-                onClick={() => displayPropertyDetails()}
+                onClick={() =>
+                  addProperty(
+                    samplePropertyDetails.addr,
+                    samplePropertyDetails.propertyType,
+                    samplePropertyDetails.titleDeedNo,
+                    samplePropertyDetails.titleDeedYear,
+                    samplePropertyDetails.streetNum,
+                    samplePropertyDetails.area,
+                    samplePropertyDetails.apartmentNum,
+                    samplePropertyDetails.listedPrice,
+                    samplePropertyDetails.ipfs,
+                    samplePropertyDetails.facilities
+                  )
+                }
                 // onClick={() => setAddPropertyView(false)}
                 style={{
                   display: "flex",
