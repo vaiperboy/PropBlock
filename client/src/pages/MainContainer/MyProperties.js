@@ -7,6 +7,7 @@ import {
   Checkbox,
   DatePicker,
   Upload,
+  InputNumber,
   Select as SelectAnt,
   Modal,
   Radio,
@@ -18,7 +19,7 @@ import { Input, Stepper, Select } from "@web3uikit/core";
 import blueTick from "./assets/blue_tick.png";
 import image from "../../assets/blue_tick.png";
 import moment from "moment";
-import { useMoralis, useMoralisQuery } from "react-moralis";
+import { useFiatBuy, useMoralis, useMoralisQuery } from "react-moralis";
 import { useNavigate } from "react-router-dom";
 import Property_Card from "./Property_Card";
 
@@ -28,39 +29,49 @@ const { Dragger } = Upload;
 
 const MyProperties = () => {
   //set this to false to display the current properties
+
+  // validated
   const [addPropertyView, setAddPropertyView] = useState(true);
+
+  // step - 1
   const [address, setAddress] = useState("");
-  const [fullName, setFullName] = useState("");
   const [ethAddress, setEthAddress] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [deedno, setDeedno] = useState("");
   const [deedyr, setDeedyr] = useState("");
   const [type, setType] = useState("");
-  const [deedno, setDeedno] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
+  const [isValidatedFirst, setIsValidatedFirst] = useState(false);
+
+  // step - 2
   const [propertyid, setPropertyId] = useState("");
-  const [datesub, setDateSubmitted] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
   const [street, setStreet] = useState("");
   const [area, setArea] = useState("");
   const [apartno, setApartmentNo] = useState("");
   const [price, setPrice] = useState("");
-  const [bednumber, setBedNumber] = useState(0);
+  const [isValidatedSecond, setIsValidatedSecond] = useState(false);
+
+  // step - 3
+  const [bednumber, setBedNumber] = useState(1);
   const [bathnumber, setBathNumber] = useState(0);
-  const [occupNum, setOccupNumber] = useState(0);
-  //freeParking = 1
-  //hasPool = 2
-  //freeParking & haspool = 3
-  const [isfreeparking, setIsFreeParking] = useState(false);
-  const [hasPool, setHasPool] = useState(false);
-  const [hasKitchen, setHasKitchen] = useState(false);
-  const [hasCoffee, setHasCoffee] = useState(false);
-  const [hasWholeAccess, setHasWholeAccess] = useState(false);
-  const [hasSecurity, setHasSecurity] = useState(false);
-  const [hasTV, setHasTV] = useState(false);
-  const [isfreewifi, setIsFreeWifi] = useState(false);
-  const [hasRestaurant, setHasRestaurant] = useState(false);
-  const [isValidated, setIsValidated] = useState(true);
-  const [isValidatedSecond, setIsValidatedSecond] = useState(true);
-  // const [isValidatedThird, setIsValidatedThird] = useState(false);
+  const [occupNum, setOccupNumber] = useState(1);
+  const [facilities, setFacilities] = useState({
+    parking: false,
+    kitchen: false,
+    security: false,
+    freeWifi: false,
+    coffee: false,
+    pool: false,
+    restaurant: false,
+    hourAccess: false,
+    tv: false,
+  });
+
+  // step - 4
+  // ---------------
+  const [isValidatedFourth, setIsValidatedFourth] = useState(false);
   const [primaryImageIndex, setPrimaryImageIndex] = useState(0);
+  const [primaryImageOption, setPrimaryImageOption] = useState("");
   const [imageList, setImageList] = useState([]);
   const [titleDeedFile, setTitleDeedFile] = useState({});
   const [imageNames, setImageNames] = useState([]);
@@ -79,49 +90,65 @@ const MyProperties = () => {
     setType("");
   };
 
+  // Validation Functions
   const validateInputFirst = (deedno, deedyr, type) => {
     try {
-      const deednoReg = /[0-9]+([,.][0-9]+)?/;
+      const numbersOnly = /^[0-9]*$/;
       if (deedno === "") {
-        message.error("Please fill deedno Input");
+        message.error("Please fill the input for Title Deed No.");
         return;
-      } else if (deedyr === "") {
-        message.error("Please fill deedyr Input");
-        return;
-      } else if (type === "") {
-        message.error("Please fill type Input");
-        return;
-      } else if (!deednoReg.test(deedno)) {
+      }
+      if (!numbersOnly.test(deedno)) {
         message.error("Invalid Deed No. Format. Must be only numbers.");
         return;
-      } else setIsValidated(true);
-    } catch (error) {}
-  };
-
-  const validateInputSecond = (datesub, street, area, apartno, price) => {
-    const apartnoReg = /[0-9]+([,.][0-9]+)?/;
-    try {
-      if (
-        datesub === "" ||
-        street === "" ||
-        area === "" ||
-        apartno === "" ||
-        price === ""
-      ) {
-        message.error("Please fill all Inputs");
-        return;
-      } else if (!apartnoReg.test(apartno) || !apartnoReg.test(price)) {
-        message.error("Invalid Format, please only use numbers");
-      } else setIsValidatedSecond(true);
-    } catch (error) {}
-  };
-
-  const validateInputThird = (bednumber, bathnumber, occupancynum) => {
-    try {
-      if (occupancynum === 0) {
-        message.error("Occupancy Number cant be 0");
       }
-    } catch (error) {}
+      if (deedyr === "") {
+        message.error("Please fill the input for Title deed Year");
+        return;
+      }
+      if (type === "" || type === "none") {
+        message.error("Please fill the input for Property Type");
+        return;
+      }
+      setIsValidatedFirst(true);
+    } catch (error) {
+      console.log("Error Message1: " + error);
+    }
+  };
+
+  const validateInputSecond = (street, area, apartno, price) => {
+    const numbersOnly = /^[0-9]*$/;
+    try {
+      if (street === "") {
+        message.error("Please fill the input for Property Street");
+        return;
+      }
+      if (area === "") {
+        message.error("Please fill the input for Area");
+        return;
+      }
+      if (!numbersOnly.test(area)) {
+        message.error("Invalid Format! Area input should only contain numbers");
+        return;
+      }
+      if (apartno === "") {
+        message.error("Please fill the input for Apartment Number");
+        return;
+      }
+      if (price === "") {
+        message.error("Please fill the input for Price of the Property");
+        return;
+      }
+      if (!numbersOnly.test(price)) {
+        message.error(
+          "Invalid Format! Price input should only contain numbers"
+        );
+        return;
+      }
+      setIsValidatedSecond(true);
+    } catch (error) {
+      message.error("Error Message: " + error);
+    }
   };
 
   useEffect(() => {
@@ -168,13 +195,43 @@ const MyProperties = () => {
     maxCount: 1,
     onChange(info) {
       setTitleDeedFile(info.file.originFileObj);
-      console.log(titleDeedFile);
     },
+    onRemove(e) {},
   };
 
-  const onChange = (e) => {
-    console.log("radio checked", e.target.value);
-    setPrimaryImageIndex(e.target.value);
+  const validateInputFourth = () => {
+    try {
+      if (primaryImageOption === "" || primaryImageOption === undefined) {
+        message.info("Please select a primary image to continue");
+        return;
+      }
+      message.success("Data stored successfully!");
+      console.log(
+        "Inputs: ",
+        ethAddress,
+        street,
+        area,
+        apartno,
+        emailAddress,
+        fullName,
+        deedno,
+        deedyr,
+        type,
+        bednumber,
+        bathnumber,
+        occupNum
+      );
+      console.log("uploads: ", imageList, titleDeedFile);
+      console.log("facilities: ", facilities);
+      setIsValidatedFourth(true);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
+  const handlePrimaryImageChange = (e) => {
+    setPrimaryImageOption(e);
+    console.log("option checked", primaryImageOption);
   };
 
   const sampleProperties = [
@@ -216,6 +273,12 @@ const MyProperties = () => {
     imageList[0] = imageList[primaryImageIndex];
     imageList[primaryImageIndex] = first;
   };
+
+  const printAllData = () => {};
+
+  useEffect(() => {
+    console.log(primaryImageOption);
+  }, [primaryImageOption]);
 
   // properties view
   if (addPropertyView) {
@@ -388,7 +451,7 @@ const MyProperties = () => {
                                 value={deedno}
                                 onChange={(e) => {
                                   setDeedno(e.target.value);
-                                  setIsValidated(false);
+                                  setIsValidatedFirst(false);
                                 }}
                                 validation={{
                                   required: true,
@@ -397,61 +460,61 @@ const MyProperties = () => {
                               />
                             </div>
                             <div className="input-item">
-                              <label for="type">Title Deed Year</label>
-                              <Input
-                                type="month"
+                              <label for="datesub">Title Deed Year</label>
+                              <DatePicker
+                                format="YYYY"
+                                picker="year"
+                                disabledDate={disabledDate}
                                 id="titleyr"
                                 name="titleyr"
-                                placeholder="..."
-                                value={deedyr}
+                                className="datePicker"
+                                style={
+                                  {
+                                    // padding: "0.5rem 4rem"
+                                  }
+                                }
                                 onChange={(e) => {
-                                  setDeedyr(e.target.value);
-                                  setIsValidated(false);
-                                }}
-                                validation={{
-                                  required: true,
+                                  setDeedyr(e._d.getFullYear());
+                                  setIsValidatedFirst(false);
                                 }}
                               />
                             </div>
                             <div className="input-item">
                               <label for="property-type">Property Type</label>
                               <div>
-                                <Select
-                                  id="property-type"
-                                  name="property-type"
+                                <SelectAnt
+                                  defaultValue="none"
                                   className="selectPropertyType"
-                                  placeholder="None"
                                   style={{
-                                    minWidth: "75%",
-                                    marginRight: "22%",
+                                    width: "200",
                                   }}
-                                  onChange={(e) => {
-                                    console.log(e.id);
-                                    setType(e.id);
-                                    setIsValidated(false);
-                                  }}
-                                  validation={{
-                                    required: true,
+                                  onChange={(value) => {
+                                    setType(value);
+                                    setIsValidatedFirst(false);
                                   }}
                                   options={[
                                     {
-                                      id: "villa",
+                                      value: "none",
+                                      label: "None",
+                                    },
+                                    {
+                                      value: "villa",
                                       label: "Villa",
                                     },
                                     {
-                                      id: "townhouse",
+                                      value: "townhouse",
                                       label: "Townhouse",
                                     },
                                     {
-                                      id: "apartment",
+                                      value: "apartment",
                                       label: "Apartment",
                                     },
                                     {
-                                      id: "penthouse",
+                                      value: "penthouse",
                                       label: "Penthouse",
                                     },
                                     {
-                                      id: "duplex",
+                                      value: "duplex",
                                       label: "Duplex",
                                     },
                                   ]}
@@ -471,9 +534,9 @@ const MyProperties = () => {
                               Go Back
                             </button>
 
-                            {isValidated && (
+                            {!isValidatedFirst && (
                               <button
-                                id="validateButton"
+                                id="validateButtonFirst"
                                 className="validatebtn"
                                 text="Validate"
                                 onClick={() =>
@@ -484,16 +547,15 @@ const MyProperties = () => {
                               </button>
                             )}
 
-                            <button
-                              id="next"
-                              className="nextButton  "
-                              text="Next"
-                              onClick={() =>
-                                validateInputFirst(deedno, deedyr, type)
-                              }
-                            >
-                              Next
-                            </button>
+                            {isValidatedFirst && (
+                              <button
+                                id="next"
+                                className="nextButton  "
+                                text="Next"
+                              >
+                                Next
+                              </button>
+                            )}
                           </div>
                         </div>
                       ),
@@ -563,25 +625,6 @@ const MyProperties = () => {
                                 }}
                               />
                             </div>
-                            {/* <div className="input-item">
-                              <label for="datesub">Date Submitted</label>
-                              <DatePicker
-                                format="DD - MM - YYYY"
-                                disabledDate={disabledDate}
-                                id="datesub"
-                                name="datesub"
-                                className="datePicker"
-                                style={
-                                  {
-                                    // padding: "0.5rem 4rem"
-                                  }
-                                }
-                                onChange={(e) => {
-                                  setDateSubmitted(e._d);
-                                  setIsValidatedSecond(false);
-                                }}
-                              />
-                            </div> */}
                             <div className="input-item">
                               <label for="street">Street Name</label>
                               <Input
@@ -605,13 +648,14 @@ const MyProperties = () => {
                                 type="text"
                                 id="area"
                                 name="area"
-                                placeholder="Al Barari"
+                                placeholder="12500 (in sqft)"
                                 value={area}
                                 onChange={(e) => {
                                   setArea(e.target.value);
                                   setIsValidatedSecond(false);
                                 }}
                                 validation={{
+                                  regExp: "[0-9]+([,.][0-9]+)?",
                                   required: true,
                                 }}
                               />
@@ -622,15 +666,11 @@ const MyProperties = () => {
                                 type="text"
                                 id="apartno"
                                 name="apartno"
-                                placeholder="123"
+                                placeholder="12B"
                                 value={apartno}
                                 onChange={(e) => {
                                   setApartmentNo(e.target.value);
                                   setIsValidatedSecond(false);
-                                }}
-                                validation={{
-                                  required: true,
-                                  regExp: "[0-9]+([,.][0-9]+)?",
                                 }}
                               />
                             </div>
@@ -657,9 +697,10 @@ const MyProperties = () => {
                             <button
                               className="prevButton"
                               id="prev"
-                              onClick={() => (
-                                setIsValidated(false), setType("")
-                              )}
+                              onClick={() => {
+                                setIsValidatedFirst(false);
+                                setType("");
+                              }}
                               style={{
                                 padding: "0.5rem 2rem",
                                 height: "fit-content",
@@ -669,12 +710,11 @@ const MyProperties = () => {
                             </button>
                             {!isValidatedSecond && (
                               <button
-                                id="next"
+                                id="validatebtn"
                                 className="validatebtn"
                                 text="Validate"
                                 onClick={() =>
                                   validateInputSecond(
-                                    datesub,
                                     street,
                                     area,
                                     apartno,
@@ -688,17 +728,8 @@ const MyProperties = () => {
                             {isValidatedSecond && (
                               <button
                                 id="next"
-                                className="nextButton  "
+                                className="nextButton"
                                 text="Next"
-                                onClick={() =>
-                                  validateInputSecond(
-                                    datesub,
-                                    street,
-                                    area,
-                                    apartno,
-                                    price
-                                  )
-                                }
                               >
                                 Next
                               </button>
@@ -717,67 +748,41 @@ const MyProperties = () => {
                             <div className="first-container">
                               <div className="label-container">
                                 <label for="NumberofBeds">No. of Beds</label>
-                                <Input
-                                  type="number"
-                                  id="NumberofBeds"
-                                  name="NumberofBeds"
-                                  placeholder="0"
-                                  value={bednumber}
-                                  onChange={(e) => {
-                                    setBedNumber(e.target.value);
+                                <InputNumber
+                                  className="bedsInputNumber"
+                                  min={1}
+                                  max={10}
+                                  defaultValue={1}
+                                  onChange={(value) => {
+                                    setBedNumber(value);
                                   }}
-                                  validation={{
-                                    required: true,
-                                  }}
-                                  style={{
-                                    maxWidth: "9rem",
-                                    minWidth: "9rem",
-                                  }}
-                                ></Input>
+                                />
                               </div>
-
                               <div className="label-container">
                                 <label for="NumberofBathrooms">
                                   No. of Bathrooms
                                 </label>
-                                <Input
-                                  type="number"
-                                  id="NumberofBathrooms"
-                                  name="NumberofBathrooms"
-                                  placeholder="0"
-                                  value={bathnumber}
-                                  onChange={(e) => {
-                                    setBathNumber(e.target.value);
+                                <InputNumber
+                                  className="bedsInputNumber"
+                                  min={0}
+                                  max={10}
+                                  defaultValue={0}
+                                  onChange={(value) => {
+                                    setBathNumber(value);
                                   }}
-                                  validation={{
-                                    required: true,
-                                  }}
-                                  style={{
-                                    maxWidth: "9rem",
-                                    minWidth: "9rem",
-                                  }}
-                                ></Input>
+                                />
                               </div>
-
                               <div className="label-container">
                                 <label for="occupancynum">Occupancy No.</label>
-                                <Input
-                                  type="number"
-                                  id="occupancynum"
-                                  name="occupancynum"
-                                  placeholder="0"
-                                  value={occupNum}
-                                  onChange={(e) => {
-                                    setOccupNumber(e.target.value);
+                                <InputNumber
+                                  className="bedsInputNumber"
+                                  min={1}
+                                  max={20}
+                                  defaultValue={1}
+                                  onChange={(value) => {
+                                    setOccupNumber(value);
                                   }}
-                                  validation={{
-                                    required: true,
-                                  }}
-                                  style={{
-                                    maxWidth: "9rem",
-                                    minWidth: "9rem",
-                                  }}
-                                ></Input>
+                                />
                               </div>
                             </div>
                             <p
@@ -793,7 +798,7 @@ const MyProperties = () => {
                               <div className="icons-row">
                                 <div className="facility">
                                   <img
-                                    alt=""
+                                    alt="freeparking"
                                     className="facilityIcon"
                                     src={require("../../assets/pic1.png")}
                                   ></img>
@@ -802,9 +807,12 @@ const MyProperties = () => {
                                     type="checkbox"
                                     id="freeparking"
                                     name="freeparking"
-                                    value={isfreeparking}
                                     onChange={(e) => {
-                                      setIsFreeParking(e.target.value);
+                                      let value = e.target.checked;
+                                      setFacilities({
+                                        ...facilities,
+                                        parking: value,
+                                      });
                                     }}
                                     style={{
                                       outline: "none",
@@ -823,9 +831,12 @@ const MyProperties = () => {
                                     type="checkbox"
                                     id="freewifi"
                                     name="freewifi"
-                                    value={isfreewifi}
                                     onChange={(e) => {
-                                      setIsFreeWifi(e.target.value);
+                                      let value = e.target.checked;
+                                      setFacilities({
+                                        ...facilities,
+                                        freeWifi: value,
+                                      });
                                     }}
                                     style={{
                                       outline: "none",
@@ -844,9 +855,12 @@ const MyProperties = () => {
                                     type="checkbox"
                                     id="restaurant"
                                     name="restaurant"
-                                    value={hasRestaurant}
                                     onChange={(e) => {
-                                      setHasRestaurant(e.target.value);
+                                      let value = e.target.checked;
+                                      setFacilities({
+                                        ...facilities,
+                                        restaurant: value,
+                                      });
                                     }}
                                     style={{
                                       outline: "none",
@@ -867,9 +881,12 @@ const MyProperties = () => {
                                     type="checkbox"
                                     id="kitchen"
                                     name="kitchen"
-                                    value={hasKitchen}
                                     onChange={(e) => {
-                                      setHasKitchen(e.target.value);
+                                      let value = e.target.checked;
+                                      setFacilities({
+                                        ...facilities,
+                                        kitchen: value,
+                                      });
                                     }}
                                     style={{
                                       outline: "none",
@@ -888,9 +905,12 @@ const MyProperties = () => {
                                     type="checkbox"
                                     id="coffee"
                                     name="coffee"
-                                    value={hasCoffee}
                                     onChange={(e) => {
-                                      setHasCoffee(e.target.value);
+                                      let value = e.target.checked;
+                                      setFacilities({
+                                        ...facilities,
+                                        coffee: value,
+                                      });
                                     }}
                                     style={{
                                       outline: "none",
@@ -909,9 +929,12 @@ const MyProperties = () => {
                                     type="checkbox"
                                     id="access"
                                     name="access"
-                                    value={hasWholeAccess}
                                     onChange={(e) => {
-                                      setHasWholeAccess(e.target.value);
+                                      let value = e.target.checked;
+                                      setFacilities({
+                                        ...facilities,
+                                        hourAccess: value,
+                                      });
                                     }}
                                     style={{
                                       outline: "none",
@@ -932,9 +955,12 @@ const MyProperties = () => {
                                     type="checkbox"
                                     id="security"
                                     name="security"
-                                    value={hasSecurity}
                                     onChange={(e) => {
-                                      setHasSecurity(e.target.value);
+                                      let value = e.target.checked;
+                                      setFacilities({
+                                        ...facilities,
+                                        security: value,
+                                      });
                                     }}
                                     style={{
                                       outline: "none",
@@ -953,9 +979,12 @@ const MyProperties = () => {
                                     type="checkbox"
                                     id="pool"
                                     name="pool"
-                                    value={hasPool}
                                     onChange={(e) => {
-                                      setHasPool(e.target.value);
+                                      let value = e.target.checked;
+                                      setFacilities({
+                                        ...facilities,
+                                        pool: value,
+                                      });
                                     }}
                                     style={{
                                       outline: "none",
@@ -974,9 +1003,12 @@ const MyProperties = () => {
                                     type="checkbox"
                                     id="tv"
                                     name="tv"
-                                    value={hasTV}
                                     onChange={(e) => {
-                                      setHasTV(e.target.value);
+                                      let value = e.target.checked;
+                                      setFacilities({
+                                        ...facilities,
+                                        tv: value,
+                                      });
                                     }}
                                     style={{
                                       outline: "none",
@@ -996,38 +1028,24 @@ const MyProperties = () => {
                                   padding: "0.5rem 2rem",
                                   height: "fit-content",
                                 }}
+                                onClick={() => {
+                                  setIsValidatedSecond(false);
+                                }}
                               >
-                                {" "}
                                 Back
                               </button>
                             </div>
                             <div className="col-25">
-                              {
-                                <button
-                                  id="next"
-                                  className="nextButton"
-                                  text="Validate"
-                                  onClick={() =>
-                                    validateInputFirst(deedno, deedyr, type)
-                                  }
-                                >
-                                  {" "}
-                                  Validate
-                                </button>
-                              }
-
-                              {/* {isValidated && (
-                                <button
-                                  id="next"
-                                  className="nextButton  "
-                                  text="Next"
-                                  onClick={() =>
-                                    validateInputFirst(deedno, deedyr, type)
-                                  }
-                                >
-                                  Next
-                                </button>
-                              )} */}
+                              <button
+                                id="next"
+                                className="nextButton  "
+                                text="Next"
+                                onClick={() =>
+                                  validateInputFirst(deedno, deedyr, type)
+                                }
+                              >
+                                Next
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -1069,7 +1087,7 @@ const MyProperties = () => {
                             <p className="text upload">
                               Upload Images (Max - 5)
                             </p>
-                            <div>
+                            <div className="imagesUploadContainer">
                               <Upload
                                 action=""
                                 onChange={handleChangeImages}
@@ -1092,9 +1110,9 @@ const MyProperties = () => {
                                 <SelectAnt
                                   defaultValue="none"
                                   style={{
-                                    width: "fit-content",
+                                    width: "20rem",
                                   }}
-                                  onChange={onChange}
+                                  onChange={handlePrimaryImageChange}
                                   options={imageNames}
                                 />
                               </div>
@@ -1110,31 +1128,32 @@ const MyProperties = () => {
                                 padding: "0.5rem 2rem",
                                 height: "fit-content",
                               }}
+                              onClick={() => {
+                                setImageNames([]);
+                              }}
                             >
-                              {" "}
                               Back
                             </button>
-                            {!isValidatedSecond && (
+                            {!isValidatedFourth ? (
                               <button
-                                id="next"
+                                id="validatebtn"
                                 className="validatebtn"
                                 text="Validate"
                                 onClick={() => {
-                                  validateInputThird(occupNum);
-                                  makePrimaryImage();
+                                  validateInputFourth();
                                 }}
                               >
-                                {" "}
                                 Validate
                               </button>
-                            )}
-
-                            {isValidatedSecond && (
+                            ) : (
                               <button
                                 id="next"
                                 className="nextButton  "
                                 text="Next"
-                                onClick={() => validateInputThird(occupNum)}
+                                onClick={() => {
+                                  makePrimaryImage();
+                                  printAllData();
+                                }}
                               >
                                 Next
                               </button>
@@ -1155,8 +1174,7 @@ const MyProperties = () => {
                           <div id="dashboardend">
                             <button
                               className="nextButton btn-submit end"
-                              id=""
-                              style={{}}
+                              id="finishButton"
                               onClick={() => {
                                 window.location.reload(false);
                               }}

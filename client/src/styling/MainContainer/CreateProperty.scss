@@ -32,6 +32,24 @@
           display: flex;
           flex-direction: column;
           gap: 2rem;
+          .datePicker {
+            padding: 0.4rem 2rem;
+            max-height: 4.5rem;
+            font-size: 2rem;
+            border-radius: 5rem;
+            input {
+              font-size: 1.5rem;
+              color: #555;
+            }
+          }
+          .ant-select-selector {
+            border-radius: 10rem;
+            padding: 0.5rem 2rem;
+            width: 15rem;
+            height: 4.5rem;
+            font-size: 1.5rem;
+            color: #777777;
+          }
           .input-item {
             display: flex;
             justify-content: space-between;
@@ -77,17 +95,6 @@
           .input-item {
             display: flex;
             justify-content: space-between;
-            .datePicker {
-              padding: 0.4rem 4rem;
-              max-height: 4.5rem;
-              font-size: 2rem;
-              border-radius: 5rem;
-              input {
-                font-size: 1.5rem;
-                color: #555;
-                margin-right: 0rem;
-              }
-            }
           }
         }
         .buttons-container {
@@ -136,9 +143,17 @@
               margin-right: 2rem;
               min-width: 30rem;
               label {
-                margin: 0 2rem 0 0;
+                margin: 0 4rem 0 0;
               }
             }
+          }
+          .bedsInputNumber {
+            width: 10rem;
+            padding: 0.4rem 2rem;
+            font-size: 1.8rem;
+            color: #555;
+          }
+          #NumberofBeds {
           }
           .icons-container {
             display: flex;
@@ -194,11 +209,24 @@
           }
           .uploadFiles {
             text-align: center;
+            width: 100%;
+            height: 12rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+            margin: 0 auto;
+            gap: 1rem;
             .ant-upload-drag-icon {
               text-align: center;
+              height: 2rem;
+              svg {
+                width: 3rem;
+              }
             }
             .ant-upload-text {
               text-align: center;
+              padding-top: 1rem;
             }
             .ant-upload-hint {
               font-size: 1.4rem;
@@ -217,8 +245,14 @@
               color: #555;
             }
           }
+          .imagesUploadContainer {
+            // background-color: red;
+          }
         }
         .buttons-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
         }
       }
     }
