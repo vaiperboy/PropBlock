@@ -17,7 +17,7 @@ import FAQ from "./pages/FAQ";
 import MainContainer from "./pages/MainContainer/MainContainer";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import ContactUs from "./pages/ContactUs";
-import TestPage from "./pages/MainContainer/TestPage";
+import GovtDashboard from "./pages/MainContainerGovt/MainContainer";
 
 function App() {
   let optionsForScroll = {
@@ -44,7 +44,9 @@ function App() {
         <Route path="/AgreementFunctions" element={<AgreementFunc />}></Route>
         <Route path="/properties" element={<Properties />}></Route>
         <Route path="/property/:id" element={<Property />}></Route>
-        <Route path="/testPage" element={<TestPage />}></Route>
+        <Route path="/dashboard" element={<MainContainer />}></Route>
+        <Route path="/goverment-dashboard" element={<GovtDashboard />}></Route>
+
         <Route path="*" element={<NoMatch />}></Route>
         <Route
           exact

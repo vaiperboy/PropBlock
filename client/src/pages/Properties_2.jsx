@@ -9,6 +9,7 @@ import SearchAvailability from "../components/Properties/SearchAvailability";
 import FilterProperties from "../components/Properties/FilterProperties";
 import { Pagination } from "@mui/material";
 import "../styling/Properties/Properties.scss";
+import Footer from "../components/Footer"
 const console = require("console-browserify");
 
 class App extends Component {
@@ -54,11 +55,12 @@ class App extends Component {
         color="primary"
         size="large"
         onChange={this.switchPage}
+        style={{zoom: "130%"}}
       />
     );
   }
 
-  constructPage(pageNo) {}
+  constructPage(pageNo) { }
 
   switchPage(e, page) {
     //window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
@@ -68,17 +70,19 @@ class App extends Component {
   render() {
     return (
       <div className="properties-page">
+        <header className="App-header">
+          <Navbar />
+        </header>
         <div className="App">
-          <header className="App-header">
-            <Navbar />
-          </header>
-
-          <div className="upper-body" style={{ zoom: "150%" }}>
-            <SearchAvailability />
+          <div className="upper-body">
+            <SearchAvailability
+            />
           </div>
 
           <br></br>
-          <div className="body" style={{ zoom: "150%" }}>
+          <div className="body"
+          // style={{ zoom: "135%" }}
+          >
             <p>{JSON.stringify(this.state.filteringParameters)}</p>
             <div className="real-body">
               <div className="left-body">
@@ -89,14 +93,14 @@ class App extends Component {
                 />
               </div>
 
-              <div className="inline">
-                <p>
-                  Search result:{" "}
-                  <p className="queries-count">
-                    {this.state.queriesCount} properties
-                  </p>
-                </p>
+              <div className="right-body">
                 <div class="property-listing">
+                  <p>
+                    Search result:{" "}
+                    <p className="queries-count">
+                      {this.state.queriesCount} properties
+                    </p>
+                  </p>
                   <PropertyListing
                     image={SampleImage}
                     propertyName="Villa"
@@ -141,6 +145,7 @@ class App extends Component {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
