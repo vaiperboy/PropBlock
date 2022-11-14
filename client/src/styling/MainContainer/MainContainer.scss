@@ -243,6 +243,8 @@
 
     .leftsidebar_item {
         display: flex;
+        justify-content: flex-start;
+        align-items: center;
         gap: 15px;
         font-size: 20px;
         color: rgba(102, 102, 102, 0.8);
@@ -375,7 +377,7 @@
         display: flex;
         flex-wrap: wrap;
         width: 100%;
-        gap: 20px;
+        gap: 3rem;
         margin: 2px;
     }
 
@@ -697,6 +699,13 @@
             }
         }
         .dashboard_card {
+            border-radius: 1rem;
+            margin-right: 1rem;
+            border: 1px solid #dedede;
+            box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+            &:hover {
+                background-color: rgb(#3daeee, 0.1);
+            }
         }
         .recent_activity_container {
             margin-top: 2rem;
