@@ -563,7 +563,7 @@ const MyProperties = () => {
                                 }}
                               />
                             </div>
-                            <div className="input-item">
+                            {/* <div className="input-item">
                               <label for="datesub">Date Submitted</label>
                               <DatePicker
                                 format="DD - MM - YYYY"
@@ -581,7 +581,7 @@ const MyProperties = () => {
                                   setIsValidatedSecond(false);
                                 }}
                               />
-                            </div>
+                            </div> */}
                             <div className="input-item">
                               <label for="street">Street Name</label>
                               <Input
