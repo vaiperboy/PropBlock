@@ -47,7 +47,7 @@ function MyChart() {
     <div
       style={{
         width: "30rem",
-        height: "20rem",
+        height: "18rem",
       }}
     >
       <Chart data={data} axes={axes} />
@@ -72,7 +72,9 @@ class PurchaseRequests extends React.Component {
           }}
         >
           <div>
-            <p className="rightsidebar_title">Welcome back, {name}</p>
+            <p className="rightsidebar_title" style={{ marginBottom: "1rem" }}>
+              Welcome back, {name}
+            </p>
           </div>
         </div>
         <div

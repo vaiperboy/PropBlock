@@ -73,13 +73,14 @@
             display: flex;
             justify-content: space-between;
             .datePicker {
-              padding: 0.5rem 4rem;
+              padding: 0.4rem 4rem;
+              max-height: 4.5rem;
               font-size: 2rem;
               border-radius: 5rem;
               input {
                 font-size: 1.5rem;
                 color: #555;
-                margin-right: -3rem;
+                margin-right: 0rem;
               }
             }
           }
@@ -127,16 +128,16 @@
             margin: 2rem 0;
             .label-container {
               display: flex;
-              margin-right: 5rem;
+              margin-right: 2rem;
               min-width: 30rem;
               label {
-                margin: 0 5rem 0 0;
+                margin: 0 2rem 0 0;
               }
             }
           }
           .icons-container {
             display: flex;
-            gap: 4rem;
+            gap: 2rem;
             .icons-row {
               text-align: left;
               .facility {
@@ -146,7 +147,7 @@
                 margin-top: 0.5rem;
                 img {
                   height: 3rem;
-                  width: 3rem;
+                  width: 4rem;
                 }
                 label {
                   margin-left: 1rem;
@@ -174,6 +175,43 @@
         justify-content: space-between;
         align-content: space-between;
         .inputs-container {
+          h3 {
+            text-align: left;
+            font-size: 1.5rem;
+            color: #3daeee;
+            margin-top: 0;
+            margin-bottom: 1rem;
+          }
+          .uploadImages {
+            display: flex;
+            justify-content: flex-start;
+            width: 100%;
+          }
+          .uploadFiles {
+            text-align: center;
+            .ant-upload-drag-icon {
+              text-align: center;
+            }
+            .ant-upload-text {
+              text-align: center;
+            }
+            .ant-upload-hint {
+              font-size: 1.4rem;
+              padding: 0 5rem;
+              text-align: center;
+            }
+          }
+          .primaryImage {
+            display: flex;
+            align-items: flex-start;
+            align-items: center;
+            justify-content: space-between;
+            h1 {
+              margin-top: 1rem;
+              font-size: 1.6rem;
+              color: #555;
+            }
+          }
         }
         .buttons-container {
         }
@@ -256,8 +294,6 @@
       resize: vertical;
       color: #3daeee;
       text-align: center;
-    }
-    .third {
     }
 
     input[type="text"],
@@ -475,7 +511,7 @@
     }
 
     .text.upload {
-      font-size: 23px;
+      font-size: 2rem;
     }
 
     .circle.active.end {
@@ -488,6 +524,83 @@
       width: 15em;
       text-align: center;
       align-items: center;
+    }
+  }
+}
+.property-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
+  .property {
+    width: 34rem;
+    height: 30rem;
+    position: relative;
+    transition: all 0.3s ease;
+    padding: 1rem;
+    &:hover {
+      transition: all 0.3s ease;
+      transform: scale(1.05);
+      cursor: pointer;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+    img {
+      width: 34rem;
+      height: 20rem;
+      object-fit: cover;
+    }
+    .propertyLabel {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0 0 0;
+      margin: 0;
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #333333;
+      }
+      p {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      img {
+        width: 2rem;
+        height: auto;
+      }
+    }
+    .propertyDescription {
+      margin: -1rem 0 0 0;
+      font-size: 1.4rem;
+      font-weight: 400;
+    }
+    .propertyPrice {
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+  }
+}
+
+// for macbook screen size and lower
+@media screen and (max-width: 1440px) {
+  .container {
+    #step-1 {
+    }
+    #step-2 {
+    }
+    #step-3 {
+      .fullform-third {
+        .inputs-container {
+          .first-container {
+            .label-container {
+              label {
+                margin-right: 0;
+              }
+              margin-right: 2rem;
+              max-width: 20rem;
+            }
+          }
+        }
+      }
     }
   }
 }

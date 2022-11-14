@@ -35,25 +35,30 @@ const Navbar = (props) => {
 
   const showButtons = () => {
     try {
-      console.log("Clicked");
-      if (avatarClicked === true) {
-        setAvatarClicked(false);
-        console.log("Buttons show: ");
-
-        return;
+      let userButtons = document.getElementById("userButtons");
+      if (userButtons.style.display !== "flex") {
+        userButtons.style.display = "flex";
+      } else {
+        userButtons.style.display = "none";
       }
-      setAvatarClicked(true);
     } catch (error) {
       console.log("Error: ", error);
     }
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      // add your logic here
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
+    document.addEventListener("click", function handleClickOutsideBox(event) {
+      const userButtons = document.getElementById("userButtons");
+      const avatarIcon = document.getElementById("avatarIcon");
+
+      if (
+        !userButtons.contains(event.target) &&
+        !avatarIcon.contains(event.target)
+      ) {
+        userButtons.style.display = "none";
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -103,7 +108,7 @@ const Navbar = (props) => {
                   <div>About Us</div>
                 </Link>
               )}
-              <div className="avatarSection">
+              <div className="avatarSection" id="avatarIcon">
                 <Avatar
                   isRounded
                   theme="image"
@@ -112,22 +117,20 @@ const Navbar = (props) => {
                     showButtons();
                   }}
                 />
-                {avatarClicked && (
-                  <div className="userButtons">
-                    <div
-                      className="dashboardButton userButton"
-                      onClick={() => navigate("/dashboard")}
-                    >
-                      Dashboard <ProfileOutlined />
-                    </div>
-                    <div
-                      className="logoutButton userButton"
-                      onClick={() => disconnectWallet()}
-                    >
-                      Logout <LogoutOutlined />
-                    </div>
+                <div className="userButtons" id="userButtons">
+                  <div
+                    className="dashboardButton userButton"
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    Dashboard <ProfileOutlined />
                   </div>
-                )}
+                  <div
+                    className="logoutButton userButton"
+                    onClick={() => disconnectWallet()}
+                  >
+                    Logout <LogoutOutlined />
+                  </div>
+                </div>
               </div>
             </nav>
           </div>

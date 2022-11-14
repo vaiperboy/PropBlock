@@ -245,7 +245,6 @@ const App = () => {
       }
     });
   };
-  window.uploadDocuments = uploadDocuments;
 
   const SignUpUser = async () => {
     setRegistering(true);

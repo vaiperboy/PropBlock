@@ -662,12 +662,44 @@
         justify-content: "center";
         height: "350px";
         margin-left: 20;
-
+        transition: all ease 0.3s;
         &:hover {
             transition: all ease 0.3s;
-            scale: (1.43);
-            transform: translateY(-0.2rem);
+            scale: (1.1);
             cursor: pointer;
+        }
+    }
+}
+// for macbook screen size and lower
+@media screen and (max-width: 1440px) {
+    .main_container {
+        .leftsidebar_container {
+            margin-left: 10rem;
+        }
+        .leftsidebar_button_outlined {
+            padding: 0.6rem 4.5rem;
+        }
+        .leftsidebar_button {
+            padding: 0.6rem 4.5rem;
+        }
+        .leftsidebar_item {
+            padding: 2rem 3rem;
+            img {
+                width: 2rem;
+            }
+        }
+        .rightsidebar_container {
+            margin-left: 5rem;
+            .rightsidebar_subtitle {
+                margin-bottom: 0;
+            }
+            .recent_activity_container {
+            }
+        }
+        .dashboard_card {
+        }
+        .recent_activity_container {
+            margin-top: 2rem;
         }
     }
 }

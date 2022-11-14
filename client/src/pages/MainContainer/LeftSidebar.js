@@ -1,5 +1,5 @@
 import React from "react";
-import stats from "./stats.png";
+import stats from "../../assets/stats_icon.svg";
 import { useMoralis } from "react-moralis";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
