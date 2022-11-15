@@ -1,6 +1,38 @@
 .purchaseRequestsContainer {
-    background-color: red;
-    width: 100rem;
-    height: 75rem;
-    margin-top: -2.5rem;
+    .tableContainer {
+        border: 1px solid #d1d1d1;
+        width: 100rem;
+        height: 75rem;
+        margin-top: -2.5rem;
+        .ant-spin-container {
+        }
+        .ant-table-title {
+            font-size: 1.7rem;
+            font-weight: 600;
+        }
+        ul {
+            margin-right: 5rem;
+        }
+        #acceptButton {
+            color: #fff;
+            background-color: rgb(24, 183, 3);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        #rejectButton {
+            color: #fff;
+            background-color: rgb(202, 34, 34);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin-left: 1rem;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
 }

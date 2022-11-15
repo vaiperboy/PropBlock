@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { Image, Button } from "antd";
+import { Image, Button, message } from "antd";
 import {
   HeartOutlined,
   ShareAltOutlined,
@@ -18,6 +18,7 @@ import people_icon from "../assets/people-icon.svg";
 import area_icon from "../assets/area-icon.svg";
 import profile_icon from "../assets/profile-icon.png";
 import mail_icon from "../assets/mail-icon.svg";
+import { useMoralis, useNewMoralisObject } from "react-moralis";
 
 const console = require("console-browserify");
 
@@ -35,6 +36,21 @@ const Property = () => {
     // area,
     // price,
   } = useParams();
+  const {
+    setUserData,
+    authenticate,
+    signup,
+    isAuthenticated,
+    isAuthenticating,
+    isUnauthenticated,
+    user,
+    account,
+    logout,
+    oralis,
+    isInitialized,
+    Moralis,
+    ...rest
+  } = useMoralis();
   const title = "Arabian Ranches | Golf Course Views - Dubai";
   const locationArea = "Arabian Ranches";
   const city = "Dubai";
@@ -45,6 +61,9 @@ const Property = () => {
   const area = "2,500";
   const price = "1,500,000";
   const ownerID = "0x0F7fe90b325C9A5837C968543E8EB1632Fa37771";
+  const propertyObjectId = "y7dM24zgRcYAs68Hs03FMSki";
+  const { save } = useNewMoralisObject("PurchaseRequest");
+
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     console.log("visible", visible);
@@ -69,6 +88,39 @@ const Property = () => {
       imageLocation: "realEstateProperty5.jpg",
     },
   ];
+
+  const requestPurchase = async () => {
+    const users = Moralis.Object.extend("PurchaseRequest");
+    const query = new Moralis.Query(users);
+    query.equalTo("requesterEthAddress", user.get("ethAddress").toLowerCase());
+    query.equalTo("propertyObjectId", propertyObjectId);
+
+    query.limit(1);
+    query.withCount();
+    const results = await query.find();
+    if (results.count > 0) {
+      message.error("You already have a request with this seller!");
+      return;
+    }
+
+    message.info("Sending request to seller!");
+    const data = {
+      sellerEthAddress: ownerID,
+      requesterEthAddress: user.get("ethAddress"),
+      propertyObjectId: propertyObjectId,
+    };
+
+    save(data, {
+      onSuccess: (obj) => {
+        message.success("Request sent to seller!");
+      },
+      onError: (error) => {
+        message.error("Couldn't send request!");
+        message.error(error.message);
+        console.log(error);
+      },
+    });
+  };
 
   const navigate = useNavigate();
   return (
@@ -207,7 +259,10 @@ const Property = () => {
                   <p>Email</p>
                   <img src={mail_icon} alt="mail_icon" />
                 </button>
-                <button className="requestPurchaseButton" onClick={() => {}}>
+                <button
+                  className="requestPurchaseButton"
+                  onClick={requestPurchase}
+                >
                   Request Purchase
                 </button>
               </div>
