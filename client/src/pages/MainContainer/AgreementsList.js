@@ -33,7 +33,8 @@ const AgreementsList = (props) => {
     },
     {
       title: "Decision",
-      key: "status",
+      key: "3",
+      dataIndex: "status",
       fixed: "right",
       width: 200,
       innerHeight: 100,
@@ -175,21 +176,21 @@ const AgreementsList = (props) => {
       address: "0x4001A8651c51...5da60538b327b96",
       propertyID: "y7dM24zgRcYAs68Hs03FMSki",
       dateRequested: "10 Nov 2022",
-      status: "accepted",
+      status: "Accepted",
     },
     {
       key: "2",
       address: "0x4001A8651c51...5da60538b327b96",
       propertyID: "y7dM24zgRcYAs68Hs03FMSki",
       dateRequested: "10 Nov 2022",
-      status: "declined",
+      status: "Declined",
     },
     {
       key: "3",
       address: "0x4001A8651c51...5da60538b327b96",
       propertyID: "y7dM24zgRcYAs68Hs03FMSki",
       dateRequested: "10 Nov 2022",
-      status: "accepted",
+      status: "Accepted",
     },
     {
       key: "4",
@@ -326,11 +327,11 @@ const AgreementsList = (props) => {
                     pagination={{
                       pageSize: 50,
                     }}
+                    scroll={{
+                      y: 600,
+                    }}
                     bordered
                     title={() => "Agreements"}
-                    scroll={{
-                      y: 240,
-                    }}
                   />
                 </div>
               </div>
@@ -376,15 +377,12 @@ const AgreementsList = (props) => {
                       pageSize: 50,
                     }}
                     scroll={{
-                      y: 240,
+                      y: 600,
                     }}
                     columns={columnsSeller}
                     dataSource={dataSourceSeller}
                     onChange={onChange}
                     bordered
-                    scroll={{
-                      y: 600,
-                    }}
                     title={() => "Agreements"}
                   />
                 </div>
