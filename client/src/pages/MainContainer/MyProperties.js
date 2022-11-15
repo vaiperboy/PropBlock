@@ -21,6 +21,7 @@ import moment from "moment";
 import { useFiatBuy, useMoralis, useMoralisQuery } from "react-moralis";
 import { useNavigate } from "react-router-dom";
 import Property_Card from "./Property_Card";
+import ipfs from "../../modules/ipfs";
 
 // smart contract imports and defs
 import realEstate from "../../artifacts/contracts/realEstate.sol/realEstate.json";
@@ -51,9 +52,6 @@ const MyProperties = () => {
     signer
   );
 
-  const { Moralis } = useMoralis();
-  const [properties, setProperties] = useState([]);
-
   // -------------------------------------------
   // Smart Contract Functions
   // -------------------------------------------
@@ -65,341 +63,6 @@ const MyProperties = () => {
       return false;
     }
     return true;
-  };
-
-  const checkAddress = (addr) => {
-    try {
-      if (addr === "") {
-        message.error(
-          "Address Input cannot be empty!\nPlease enter a valid address."
-        );
-        return false;
-      }
-      const newAddress = ethers.utils.getAddress(addr);
-      const isAddr = ethers.utils.isAddress(newAddress);
-      return true;
-    } catch (error) {
-      message.error("Error (Invalid Address): ", error);
-      return false;
-    }
-  };
-
-  // checks if the landlord with this addr exists
-  const checkLandlordExists = async (addr) => {
-    try {
-      if (!checkAddress(addr)) {
-        return;
-      }
-      const landlords = Moralis.Object.extend("Landlords");
-      const query = new Moralis.Query(landlords);
-      query.equalTo("landlordAddress", addr.toLowerCase());
-      query.select("landlordAddress");
-      const results = await query.find();
-      if (results.length === 0) {
-        message.error(
-          "Landlord does not exist for this address: " +
-            addr.slice(0, 10) +
-            "..." +
-            addr.slice(35, 42)
-        );
-        return false;
-      } else {
-        return true;
-      }
-    } catch (error) {
-      console.log("Error1: ", error);
-    }
-  };
-
-  const getPropertiesUsingContract = async (addr) => {
-    try {
-      if (!checkAddress(addr)) {
-        return;
-      }
-      const landlordExists = await checkLandlordExists(addr);
-      if (!landlordExists) {
-        return;
-      }
-      const counter = await realEstateContract.getLandlordCounter(addr);
-      setProperties([]);
-      for (let i = 1; i <= counter; i++) {
-        const propertyExists = await checkPropertyExistsUsingContract(addr, i);
-        if (propertyExists) {
-          let property = await realEstateContract.getProperty(addr, i);
-          let _area = parseInt(property[1]._hex, 16);
-          let _apartmentNo = parseInt(property[2]._hex, 16);
-          let _listedPrice = parseInt(property[3]._hex, 16);
-          const propertyObj = {
-            landlordAddress: addr,
-            propertyId: i,
-            streetName: property[0],
-            area: _area,
-            apartmentNo: _apartmentNo,
-            listedPrice: _listedPrice,
-          };
-          setProperties((properties) => [...properties, propertyObj]);
-        }
-      }
-    } catch (error) {
-      message.error("Error1: " + error.message);
-    }
-  };
-  // checks if a property exists
-  const checkPropertyExists = async (addr, id) => {
-    try {
-      if (!checkAddress(addr)) {
-        return;
-      }
-      if (!onlyNumbers(id)) {
-        message.error("Invalid Id! Enter the ID in correct format");
-        return;
-      }
-      if (id === "0") {
-        message.error("Invalid ID! Property Id cannot be zero.");
-        return;
-      }
-      const properties = Moralis.Object.extend("Properties");
-      const query = new Moralis.Query(properties);
-      query.equalTo("landlordAddress", addr.toLowerCase());
-      query.equalTo("propertyId", id);
-      const results = await query.find();
-      if (results.length === 0) {
-        message.error(
-          "Property with id " +
-            id +
-            " does not exist for this address: " +
-            addr.slice(0, 10) +
-            "..." +
-            addr.slice(35, 42)
-        );
-        return false;
-      } else {
-        return true;
-      }
-    } catch (error) {
-      console.log("Error: ", error);
-    }
-  };
-
-  // checks if a property exists using the realEstate Contract
-  const checkPropertyExistsUsingContract = async (addr, id) => {
-    try {
-      if (!checkAddress(addr)) {
-        return;
-      }
-      const exists = await realEstateContract.checkPropertyExists(addr, id);
-      if (exists) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.log("Error2: ", error);
-    }
-  };
-
-  // Adding a new property
-  const addProperty = async (
-    addr,
-    propertyType,
-    titleDeedNo,
-    titleDeedYear,
-    streetNum,
-    area,
-    apartmentNum,
-    listedPrice,
-    ipfs,
-    facilities
-  ) => {
-    try {
-      let realEstateDappContract;
-      console.log("here");
-
-      //input error handling
-      if (
-        addr === "" ||
-        propertyType === "" ||
-        streetNum === "" ||
-        apartmentNum === "" ||
-        ipfs === ""
-      ) {
-        message.error("Invalid input! Please fill in all the field required.");
-        return;
-      }
-      if (
-        titleDeedNo === 0 ||
-        titleDeedYear === 0 ||
-        area === 0 ||
-        listedPrice === 0 ||
-        facilities === 0
-      ) {
-        message.error(
-          "Invalid input! Please fill the inputs with the right feild types."
-        );
-        return;
-      }
-
-      if (
-        !onlyNumbers(titleDeedNo) ||
-        !onlyNumbers(titleDeedYear) ||
-        !onlyNumbers(area) ||
-        !onlyNumbers(listedPrice) ||
-        !onlyNumbers(facilities)
-      ) {
-        message.error("Invalid Input! Enter the values in correct format.");
-        return;
-      }
-      if (!window.ethereum) {
-        message.error(
-          "Metamask not detected! Please install metamask to continue."
-        );
-        return;
-      }
-      // converting the data from string to int type
-      const uintTitleDeedNo = parseInt(titleDeedNo);
-      const uintTitleDeedYear = parseInt(titleDeedYear);
-      const uintArea = parseInt(area);
-      const uintListedPrice = parseInt(listedPrice);
-      const uintFacilities = parseInt(facilities);
-      const ipfsHash = "";
-      if (ethereum) {
-        const accounts = await ethereum.request({ method: "eth_accounts" });
-        // connected
-        if (accounts.length) {
-          //set up transaction parameters
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const walletAddress = accounts[0]; // first account in MetaMask
-          const signerNew = provider.getSigner(walletAddress);
-          realEstateDappContract = new ethers.Contract(
-            CONTRACT_ADDRESS,
-            realEstate.abi,
-            signerNew
-          );
-          await realEstateDappContract.createPropertyListing(
-            addr,
-            propertyType,
-            uintTitleDeedNo,
-            uintTitleDeedYear,
-            streetNum,
-            uintArea,
-            apartmentNum,
-            uintListedPrice,
-            ipfsHash,
-            uintFacilities
-          );
-          message.success(`Property added for landlord (address: ${addr})`);
-        } else {
-          // if not connected then
-          const accounts = await ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          //set up transaction parameters
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const walletAddress = accounts[0]; // first account in MetaMask
-          const signerNew = provider.getSigner(walletAddress);
-          realEstateDappContract = new ethers.Contract(
-            CONTRACT_ADDRESS,
-            realEstate.abi,
-            signerNew
-          );
-          await realEstateDappContract.createPropertyListing(
-            addr,
-            propertyType,
-            uintTitleDeedNo,
-            uintTitleDeedYear,
-            streetNum,
-            uintArea,
-            apartmentNum,
-            uintListedPrice,
-            ipfsHash,
-            uintFacilities
-          );
-          message.success(`Property added for landlord (address: ${addr})`);
-        }
-      }
-    } catch (error) {
-      if (error.code === 4001) {
-        message.error("Error " + error.code + ": " + error.message);
-      } else {
-        message.error("Error: " + error);
-        console.log("Error: " + error.message);
-      }
-    }
-  };
-
-  const samplePropertyDetails = {
-    addr: "0x6F7CBEE1098D7b5890299FA1B16b98F458926636",
-    propertyType: "villa",
-    titleDeedNo: 12344,
-    titleDeedYear: 2020,
-    streetNum: "12 Street",
-    area: 2500,
-    apartmentNum: "12A",
-    listedPrice: 1250000,
-    ipfs: "asdasdmkalksfm",
-    facilities: 1,
-  };
-
-  const displayPropertyDetails = () => {
-    console.log(samplePropertyDetails.addr, samplePropertyDetails.area);
-  };
-
-  // transfers the property from the landlord to the buyer
-  const transferPropertyUsingContract = async (landAddr, buyerAddr, propId) => {
-    try {
-      if (!checkAddress(landAddr) || !checkAddress(buyerAddr)) {
-        return;
-      }
-      if (landAddr === buyerAddr) {
-        message.error("Invalid Input: Addresses cannot be the same.");
-        return;
-      }
-      if (!onlyNumbers(propId)) {
-        message.error("Invalid Input: Id entered is in incorrect format.");
-        return;
-      }
-      if (propId === "0") {
-        message.error("Invalid ID! Property Id cannot be zero.");
-        return;
-      }
-      const landlordExists = await checkLandlordExists(landAddr);
-      const buyerExists = await checkLandlordExists(buyerAddr);
-      if (!landlordExists || !buyerExists) {
-        return;
-      }
-      const propertyExists = await checkPropertyExistsUsingContract(
-        landAddr,
-        propId
-      );
-      if (!propertyExists) {
-        message.error(
-          "The landlord does not have a property with this property Id (" +
-            propId +
-            ")"
-        );
-        return;
-      }
-      await realEstateContract.transferProperty(
-        landAddr,
-        parseInt(propId),
-        buyerAddr
-      );
-      message.success(
-        "Property (id: " +
-          propId +
-          ") transfered successfully from landlord (" +
-          landAddr.slice(0, 10) +
-          "..." +
-          landAddr.slice(35, 42) +
-          ") to Buyer (" +
-          buyerAddr.slice(0, 10) +
-          "..." +
-          buyerAddr.slice(35, 42) +
-          "."
-      );
-    } catch (error) {
-      message.error("Error Message: " + error);
-    }
   };
 
   //set this to false to display the current properties
@@ -448,12 +111,247 @@ const MyProperties = () => {
   const [imageList, setImageList] = useState([]);
   const [titleDeedFile, setTitleDeedFile] = useState({});
   const [imageNames, setImageNames] = useState([]);
-
   const { user, ...rest } = useMoralis();
+
+  const [isCreatingProperty, setIsCreatingProperty] = useState(true);
   const disabledDate = (current) => {
     // Can not select days before today and today
     return current && current > moment().endOf("day");
   };
+
+  const [facilitiesXor, setFacilitiesXor] = useState(0);
+
+  const addProperty = async () => {
+   setIsCreatingProperty(true);
+    processFacilities();
+    message.info("uploading documents...");
+    //const ipfsHash = await uploadIpfs();
+    const ipfsHash = "123123123";
+    if (ipfsHash.length == 0) {
+      message.error("Could not upload files via IPFS!");
+      return;
+    }
+    message.success("documents uploaded!");
+
+
+    message.info("adding property...");
+    await deployProperty(
+      ethAddress,
+      type,
+      deedno,
+      deedyr,
+      street,
+      area,
+      apartno,
+      price,
+      ipfsHash,
+      facilitiesXor
+    );
+    message.success("property added!");
+
+    //setIsCreatingProperty(false);
+  }
+
+  // Adding a new property
+  const deployProperty = async (
+    addr,
+    propertyType,
+    titleDeedNo,
+    titleDeedYear,
+    streetNum,
+    area,
+    apartmentNum,
+    listedPrice,
+    ipfs,
+    facilities
+  ) => {
+    try {
+      let realEstateDappContract;
+      console.log("here");
+
+      //input error handling
+      /*if (
+        addr === "" ||
+        propertyType === "" ||
+        streetNum === "" ||
+        apartmentNum === "" ||
+        ipfs === ""
+      ) {
+        message.error("Invalid input! Please fill in all the field required.");
+        return;
+      }
+      if (
+        titleDeedNo === 0 ||
+        titleDeedYear === 0 ||
+        area === 0 ||
+        listedPrice === 0 ||
+        facilities === 0
+      ) {
+        message.error(
+          "Invalid input! Please fill the inputs with the right feild types."
+        );
+        return;
+      }*/
+
+      if (
+        !onlyNumbers(titleDeedNo) ||
+        !onlyNumbers(titleDeedYear) ||
+        !onlyNumbers(area) ||
+        !onlyNumbers(listedPrice) ||
+        !onlyNumbers(facilities)
+      ) {
+        message.error("Invalid Input! Enter the values in correct format.");
+        return;
+      }
+      if (!window.ethereum) {
+        message.error(
+          "Metamask not detected! Please install metamask to continue."
+        );
+        return;
+      }
+      // converting the data from string to int type
+      const uintTitleDeedNo = parseInt(titleDeedNo);
+      const uintTitleDeedYear = parseInt(titleDeedYear);
+      const uintArea = parseInt(area);
+      const uintListedPrice = parseInt(listedPrice);
+      const uintFacilities = parseInt(facilities);
+      if (ethereum) {
+        const accounts = await ethereum.request({ method: "eth_accounts" });
+        // connected
+        //set up transaction parameters
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const walletAddress = accounts[0]; // first account in MetaMask
+        const signerNew = provider.getSigner(walletAddress);
+        realEstateDappContract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          realEstate.abi,
+          signerNew
+        );
+        await realEstateDappContract.createPropertyListing(
+          addr,
+          propertyType,
+          uintTitleDeedNo,
+          uintTitleDeedYear,
+          streetNum,
+          uintArea,
+          apartmentNum,
+          uintListedPrice,
+          ipfs,
+          uintFacilities
+        );
+        setIsCreatingProperty(false);
+        message.success(`Property added for landlord (address: ${addr})`);
+      }
+    } catch (error) {
+      if (error.code === 4001) {
+        message.error("Error " + error.code + ": " + error.message);
+      } else {
+        message.error("Error: " + error);
+        console.log("Error: " + error.message);
+      }
+    }
+    setIsCreatingProperty(false);
+  };
+
+  const samplePropertyDetails = {
+    addr: "0x6F7CBEE1098D7b5890299FA1B16b98F458926636",
+    propertyType: "villa",
+    titleDeedNo: 12344,
+    titleDeedYear: 2020,
+    streetNum: "12 Street",
+    area: 2500,
+    apartmentNum: "12A",
+    listedPrice: 1250000,
+    ipfs: "asdasdmkalksfm",
+    facilities: 1,
+  };
+
+  const displayPropertyDetails = () => {
+    console.log(samplePropertyDetails.addr, samplePropertyDetails.area);
+  };
+
+  //convert the boolean facilities to flags by XoR
+  const processFacilities = () => {
+    var _enum = {
+      parking: 1,
+      kitchen: 2,
+      security: 4,
+      freeWifi: 8,
+      coffee: 16,
+      pool: 32,
+      restaurant: 64,
+      hourAccess: 128,
+      tv: 256
+    }
+
+    let flags;
+
+
+    if (facilities.parking) {
+      flags = flags | _enum.parking;
+    }
+
+    if (facilities.kitchen) {
+      flags = flags | _enum.kitchen;
+    }
+
+    if (facilities.security) {
+      flags = flags | _enum.security;
+    }
+    if (facilities.freeWifi) {
+      flags = flags | _enum.freeWifi;
+    }
+    if (facilities.coffee) {
+      flags = flags | _enum.coffee;
+    }
+    if (facilities.pool) {
+      flags = flags | _enum.pool;
+    }
+
+    if (facilities.restaurant) {
+      flags = flags | _enum.restaurant;
+    }
+    if (facilities.hourAccess) {
+      flags = flags | _enum.hourAccess;
+    }
+
+    if (facilities.tv) {
+      flags = flags | _enum.tv;
+    }
+
+    console.log("flags: " + flags);
+    setFacilitiesXor(flags);
+  }
+
+  const uploadIpfs = async () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const options = {
+          wrapWithDirectory: true,
+          //progress: (prog) => console.log(`[ipfs] received: ${prog}`)
+        };
+
+
+        /*const files = [
+          titleDeedFile,
+          ...imageList
+        ];*/
+
+        const files = imageList;
+        var hash = "";
+        console.log("files to add: " + files);
+        for await (const result of ipfs.addAll(files, options)) {
+          console.log(result);
+          hash = result.cid._baseCache.entries().next().value[1];
+        }
+
+        resolve(hash);
+      } catch (error) {
+        message.error("error with IPFS: " + error);
+        resolve("");
+      }
+    });
+  }
 
   // Validation Functions
   // ---------------------
@@ -543,7 +441,7 @@ const MyProperties = () => {
     onChange(info) {
       setTitleDeedFile(info.file.originFileObj);
     },
-    onRemove(e) {},
+    onRemove(e) { },
   };
 
   useEffect(() => {
@@ -637,7 +535,7 @@ const MyProperties = () => {
     imageList[primaryImageIndex] = first;
   };
 
-  const printAllData = () => {};
+  const printAllData = () => { };
 
   useEffect(() => {
     console.log(primaryImageOption);
@@ -685,7 +583,8 @@ const MyProperties = () => {
               ))}
               <div
                 onClick={() =>
-                  addProperty(
+                  setAddPropertyView(false)
+                  /*addProperty(
                     samplePropertyDetails.addr,
                     samplePropertyDetails.propertyType,
                     samplePropertyDetails.titleDeedNo,
@@ -696,9 +595,8 @@ const MyProperties = () => {
                     samplePropertyDetails.listedPrice,
                     samplePropertyDetails.ipfs,
                     samplePropertyDetails.facilities
-                  )
+                  )*/
                 }
-                // onClick={() => setAddPropertyView(false)}
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -780,11 +678,10 @@ const MyProperties = () => {
                                 id="InputAddress"
                                 className="ethAddressInput"
                                 name="address"
-                                placeholder={`${
-                                  ethAddress.slice(0, 6) +
+                                placeholder={`${ethAddress.slice(0, 6) +
                                   "..." +
                                   ethAddress.slice(25, 35)
-                                }`}
+                                  }`}
                                 value={address}
                                 onChange={(e) => {
                                   setAddress(e.target.value);
@@ -986,11 +883,10 @@ const MyProperties = () => {
                                 id="InputDeedno"
                                 name="titleno"
                                 className="ethAddressInput"
-                                placeholder={`${
-                                  ethAddress.slice(0, 6) +
+                                placeholder={`${ethAddress.slice(0, 6) +
                                   "..." +
                                   ethAddress.slice(25, 35)
-                                }`}
+                                  }`}
                                 value={address}
                                 onChange={(e) => {
                                   setAddress(e.target.value);
@@ -1417,8 +1313,9 @@ const MyProperties = () => {
                                 id="next"
                                 className="nextButton  "
                                 text="Next"
-                                onClick={() =>
-                                  validateInputFirst(deedno, deedyr, type)
+                                onClick={() => {
+                                  validateInputFirst(deedno, deedyr, type);
+                                }
                                 }
                               >
                                 Next
@@ -1472,7 +1369,6 @@ const MyProperties = () => {
                                 listType="picture-card"
                                 accept=".png, .jpeg, .jpg"
                                 maxCount={5}
-                                multiple={true}
                                 className="uploadImages"
                               >
                                 <div>
@@ -1539,6 +1435,7 @@ const MyProperties = () => {
                                 onClick={() => {
                                   makePrimaryImage();
                                   printAllData();
+                                  addProperty();
                                 }}
                               >
                                 Next
@@ -1550,25 +1447,35 @@ const MyProperties = () => {
                     },
                     {
                       content: (
-                        <div className="fullform">
-                          <div className="checkimage">
-                            {<img src={image} alt=""></img>}
-                          </div>
-                          <p className="text done">
-                            Your property was created Successfully!
-                          </p>
-                          <div id="dashboardend">
-                            <button
-                              className="nextButton btn-submit end"
-                              id="finishButton"
-                              onClick={() => {
-                                window.location.reload(false);
-                              }}
-                            >
-                              Finish
-                            </button>
-                          </div>
+                        <div>
+                          {isCreatingProperty ?
+                           (<div className="fullform">
+                            <h1>Creating property....</h1>
+                           </div>)
+                            : <div className="fullform">
+                            <div className="checkimage">
+                              {<img src={image} alt=""></img>}
+                            </div>
+                            <p className="text done">
+                              Your property was created Successfully!
+                            </p>
+                            <div id="dashboardend">
+                              <button
+                                className="nextButton btn-submit end"
+                                id="finishButton"
+                                onClick={() => {
+                                  window.location.reload(false);
+                                }}
+                              >
+                                Finish
+                              </button>
+                            </div>
+                          </div>}
+                         
+                         
                         </div>
+
+
                       ),
                     },
                   ]}

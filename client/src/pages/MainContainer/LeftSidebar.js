@@ -245,7 +245,7 @@ class LeftSidebar extends React.Component {
                   this.props.toggleStatsView(true);
                 }}
               >
-                <img src={stats} />
+                <img src={stats} height="20" width="20" />
                 Statistics
               </div>
               <div
