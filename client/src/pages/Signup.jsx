@@ -245,6 +245,7 @@ const App = () => {
       }
     });
   };
+
   const SignUpUser = async () => {
     setRegistering(true);
     message.info("Registring into database....");

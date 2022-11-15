@@ -7,11 +7,15 @@ import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import MyAgreements from "./MyAgreements";
 const console = require("console-browserify");
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 const AgreementsList = (props) => {
+  const [showAgreement, setShowAgreements] = useState(false);
+  const [currentAgreementId, setCurrentAgreementId] = useState("");
+
   const columnsBuyer = [
     {
       title: "Address Of User",
@@ -66,55 +70,29 @@ const AgreementsList = (props) => {
       width: 200,
       innerHeight: 100,
       render: (_, record) =>
-        !accepted ? (
+        !isUploaded ? (
           <>
-            <Popconfirm
-              title="Are you sure to accepet this purchase request?"
-              onConfirm={() => {
-                handleDelete(record.key);
-                message.success("Accepted Purchase Request");
+            <button
+              id="acceptButton"
+              onClick={() => {
+                setShowAgreements(true);
+                setIsUploaded(true);
               }}
-              onCancel={() => {
-                return;
-              }}
-              okText="Accept"
-              cancelText="Cancel"
             >
-              <button
-                id="acceptButton"
-                onClick={() => {
-                  // message.success("Accepted Purchase Request");
-                  // handleDelete(record.key);
-                }}
-              >
-                Accept
-              </button>
-            </Popconfirm>
-            <Popconfirm
-              title="Are you sure to reject this purchase request?"
-              onConfirm={() => {
-                handleDelete(record.key);
-                message.info("Purchase Request Rejected");
-              }}
-              onCancel={() => {
-                return;
-              }}
-              okText="Reject"
-              cancelText="Cancel"
-            >
-              <button
-                id="rejectButton"
-                onClick={() => {
-                  handleDelete(record.key);
-                  handleDelete();
-                }}
-              >
-                Reject
-              </button>
-            </Popconfirm>
+              Upload
+            </button>
           </>
         ) : (
-          <>Accepted</>
+          <>
+            <button
+              id="acceptButton"
+              style={{ pointerEvents: "none" }}
+              onClick={() => {}}
+              className
+            >
+              Uploaded
+            </button>
+          </>
         ),
     },
   ];
@@ -243,7 +221,7 @@ const AgreementsList = (props) => {
   const [agreements, setAgreements] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [accepted, setAccepted] = useState(false);
+  const [isUploaded, setIsUploaded] = useState(false);
 
   console.log("buyer: ", props.isBuyer);
 
@@ -358,55 +336,62 @@ const AgreementsList = (props) => {
     }
   } else {
     if (!isLoading) {
-      return (
-        <div className="rightsidebar_container">
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <div>
-              <p className="rightsidebar_title">My Properties Agreements</p>
-              <div className="purchaseRequestsContainer">
-                <div className="tableContainer">
-                  <Table
-                    pagination={{
-                      pageSize: 50,
-                    }}
-                    scroll={{
-                      y: 600,
-                    }}
-                    columns={columnsSeller}
-                    dataSource={dataSourceSeller}
-                    onChange={onChange}
-                    bordered
-                    title={() => "Agreements"}
-                  />
+      if (showAgreement) return <MyAgreements />;
+      else
+        return (
+          <div className="rightsidebar_container">
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                <p className="rightsidebar_title">My Properties Agreements</p>
+                <div className="purchaseRequestsContainer">
+                  <div className="tableContainer">
+                    <Table
+                      pagination={{
+                        pageSize: 50,
+                      }}
+                      scroll={{
+                        y: 600,
+                      }}
+                      columns={columnsSeller}
+                      dataSource={dataSourceSeller}
+                      onChange={onChange}
+                      bordered
+                      title={() => "Agreements"}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      );
+        );
     } else {
-      return (
-        <div
-          style={{
-            textAlign: "center",
-            width: "60%",
-            height: "50rem",
-            marginLeft: "5rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Spin size="large" style={{ margin: "0 2rem 0 0 " }} /> Loading
-        </div>
-      );
+      if (showAgreement) {
+        try {
+          return <MyAgreements />;
+        } catch (error) {}
+      } else
+        return (
+          <div
+            style={{
+              textAlign: "center",
+              width: "60%",
+              height: "50rem",
+              marginLeft: "5rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Spin size="large" style={{ margin: "0 2rem 0 0 " }} /> Loading
+          </div>
+        );
     }
   }
 };

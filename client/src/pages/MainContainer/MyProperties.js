@@ -122,7 +122,7 @@ const MyProperties = () => {
   const [facilitiesXor, setFacilitiesXor] = useState(0);
 
   const addProperty = async () => {
-   setIsCreatingProperty(true);
+    setIsCreatingProperty(true);
     processFacilities();
     message.info("uploading documents...");
     const ipfsHash = await uploadIpfs();
@@ -132,7 +132,6 @@ const MyProperties = () => {
       return;
     }
     message.success("documents uploaded!");
-
 
     message.info("adding property...");
     await deployProperty(
@@ -150,7 +149,7 @@ const MyProperties = () => {
     message.success("property added!");
 
     //setIsCreatingProperty(false);
-  }
+  };
 
   // Adding a new property
   const deployProperty = async (
@@ -281,11 +280,10 @@ const MyProperties = () => {
       pool: 32,
       restaurant: 64,
       hourAccess: 128,
-      tv: 256
-    }
+      tv: 256,
+    };
 
     let flags;
-
 
     if (facilities.parking) {
       flags = flags | _enum.parking;
@@ -321,7 +319,7 @@ const MyProperties = () => {
 
     console.log("flags: " + flags);
     setFacilitiesXor(flags);
-  }
+  };
 
   const uploadIpfs = async () => {
     return new Promise(async (resolve, reject) => {
@@ -330,7 +328,6 @@ const MyProperties = () => {
           wrapWithDirectory: true,
           //progress: (prog) => console.log(`[ipfs] received: ${prog}`)
         };
-
 
         /*const files = [
           titleDeedFile,
@@ -351,7 +348,7 @@ const MyProperties = () => {
         resolve("");
       }
     });
-  }
+  };
 
   // Validation Functions
   // ---------------------
@@ -441,7 +438,7 @@ const MyProperties = () => {
     onChange(info) {
       setTitleDeedFile(info.file.originFileObj);
     },
-    onRemove(e) { },
+    onRemove(e) {},
   };
 
   useEffect(() => {
@@ -535,7 +532,7 @@ const MyProperties = () => {
     imageList[primaryImageIndex] = first;
   };
 
-  const printAllData = () => { };
+  const printAllData = () => {};
 
   useEffect(() => {
     console.log(primaryImageOption);
@@ -583,21 +580,6 @@ const MyProperties = () => {
               ))}
               <div
                 onClick={() =>
-<<<<<<< HEAD
-                  setAddPropertyView(false)
-                  /*addProperty(
-                    samplePropertyDetails.addr,
-                    samplePropertyDetails.propertyType,
-                    samplePropertyDetails.titleDeedNo,
-                    samplePropertyDetails.titleDeedYear,
-                    samplePropertyDetails.streetNum,
-                    samplePropertyDetails.area,
-                    samplePropertyDetails.apartmentNum,
-                    samplePropertyDetails.listedPrice,
-                    samplePropertyDetails.ipfs,
-                    samplePropertyDetails.facilities
-                  )*/
-=======
                   // addProperty(
                   //   samplePropertyDetails.addr,
                   //   samplePropertyDetails.propertyType,
@@ -613,7 +595,6 @@ const MyProperties = () => {
                   {
                     setAddPropertyView(false);
                   }
->>>>>>> ad918c1cad8c3c3f180f012d988e73b888c7beda
                 }
                 style={{
                   display: "flex",
@@ -696,10 +677,11 @@ const MyProperties = () => {
                                 id="InputAddress"
                                 className="ethAddressInput"
                                 name="address"
-                                placeholder={`${ethAddress.slice(0, 6) +
+                                placeholder={`${
+                                  ethAddress.slice(0, 6) +
                                   "..." +
                                   ethAddress.slice(25, 35)
-                                  }`}
+                                }`}
                                 value={address}
                                 onChange={(e) => {
                                   setAddress(e.target.value);
@@ -901,10 +883,11 @@ const MyProperties = () => {
                                 id="InputDeedno"
                                 name="titleno"
                                 className="ethAddressInput"
-                                placeholder={`${ethAddress.slice(0, 6) +
+                                placeholder={`${
+                                  ethAddress.slice(0, 6) +
                                   "..." +
                                   ethAddress.slice(25, 35)
-                                  }`}
+                                }`}
                                 value={address}
                                 onChange={(e) => {
                                   setAddress(e.target.value);
@@ -1333,8 +1316,7 @@ const MyProperties = () => {
                                 text="Next"
                                 onClick={() => {
                                   validateInputFirst(deedno, deedyr, type);
-                                }
-                                }
+                                }}
                               >
                                 Next
                               </button>
@@ -1466,34 +1448,32 @@ const MyProperties = () => {
                     {
                       content: (
                         <div>
-                          {isCreatingProperty ?
-                           (<div className="fullform">
-                            <h1>Creating property....</h1>
-                           </div>)
-                            : <div className="fullform">
-                            <div className="checkimage">
-                              {<img src={image} alt=""></img>}
+                          {isCreatingProperty ? (
+                            <div className="fullform">
+                              <h1>Creating property....</h1>
                             </div>
-                            <p className="text done">
-                              Your property was created Successfully!
-                            </p>
-                            <div id="dashboardend">
-                              <button
-                                className="nextButton btn-submit end"
-                                id="finishButton"
-                                onClick={() => {
-                                  window.location.reload(false);
-                                }}
-                              >
-                                Finish
-                              </button>
+                          ) : (
+                            <div className="fullform">
+                              <div className="checkimage">
+                                {<img src={image} alt=""></img>}
+                              </div>
+                              <p className="text done">
+                                Your property was created Successfully!
+                              </p>
+                              <div id="dashboardend">
+                                <button
+                                  className="nextButton btn-submit end"
+                                  id="finishButton"
+                                  onClick={() => {
+                                    window.location.reload(false);
+                                  }}
+                                >
+                                  Finish
+                                </button>
+                              </div>
                             </div>
-                          </div>}
-                         
-                         
+                          )}
                         </div>
-
-
                       ),
                     },
                   ]}

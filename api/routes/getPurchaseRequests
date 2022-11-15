@@ -1,59 +1,68 @@
 var express = require("express");
 require("dotenv").config();
 var Moralis = require("../modules/moralis");
-var config = require('../config');
+var config = require("../config");
 var helper = require("../functions/Helper");
 
 var router = express.Router();
 
 //getting purchases requests for a seller
-router.get("/getPurchaseRequests", async function(req, res, next) {
+router.get("/getPurchaseRequests", async function (req, res, next) {
+  const sessionToken = req.query.sessionToken;
+  console.log("authenticating with: " + sessionToken);
+  if (!helper.isAuthenticated(sessionToken)) {
+    res.status(401);
+    res.send("not authenticated!");
+    return;
+  }
 
-    const sessionToken = req.query.sessionToken;
-    console.log("authenticating with: " + sessionToken);
-    if (!helper.isAuthenticated(sessionToken)) {
-        res.status(401);
-        res.send("not authenticated!");
-        return;
-    }
+  const ownerAddress = req.query.ownerAddress;
+  if (ownerAddress) {
+    console.log("here");
+    //make local caching
+    const requestsQuery = new Moralis.Query("PurchaseRequest");
+    requestsQuery.equalTo("sellerEthAddress", ownerAddress);
+    const requestResult = await requestsQuery.find();
+    const data = [];
+    for (let i = 0; i < requestResult.length; i++) {
+      var currentResult = requestResult[i];
+      //only return results with isBeingProcessed status
+      console.log(currentResult.get("isBeingProccessed"));
+      if (
+        currentResult.get("isBeingProccessed") == undefined ||
+        currentResult.get("isBeingProccessed")
+      ) {
+        var requestorAddress = currentResult.get("requesterEthAddress");
+        var inCache = false;
+        var user = {};
 
-    const ownerAddress = req.query.ownerAddress;
-    if (ownerAddress) {
-        //make local caching
-        const requestsQuery = new Moralis.Query("PurchaseRequest");
-        requestsQuery.equalTo("sellerEthAddress", ownerAddress);
-        const requestResult = await requestsQuery.find();
-        const data = [];
-        for (let i = 0; i < requestResult.length; i++) {
-            var currentResult = requestResult[i];
-            //only return results with isBeingProcessed status
-            if (currentResult.get("isBeingProcessed") !== undefined && currentResult.get("isBeingProcessed")) {
-            var requestorAddress = currentResult[i].get("requesterEthAddress");
-            var inCache = false;
-            var user = {};
-            for (var j = 0; j < data.length; j++) {
-                //if user exists in cache
-                if (data[j]["address"] == requestorAddress) {
-                    inCache = true;
-                    user = [data][j];
-                    break;
-                }
-            }
-
-            if (!inCache) user = await helper.getUser(requestorAddress);
-            data.push( {
-                ...user,
-                isAccepted: currentResult.get("isAccepted"),
-                isBeingProcessed: currentResult.get("isBeingProccessed") ?? true,
-                createdAt: currentResult.get("createdAt"),
-                propertyObjectId: currentResult.get("propertyObjectId")
-            });   
-            }
-             
+        for (var j = 0; j < data.length; j++) {
+          //if user exists in cache
+          if (data[j]["address"] == requestorAddress) {
+            inCache = true;
+            user = {
+              fullName: data[j]["fullName"],
+              address: data[j]["address"],
+            };
+            break;
+          }
         }
-        res.send(data);
-        return;
+
+        if (!inCache) user = await helper.getUser(requestorAddress);
+
+        data.push({
+          fullName: user["fullName"],
+          address: user["address"],
+          isAccepted: currentResult.get("isAccepted"),
+          isBeingProcessed: currentResult.get("isBeingProccessed") ?? true,
+          createdAt: currentResult.get("createdAt"),
+          propertyObjectId: currentResult.get("propertyObjectId"),
+        });
+      }
     }
+    res.send(data);
+    return;
+  }
 });
 
 module.exports = router;

@@ -18,6 +18,7 @@ import MainContainer from "./pages/MainContainer/MainContainer";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import ContactUs from "./pages/ContactUs";
 import GovtDashboard from "./pages/MainContainerGovt/MainContainer";
+import ProtectedRouteGovernment from "./ProtectedRouteGovernment";
 
 function App() {
   let optionsForScroll = {
@@ -40,6 +41,12 @@ function App() {
         ></Route>
         <Route path="/ContactUs" element={<ContactUs />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route
+          exact
+          path="/government"
+          element={<ProtectedRouteGovernment component={<GovtDashboard />} />}
+        />
+        {/* <Route path="/government" element={<GovtDashboard />}></Route> */}
         <Route path="/PropertyFunctions" element={<PropertyFunc />}></Route>
         <Route path="/AgreementFunctions" element={<AgreementFunc />}></Route>
         <Route path="/properties" element={<Properties />}></Route>

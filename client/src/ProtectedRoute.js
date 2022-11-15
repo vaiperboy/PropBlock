@@ -1,5 +1,5 @@
 import { useMoralis } from "react-moralis";
-import NoMatch from "./pages/NoMatch"
+import NoMatch from "./pages/NoMatch";
 
 function ProtectedRoute({ component }) {
   const {
@@ -19,7 +19,6 @@ function ProtectedRoute({ component }) {
   } = useMoralis();
 
   return isAuthenticated ? { ...component } : <NoMatch />;
-  //return { ...component }
 }
 
 export default ProtectedRoute;
