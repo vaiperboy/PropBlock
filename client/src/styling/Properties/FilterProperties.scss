@@ -1,43 +1,45 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@300;500&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@300;500&display=swap");
 
 .filter-properties {
-    width: 432px;
-    height: 500px;
-    border: 1px solid;
-    border-radius: 9px;
-
+    width: 40rem;
+    height: 55rem;
+    border: 2px solid #3daeee;
+    border-radius: 3px;
     .inner-rectangle {
+        display: flex;
+        flex-direction: column;
+        margin: 1rem 0;
         width: 95%;
         height: 99%;
-
+        padding: 0 1rem;
         position: relative;
         top: 50%;
         left: 50%;
         -moz-transform: translateX(-50%) translateY(-50%);
         -webkit-transform: translateX(-50%) translateY(-50%);
         transform: translateX(-50%) translateY(-50%);
-
         .upper-body {
-            text-align: center;
-            font-family: 'Poppins', sans-serif;
+            font-family: "Poppins", sans-serif;
             font-weight: 600;
-            font-size: 32px;
+            font-size: 2rem;
             color: #555555;
+            margin-left: auto;
         }
-
         .filter-body {
-            
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             .inline {
-                display: inline-block;
-
+                display: flex;
+                flex-wrap: wrap;
+                gap: 2rem;
+                margin-bottom: 1rem;
                 .checkbox {
-                    margin-right: 30px;
                 }
             }
 
             p {
-                font-family: 'Poppins', sans-serif;
+                font-family: "Poppins", sans-serif;
                 font-weight: 600;
                 font-size: 16px;
                 color: #555555;
@@ -61,12 +63,12 @@
             font-size: 1.5rem;
             -webkit-transition: all 0.2s ease;
             transition: all 0.2s ease;
-          }
-          
-          .filter-button:hover {
+        }
+
+        .filter-button:hover {
             -webkit-transition: all 0.2s ease;
             transition: all 0.2s ease;
             background-color: #147ebb;
-          }
+        }
     }
 }

@@ -48,7 +48,7 @@ class FilterProperties extends React.Component {
     return (
       <div className="filter-properties">
         <div className="inner-rectangle">
-          <div className="upper-body">Filter By</div>
+          <div className="upper-body">Filters</div>
           <div className="filter-body">
             <p>Price</p>
             <MultiRangeSlider
@@ -76,7 +76,7 @@ class FilterProperties extends React.Component {
                 style={{
                   width: "100%",
                 }}
-              //onChange={handleChange}
+                //onChange={handleChange}
               >
                 <Option value="Apartment">Apartment</Option>
                 <Option value="Villa">Villa</Option>

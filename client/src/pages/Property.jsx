@@ -127,7 +127,12 @@ const Property = () => {
     <div>
       <Navbar />
       <div className="propertyStyling">
-        <div className="backButton" onClick={() => {}}>
+        <div
+          className="backButton"
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
           <ArrowLeftOutlined /> Back
         </div>
         <div className="titleSection">

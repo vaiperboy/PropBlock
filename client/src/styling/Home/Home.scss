@@ -3,7 +3,6 @@
     src: url("../../assets/TT-Travels-Next/TT\ Travels\ Next\ Medium.ttf") format("truetype");
 }
 
-
 main {
     .heroSection {
         display: flex;
@@ -136,7 +135,6 @@ main {
                 cursor: no-drop;
             }
         }
-        
     }
     .horizontal-breaker {
         width: 88%;
@@ -491,7 +489,7 @@ main {
         display: flex;
         flex-direction: column;
         width: 85%;
-        margin: 0 auto 8rem auto;
+        margin: 5rem auto 8rem auto;
         .heading {
             h1 {
                 margin: 0 0 4rem 7rem;

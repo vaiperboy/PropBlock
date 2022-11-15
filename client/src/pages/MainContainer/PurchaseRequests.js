@@ -37,12 +37,38 @@ const PurchaseRequests = (props) => {
     },
     {
       title: "Decision",
-      key: "status",
       fixed: "right",
+      dataIndex: "status",
+      kay: "3",
       width: 200,
       innerHeight: 100,
     },
   ];
+
+  const [dataSourceBuyer, setDataSourceBuyer] = useState([
+    {
+      key: "1",
+      address: "0x4001A8651c51...5da60538b327b96",
+      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+      dateRequested: "10 Nov 2022",
+      status: "accepted",
+    },
+    {
+      key: "2",
+      address: "0x4001A8651c51...5da60538b327b96",
+      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+      dateRequested: "10 Nov 2022",
+      status: "declined",
+    },
+    {
+      key: "3",
+      address: "0x4001A8651c51...5da60538b327b96",
+      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+      dateRequested: "10 Nov 2022",
+      status: "accepted",
+    },
+  ]);
+
   const columnsSeller = [
     {
       title: "Address Of User",
@@ -170,65 +196,6 @@ const PurchaseRequests = (props) => {
       address: "0x4001A8651c51...5da60538b327b96",
       propertyID: "u7dM24zgRcYAs68Hs03FMSki",
       dateRequested: "15 Nov 2022",
-    },
-  ]);
-
-  const [dataSourceBuyer, setDataSourceBuyer] = useState([
-    {
-      key: "1",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "accepted",
-    },
-    {
-      key: "2",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "declined",
-    },
-    {
-      key: "3",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "accepted",
-    },
-    {
-      key: "4",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "accepted",
-    },
-    {
-      key: "5",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "accepted",
-    },
-    {
-      key: "6",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "accepted",
-    },
-    {
-      key: "7",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "z7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "12 Nov 2022",
-      status: "accepted",
-    },
-    {
-      key: "8",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "u7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "15 Nov 2022",
-      status: "accepted",
     },
   ]);
 
@@ -374,14 +341,20 @@ const PurchaseRequests = (props) => {
               <div className="purchaseRequestsContainer">
                 <div className="tableContainer">
                   <Table
+                    pagination={{
+                      pageSize: 50,
+                    }}
+                    scroll={{
+                      y: 240,
+                    }}
                     columns={columnsSeller}
                     dataSource={dataSourceSeller}
                     onChange={onChange}
                     bordered
-                    title={() => "Purchase Requests Received"}
                     scroll={{
                       y: 600,
                     }}
+                    title={() => "Purchase Requests Received"}
                   />
                 </div>
               </div>

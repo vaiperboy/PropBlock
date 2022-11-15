@@ -583,6 +583,7 @@ const MyProperties = () => {
               ))}
               <div
                 onClick={() =>
+<<<<<<< HEAD
                   setAddPropertyView(false)
                   /*addProperty(
                     samplePropertyDetails.addr,
@@ -596,6 +597,23 @@ const MyProperties = () => {
                     samplePropertyDetails.ipfs,
                     samplePropertyDetails.facilities
                   )*/
+=======
+                  // addProperty(
+                  //   samplePropertyDetails.addr,
+                  //   samplePropertyDetails.propertyType,
+                  //   samplePropertyDetails.titleDeedNo,
+                  //   samplePropertyDetails.titleDeedYear,
+                  //   samplePropertyDetails.streetNum,
+                  //   samplePropertyDetails.area,
+                  //   samplePropertyDetails.apartmentNum,
+                  //   samplePropertyDetails.listedPrice,
+                  //   samplePropertyDetails.ipfs,
+                  //   samplePropertyDetails.facilities
+                  // )
+                  {
+                    setAddPropertyView(false);
+                  }
+>>>>>>> ad918c1cad8c3c3f180f012d988e73b888c7beda
                 }
                 style={{
                   display: "flex",
