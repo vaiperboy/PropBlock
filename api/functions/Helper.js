@@ -1,6 +1,7 @@
 const auth = require("../modules/ipfs");
 var config = require('../config');
 var axios = require('axios');
+var Moralis = require("../modules/moralis");
 
 
 //to cache the result
@@ -43,6 +44,42 @@ module.exports.getLinks = async function (cid) {
     return hashes;
 }
 
+//makes sure user is authenticated
+module.exports.isAuthenticated = async function(sessionToken) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            var query = new Moralis.Query("_Session");
+            query.equalTo("sessionToken", sessionToken);
+            query.limit(1);
+            query.withCount();
+            const result = await query.find();
+            resolve(result.count == 1); //if session exsists its authenticated
+        } catch {
+            resolve(false);
+        }
+    });
+}
+
+
+//caching
+module.exports.getUser = async function(address) {
+    return new Promise(async (resolve, reject) => {
+        console.log("finding with: " + address);
+        const query = new Moralis.Query("_User");
+        query.equalTo("ethAddress", address.toLowerCase());
+        query.limit(1);
+        var result = await query.find({useMasterKey: true});
+        var user = {};
+        result.forEach((e) => {
+            user = {
+            "fullName": e.get("fullName").toString(),
+            "address": e.get("ethAddress").toString()
+            }
+        });
+        resolve(user);
+    });
+}
+
 //processes the moralis Query object with the 
 //parameters
 module.exports.processFiltering = async function(params, query) {
@@ -53,4 +90,6 @@ module.exports.processFiltering = async function(params, query) {
     if (params["facilities"] != undefined && params["facilities"] > 0) {
         query.greaterThan("facilities", params["facilities"]);
     }
+
+
 }

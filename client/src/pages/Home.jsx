@@ -22,6 +22,7 @@ import property_type_icon from "../assets/home-icon.png";
 import beds_icon from "../assets/beds-icon.svg";
 import price_tag_icon from "../assets/tag-icon.png";
 import hero_image from "../assets/hero-section-image.png";
+import { useEffect } from "react";
 
 const console = require("console-browserify");
 
@@ -88,6 +89,8 @@ function Home() {
   ];
 
   const { Option } = Select;
+
+
 
   return (
     <div>

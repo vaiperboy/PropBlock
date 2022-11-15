@@ -36,6 +36,7 @@ const MyProfile = () => {
     setEmailAddress(user.get("email"));
     setFullName(user.get("fullName"));
     setDescription("big data");
+    console.log(user.getSessionToken());
   }, [user]);
 
   const validateEmail = (email) => {
