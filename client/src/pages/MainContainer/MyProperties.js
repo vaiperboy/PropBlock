@@ -144,6 +144,42 @@ const MyProperties = () => {
       message.error("Error1: " + error.message);
     }
   };
+  // checks if a property exists
+  const checkPropertyExists = async (addr, id) => {
+    try {
+      if (!checkAddress(addr)) {
+        return;
+      }
+      if (!onlyNumbers(id)) {
+        message.error("Invalid Id! Enter the ID in correct format");
+        return;
+      }
+      if (id === "0") {
+        message.error("Invalid ID! Property Id cannot be zero.");
+        return;
+      }
+      const properties = Moralis.Object.extend("Properties");
+      const query = new Moralis.Query(properties);
+      query.equalTo("landlordAddress", addr.toLowerCase());
+      query.equalTo("propertyId", id);
+      const results = await query.find();
+      if (results.length === 0) {
+        message.error(
+          "Property with id " +
+            id +
+            " does not exist for this address: " +
+            addr.slice(0, 10) +
+            "..." +
+            addr.slice(35, 42)
+        );
+        return false;
+      } else {
+        return true;
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
 
   // checks if a property exists using the realEstate Contract
   const checkPropertyExistsUsingContract = async (addr, id) => {
@@ -213,22 +249,12 @@ const MyProperties = () => {
         message.error("Invalid Input! Enter the values in correct format.");
         return;
       }
-
-      // make change here
-      // ------ ******** ---------
-
-      // let exists = await checkLandlordExists(addr);
-      // if (!exists) {
-      //   message.error(`Landlord does not exist ${addr}`);
-      //   return;
-      // }
       if (!window.ethereum) {
         message.error(
           "Metamask not detected! Please install metamask to continue."
         );
         return;
       }
-
       // converting the data from string to int type
       const uintTitleDeedNo = parseInt(titleDeedNo);
       const uintTitleDeedYear = parseInt(titleDeedYear);
@@ -375,7 +401,6 @@ const MyProperties = () => {
       message.error("Error Message: " + error);
     }
   };
-  //
 
   //set this to false to display the current properties
   // validated

@@ -20,6 +20,7 @@ import { Spin, Skeleton, Avatar, List } from "antd";
 class MainContainer extends React.Component {
   constructor(props) {
     super(props);
+    this.setToBuyer = this.setToBuyer.bind(this);
   }
 
   state = {
@@ -35,6 +36,11 @@ class MainContainer extends React.Component {
       settingView: false,
     },
     isLoading: true,
+    isBuyer: true,
+  };
+
+  setToBuyer = (val) => {
+    this.setState({ isBuyer: val });
   };
 
   toggleView = (val) => {
@@ -216,6 +222,8 @@ class MainContainer extends React.Component {
           >
             <div style={{ display: "flex", marginTop: "5rem" }}>
               <LeftSidebar
+                setBuyer={this.setToBuyer}
+                isBuyer={this.state.isBuyer}
                 menuState={this.state.menuState}
                 toggleSettingView={this.toggleSettingView}
                 toggleProfileView={this.toggleProfileView}
@@ -244,11 +252,12 @@ class MainContainer extends React.Component {
                 />
               ) : null}
               {this.state.menuState.uploadMode ? (
-                <MyAgreements />
+                <MyAgreements isBuyer={this.state.isBuyer} />
               ) : this.state.menuState.agreementView === 1 &&
                 !this.state.menuState.purchaseRequestView &&
                 !this.state.menuState.dashboardView ? (
                 <AgreementsList
+                  isBuyer={this.state.isBuyer.toString()}
                   toggleView={this.toggleView}
                   toggleAgreementView={this.toggleAgreementView}
                 />
@@ -257,7 +266,7 @@ class MainContainer extends React.Component {
                 <AgreementView />
               ) : null}
               {this.state.menuState.purchaseRequestView ? (
-                <PurchaseRequests />
+                <PurchaseRequests isBuyer={this.state.isBuyer.toString()} />
               ) : null}
               {this.state.menuState.propertiesView ? <MyProperties /> : null}
               {this.state.menuState.statsView ? <Statistics /> : null}

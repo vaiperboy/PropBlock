@@ -45,20 +45,16 @@ const Disconnect = () => {
 };
 
 class LeftSidebar extends React.Component {
-  state = {
-    isBuyer: false,
-  };
-
   componentDidMount = () => {};
 
   componentWillUnmount = () => {};
 
   switchToBuyer = () => {
-    this.setState({ isBuyer: true });
+    this.props.setBuyer(true);
   };
 
   switchToSeller = () => {
-    this.setState({ isBuyer: false });
+    this.props.setBuyer(false);
   };
 
   render() {
@@ -74,7 +70,7 @@ class LeftSidebar extends React.Component {
           >
             <button
               className={
-                this.state.isBuyer
+                this.props.isBuyer
                   ? "leftsidebar_button"
                   : "leftsidebar_button_outlined"
               }
@@ -85,7 +81,7 @@ class LeftSidebar extends React.Component {
             </button>
             <button
               className={
-                this.state.isBuyer
+                this.props.isBuyer
                   ? "leftsidebar_button_outlined"
                   : "leftsidebar_button"
               }
@@ -106,7 +102,7 @@ class LeftSidebar extends React.Component {
             position: "relative",
           }}
         >
-          {this.state.isBuyer ? (
+          {this.props.isBuyer ? (
             <>
               <div
                 className="leftsidebar_item"

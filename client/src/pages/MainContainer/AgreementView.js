@@ -5,10 +5,14 @@ import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+const console = require("console-browserify");
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 class AgreementView extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   state = {
     inputDragEvent: {},
     file1: [],
@@ -16,7 +20,9 @@ class AgreementView extends React.Component {
     file3: [],
   };
 
-  componentDidMount = () => {};
+  componentDidMount = () => {
+    console.log("here", this.props.isBuyer);
+  };
 
   componentWillUnmount = () => {};
 
