@@ -16,30 +16,47 @@
         .avatar {
             &:hover {
                 transition: all ease 0.2s;
-                // scale: (1.35);
-                // transform: translateY(-0.2rem);
-                // background-color: #2994d2;
                 cursor: pointer;
             }
         }
         .userButtons {
             position: absolute;
-            margin-top: 5rem;
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-top: 6rem;
             z-index: 55;
             right: -4rem;
+            font-size: 1.5rem;
+            font-weight: 600;
             background-color: #ffffff;
-            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            border: 1px solid #cfcfcf;
+            box-shadow: rgba(112, 112, 112, 0.2) 0px 7px 29px 0px;
             .userButton {
-                padding: 1rem 1rem;
+                text-align: left;
+                padding: 1rem 2rem;
+                width: 100%;
                 &:hover {
                     cursor: pointer;
-                    border-bottom: 1px solid #c4c4c4;
+                    background-color: #def2fd;
                 }
             }
             .logoutButton {
+                padding: 0.8rem 2rem;
+                color: red;
+                &:hover {
+                    background-color: rgb(245, 138, 138);
+                    color: #ffffff;
+                }
             }
             .dashboardButton {
-                color: #333333;
+                padding: 0.8rem 2rem;
+                color: #3daeee;
+                &:hover {
+                    background-color: #85d2fe;
+                    color: white;
+                }
             }
         }
     }

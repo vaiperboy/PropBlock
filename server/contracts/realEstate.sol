@@ -34,6 +34,9 @@ contract realEstate is Ownable {
 
     struct Property { 
         uint propertyId;
+        string propertyType;
+        uint titleDeedNo;
+        uint titleDeedYear;
         string streetName;
         uint area;
         string apartmentNum;
@@ -41,6 +44,7 @@ contract realEstate is Ownable {
         bool valid; 
         properyStatus propStatus;
         string ipfsHash;
+        uint facilities;
     }
 
     enum properyStatus {
@@ -73,11 +77,10 @@ contract realEstate is Ownable {
         completed
     }
 
-
     // ----------------------------
     // list of events emitted to log
     event newLandlordAdded(address _landlordAddress, uint _landlordId);
-    event newPropertyAdded(address payable landlordAddress, uint _propertyId, string streetName, uint area, string apartmentNum, uint listedPrice, properyStatus propStatus, string ipfsHash);
+    event newPropertyAdded(address payable landlordAddress, uint _propertyId, uint titleDeedNo, uint titleDeedYear, string propertyType, string streetName, uint area, string apartmentNum, uint listedPrice, properyStatus propStatus, string ipfsHash, uint facilities);
     event propertTransfered(address _landlordAddress, address _buyerAddress, uint _propertyID, uint _price);
     event propertyStatusChanged(address payable _landlordAddress, uint _propertyId, properyStatus _status);
     event amountTransfered(address _to, uint _amount);
@@ -102,7 +105,6 @@ contract realEstate is Ownable {
     function getBalance() public view returns (uint) {
         return address(this).balance;
     }   
-
 
     // ---------------------------------
     // MODIFIERS FOR OUR CONTRACTS: 
@@ -194,7 +196,7 @@ contract realEstate is Ownable {
         @filters - landlordExists 
         @params - landlordAddress, streetName, area, apartmentNum, listedPrice
     */ 
-    function createPropertyListing(address payable _landlordAddress, string memory _streetName, uint _area, string memory _apartmentNum, uint _listedPrice, string memory _ipfsHash) 
+    function createPropertyListing(address payable _landlordAddress, string memory _propertyType, uint _titleDeedNo, uint _titleDeedYear, string memory _streetName, uint _area, string memory _apartmentNum, uint _listedPrice, string memory _ipfsHash, uint _facilities )
     public payable 
     {
         require(msg.sender == _landlordAddress, "You cannot create a property for the user! Only the owner can create the property."); 
@@ -210,9 +212,9 @@ contract realEstate is Ownable {
         landlordsPropertyCounter[_landlordAddress]++;
         uint counter = landlordsPropertyCounter[_landlordAddress];
         // adds property to the list of lands owned by a landlord
-        landlordProperties[_landlordAddress][counter] = Property(counter, _streetName, _area, _apartmentNum, _listedPrice, true, properyStatus.uninitialized, _ipfsHash);  
+        landlordProperties[_landlordAddress][counter] = Property(counter, _propertyType, _titleDeedNo, _titleDeedYear, _streetName, _area, _apartmentNum, _listedPrice, true, properyStatus.uninitialized, _ipfsHash, _facilities);  
         emit propertyStatusChanged(_landlordAddress, counter, properyStatus.uninitialized); 
-        emit newPropertyAdded(_landlordAddress, counter, _streetName, _area, _apartmentNum, _listedPrice, properyStatus.uninitialized, _ipfsHash );
+        emit newPropertyAdded(_landlordAddress, counter, _titleDeedNo, _titleDeedYear, _propertyType, _streetName, _area, _apartmentNum, _listedPrice, properyStatus.uninitialized, _ipfsHash, _facilities );
     }
 
     /*  @dev - gets the listed price for an existing property for a landlord
@@ -230,21 +232,38 @@ contract realEstate is Ownable {
         );
     }
 
-    /*  @dev - gets an existing property for a landlord
+    /*  @dev - gets an existing property's details for a landlord
         @filters - landlordExists, propertyExists 
         @params - landlordAddress, propertyID
     */ 
-    function getProperty(address payable _landlordAddress, uint _propertyID) 
+    function getPropertyDetails(address payable _landlordAddress, uint _propertyID) 
     view public  
     landlordExists(_landlordAddress) 
     propertyExists(_landlordAddress, _propertyID) 
-    returns (string memory, uint, string memory, uint, string memory) 
+    returns (string memory, uint, uint, uint) 
+    {
+        return (
+            landlordProperties[_landlordAddress][_propertyID].propertyType, 
+            landlordProperties[_landlordAddress][_propertyID].titleDeedYear, 
+            landlordProperties[_landlordAddress][_propertyID].listedPrice,
+            landlordProperties[_landlordAddress][_propertyID].facilities
+        );
+    }
+
+    /*  @dev - gets an existing property's location details for a landlord
+        @filters - landlordExists, propertyExists 
+        @params - landlordAddress, propertyID
+    */ 
+    function getPropertyLocationDetails(address payable _landlordAddress, uint _propertyID) 
+    view public  
+    landlordExists(_landlordAddress) 
+    propertyExists(_landlordAddress, _propertyID) 
+    returns (string memory, uint, string memory, string memory) 
     {
         return (
             landlordProperties[_landlordAddress][_propertyID].streetName, 
             landlordProperties[_landlordAddress][_propertyID].area,
             landlordProperties[_landlordAddress][_propertyID].apartmentNum,
-            landlordProperties[_landlordAddress][_propertyID].listedPrice,
             landlordProperties[_landlordAddress][_propertyID].ipfsHash
         );
     }
@@ -280,6 +299,7 @@ contract realEstate is Ownable {
     propertyExists(_landlordAddress, _propertyID) 
     {
         require(msg.sender == _landlordAddress, "You cannot transfer the property! Only the owner can transfer the property.");
+        require(_landlordAddress != _buyerAddress, "You cannot transfer the property to the same address! Buyer and Landlord Address should be different.");
         // increment buyer's counter 
         landlordsPropertyCounter[_buyerAddress]++;
         uint buyerCounter = landlordsPropertyCounter[_buyerAddress];

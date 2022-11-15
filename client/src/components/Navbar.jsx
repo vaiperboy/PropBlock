@@ -5,6 +5,7 @@ import { Avatar, Blockie } from "@web3uikit/core";
 import { useMoralis } from "react-moralis";
 import NavbarIcon from "../assets/framer-1.png";
 import { message } from "antd";
+import { LogoutOutlined, ProfileOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 const console = require("console-browserify");
@@ -34,25 +35,30 @@ const Navbar = (props) => {
 
   const showButtons = () => {
     try {
-      console.log("Clicked");
-      if (avatarClicked === true) {
-        setAvatarClicked(false);
-        console.log("Buttons show: ");
-
-        return;
+      let userButtons = document.getElementById("userButtons");
+      if (userButtons.style.display !== "flex") {
+        userButtons.style.display = "flex";
+      } else {
+        userButtons.style.display = "none";
       }
-      setAvatarClicked(true);
     } catch (error) {
       console.log("Error: ", error);
     }
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      // add your logic here
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated]);
+    document.addEventListener("click", function handleClickOutsideBox(event) {
+      const userButtons = document.getElementById("userButtons");
+      const avatarIcon = document.getElementById("avatarIcon");
+
+      if (
+        !userButtons.contains(event.target) &&
+        !avatarIcon.contains(event.target)
+      ) {
+        userButtons.style.display = "none";
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -102,7 +108,7 @@ const Navbar = (props) => {
                   <div>About Us</div>
                 </Link>
               )}
-              <div className="avatarSection">
+              <div className="avatarSection" id="avatarIcon">
                 <Avatar
                   isRounded
                   theme="image"
@@ -111,22 +117,20 @@ const Navbar = (props) => {
                     showButtons();
                   }}
                 />
-                {avatarClicked && (
-                  <div className="userButtons">
-                    <div
-                      className="userButton logoutButton"
-                      onClick={() => disconnectWallet()}
-                    >
-                      Logout
-                    </div>
-
-                    <div className="userButton ">
-                      <Link to="/dashboard" className="dashboardButton">
-                        Dashboard
-                      </Link>
-                    </div>
+                <div className="userButtons" id="userButtons">
+                  <div
+                    className="dashboardButton userButton"
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    Dashboard <ProfileOutlined />
                   </div>
-                )}
+                  <div
+                    className="logoutButton userButton"
+                    onClick={() => disconnectWallet()}
+                  >
+                    Logout <LogoutOutlined />
+                  </div>
+                </div>
               </div>
             </nav>
           </div>

@@ -292,7 +292,6 @@ function Home() {
             </div>
           </div>
         </div>
-
         <div className="trendingProperties">
           <div className="trendingHeader">
             <h1>Trending Properties</h1>

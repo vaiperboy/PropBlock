@@ -46,13 +46,13 @@ function App() {
         <Route path="/property/:id" element={<Property />}></Route>
         <Route path="/dashboard" element={<MainContainer />}></Route>
         <Route path="/goverment-dashboard" element={<GovtDashboard />}></Route>
-        
+
         <Route path="*" element={<NoMatch />}></Route>
-        {/* <Route
+        <Route
           exact
           path="/dashboard"
           element={<ProtectedRoute component={<MainContainer />} />}
-        /> */}
+        />
       </Routes>
     </BrowserRouter>
   );
