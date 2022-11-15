@@ -91,5 +91,5 @@ module.exports.processFiltering = async function(params, query) {
         query.greaterThan("facilities", params["facilities"]);
     }
 
-
+    
 }

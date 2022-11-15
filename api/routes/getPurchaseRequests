@@ -22,23 +22,29 @@ router.get("/getPurchaseRequests", async function(req, res, next) {
         //make local caching
         const requestsQuery = new Moralis.Query("PurchaseRequest");
         requestsQuery.equalTo("sellerEthAddress", ownerAddress);
-        const result = await requestsQuery.find();
+        const requestResult = await requestsQuery.find();
         const data = [];
-        for (let i = 0; i < result.length; i++) {
-            var requestorAddress = result[i].get("requesterEthAddress");
+        for (let i = 0; i < requestResult.length; i++) {
+            var currentResult = requestResult[i];
+            var requestorAddress = currentResult[i].get("requesterEthAddress");
             var inCache = false;
+            var user = {};
             for (var j = 0; j < data.length; j++) {
+                //if user exists in cache
                 if (data[j]["address"] == requestorAddress) {
                     inCache = true;
+                    user = [data][j];
+                    break;
                 }
             }
-            const user = await helper.getUser(requestorAddress);
+
+            if (!inCache) user = await helper.getUser(requestorAddress);
             data.push( {
                 ...user,
-                isAccepted: result[i].get("isAccepted"),
-                isBeingProcessed: result[i].get("isBeingProccessed") ?? true,
-                createdAt: result[i].get("createdAt"),
-                propertyObjectId: result[i].get("propertyObjectId")
+                isAccepted: currentResult[i].get("isAccepted"),
+                isBeingProcessed: currentResult[i].get("isBeingProccessed") ?? true,
+                createdAt: currentResult[i].get("createdAt"),
+                propertyObjectId: currentResult[i].get("propertyObjectId")
             }); 
             
         }

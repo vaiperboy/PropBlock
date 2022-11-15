@@ -189,7 +189,7 @@ class MainContainer extends React.Component {
 
   componentDidMount = async () => {
     // Set loading state to true initially
-    await new Promise((r) => setTimeout(r, 1500));
+    await new Promise((r) => setTimeout(r, 500));
     this.setState({ isLoading: false });
   };
 

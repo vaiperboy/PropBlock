@@ -2,9 +2,9 @@ import React from "react";
 import "../../styling/Properties/FilterProperties.scss";
 import MultiRangeSlider from "./multiRangeSlider/MultiRangeSlider";
 import { Checkbox, Input, Button } from "@web3uikit/core";
-import { Select} from "antd";
+import { Radio, Select } from 'antd';
 const console = require("console-browserify");
-const {Option} = Select;
+const { Option } = Select;
 
 class FilterProperties extends React.Component {
   constructor(props) {
@@ -12,8 +12,36 @@ class FilterProperties extends React.Component {
     this.state = {
       oldMin: this.props.minPrice,
       oldMax: this.props.maxPrice,
-    };
-    console.log("constructed");
+      facilitiesOptions: [
+        { value: 1, label: "Free Parking" },
+        { value: 2, label: "Kitchen" },
+        { value: 4, label: "Security" },
+        { value: 8, label: "Free WiFi" },
+        { value: 16, label: "Coffee Maker" },
+        { value: 64, label: "Restaurant" },
+        { value: 128, label: "24 hour access" },
+        { value: 256, label: "TV Access" }
+      ],
+      facilitiesXor: 0
+    }
+    this.handleFacilities = this.handleFacilities.bind(this);
+  }
+
+  //only made it for lowest number (least option)
+  handleFacilities(arr) {
+    /*let tmp = 1;
+    for (const e of arr) {
+      tmp = tmp | e;
+    }
+    this.setState({facilitiesXor: tmp});
+    console.log(this.state.facilitiesXor);*/
+    if (arr.length > 0) {
+      var lowest = arr[0];
+      for (var i = 1; i < arr.length; i++) {
+        if (arr[i] < lowest) lowest = arr[i];
+      }
+      this.setState({facilitiesXor: lowest});
+    } else this.setState({facilitiesXor: 0});
   }
 
   render() {
@@ -71,55 +99,14 @@ class FilterProperties extends React.Component {
             />
             <hr></hr>
             <p>Facilities</p>
-            <div className="inline">
-              <div className="checkbox">
-                <Checkbox
-                  label="Parking"
-                  name="hasParking"
-                  className="checkbox"
-                  onChange={(e) =>
-                    this.props.parentCallBack("hasParking", e.target.checked)
-                  }
-                  checked="true"
-                />
-              </div>
-              <div className="checkbox">
-                <Checkbox
-                  label="Restaurant"
-                  name="hasRestaurant"
-                  className="checkbox"
-                  onChange={(e) =>
-                    this.props.parentCallBack("hasRestaurant", e.target.checked)
-                  }
-                  checked="true"
-                />
-              </div>
-            </div>
-
-            <div className="inline">
-              <div className="checkbox">
-                <Checkbox
-                  label="Free Wifi"
-                  name="hasWifi"
-                  className="checkbox"
-                  onChange={(e) =>
-                    this.props.parentCallBack("hasWifi", e.target.checked)
-                  }
-                  checked="true"
-                />
-              </div>
-              <div className="checkbox">
-                <Checkbox
-                  label="Swimming Pool"
-                  name="hasPool"
-                  className="checkbox"
-                  onChange={(e) =>
-                    this.props.parentCallBack("hasPool", e.target.checked)
-                  }
-                  checked="true"
-                />
-              </div>
-            </div>
+            <Select
+              mode="tags"
+              size={"medium"}
+              placeholder="Please select"
+              onChange={this.handleFacilities}
+              style={{ width: '100%' }}
+              options={this.state.facilitiesOptions}
+            />
           </div>
           <button className="filter-button">Filter Properties</button>
         </div>
