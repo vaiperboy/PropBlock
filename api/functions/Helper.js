@@ -42,3 +42,15 @@ module.exports.getLinks = async function (cid) {
 
     return hashes;
 }
+
+//processes the moralis Query object with the 
+//parameters
+module.exports.processFiltering = async function(params, query) {
+    if (params["propertyType"] != undefined) {
+        query.equalTo("propertyType", params["propertyType"]);
+    }
+
+    if (params["facilities"] != undefined && params["facilities"] > 0) {
+        query.greaterThan("facilities", params["facilities"]);
+    }
+}
