@@ -26,6 +26,8 @@ router.get("/getPurchaseRequests", async function(req, res, next) {
         const data = [];
         for (let i = 0; i < requestResult.length; i++) {
             var currentResult = requestResult[i];
+            //only return results with isBeingProcessed status
+            if (currentResult.get("isBeingProcessed") !== undefined && currentResult.get("isBeingProcessed")) {
             var requestorAddress = currentResult[i].get("requesterEthAddress");
             var inCache = false;
             var user = {};
@@ -41,12 +43,13 @@ router.get("/getPurchaseRequests", async function(req, res, next) {
             if (!inCache) user = await helper.getUser(requestorAddress);
             data.push( {
                 ...user,
-                isAccepted: currentResult[i].get("isAccepted"),
-                isBeingProcessed: currentResult[i].get("isBeingProccessed") ?? true,
-                createdAt: currentResult[i].get("createdAt"),
-                propertyObjectId: currentResult[i].get("propertyObjectId")
-            }); 
-            
+                isAccepted: currentResult.get("isAccepted"),
+                isBeingProcessed: currentResult.get("isBeingProccessed") ?? true,
+                createdAt: currentResult.get("createdAt"),
+                propertyObjectId: currentResult.get("propertyObjectId")
+            });   
+            }
+             
         }
         res.send(data);
         return;
