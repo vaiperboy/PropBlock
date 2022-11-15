@@ -1,45 +1,76 @@
 .properties-page {
-
   .App {
-    width: 80%;
-    transform: translateX(12%);
-
     .upper-body {
-      width: 80%;
-      margin-left: 10%;
+      margin: 0 auto;
+      width: 70%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .topSearchSection {
+      }
     }
   }
-
   .body {
     display: inline-block;
-    transform: translateX(12%);
     .real-body {
+      width: 80%;
+      margin: 0 auto;
       display: flex;
-      float: left;
-      margin-left: 80px;
-
+      justify-content: space-between;
+      margin-top: 7rem;
       .right-body {
         .queries-count {
           display: inline;
-          font-family: 'Poppins', sans-serif;
+          font-family: "Poppins", sans-serif;
           font-weight: 600;
-          font-size: 14px;
+          margin-left: 1rem;
           color: #555555;
         }
-        margin-left: 70px
-
+        margin-left: 70px;
       }
-
       .left-body {
-        float: left;
         width: 432px;
         height: 600px;
       }
-
       .property-listing {
-        margin-bottom: 9px;
+        width: 100%;
+        height: 28rem;
+        .resultsText {
+          margin-top: -3.5rem;
+          margin-bottom: 1rem;
+          font-size: 1.7rem;
+        }
+        .property {
+          width: 70rem;
+          display: flex;
+          margin-bottom: 10rem;
+          #property-image {
+            width: 25rem;
+            padding: 1rem;
+          }
+          .address-box {
+            width: 24rem;
+            height: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            align-content: center;
+            margin-top: 10rem;
+            #walletImage {
+              width: 2.5rem;
+              height: 2.5rem;
+              margin: 0;
+            }
+            #walletAddress {
+              color: #3daeee;
+              margin-left: 4rem;
+            }
+          }
+          .property-button {
+            margin: 1rem;
+          }
+        }
       }
-
       .page-numbers {
         display: flex;
         justify-content: center;
@@ -56,6 +87,4 @@
     margin-top: 50px;
     text-align: center;
   }
-
-
 }

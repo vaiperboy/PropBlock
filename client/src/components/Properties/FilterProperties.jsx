@@ -2,9 +2,9 @@ import React from "react";
 import "../../styling/Properties/FilterProperties.scss";
 import MultiRangeSlider from "./multiRangeSlider/MultiRangeSlider";
 import { Checkbox, Input, Button } from "@web3uikit/core";
-import { Select} from "antd";
+import { Select } from "antd";
 const console = require("console-browserify");
-const {Option} = Select;
+const { Option } = Select;
 
 class FilterProperties extends React.Component {
   constructor(props) {
@@ -20,7 +20,7 @@ class FilterProperties extends React.Component {
     return (
       <div className="filter-properties">
         <div className="inner-rectangle">
-          <div className="upper-body">Filter By</div>
+          <div className="upper-body">Filters</div>
           <div className="filter-body">
             <p>Price</p>
             <MultiRangeSlider
@@ -48,7 +48,7 @@ class FilterProperties extends React.Component {
                 style={{
                   width: "100%",
                 }}
-              //onChange={handleChange}
+                //onChange={handleChange}
               >
                 <Option value="Apartment">Apartment</Option>
                 <Option value="Villa">Villa</Option>

@@ -685,18 +685,21 @@ const MyProperties = () => {
               ))}
               <div
                 onClick={() =>
-                  addProperty(
-                    samplePropertyDetails.addr,
-                    samplePropertyDetails.propertyType,
-                    samplePropertyDetails.titleDeedNo,
-                    samplePropertyDetails.titleDeedYear,
-                    samplePropertyDetails.streetNum,
-                    samplePropertyDetails.area,
-                    samplePropertyDetails.apartmentNum,
-                    samplePropertyDetails.listedPrice,
-                    samplePropertyDetails.ipfs,
-                    samplePropertyDetails.facilities
-                  )
+                  // addProperty(
+                  //   samplePropertyDetails.addr,
+                  //   samplePropertyDetails.propertyType,
+                  //   samplePropertyDetails.titleDeedNo,
+                  //   samplePropertyDetails.titleDeedYear,
+                  //   samplePropertyDetails.streetNum,
+                  //   samplePropertyDetails.area,
+                  //   samplePropertyDetails.apartmentNum,
+                  //   samplePropertyDetails.listedPrice,
+                  //   samplePropertyDetails.ipfs,
+                  //   samplePropertyDetails.facilities
+                  // )
+                  {
+                    setAddPropertyView(false);
+                  }
                 }
                 // onClick={() => setAddPropertyView(false)}
                 style={{

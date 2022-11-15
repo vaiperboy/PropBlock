@@ -9,7 +9,7 @@ import SearchAvailability from "../components/Properties/SearchAvailability";
 import FilterProperties from "../components/Properties/FilterProperties";
 import { Pagination } from "@mui/material";
 import "../styling/Properties/Properties.scss";
-import Footer from "../components/Footer"
+import Footer from "../components/Footer";
 const console = require("console-browserify");
 
 class App extends Component {
@@ -55,12 +55,12 @@ class App extends Component {
         color="primary"
         size="large"
         onChange={this.switchPage}
-        style={{zoom: "130%"}}
+        style={{ zoom: "130%" }}
       />
     );
   }
 
-  constructPage(pageNo) { }
+  constructPage(pageNo) {}
 
   switchPage(e, page) {
     //window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
@@ -75,15 +75,12 @@ class App extends Component {
         </header>
         <div className="App">
           <div className="upper-body">
-            <SearchAvailability
-            />
+            <div className="topSearchSection">
+              <SearchAvailability />
+            </div>
           </div>
-
-          <br></br>
-          <div className="body"
-          // style={{ zoom: "135%" }}
-          >
-            <p>{JSON.stringify(this.state.filteringParameters)}</p>
+          <div className="body">
+            {/* <p>{JSON.stringify(this.state.filteringParameters)}</p> */}
             <div className="real-body">
               <div className="left-body">
                 <FilterProperties
@@ -92,16 +89,16 @@ class App extends Component {
                   parentCallBack={this.handleFiltering}
                 />
               </div>
-
               <div className="right-body">
                 <div class="property-listing">
-                  <p>
-                    Search result:{" "}
+                  <p className="resultsText">
+                    Search result:
                     <p className="queries-count">
                       {this.state.queriesCount} properties
                     </p>
                   </p>
                   <PropertyListing
+                    className="property"
                     image={SampleImage}
                     propertyName="Villa"
                     locationName="Dubai, UAE"
@@ -116,6 +113,7 @@ class App extends Component {
 
                 <div class="property-listing">
                   <PropertyListing
+                    className="property"
                     image={SampleImage}
                     propertyName="Villa"
                     locationName="Dubai, UAE"
@@ -129,6 +127,7 @@ class App extends Component {
                 </div>
                 <div class="property-listing">
                   <PropertyListing
+                    className="property"
                     image={SampleImage}
                     propertyName="Villa"
                     locationName="Dubai, UAE"
