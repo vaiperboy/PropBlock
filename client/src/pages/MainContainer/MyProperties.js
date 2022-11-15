@@ -125,8 +125,8 @@ const MyProperties = () => {
    setIsCreatingProperty(true);
     processFacilities();
     message.info("uploading documents...");
-    //const ipfsHash = await uploadIpfs();
-    const ipfsHash = "123123123";
+    const ipfsHash = await uploadIpfs();
+    //const ipfsHash = "123123123";
     if (ipfsHash.length == 0) {
       message.error("Could not upload files via IPFS!");
       return;

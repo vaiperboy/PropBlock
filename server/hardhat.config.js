@@ -19,8 +19,8 @@ module.exports = {
       url: API_URL,
       accounts: [`0x${PRIVATE_KEY}`],
       allowUnlimitedContractSize: true,
-      gas: 2100000,
-      gasPrice: 8000000000
+      gas: "auto",
+      gasPrice: "auto"
     },
   },
   etherscan: {
