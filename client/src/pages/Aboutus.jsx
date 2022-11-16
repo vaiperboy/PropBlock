@@ -15,6 +15,7 @@ import curved_vector from "../assets/Vector 1.svg";
 import qusai_image from "../assets/qusai-1.png";
 import ahmed_image from "../assets/ahmed-1.png";
 import sultan_image from "../assets/sultan-1.png";
+import vishal_image from "../assets/vishal-1.png";
 
 const Aboutus = () => {
   useEffect(() => {
@@ -169,12 +170,13 @@ const Aboutus = () => {
               </div>
             </div>
             <div className="team-card orange">
-              <img src={sultan_image} alt="Team_card_image" />
+              <img src={vishal_image} alt="Team_card_image" />
               <div className="team-description">
-                <h3>Sultan Speen Jan</h3>
-                <p>Blockchain Dev</p>
+                <h3>Vishal Baheti</h3>
+                <p>Junior Frontend Dev</p>
               </div>
             </div>
+
             <div className="team-card">
               <img src={qusai_image} alt="Team_card_image" />
               <div className="team-description">
@@ -183,10 +185,10 @@ const Aboutus = () => {
               </div>
             </div>
             <div className="team-card orange">
-              <img src={team_card_image} alt="Team_card_image" />
+              <img src={sultan_image} alt="Team_card_image" />
               <div className="team-description">
-                <h3>Vishal Baheti</h3>
-                <p>Junior Frontend Dev</p>
+                <h3>Sultan Speen Jan</h3>
+                <p>Blockchain Dev</p>
               </div>
             </div>
           </div>
