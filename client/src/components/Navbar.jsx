@@ -154,7 +154,7 @@ const Navbar = (props) => {
                   <div>Properties</div>
                 </Link>
               )}
-              {window.location.pathname === "/buy" ? (
+              {/* {window.location.pathname === "/buy" ? (
                 <Link to="/buy" className="link">
                   <div className="current">Buy</div>
                 </Link>
@@ -162,8 +162,8 @@ const Navbar = (props) => {
                 <Link to="/buy" className="link">
                   <div>Buy</div>
                 </Link>
-              )}
-              {window.location.pathname === "/rent" ? (
+              )} */}
+              {/* {window.location.pathname === "/rent" ? (
                 <Link to="" className="linkDisabled">
                   <div className="disabled">Rent</div>
                 </Link>
@@ -171,14 +171,23 @@ const Navbar = (props) => {
                 <Link to="" className="linkDisabled">
                   <div className="disabled">Rent</div>
                 </Link>
-              )}
+              )} */}
               {window.location.pathname === "/aboutus" ? (
                 <Link to="/aboutus" className="link">
-                  <div className="current">About Us</div>
+                  <div className="current">About</div>
                 </Link>
               ) : (
                 <Link to="/aboutus" className="link">
-                  <div>About Us</div>
+                  <div>About</div>
+                </Link>
+              )}
+              {window.location.pathname === "/contactus" ? (
+                <Link to="/contactus" className="link">
+                  <div className="current">Contact Us</div>
+                </Link>
+              ) : (
+                <Link to="/contactus" className="link">
+                  <div>Contact Us</div>
                 </Link>
               )}
               <Link to="/signup">

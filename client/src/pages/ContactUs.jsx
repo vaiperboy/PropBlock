@@ -19,7 +19,7 @@ const ContactUs = () => {
     setStatus("Submitting ...");
     emailjs
       .sendForm(
-        "service_thu8bw9",
+        "service_gmrzi7k",
         "template_uogsaqt",
         e.target,
         "_71PziH1OmwrfGNEc"

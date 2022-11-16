@@ -78,6 +78,7 @@ class App extends Component {
                           height: "100px",
                           width: "100px",
                         }}
+                        alt="Property_Image"
                       />
                     ))}
                   </Descriptions.Item>

@@ -12,6 +12,9 @@ import moralis_logo from "../assets/moralis-logo.png";
 import government_logo from "../assets/Government_of_Dubai_logo.png";
 import ethereum_logo from "../assets/ethereum-logo.png";
 import curved_vector from "../assets/Vector 1.svg";
+import qusai_image from "../assets/qusai-1.png";
+import ahmed_image from "../assets/ahmed-1.png";
+import sultan_image from "../assets/sultan-1.png";
 
 const Aboutus = () => {
   useEffect(() => {
@@ -159,31 +162,31 @@ const Aboutus = () => {
           <h1>Meet the team.</h1>
           <div className="team-cards">
             <div className="team-card">
-              <img src={team_card_image} alt="Team_card_image" />
+              <img src={ahmed_image} alt="Team_card_image" />
               <div className="team-description">
                 <h3>Ahmed Ennab</h3>
-                <p>Senior Backend dev, Co-founder</p>
+                <p>Senior Backend Dev (PropBlock)</p>
               </div>
             </div>
             <div className="team-card orange">
-              <img src={team_card_image} alt="Team_card_image" />
+              <img src={sultan_image} alt="Team_card_image" />
               <div className="team-description">
                 <h3>Sultan Speen Jan</h3>
-                <p>Blockchain dev, Co-founder</p>
+                <p>Blockchain Dev</p>
               </div>
             </div>
             <div className="team-card">
-              <img src={team_card_image} alt="Team_card_image" />
+              <img src={qusai_image} alt="Team_card_image" />
               <div className="team-description">
                 <h3>Qusai AbdelQader</h3>
-                <p>Frontend dev, Co-founder</p>
+                <p>Full-Stack Dev</p>
               </div>
             </div>
             <div className="team-card orange">
               <img src={team_card_image} alt="Team_card_image" />
               <div className="team-description">
                 <h3>Vishal Baheti</h3>
-                <p>Frontend dev, Co-founder</p>
+                <p>Junior Frontend Dev</p>
               </div>
             </div>
           </div>
