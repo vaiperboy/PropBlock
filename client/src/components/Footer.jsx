@@ -11,11 +11,9 @@ const Footer = () => {
           <img src={FooterIcon} alt="FooterIcon" />
           <div>
             <p>Your new home is a few clicks away.</p>
-            <button className="exploreButton">
-              <Link to="/" className="exploreLink">
-                Explore
-              </Link>
-            </button>
+            <Link to="/properties" className="exploreLink">
+              <button className="exploreButton">Explore</button>
+            </Link>
           </div>
         </div>
         <div className="bottomSection">

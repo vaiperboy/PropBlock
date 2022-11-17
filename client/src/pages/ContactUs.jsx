@@ -9,6 +9,9 @@ import moralis_logo from "../assets/moralis-logo.png";
 import propertyFinder_logo from "../assets/propertyFinder-logo.svg";
 import government_Of_Dubai from "../assets/Government_of_Dubai_logo.png";
 import emailjs from "emailjs-com";
+import Flip from "react-reveal/Flip";
+import Slide from "react-reveal/Slide";
+import Fade from "react-reveal/Fade";
 const console = require("console-browserify");
 const { TextArea } = Input;
 
@@ -44,74 +47,80 @@ const ContactUs = () => {
       <Navbar />
       <div className="contactUs">
         <div className="topSection">
-          <div className="leftSide">
-            <h1>Let's Talk</h1>
-            <p>
-              Need support? or have a question for PropBlock? We're here to
-              help.
-            </p>
-            <p className="email">support@propblock.io</p>
-          </div>
-          <div className="rightSide">
-            <h1>Contact Us</h1>
-            <form onSubmit={sendEmail} id="myForm">
-              <div className="fullName">
-                <input
-                  type="text"
-                  name="firstName"
-                  className="Input"
-                  placeholder="First Name"
-                  required
-                />
-                <input
-                  type="text"
-                  name="lastName"
-                  className="Input"
-                  placeholder="Last Name"
-                  required
-                />
-              </div>
-              <input
-                type="email"
-                name="userEmail"
-                className="Input"
-                placeholder="Work Email"
-                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                required
-              />
-              <input
-                type="text"
-                name="companyName"
-                className="Input"
-                placeholder="Company Name"
-                required
-              />
-              <textarea
-                placeholder="How can we help?"
-                name="message"
-                id="message"
-                rows="5"
-                className="textAreaClass"
-                required
-              ></textarea>
-              <p className="disclaimer">
-                For information about how PropBlock handles personal data, see
-                our <Link to="/terms&conditions">Terms & Conditions</Link>
+          <Flip top cascade duration={1000}>
+            <div className="leftSide">
+              <h1>Let's Talk</h1>
+              <p>
+                Need support? or have a question for PropBlock? We're here to
+                help.
               </p>
-              <button className="submitMessage" type="submit">
-                {status}
-              </button>
-            </form>
-          </div>
+              <p className="email">support@propblock.io</p>
+            </div>
+          </Flip>
+          <Slide right>
+            <div className="rightSide">
+              <h1>Contact Us</h1>
+              <form onSubmit={sendEmail} id="myForm">
+                <div className="fullName">
+                  <input
+                    type="text"
+                    name="firstName"
+                    className="Input"
+                    placeholder="First Name"
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="lastName"
+                    className="Input"
+                    placeholder="Last Name"
+                    required
+                  />
+                </div>
+                <input
+                  type="email"
+                  name="userEmail"
+                  className="Input"
+                  placeholder="Work Email"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                  required
+                />
+                <input
+                  type="text"
+                  name="companyName"
+                  className="Input"
+                  placeholder="Company Name"
+                  required
+                />
+                <textarea
+                  placeholder="How can we help?"
+                  name="message"
+                  id="message"
+                  rows="5"
+                  className="textAreaClass"
+                  required
+                ></textarea>
+                <p className="disclaimer">
+                  For information about how PropBlock handles personal data, see
+                  our <Link to="/terms&conditions">Terms & Conditions</Link>
+                </p>
+                <button className="submitMessage" type="submit">
+                  {status}
+                </button>
+              </form>
+            </div>
+          </Slide>
         </div>
         <div className="bottomSection">
-          <h2>Industry Leaders Trust PropBlock</h2>
-          <div className="logosContainer">
-            <img src={ethereum_logo} alt="Ethereum_Logo" />
-            <img src={propertyFinder_logo} alt="propertyFinder_logo" />
-            <img src={government_Of_Dubai} alt="Government_of_dubai" />
-            <img src={moralis_logo} alt="Moralis_Logo" />
-          </div>
+          <Fade bottom>
+            <h2>Industry Leaders Trust PropBlock</h2>
+            <div className="logosContainer">
+              <img src={ethereum_logo} alt="Ethereum_Logo" />
+              <img src={propertyFinder_logo} alt="propertyFinder_logo" />
+              <img src={government_Of_Dubai} alt="Government_of_dubai" />
+              <img src={moralis_logo} alt="Moralis_Logo" />
+            </div>
+          </Fade>
         </div>
       </div>
 

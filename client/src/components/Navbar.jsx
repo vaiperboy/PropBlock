@@ -81,31 +81,22 @@ const Navbar = (props) => {
                   <div>Properties</div>
                 </Link>
               )}
-              {window.location.pathname === "/buy" ? (
-                <Link to="/buy" className="link">
-                  <div className="current">Buy</div>
+              {window.location.pathname === "/contactus" ? (
+                <Link to="/contactus" className="link">
+                  <div className="current">Contact Us</div>
                 </Link>
               ) : (
-                <Link to="/buy" className="link">
-                  <div>Buy</div>
-                </Link>
-              )}
-              {window.location.pathname === "/rent" ? (
-                <Link to="" className="linkDisabled">
-                  <div className="disabled">Rent</div>
-                </Link>
-              ) : (
-                <Link to="" className="linkDisabled">
-                  <div className="disabled">Rent</div>
+                <Link to="/contactus" className="link">
+                  <div>Contact Us</div>
                 </Link>
               )}
               {window.location.pathname === "/aboutus" ? (
                 <Link to="/aboutus" className="link">
-                  <div className="current">About Us</div>
+                  <div className="current">About</div>
                 </Link>
               ) : (
                 <Link to="/aboutus" className="link">
-                  <div>About Us</div>
+                  <div>About</div>
                 </Link>
               )}
               <div className="avatarSection" id="avatarIcon">
@@ -154,24 +145,7 @@ const Navbar = (props) => {
                   <div>Properties</div>
                 </Link>
               )}
-              {/* {window.location.pathname === "/buy" ? (
-                <Link to="/buy" className="link">
-                  <div className="current">Buy</div>
-                </Link>
-              ) : (
-                <Link to="/buy" className="link">
-                  <div>Buy</div>
-                </Link>
-              )} */}
-              {/* {window.location.pathname === "/rent" ? (
-                <Link to="" className="linkDisabled">
-                  <div className="disabled">Rent</div>
-                </Link>
-              ) : (
-                <Link to="" className="linkDisabled">
-                  <div className="disabled">Rent</div>
-                </Link>
-              )} */}
+
               {window.location.pathname === "/aboutus" ? (
                 <Link to="/aboutus" className="link">
                   <div className="current">About</div>

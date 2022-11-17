@@ -23,7 +23,10 @@ import beds_icon from "../assets/beds-icon.svg";
 import price_tag_icon from "../assets/tag-icon.png";
 import hero_image from "../assets/hero-section-image.png";
 import { useEffect } from "react";
-
+import Zoom from "react-reveal/Zoom";
+import Fade from "react-reveal/Fade";
+import Reveal from "react-reveal/Reveal";
+import Slide from "react-reveal/Slide";
 const console = require("console-browserify");
 
 function Home() {
@@ -90,27 +93,29 @@ function Home() {
 
   const { Option } = Select;
 
-
-
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <main>
         <div className="heroSection">
           <div className="leftSide">
             <div className="dottedLine"></div>
             <div>
-              <h1>
-                Find your dream home, <br /> the <span>Web3</span> way!
-              </h1>
-              <h5>Harness the real power of smart contracts.</h5>
+              <Fade left duration={1800}>
+                <h1>
+                  Find your dream home, <br /> the <span>Web3</span> way!
+                </h1>
+                <h5>Harness the real power of smart contracts.</h5>
+              </Fade>
               <Link to="/properties" className="exploreLink">
                 <button className="exploreButton">Explore</button>
               </Link>
             </div>
           </div>
           <div className="rightSide">
-            <img src={hero_image} alt="hero_Section_Image" />
+            <Slide right>
+              <img src={hero_image} alt="hero_Section_Image" />
+            </Slide>
           </div>
         </div>
         <div className="searchSection">
@@ -203,43 +208,93 @@ function Home() {
           </div>
         </div>
         {/* <div className="horizontal-breaker"></div> */}
+
+        <div className="servicesSection">
+          <h3>what we offer</h3>
+          <div className="serviceCards">
+            <Slide left duration={1000}>
+              <div className="rentHome">
+                <div className="iconDiv">
+                  <img src={rentHome} alt="rentHomeIcon" />
+                </div>
+                <h1>Rent a home</h1>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
+                  earum animi assumenda quia ex deserunt laudantium nostrum
+                  maiores placeat quaerat!
+                </p>
+              </div>
+            </Slide>
+            <Slide bottom duration={1000}>
+              <div className="buyHome">
+                <div className="iconDiv">
+                  <img src={buyHome} alt="buyHomeIcon" />
+                </div>
+                <h1>Buy a home</h1>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
+                  earum animi assumenda quia ex deserunt laudantium nostrum
+                  maiores placeat quaerat!
+                </p>
+              </div>
+            </Slide>
+            <Slide right duration={1000}>
+              <div className="sellHome">
+                <div className="iconDiv">
+                  <div className="sellIconDiv">
+                    <TagOutlined />
+                  </div>
+                </div>
+                <h1>Sell a home</h1>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
+                  earum animi assumenda quia ex deserunt laudantium nostrum
+                  maiores placeat quaerat!
+                </p>
+              </div>
+            </Slide>
+          </div>
+        </div>
         <div className="aboutUsSection">
           <div className="leftSide">
             <h1>About Us</h1>
-            <h3 style={{ fontWeight: "600" }}>
-              A real estate enlisting website, that uses blockchain innovation
-              to connect real estate sellers and buyers.
-            </h3>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-              vulputate libero et velit interdum, ac aliquet odio mattis. Class
-              aptent taciti sociosqu ad litora torquent per conubia nostra, per
-              inceptos himenaeos.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-              vulputate libero et velit interdum, ac aliquet odio mattis. Class
-              aptent taciti sociosqu ad litora torquent per conubia nostra, per
-              inceptos himenaeos. ac aliquet odio mattis. Class aptent taciti
-              sociosqu ad litora torquent per conubia nostra, per inceptos
-              himenaeos. ac aliquet odio mattis. Class aptent taciti sociosqu ad
-              litora torquent per conubia nostra, per inceptos himenaeos.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-              vulputate libero et velit interdum, ac aliquet odio mattis. Class
-              aptent taciti sociosqu ad litora torquent per conubia nostra, per
-              inceptos himenaeos. ac aliquet odio mattis. Class aptent taciti
-              sociosqu ad litora torquent per conubia nostra, per inceptos
-              himenaeos. ac aliquet odio mattis. Class aptent taciti sociosqu ad
-              litora torquent per conubia nostra, per inceptos himenaeos.
-            </p>
-            <Link to="/aboutus" onClick={() => window.scrollTo(0, 0)}>
-              <button className="readMoreButton">
-                Read More
-                {/* Icon here */}
-              </button>
-            </Link>
+            <Fade left>
+              <h3 style={{ fontWeight: "600" }}>
+                A real estate enlisting website, that uses blockchain innovation
+                to connect real estate sellers and buyers.
+              </h3>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+                vulputate libero et velit interdum, ac aliquet odio mattis.
+                Class aptent taciti sociosqu ad litora torquent per conubia
+                nostra, per inceptos himenaeos.
+              </p>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
+                vulputate libero et velit interdum, ac aliquet odio mattis.
+                Class aptent taciti sociosqu ad litora torquent per conubia
+                nostra, per inceptos himenaeos. ac aliquet odio mattis. Class
+                aptent taciti sociosqu ad litora torquent per conubia nostra,
+                per inceptos himenaeos. ac aliquet odio mattis. Class aptent
+                taciti sociosqu ad litora torquent per conubia nostra, per
+                inceptos himenaeos. Lorem ipsum dolor sit amet, consectetur
+                adipiscing elit. Nunc vulputate libero et velit interdum, ac
+                aliquet odio mattis. Class aptent taciti sociosqu ad litora
+                torquent per conubia nostra, per inceptos himenaeos. ac aliquet
+                odio mattis. Class aptent taciti sociosqu ad litora torquent per
+                conubia nostra, per inceptos himenaeos. ac aliquet odio mattis.
+                Class aptent taciti sociosqu ad litora torquent per conubia
+                nostra, per inceptos himenaeos.
+              </p>
+            </Fade>
+            <Fade left duration={1000}>
+              <Link to="/aboutus" onClick={() => window.scrollTo(0, 0)}>
+                <button className="readMoreButton">
+                  Read More
+                  {/* Icon here */}
+                </button>
+              </Link>
+            </Fade>
           </div>
           <div className="rightSide">
             <div className="image1">
@@ -252,46 +307,6 @@ function Home() {
               <div className="image3">
                 <img src={realEstateImage3} alt="Real_Estate_Image" />
               </div>
-            </div>
-          </div>
-        </div>
-        <div className="servicesSection">
-          <h3>what we offer</h3>
-          <div className="serviceCards">
-            <div className="rentHome">
-              <div className="iconDiv">
-                <img src={rentHome} alt="rentHomeIcon" />
-              </div>
-              <h1>Rent a home</h1>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
-                earum animi assumenda quia ex deserunt laudantium nostrum
-                maiores placeat quaerat!
-              </p>
-            </div>
-            <div className="buyHome">
-              <div className="iconDiv">
-                <img src={buyHome} alt="buyHomeIcon" />
-              </div>
-              <h1>Buy a home</h1>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
-                earum animi assumenda quia ex deserunt laudantium nostrum
-                maiores placeat quaerat!
-              </p>
-            </div>
-            <div className="sellHome">
-              <div className="iconDiv">
-                <div className="sellIconDiv">
-                  <TagOutlined />
-                </div>
-              </div>
-              <h1>Sell a home</h1>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla
-                earum animi assumenda quia ex deserunt laudantium nostrum
-                maiores placeat quaerat!
-              </p>
             </div>
           </div>
         </div>
@@ -329,60 +344,62 @@ function Home() {
           </div>
         </div>
         {/* <div className="breakLine"></div> */}
-        <div className="testimonialSection">
-          <div className="heading">
-            <h1>
-              What some of our <span>Users</span> say
-            </h1>
+        <Fade bottom>
+          <div className="testimonialSection">
+            <div className="heading">
+              <h1>
+                What some of our <span>Users</span> say
+              </h1>
+            </div>
+            <div className="customers">
+              <div className="customer1">
+                <div className="profile">
+                  <img src={profile} alt="customer_image" />
+                  <h2>0xd1D3 ... 75f9</h2>
+                </div>
+                <div className="comment">
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  Obcaecati repellendus itaque reprehenderit neque dolore soluta
+                  nostrum, facilis atque porro commodi!
+                </div>
+              </div>
+              <div className="customer2">
+                <div className="profile">
+                  <img src={profile} alt="customer_image" />
+                  <h2>0xd1D3 ... 75f9</h2>
+                </div>
+                <div className="comment">
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  Obcaecati repellendus itaque reprehenderit neque dolore soluta
+                  nostrum, facilis atque porro commodi!
+                </div>
+              </div>
+              <div className="break"></div>
+              <div className="customer3">
+                <div className="profile">
+                  <img src={profile} alt="customer_image" />
+                  <h2>0xd1D3 ... 75f9</h2>
+                </div>
+                <div className="comment">
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  Obcaecati repellendus itaque reprehenderit neque dolore soluta
+                  nostrum, facilis atque porro commodi!
+                </div>
+              </div>
+              <div className="customer4">
+                <div className="profile">
+                  <img src={profile} alt="customer_image" />
+                  <h2>0xd1D3 ... 75f9</h2>
+                </div>
+                <div className="comment">
+                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                  Obcaecati repellendus itaque reprehenderit neque dolore soluta
+                  nostrum, facilis atque porro commodi!
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="customers">
-            <div className="customer1">
-              <div className="profile">
-                <img src={profile} alt="customer_image" />
-                <h2>0xd1D3 ... 75f9</h2>
-              </div>
-              <div className="comment">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Obcaecati repellendus itaque reprehenderit neque dolore soluta
-                nostrum, facilis atque porro commodi!
-              </div>
-            </div>
-            <div className="customer2">
-              <div className="profile">
-                <img src={profile} alt="customer_image" />
-                <h2>0xd1D3 ... 75f9</h2>
-              </div>
-              <div className="comment">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Obcaecati repellendus itaque reprehenderit neque dolore soluta
-                nostrum, facilis atque porro commodi!
-              </div>
-            </div>
-            <div className="break"></div>
-            <div className="customer3">
-              <div className="profile">
-                <img src={profile} alt="customer_image" />
-                <h2>0xd1D3 ... 75f9</h2>
-              </div>
-              <div className="comment">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Obcaecati repellendus itaque reprehenderit neque dolore soluta
-                nostrum, facilis atque porro commodi!
-              </div>
-            </div>
-            <div className="customer4">
-              <div className="profile">
-                <img src={profile} alt="customer_image" />
-                <h2>0xd1D3 ... 75f9</h2>
-              </div>
-              <div className="comment">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Obcaecati repellendus itaque reprehenderit neque dolore soluta
-                nostrum, facilis atque porro commodi!
-              </div>
-            </div>
-          </div>
-        </div>
+        </Fade>
       </main>
       <Footer />
     </div>
