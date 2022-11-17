@@ -19,6 +19,7 @@ router.get("/getPurchaseRequests", async function(req, res, next) {
 
     const ownerAddress = req.query.ownerAddress;
     if (ownerAddress) {
+        console.log("here");
         //make local caching
         const requestsQuery = new Moralis.Query("PurchaseRequest");
         requestsQuery.equalTo("sellerEthAddress", ownerAddress);
@@ -27,22 +28,29 @@ router.get("/getPurchaseRequests", async function(req, res, next) {
         for (let i = 0; i < requestResult.length; i++) {
             var currentResult = requestResult[i];
             //only return results with isBeingProcessed status
-            if (currentResult.get("isBeingProcessed") !== undefined && currentResult.get("isBeingProcessed")) {
-            var requestorAddress = currentResult[i].get("requesterEthAddress");
+            console.log(currentResult.get("isBeingProccessed"));
+            if (currentResult.get("isBeingProccessed") == undefined || currentResult.get("isBeingProccessed")) {
+            var requestorAddress = currentResult.get("requesterEthAddress");
             var inCache = false;
             var user = {};
+
             for (var j = 0; j < data.length; j++) {
                 //if user exists in cache
                 if (data[j]["address"] == requestorAddress) {
                     inCache = true;
-                    user = [data][j];
+                    user = {
+                        fullName: data[j]["fullName"],
+                        address: data[j]["address"]
+                    }
                     break;
                 }
             }
 
             if (!inCache) user = await helper.getUser(requestorAddress);
+
             data.push( {
-                ...user,
+                fullName: user["fullName"],
+                address: user["address"],
                 isAccepted: currentResult.get("isAccepted"),
                 isBeingProcessed: currentResult.get("isBeingProccessed") ?? true,
                 createdAt: currentResult.get("createdAt"),
