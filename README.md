@@ -12,7 +12,10 @@
 - Responsive web application (for the most part at least)
 - Viewing the properties in an asynchronous matter with heafty amount of filters to use
 - Buying and selling the properties on the chain itself
-- A goverment/admin account that lets the agreements to go through or not
+- Purchase requests that comes in before being able to issue the agreements
+- Agreement system between the buyer and seller as well as having the goverment account as a middleman between the two
+- User management page for the goverment account
+- All documents & images are uploaded via _IPFS_ to achieve full decentralization (the whole purpose of this project)
 
 ## Tech
 
