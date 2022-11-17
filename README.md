@@ -1,7 +1,7 @@
 # PropBlock
 ## _Web3.0-Powered Blockchain application_
 
-[![N|Solid](https://en.bitcoinwiki.org/upload/en/images/d/d5/Solidity.png)]
+![N|Solid](https://en.bitcoinwiki.org/upload/en/images/d/d5/Solidity.png)
 
 
 **PropBlock is a University project made for UOWD.** The project's target is to enable the buying and selling Real Estate properties on the Etherum network using Soldity smart contracts. The platform offers authentication via connecting the wallet only (one step closer to Web3.0 world) using the Moralis that acts as that Database.
