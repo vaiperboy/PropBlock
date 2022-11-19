@@ -4,6 +4,8 @@ import { Input } from "@web3uikit/core";
 import { message } from "antd";
 
 const MyProfile = () => {
+  const console = require("console-browserify");
+
   const {
     Moralis,
     authenticated,

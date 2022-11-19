@@ -9,6 +9,5 @@ const masterKey = process.env.MORALIS_MASTER_KEY;
     await Moralis.start({ serverUrl, appId, masterKey });
   }) ();
 
-
-
+  
 module.exports = Moralis;

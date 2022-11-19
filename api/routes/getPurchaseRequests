@@ -19,8 +19,6 @@ router.get("/getPurchaseRequests", async function(req, res, next) {
 
     const ownerAddress = req.query.ownerAddress;
     if (ownerAddress) {
-        console.log("here");
-        //make local caching
         const requestsQuery = new Moralis.Query("PurchaseRequest");
         requestsQuery.equalTo("sellerEthAddress", ownerAddress);
         const requestResult = await requestsQuery.find();
@@ -31,6 +29,8 @@ router.get("/getPurchaseRequests", async function(req, res, next) {
             console.log(currentResult.get("isBeingProccessed"));
             if (currentResult.get("isBeingProccessed") == undefined || currentResult.get("isBeingProccessed")) {
             var requestorAddress = currentResult.get("requesterEthAddress");
+
+            //make local caching
             var inCache = false;
             var user = {};
 
@@ -47,7 +47,6 @@ router.get("/getPurchaseRequests", async function(req, res, next) {
             }
 
             if (!inCache) user = await helper.getUser(requestorAddress);
-
             data.push( {
                 fullName: user["fullName"],
                 address: user["address"],
@@ -57,7 +56,6 @@ router.get("/getPurchaseRequests", async function(req, res, next) {
                 propertyObjectId: currentResult.get("propertyObjectId")
             });   
             }
-             
         }
         res.send(data);
         return;
