@@ -66,7 +66,6 @@ const Login2 = () => {
         );
         return;
       }
-
       // wallet is connected
       // const currentUser = Moralis.User.current();
       // const userExists = await checkUserExists(currentUser.get("ethAddress"));
@@ -86,7 +85,7 @@ const Login2 = () => {
                 loggedin();
               })
               .catch(function (error) {
-                console.log(error);
+                console.log("here: ", error.code);
               });
           }
         } else {
@@ -115,6 +114,7 @@ const Login2 = () => {
   };
 
   let navigate = useNavigate();
+
   const loggedin = async () => {
     message.success("Login successful. Redirecting to home page.");
     await sleep(2500);

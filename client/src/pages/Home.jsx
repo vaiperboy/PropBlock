@@ -113,9 +113,7 @@ function Home() {
             </div>
           </div>
           <div className="rightSide">
-            <Slide right>
-              <img src={hero_image} alt="hero_Section_Image" />
-            </Slide>
+            <img src={hero_image} alt="hero_Section_Image" />
           </div>
         </div>
         <div className="searchSection">

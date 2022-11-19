@@ -7,18 +7,23 @@ import NavbarIcon from "../assets/framer-1.png";
 import { message } from "antd";
 import { LogoutOutlined, ProfileOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+var Web3 = require("web3");
 
 const console = require("console-browserify");
 
 const Navbar = (props) => {
   const [signedIn, setSignedIn] = useState(false);
   const [avatarClicked, setAvatarClicked] = useState(false);
+  const [isGovenmentUser, setIsGovernmentUser] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     authenticate,
     isAuthenticated,
     isAuthenticating,
     user,
     account,
+    Moralis,
     logout,
   } = useMoralis();
   let navigate = useNavigate();
@@ -58,6 +63,26 @@ const Navbar = (props) => {
         userButtons.style.display = "none";
       }
     });
+
+    // check if normal user or govenment user
+    const checkUserType = async () => {
+      setIsLoading(true);
+      const tempAddress = user.get("ethAddress");
+      const userAddress = Web3.utils.toChecksumAddress(tempAddress);
+      const users = Moralis.Object.extend("GovernmentUsers");
+      const query = new Moralis.Query(users);
+      query.equalTo("ethAddress", userAddress);
+      query.limit(1);
+      query.withCount();
+      const results = await query.find();
+      if (results.count === 0) {
+        setIsGovernmentUser(false);
+      } else {
+        setIsGovernmentUser(true);
+      }
+      setIsLoading(false);
+    };
+    checkUserType();
   }, []);
 
   return (
@@ -100,28 +125,56 @@ const Navbar = (props) => {
                 </Link>
               )}
               <div className="avatarSection" id="avatarIcon">
-                <Avatar
-                  isRounded
-                  theme="image"
-                  className="avatar"
-                  onClick={() => {
-                    showButtons();
-                  }}
-                />
-                <div className="userButtons" id="userButtons">
-                  <div
-                    className="dashboardButton userButton"
-                    onClick={() => navigate("/dashboard")}
-                  >
-                    Dashboard <ProfileOutlined />
+                {isLoading ? (
+                  <Avatar
+                    isRounded
+                    theme="image"
+                    className="avatar"
+                    onClick={() => {
+                      // showButtons();
+                    }}
+                  />
+                ) : (
+                  <Avatar
+                    isRounded
+                    theme="image"
+                    className="avatar"
+                    onClick={() => {
+                      showButtons();
+                    }}
+                  />
+                )}
+                {isGovenmentUser ? (
+                  <div className="userButtons" id="userButtons">
+                    <div
+                      className="dashboardButton userButton"
+                      onClick={() => navigate("/government")}
+                    >
+                      Goverment Dashoard <ProfileOutlined />
+                    </div>
+                    <div
+                      className="logoutButton userButton"
+                      onClick={() => disconnectWallet()}
+                    >
+                      Logout <LogoutOutlined />
+                    </div>
                   </div>
-                  <div
-                    className="logoutButton userButton"
-                    onClick={() => disconnectWallet()}
-                  >
-                    Logout <LogoutOutlined />
+                ) : (
+                  <div className="userButtons" id="userButtons">
+                    <div
+                      className="dashboardButton userButton"
+                      onClick={() => navigate("/dashboard")}
+                    >
+                      Dashboard <ProfileOutlined />
+                    </div>
+                    <div
+                      className="logoutButton userButton"
+                      onClick={() => disconnectWallet()}
+                    >
+                      Logout <LogoutOutlined />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </nav>
           </div>
