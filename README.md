@@ -28,7 +28,7 @@ PropBlock uses a number of open source projects to work properly:
 - [Moralis] - for capturing the events emitted by the contract (on-chain data) and storing the users table (off-chain data)
 
 ### My part in completing the project:
-I have been the senior lead of this project by combining all the parts, integrating them, unit test and version control the whole project. However, the fair split of my work is stated below
+I have been the senior lead of this project by combining all the parts, integrating them, unit test and version control the whole project. However, the fair split of my work is stated as below
 - **API**: Taking the full responsiblity as a sole member in developing and testing the RESTful API requests & integrate it with the front-end.
 - **Smart Contract**: Taking part in helping with the logical thinking of the contract as well as doing some bits here and there that is fully lead by by collegue [@Sultan](https://github.com/sultanspeenjan)
 - **Front End**: Solely fully developed some major pages/components in the website. Unit tested and integrated the whole project as well as making sure everything is styled properly.
