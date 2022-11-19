@@ -82,7 +82,11 @@ const Login2 = () => {
           if (!isAuthenticated) {
             await authenticate()
               .then(function (user) {
-                loggedin();
+                if (isAuthenticated) {
+                  loggedin();
+                } else {
+                  message.error("Your rejected the signature!");
+                }
               })
               .catch(function (error) {
                 console.log("here: ", error.code);
