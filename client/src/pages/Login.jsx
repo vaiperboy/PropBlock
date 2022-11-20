@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { useMoralis } from "react-moralis";
 import { Link, Navigate } from "react-router-dom";
 import { message, Alert } from "antd";
@@ -13,6 +14,7 @@ import login_illustration from "../assets/login_illustration.png";
 import login_svg from "../assets/login-image-min.png";
 import metamask from "../assets/icons8-metamask-logo-96-min.png";
 import MoralisType from "moralis-v1";
+import Fade from "react-reveal/Fade";
 
 const console = require("console-browserify");
 const { ethers } = require("ethers");
@@ -42,7 +44,6 @@ const Login2 = () => {
   } = useMoralis();
   let sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 
-
   // checks if the user with the address exists already in the db
   const checkUserExists = async (address) => {
     try {
@@ -56,7 +57,6 @@ const Login2 = () => {
     }
   };
 
-
   // logs the user in using the email & address
   const loginUser = async () => {
     try {
@@ -66,7 +66,6 @@ const Login2 = () => {
         );
         return;
       }
-
       // wallet is connected
       // const currentUser = Moralis.User.current();
       // const userExists = await checkUserExists(currentUser.get("ethAddress"));
@@ -83,22 +82,24 @@ const Login2 = () => {
           if (!isAuthenticated) {
             await authenticate()
               .then(function (user) {
-                loggedin();
+                if (isAuthenticated) {
+                  loggedin();
+                } else {
+                  message.error("Your rejected the signature!");
+                }
               })
               .catch(function (error) {
-                console.log(error);
+                console.log("here: ", error.code);
               });
           }
         } else {
           console.log("logged in user: " + user);
         }
       }
-    }
-    catch (error) {
+    } catch (error) {
       message.error(error);
     }
   };
-
 
   const connectWallet = async () => {
     try {
@@ -117,20 +118,23 @@ const Login2 = () => {
   };
 
   let navigate = useNavigate();
+
   const loggedin = async () => {
     message.success("Login successful. Redirecting to home page.");
     await sleep(2500);
     navigate("/");
-  }
+  };
 
   return (
     <div>
       <Navbar />
       <div className="loginPage">
         <div className="leftSide">
-          <div className="illustrationDiv">
-            <img src={login_illustration} alt="man illustration" />
-          </div>
+          <Fade left duration={1000}>
+            <div className="illustrationDiv">
+              <img src={login_illustration} alt="man illustration" />
+            </div>
+          </Fade>
         </div>
         <div className="rightSide">
           <div></div>
@@ -139,7 +143,7 @@ const Login2 = () => {
             <p>Connect your wallet to login</p>
             {!walletConnected ? (
               <button className="connectWalletButton" onClick={connectWallet}>
-                <span className="text">Connect Wallet</span>{" "}
+                <span className="text">Connect Wallet</span>
                 <img src={metamask} alt="metamask icon" />
               </button>
             ) : (

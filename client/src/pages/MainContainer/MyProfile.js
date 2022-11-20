@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import { Input } from "@web3uikit/core";
 import { message } from "antd";
+const console = require("console-browserify");
 
 const MyProfile = () => {
   const console = require("console-browserify");

@@ -51,7 +51,7 @@ class App extends Component {
   constructPagesCount() {
     return (
       <Pagination
-        count={2}
+        count={1}
         color="primary"
         size="large"
         onChange={this.switchPage}

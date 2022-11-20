@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { message, Spin } from "antd";
 import { useMoralis } from "react-moralis";
 import NoMatch from "./pages/NoMatch";
-
+import { message, Spin } from "antd";
 var Web3 = require("web3");
 const console = require("console-browserify");
 
-function ProtectedRoute({ component }) {
+function ProtectedRouteGovernment({ component }) {
   const {
     setUserData,
     authenticate,
@@ -23,12 +22,10 @@ function ProtectedRoute({ component }) {
     ...rest
   } = useMoralis();
 
-  // useState vars
-  const [isNormalUser, setIsNormalUser] = useState(false);
+  const [isGovernmentUser, setIsGovernmentUser] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // checks if the user is not a government User
-  const checkUserType = async () => {
+  const checkGovernmentUser = async () => {
     try {
       const tempAddress = user.get("ethAddress");
       const userAddress = Web3.utils.toChecksumAddress(tempAddress);
@@ -39,10 +36,11 @@ function ProtectedRoute({ component }) {
       query.withCount();
       const results = await query.find();
       if (results.count === 0) {
-        setIsNormalUser(true);
+        message.error("Your are not the governement User");
         setIsLoading(false);
         return;
       } else {
+        setIsGovernmentUser(true);
         setIsLoading(false);
         return;
       }
@@ -50,10 +48,8 @@ function ProtectedRoute({ component }) {
       return error;
     }
   };
-
-  // run when page is loading
   useEffect(() => {
-    checkUserType();
+    checkGovernmentUser();
     console.log("now");
   }, [user]);
 
@@ -82,8 +78,8 @@ function ProtectedRoute({ component }) {
       </div>
     );
   } else {
-    return isAuthenticated && isNormalUser ? { ...component } : <NoMatch />;
+    return isGovernmentUser ? { ...component } : <NoMatch />;
   }
 }
 
-export default ProtectedRoute;
+export default ProtectedRouteGovernment;

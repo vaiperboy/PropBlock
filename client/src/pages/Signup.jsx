@@ -16,6 +16,7 @@ import signup_illustration from "../assets/signup_illustration.png";
 import metamask from "../assets/icons8-metamask-logo-96-min.png";
 import { useEffect } from "react";
 import ipfs from "../modules/ipfs";
+import Fade from "react-reveal/Fade";
 
 // import { ArrowLeftOutlined } from "@ant-design/icons";
 const console = require("console-browserify");
@@ -56,7 +57,7 @@ const App = () => {
 
   //change all of these to 'false' in production
   const [isValidated, setIsValidated] = useState(false);
-  const [codeVerified, setCodeVerified] = useState(true);
+  const [codeVerified, setCodeVerified] = useState(false);
   const [idDocumentsVerified, setIdDocumentsVerified] = useState(false);
   const [passportDocumentsVerified, setPassportDocumentsVerified] =
     useState(false);
@@ -180,7 +181,7 @@ const App = () => {
       //means he can proceed
       if (errors.length == 0) {
         setIsValidated(true);
-        message.info("yla continue");
+        message.info("You can proceed now!");
         return true;
       } else {
         //incase
@@ -245,6 +246,7 @@ const App = () => {
       }
     });
   };
+
   const SignUpUser = async () => {
     setRegistering(true);
     message.info("Registring into database....");
@@ -445,9 +447,11 @@ const App = () => {
       <Navbar signedIn2={isAuthenticated} />
       <div className="signup">
         <div className="leftSide">
-          <div className="illustrationDiv">
-            <img src={signup_illustration} alt="man illustration" />
-          </div>
+          <Fade left duration={1000}>
+            <div className="illustrationDiv">
+              <img src={signup_illustration} alt="man illustration" />
+            </div>
+          </Fade>
         </div>
         <div className="rightSide">
           <div></div>

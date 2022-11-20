@@ -223,8 +223,6 @@ main {
                     transition: all 0.3s ease;
                     transform: translateY(-1rem);
                     scale: 1.02;
-                    cursor: pointer;
-                    // transform: scale(1.05);
                 }
                 img {
                     width: 24rem;
@@ -237,6 +235,7 @@ main {
                     margin-top: 1.5rem;
                     h3 {
                         margin: 1rem 0 0 2rem;
+                        font-weight: 600;
                     }
                     p {
                         margin: 0 0 1rem 2rem;

@@ -2,7 +2,7 @@ import React from "react";
 import "../../styling/Properties/FilterProperties.scss";
 import MultiRangeSlider from "./multiRangeSlider/MultiRangeSlider";
 import { Checkbox, Input, Button } from "@web3uikit/core";
-import { Radio, Select } from 'antd';
+import { Radio, Select } from "antd";
 const console = require("console-browserify");
 const { Option } = Select;
 
@@ -20,10 +20,10 @@ class FilterProperties extends React.Component {
         { value: 16, label: "Coffee Maker" },
         { value: 64, label: "Restaurant" },
         { value: 128, label: "24 hour access" },
-        { value: 256, label: "TV Access" }
+        { value: 256, label: "TV Access" },
       ],
-      facilitiesXor: 0
-    }
+      facilitiesXor: 0,
+    };
     this.handleFacilities = this.handleFacilities.bind(this);
   }
 
@@ -40,8 +40,8 @@ class FilterProperties extends React.Component {
       for (var i = 1; i < arr.length; i++) {
         if (arr[i] < lowest) lowest = arr[i];
       }
-      this.setState({facilitiesXor: lowest});
-    } else this.setState({facilitiesXor: 0});
+      this.setState({ facilitiesXor: lowest });
+    } else this.setState({ facilitiesXor: 0 });
   }
 
   render() {
@@ -104,7 +104,7 @@ class FilterProperties extends React.Component {
               size={"medium"}
               placeholder="Please select"
               onChange={this.handleFacilities}
-              style={{ width: '100%' }}
+              style={{ width: "100%", margin: "0 0 2rem 0" }}
               options={this.state.facilitiesOptions}
             />
           </div>

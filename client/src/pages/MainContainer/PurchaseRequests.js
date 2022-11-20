@@ -38,12 +38,58 @@ const PurchaseRequests = (props) => {
     {
       title: "Decision",
       fixed: "right",
-      dataIndex: "status",
+      keu: "status",
+      render: (_, record) =>
+        record.status === "Accepted" ? (
+          <h3 style={{ color: "red" }}>Accepted</h3>
+        ) : (
+          <h3 style={{ color: "green" }}>Rejected</h3>
+        ),
       kay: "3",
       width: 200,
       innerHeight: 100,
     },
   ];
+
+  const shortenAddress = (text, maxWords) => {
+    if (maxWords < text.length && maxWords >= 18) {
+      text = text.substring(0, 15) + " ... " + text.substring(text.length - 10);
+    }
+    return text;
+  };
+
+  useEffect(() => {
+    async function loadData() {
+      setIsLoading(true);
+
+      fetch(
+        "http://localhost:9000/getPurchaseRequests?" +
+          new URLSearchParams({
+            sessionToken: user.getSessionToken(),
+            ownerAddress: user.get("ethAddress"),
+          })
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          var temp = [];
+          for (var i = 0; i < res.length; i++) {
+            var e = res[i];
+
+            temp.push({
+              key: i,
+              address: shortenAddress(e.address, 25),
+              propertyID: e.propertyObjectId,
+              dateRequested: e.createdAt,
+            });
+          }
+
+          setDataSourceSeller(temp);
+          console.log(res);
+        });
+      setIsLoading(false);
+    }
+    loadData();
+  }, []);
 
   const [dataSourceBuyer, setDataSourceBuyer] = useState([
     {
@@ -51,21 +97,21 @@ const PurchaseRequests = (props) => {
       address: "0x4001A8651c51...5da60538b327b96",
       propertyID: "y7dM24zgRcYAs68Hs03FMSki",
       dateRequested: "10 Nov 2022",
-      status: "accepted",
+      status: "Accepted",
     },
     {
       key: "2",
       address: "0x4001A8651c51...5da60538b327b96",
       propertyID: "y7dM24zgRcYAs68Hs03FMSki",
       dateRequested: "10 Nov 2022",
-      status: "declined",
+      status: "Rejected",
     },
     {
       key: "3",
       address: "0x4001A8651c51...5da60538b327b96",
       propertyID: "y7dM24zgRcYAs68Hs03FMSki",
       dateRequested: "10 Nov 2022",
-      status: "accepted",
+      status: "Accepted",
     },
   ]);
 
@@ -148,56 +194,58 @@ const PurchaseRequests = (props) => {
     },
   ];
 
-  const [dataSourceSeller, setDataSourceSeller] = useState([
-    {
-      key: "1",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-    },
-    {
-      key: "2",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-    },
-    {
-      key: "3",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-    },
-    {
-      key: "4",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-    },
-    {
-      key: "5",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-    },
-    {
-      key: "6",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-    },
-    {
-      key: "7",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "z7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "12 Nov 2022",
-    },
-    {
-      key: "8",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "u7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "15 Nov 2022",
-    },
-  ]);
+  const [dataSourceSeller, setDataSourceSeller] = useState([]);
+
+  // const [dataSourceSeller, setDataSourceSeller] = useState([
+  //   {
+  //     key: "1",
+  //     address: "0x4001A8651c51...5da60538b327b96",
+  //     propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+  //     dateRequested: "10 Nov 2022",
+  //   },
+  //   {
+  //     key: "2",
+  //     address: "0x4001A8651c51...5da60538b327b96",
+  //     propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+  //     dateRequested: "10 Nov 2022",
+  //   },
+  //   {
+  //     key: "3",
+  //     address: "0x4001A8651c51...5da60538b327b96",
+  //     propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+  //     dateRequested: "10 Nov 2022",
+  //   },
+  //   {
+  //     key: "4",
+  //     address: "0x4001A8651c51...5da60538b327b96",
+  //     propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+  //     dateRequested: "10 Nov 2022",
+  //   },
+  //   {
+  //     key: "5",
+  //     address: "0x4001A8651c51...5da60538b327b96",
+  //     propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+  //     dateRequested: "10 Nov 2022",
+  //   },
+  //   {
+  //     key: "6",
+  //     address: "0x4001A8651c51...5da60538b327b96",
+  //     propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+  //     dateRequested: "10 Nov 2022",
+  //   },
+  //   {
+  //     key: "7",
+  //     address: "0x4001A8651c51...5da60538b327b96",
+  //     propertyID: "z7dM24zgRcYAs68Hs03FMSki",
+  //     dateRequested: "12 Nov 2022",
+  //   },
+  //   {
+  //     key: "8",
+  //     address: "0x4001A8651c51...5da60538b327b96",
+  //     propertyID: "u7dM24zgRcYAs68Hs03FMSki",
+  //     dateRequested: "15 Nov 2022",
+  //   },
+  // ]);
 
   // handles the deletion of the row in the table
   const handleDelete = (key) => {
@@ -228,47 +276,6 @@ const PurchaseRequests = (props) => {
     Moralis,
     ...rest
   } = useMoralis();
-
-  useEffect(() => {
-    async function loadData() {
-      setIsLoading(true);
-      const requests = Moralis.Object.extend("PurchaseRequest");
-      const users = Moralis.Object.extend("_Users");
-      const purchaseQuery = new Moralis.Query(requests);
-      console.log(user.get("ethAddress"));
-      purchaseQuery.equalTo(
-        "sellerEthAddress",
-        user.get("ethAddress").toLowerCase()
-      );
-      const results = await purchaseQuery.find();
-      console.log("results: " + results);
-      const tmpData = [];
-      results.forEach(async (e) => {
-        console.log("currently at: " + e.get("requesterEthAddress"));
-        const usersQuery = new Moralis.Query(users);
-        //usersQuery.limit(1);
-        //usersQuery.equalTo(
-        // "ethAddress",
-        //e.get("requesterEthAddress").toLowerCase()
-        //);
-        const usersResult = await usersQuery.find();
-        usersResult = usersResult[0];
-        tmpData.push({
-          //
-          fullName: usersResult.get("fullName"),
-          address: usersResult.get("ethAddress"),
-          propertyObjectId: e.get("propertyObjectId"),
-          dateSubmitted: e.get("createdAt"),
-          status: e.get("isAccepted"),
-        });
-      });
-      setPurchaseRequests(tmpData);
-      setIsLoading(false);
-      console.log(tmpData);
-    }
-
-    loadData();
-  }, []);
 
   if (props.isBuyer === "true") {
     if (!isLoading) {
@@ -343,9 +350,6 @@ const PurchaseRequests = (props) => {
                   <Table
                     pagination={{
                       pageSize: 50,
-                    }}
-                    scroll={{
-                      y: 240,
                     }}
                     columns={columnsSeller}
                     dataSource={dataSourceSeller}
