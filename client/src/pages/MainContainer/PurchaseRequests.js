@@ -11,6 +11,10 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "../../styling/MainContainer/purchaseRequests.scss";
 import { hexlify } from "ethers/lib/utils";
+
+// importing images
+import no_data from "../../assets/no_data.png";
+const web3 = require("web3");
 const console = require("console-browserify");
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -59,9 +63,8 @@ const PurchaseRequests = (props) => {
   };
 
   useEffect(() => {
-    async function loadData() {
+    async function loadSellerData() {
       setIsLoading(true);
-
       fetch(
         "http://localhost:9000/getPurchaseRequests?" +
           new URLSearchParams({
@@ -82,16 +85,58 @@ const PurchaseRequests = (props) => {
               dateRequested: e.createdAt,
             });
           }
-
           setDataSourceSeller(temp);
           console.log(res);
         });
       setIsLoading(false);
     }
-    loadData();
+
+    const loadBuyerRequests = async () => {
+      try {
+        const userEmails = Moralis.Object.extend("PurchaseRequest");
+        const query = new Moralis.Query(userEmails);
+        const userAddress = web3.utils.toChecksumAddress(
+          user.get("ethAddress")
+        );
+        query.equalTo("requesterEthAddress", userAddress);
+        const results = await query.find();
+        let tempArray = [];
+        let date;
+        results.forEach((request, key) => {
+          let day = request.createdAt.getDate().toString();
+          let month = request.createdAt.getMonth().toString();
+          let year = request.createdAt.getFullYear().toString();
+          date = day + " " + month + " " + year;
+          tempArray.push({
+            key: key + 1,
+            address: request.get("sellerEthAddress"),
+            propertyID: request.get("propertyObjectId"),
+            dateRequested: date,
+            status: request.get("isAccepted"),
+          });
+        });
+        setDataSourceBuyer(tempArray);
+        // tempArray.sort(compareByString);
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+    };
+    loadBuyerRequests();
+    loadSellerData();
   }, []);
 
-  const [dataSourceBuyer, setDataSourceBuyer] = useState([
+  function compareByString(a, b) {
+    if (a.address < b.address) {
+      return -1;
+    }
+    if (a.address > b.address) {
+      return 1;
+    }
+    return 0;
+  }
+
+  const [dataSourceBuyer, setDataSourceBuyer] = useState([]);
+  const [dataSourceBuyerTemp, setDataSourceBuyerTemp] = useState([
     {
       key: "1",
       address: "0x4001A8651c51...5da60538b327b96",
@@ -114,6 +159,7 @@ const PurchaseRequests = (props) => {
       status: "Accepted",
     },
   ]);
+  const [dataSourceSeller, setDataSourceSeller] = useState([]);
 
   const columnsSeller = [
     {
@@ -193,8 +239,6 @@ const PurchaseRequests = (props) => {
         ),
     },
   ];
-
-  const [dataSourceSeller, setDataSourceSeller] = useState([]);
 
   // const [dataSourceSeller, setDataSourceSeller] = useState([
   //   {
@@ -293,19 +337,70 @@ const PurchaseRequests = (props) => {
               <p className="rightsidebar_title">My Purchase Requests</p>
               <div className="purchaseRequestsContainer">
                 <div className="tableContainer">
-                  <Table
-                    columns={columnsBuyer}
-                    dataSource={dataSourceBuyer}
-                    onChange={onChange}
-                    pagination={{
-                      pageSize: 50,
-                    }}
-                    bordered
-                    title={() => "Purchase Requests Sent"}
-                    scroll={{
-                      y: 240,
-                    }}
-                  />
+                  <table>
+                    <tr>
+                      <th>Address of User</th>
+                      <th>Property ID</th>
+                      <th>Date Requested</th>
+                      <th>Seller Decision</th>
+                    </tr>
+                    {dataSourceBuyer.length === 0 && (
+                      <tr>
+                        <td colSpan="4" style={{ textAlign: "center" }}>
+                          <img
+                            src={no_data}
+                            style={{ width: "10rem" }}
+                            alt="no_Data"
+                          ></img>
+                        </td>
+                      </tr>
+                    )}
+                    {dataSourceBuyer.map((item) =>
+                      item.status.toString() === "true" ? (
+                        <tr key={item.key} className="notBuyerFirstRowAccepted">
+                          <td>{item.address}</td>
+                          <td>{item.propertyID}</td>
+                          <td>{item.dateRequested}</td>
+                          {item.status.toString() === "true" ? (
+                            <td
+                              className="requestAccepted"
+                              style={{ color: "#2db32d" }}
+                            >
+                              Accepted
+                            </td>
+                          ) : (
+                            <td
+                              className="requestRejected"
+                              style={{ color: "#FF0000" }}
+                            >
+                              Rejected
+                            </td>
+                          )}
+                        </tr>
+                      ) : (
+                        <tr key={item.key} className="notBuyerFirstRowRejected">
+                          <td>{item.address}</td>
+                          <td>{item.propertyID}</td>
+                          <td>{item.dateRequested}</td>
+                          {item.status.toString() === "true" ? (
+                            <td
+                              className="requestAccepted"
+                              style={{ color: "#2db32d" }}
+                            >
+                              Accepted
+                            </td>
+                          ) : (
+                            <td
+                              className="requestRejected"
+                              style={{ color: "#FF0000" }}
+                            >
+                              Rejected
+                            </td>
+                          )}
+                        </tr>
+                      )
+                    )}
+                  </table>
                 </div>
               </div>
             </div>
@@ -347,7 +442,71 @@ const PurchaseRequests = (props) => {
               </p>
               <div className="purchaseRequestsContainer">
                 <div className="tableContainer">
-                  <Table
+                  <table>
+                    <tr>
+                      <th>Address of User</th>
+                      <th>Property ID</th>
+                      <th>Date Requested</th>
+                      <th>Seller Decision</th>
+                    </tr>
+                    {dataSourceSeller.length === 0 && (
+                      <tr>
+                        <td colspan="4" style={{ textAlign: "center" }}>
+                          <img
+                            src={no_data}
+                            style={{ width: "10rem" }}
+                            alt="no_Data"
+                          ></img>
+                        </td>
+                      </tr>
+                    )}
+                    {dataSourceSeller.map((item) =>
+                      item.status.toString() === "true" ? (
+                        <tr key={item.key} className="notBuyerFirstRowAccepted">
+                          <td>{item.address}</td>
+                          <td>{item.propertyID}</td>
+                          <td>{item.dateRequested}</td>
+                          {item.status.toString() === "true" ? (
+                            <td
+                              className="requestAccepted"
+                              style={{ color: "#2db32d" }}
+                            >
+                              Accepted
+                            </td>
+                          ) : (
+                            <td
+                              className="requestRejected"
+                              style={{ color: "#FF0000" }}
+                            >
+                              Rejected
+                            </td>
+                          )}
+                        </tr>
+                      ) : (
+                        <tr key={item.key} className="notBuyerFirstRowRejected">
+                          <td>{item.address}</td>
+                          <td>{item.propertyID}</td>
+                          <td>{item.dateRequested}</td>
+                          {item.status.toString() === "true" ? (
+                            <td
+                              className="requestAccepted"
+                              style={{ color: "#2db32d" }}
+                            >
+                              Accepted
+                            </td>
+                          ) : (
+                            <td
+                              className="requestRejected"
+                              style={{ color: "#FF0000" }}
+                            >
+                              Rejected
+                            </td>
+                          )}
+                        </tr>
+                      )
+                    )}
+                  </table>
+                  {/* <Table
                     pagination={{
                       pageSize: 50,
                     }}
@@ -359,7 +518,7 @@ const PurchaseRequests = (props) => {
                       y: 600,
                     }}
                     title={() => "Purchase Requests Received"}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
