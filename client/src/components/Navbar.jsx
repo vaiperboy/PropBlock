@@ -97,6 +97,15 @@ const Navbar = (props) => {
           </div>
           <div className="rightSide">
             <nav>
+              {window.location.pathname === "/howPropBlockWorks" ? (
+                <Link to="/howPropBlockWorks" className="link">
+                  <div className="current">How it works</div>
+                </Link>
+              ) : (
+                <Link to="/howPropBlockWorks" className="link">
+                  <div>How it Works</div>
+                </Link>
+              )}
               {window.location.pathname === "/properties" ? (
                 <Link to="/properties" className="link">
                   <div className="current">Properties</div>
@@ -190,7 +199,7 @@ const Navbar = (props) => {
           <div className="rightSide">
             <nav>
               {window.location.pathname === "/properties" ? (
-                <Link to="/properties" className="link">
+                <Link to="/howPropBlockWorks" className="link">
                   <div className="current">Properties</div>
                 </Link>
               ) : (
@@ -198,7 +207,15 @@ const Navbar = (props) => {
                   <div>Properties</div>
                 </Link>
               )}
-
+              {window.location.pathname === "/howPropBlockWorks" ? (
+                <Link to="/howPropBlockWorks" className="link">
+                  <div className="current">How it works</div>
+                </Link>
+              ) : (
+                <Link to="/howPropBlockWorks" className="link">
+                  <div>how it works</div>
+                </Link>
+              )}
               {window.location.pathname === "/aboutus" ? (
                 <Link to="/aboutus" className="link">
                   <div className="current">About</div>

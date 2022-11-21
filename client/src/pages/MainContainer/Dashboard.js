@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import stats from "./stats_2.png";
+// import stats from "./stats_2.png";
 import { Chart, Line } from "react-charts";
+import stats from "../../assets/stats_icon.svg";
 
 function MyChart() {
   const data = React.useMemo(
@@ -125,7 +126,7 @@ class PurchaseRequests extends React.Component {
               }}
             >
               <div className="dashboard_card_icon">
-                <img src={stats} style={{ width: "41px", height: "41px" }} />
+                <img src={stats} style={{ width: "30px" }} />
               </div>
               <div className="dashboard_card_text">Statistics</div>
             </div>

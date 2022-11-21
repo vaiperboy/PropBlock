@@ -16,6 +16,12 @@
                 color: #555;
                 font-weight: 550;
             }
+            tr {
+                color: #555;
+            }
+            tr:nth-child(odd) {
+                background-color: #efefef;
+            }
             .notBuyerFirstRowAccepted {
                 font-size: 1.5rem;
                 td {
@@ -26,7 +32,21 @@
                 }
                 .requestAccepted {
                     &:hover {
-                        background-color: red;
+                    }
+                }
+                .requestRejected {
+                }
+            }
+            .notBuyerFirstRowPending {
+                font-size: 1.5rem;
+                td {
+                    border-right: 1px solid rgb(230, 230, 230);
+                }
+                &:hover {
+                    background-color: rgba(#9dabb3, 0.1);
+                }
+                .requestAccepted {
+                    &:hover {
                     }
                 }
                 .requestRejected {

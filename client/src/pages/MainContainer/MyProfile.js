@@ -112,7 +112,7 @@ const MyProfile = () => {
                 alignItems: "center",
               }}
             >
-              <p className="profile_address">
+              <p className="profile_address" style={{ fontSize: "2.5rem" }}>
                 Address - [{shortenAddress(user.get("ethAddress"), 18)}]
               </p>
               <div style={{ display: "flex", gap: "15px" }}>
