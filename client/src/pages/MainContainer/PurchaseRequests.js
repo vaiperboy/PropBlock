@@ -112,11 +112,11 @@ const PurchaseRequests = (props) => {
             address: request.get("sellerEthAddress"),
             propertyID: request.get("propertyObjectId"),
             dateRequested: date,
-            status: request.get("isAccepted"),
+            isAccepted: request.get("isAccepted"),
+            isPending: request.get("isPending"),
           });
         });
         setDataSourceBuyer(tempArray);
-
         // tempArray.sort(compareByDecision);
         // tempArray.sort(compareByAddress);
       } catch (error) {
@@ -337,7 +337,7 @@ const PurchaseRequests = (props) => {
   const [dataSourceSeller, setDataSourceSeller] = useState([]);
   const [pruchaseRequests, setPurchaseRequests] = useState([]);
   const [accepted, setAccepted] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     authenticate,
@@ -389,7 +389,7 @@ const PurchaseRequests = (props) => {
                       </tr>
                     )}
                     {dataSourceBuyer.map((item) => {
-                      if (item.status.toString() === "None") {
+                      if (item.isPending === true) {
                         return (
                           <tr
                             key={item.key}
@@ -407,7 +407,10 @@ const PurchaseRequests = (props) => {
                           </tr>
                         );
                       }
-                      if (item.status === "Accepted") {
+                      if (
+                        item.isAccepted === true &&
+                        item.isPending === false
+                      ) {
                         return (
                           <tr
                             key={item.key}
@@ -425,7 +428,10 @@ const PurchaseRequests = (props) => {
                           </tr>
                         );
                       }
-                      if (item.status === "Rejected") {
+                      if (
+                        item.isAccepted === false &&
+                        item.isPending === false
+                      ) {
                         return (
                           <tr
                             key={item.key}
