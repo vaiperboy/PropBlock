@@ -10,7 +10,11 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "../../styling/MainContainer/purchaseRequests.scss";
-import { hexlify } from "ethers/lib/utils";
+import { computeAddress, hexlify } from "ethers/lib/utils";
+
+// importing images
+import no_data from "../../assets/no_data.png";
+const web3 = require("web3");
 const console = require("console-browserify");
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -58,62 +62,117 @@ const PurchaseRequests = (props) => {
     return text;
   };
 
+  // loads the dataSourceBuyer & dataSourceSeller
   useEffect(() => {
-    async function loadData() {
-      setIsLoading(true);
+    // async function loadSellerData() {
+    //   setIsLoading(true);
+    //   fetch(
+    //     "http://localhost:9000/getPurchaseRequests?" +
+    //       new URLSearchParams({
+    //         sessionToken: user.getSessionToken(),
+    //         ownerAddress: user.get("ethAddress"),
+    //       })
+    //   )
+    //     .then((res) => res.json())
+    //     .then((res) => {
+    //       var temp = [];
+    //       for (var i = 0; i < res.length; i++) {
+    //         var e = res[i];
+    //         temp.push({
+    //           key: i,
+    //           address: shortenAddress(e.address, 25),
+    //           propertyID: e.propertyObjectId,
+    //           dateRequested: e.createdAt,
+    //         });
+    //       }
+    //       setDataSourceSeller(temp);
+    //       console.log(res);
+    //     });
+    //   setIsLoading(false);
+    // }
 
-      fetch(
-        "http://localhost:9000/getPurchaseRequests?" +
-          new URLSearchParams({
-            sessionToken: user.getSessionToken(),
-            ownerAddress: user.get("ethAddress"),
-          })
-      )
-        .then((res) => res.json())
-        .then((res) => {
-          var temp = [];
-          for (var i = 0; i < res.length; i++) {
-            var e = res[i];
-
-            temp.push({
-              key: i,
-              address: shortenAddress(e.address, 25),
-              propertyID: e.propertyObjectId,
-              dateRequested: e.createdAt,
-            });
-          }
-
-          setDataSourceSeller(temp);
-          console.log(res);
+    const loadBuyerRequests = async () => {
+      try {
+        const userEmails = Moralis.Object.extend("PurchaseRequest");
+        const query = new Moralis.Query(userEmails);
+        const userAddress = web3.utils.toChecksumAddress(
+          user.get("ethAddress")
+        );
+        query.equalTo("requesterEthAddress", userAddress);
+        const results = await query.find();
+        let tempArray = [];
+        let date;
+        results.forEach((request, key) => {
+          let day = request.createdAt.getDate().toString();
+          let month = request.createdAt.getMonth().toString();
+          let year = request.createdAt.getFullYear().toString();
+          date = day + " - " + month + " - " + year;
+          tempArray.push({
+            key: key + 1,
+            address: request.get("sellerEthAddress"),
+            propertyID: request.get("propertyObjectId"),
+            dateRequested: date,
+            status: request.get("isAccepted"),
+          });
         });
-      setIsLoading(false);
-    }
-    loadData();
+        setDataSourceBuyer(tempArray);
+
+        // tempArray.sort(compareByDecision);
+        // tempArray.sort(compareByAddress);
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+    };
+    // calling the functions
+    loadBuyerRequests();
+    // loadSellerData();
   }, []);
 
-  const [dataSourceBuyer, setDataSourceBuyer] = useState([
-    {
-      key: "1",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "Accepted",
-    },
-    {
-      key: "2",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "Rejected",
-    },
-    {
-      key: "3",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "Accepted",
-    },
-  ]);
+  // removes the request with the property ID
+  const removeRequest = (propertyId, ownerAddress) => {
+    removeByAttr();
+    const temp = dataSourceBuyer;
+    removeByAttr(temp, "propertyID", propertyId, "address", ownerAddress);
+    setDataSourceBuyer(temp);
+  };
+
+  // removes the object by the key and value
+  let removeByAttr = function (arr, attr1, value1, attr2, value2) {
+    var i = arr.length;
+    while (i--) {
+      if (
+        arr[i] &&
+        arr[i].hasOwnProperty(attr1) &&
+        arr[i].hasOwnProperty(attr2) &&
+        arguments.length > 2 &&
+        arr[i][attr1] === value1 &&
+        arr[i][attr2] === value2
+      ) {
+        arr.splice(i, 1);
+      }
+    }
+    return arr;
+  };
+
+  function compareByAddress(a, b) {
+    if (a.address < b.address) {
+      return -1;
+    }
+    if (a.address > b.address) {
+      return 1;
+    }
+    return 0;
+  }
+
+  function compareByDecision(a, b) {
+    if (a.status < b.status) {
+      return -1;
+    }
+    if (a.status > b.status) {
+      return 1;
+    }
+    return 0;
+  }
 
   const columnsSeller = [
     {
@@ -194,8 +253,6 @@ const PurchaseRequests = (props) => {
     },
   ];
 
-  const [dataSourceSeller, setDataSourceSeller] = useState([]);
-
   // const [dataSourceSeller, setDataSourceSeller] = useState([
   //   {
   //     key: "1",
@@ -253,13 +310,33 @@ const PurchaseRequests = (props) => {
     setDataSourceSeller(newData);
   };
 
-  // is run for the table
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log("params", pagination, filters, sorter, extra);
-  };
-
+  const [dataSourceBuyer, setDataSourceBuyer] = useState([]);
+  const [dataSourceSellerTemp, setDataSourceSellerTemp] = useState([
+    {
+      key: "1",
+      address: "0x4001A8651c51...5da60538b327b96",
+      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+      dateRequested: "10 Nov 2022",
+      status: "None",
+    },
+    {
+      key: "2",
+      address: "0x4001A8651c51...5da60538b327b96",
+      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+      dateRequested: "10 Nov 2022",
+      status: "None",
+    },
+    {
+      key: "3",
+      address: "0x4001A8651c51...5da60538b327b96",
+      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+      dateRequested: "10 Nov 2022",
+      status: "None",
+    },
+  ]);
+  const [dataSourceSeller, setDataSourceSeller] = useState([]);
   const [pruchaseRequests, setPurchaseRequests] = useState([]);
-  const [accepted, setAccepted] = useState(false);
+  const [accepted, setAccepted] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   const {
@@ -293,19 +370,81 @@ const PurchaseRequests = (props) => {
               <p className="rightsidebar_title">My Purchase Requests</p>
               <div className="purchaseRequestsContainer">
                 <div className="tableContainer">
-                  <Table
-                    columns={columnsBuyer}
-                    dataSource={dataSourceBuyer}
-                    onChange={onChange}
-                    pagination={{
-                      pageSize: 50,
-                    }}
-                    bordered
-                    title={() => "Purchase Requests Sent"}
-                    scroll={{
-                      y: 240,
-                    }}
-                  />
+                  <table className="normalTable">
+                    <tr>
+                      <th>Address of User</th>
+                      <th>Property ID</th>
+                      <th>Date Requested</th>
+                      <th>Seller Decision</th>
+                    </tr>
+                    {dataSourceBuyer.length === 0 && (
+                      <tr>
+                        <td colSpan="4" style={{ textAlign: "center" }}>
+                          <img
+                            src={no_data}
+                            style={{ width: "10rem" }}
+                            alt="no_Data"
+                          ></img>
+                        </td>
+                      </tr>
+                    )}
+                    {dataSourceBuyer.map((item) => {
+                      if (item.status.toString() === "None") {
+                        return (
+                          <tr
+                            key={item.key}
+                            className="notBuyerFirstRowPending"
+                          >
+                            <td>{shortenAddress(item.address, 20)}</td>
+                            <td>{item.propertyID}</td>
+                            <td>{item.dateRequested}</td>
+                            <td
+                              className="requestAccepted"
+                              style={{ color: "#9dabb3" }}
+                            >
+                              Pending
+                            </td>
+                          </tr>
+                        );
+                      }
+                      if (item.status === "Accepted") {
+                        return (
+                          <tr
+                            key={item.key}
+                            className="notBuyerFirstRowAccepted"
+                          >
+                            <td>{shortenAddress(item.address, 20)}</td>
+                            <td>{item.propertyID}</td>
+                            <td>{item.dateRequested}</td>
+                            <td
+                              className="requestAccepted"
+                              style={{ color: "#2db32d" }}
+                            >
+                              Accepted
+                            </td>
+                          </tr>
+                        );
+                      }
+                      if (item.status === "Rejected") {
+                        return (
+                          <tr
+                            key={item.key}
+                            className="notBuyerFirstRowRejected"
+                          >
+                            <td>{shortenAddress(item.address, 20)}</td>
+                            <td>{item.propertyID}</td>
+                            <td>{item.dateRequested}</td>
+                            <td
+                              className="requestRejected"
+                              style={{ color: "#FF0000" }}
+                            >
+                              Rejected
+                            </td>
+                          </tr>
+                        );
+                      }
+                    })}
+                  </table>
                 </div>
               </div>
             </div>
@@ -347,19 +486,70 @@ const PurchaseRequests = (props) => {
               </p>
               <div className="purchaseRequestsContainer">
                 <div className="tableContainer">
-                  <Table
-                    pagination={{
-                      pageSize: 50,
-                    }}
-                    columns={columnsSeller}
-                    dataSource={dataSourceSeller}
-                    onChange={onChange}
-                    bordered
-                    scroll={{
-                      y: 600,
-                    }}
-                    title={() => "Purchase Requests Received"}
-                  />
+                  <table className="normalTable">
+                    <tr>
+                      <th>Address of User</th>
+                      <th>Property ID</th>
+                      <th>Date Requested</th>
+                      <th>Your Decision</th>
+                    </tr>
+                    {dataSourceSeller.length === 0 && (
+                      <tr>
+                        <td colspan="4" style={{ textAlign: "center" }}>
+                          <img
+                            src={no_data}
+                            style={{ width: "10rem" }}
+                            alt="no_Data"
+                          ></img>
+                        </td>
+                      </tr>
+                    )}
+                    {dataSourceSeller.map((item) =>
+                      item.status.toString() === "true" ? (
+                        <tr key={item.key} className="notBuyerFirstRowAccepted">
+                          <td>{item.address}</td>
+                          <td>{item.propertyID}</td>
+                          <td>{item.dateRequested}</td>
+                          {item.status.toString() === "true" ? (
+                            <td
+                              className="requestAccepted"
+                              style={{ color: "#2db32d" }}
+                            >
+                              Accepted
+                            </td>
+                          ) : (
+                            <td
+                              className="requestRejected"
+                              style={{ color: "#FF0000" }}
+                            >
+                              Rejected
+                            </td>
+                          )}
+                        </tr>
+                      ) : (
+                        <tr key={item.key} className="notBuyerFirstRowRejected">
+                          <td>{item.address}</td>
+                          <td>{item.propertyID}</td>
+                          <td>{item.dateRequested}</td>
+                          {item.status.toString() === "true" ? (
+                            <td
+                              className="requestAccepted"
+                              style={{ color: "#2db32d" }}
+                            >
+                              Accepted
+                            </td>
+                          ) : (
+                            <td
+                              className="requestRejected"
+                              style={{ color: "#FF0000" }}
+                            >
+                              Rejected
+                            </td>
+                          )}
+                        </tr>
+                      )
+                    )}
+                  </table>
                 </div>
               </div>
             </div>

@@ -185,10 +185,10 @@ const Aboutus = () => {
             </Slide>
             <Fade bottom duration={2000}>
               <div className="team-card orange">
-                <img src={vishal_image} alt="Team_card_image" />
+                <img src={sultan_image} alt="Team_card_image" />
                 <div className="team-description">
-                  <h3>Vishal Baheti</h3>
-                  <p>Junior Frontend Dev</p>
+                  <h3>Sultan Speen Jan</h3>
+                  <p>Blockchain Dev</p>
                 </div>
               </div>
             </Fade>
@@ -203,10 +203,10 @@ const Aboutus = () => {
             </Fade>
             <Fade bottom duration={2000}>
               <div className="team-card orange">
-                <img src={sultan_image} alt="Team_card_image" />
+                <img src={vishal_image} alt="Team_card_image" />
                 <div className="team-description">
-                  <h3>Sultan Speen Jan</h3>
-                  <p>Blockchain Dev</p>
+                  <h3>Vishal Baheti</h3>
+                  <p>Junior Frontend Dev</p>
                 </div>
               </div>
             </Fade>
