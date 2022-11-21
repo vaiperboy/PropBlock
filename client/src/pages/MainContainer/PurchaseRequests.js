@@ -64,32 +64,33 @@ const PurchaseRequests = (props) => {
 
   // loads the dataSourceBuyer & dataSourceSeller
   useEffect(() => {
-    // async function loadSellerData() {
-    //   setIsLoading(true);
-    //   fetch(
-    //     "http://localhost:9000/getPurchaseRequests?" +
-    //       new URLSearchParams({
-    //         sessionToken: user.getSessionToken(),
-    //         ownerAddress: user.get("ethAddress"),
-    //       })
-    //   )
-    //     .then((res) => res.json())
-    //     .then((res) => {
-    //       var temp = [];
-    //       for (var i = 0; i < res.length; i++) {
-    //         var e = res[i];
-    //         temp.push({
-    //           key: i,
-    //           address: shortenAddress(e.address, 25),
-    //           propertyID: e.propertyObjectId,
-    //           dateRequested: e.createdAt,
-    //         });
-    //       }
-    //       setDataSourceSeller(temp);
-    //       console.log(res);
-    //     });
-    //   setIsLoading(false);
-    // }
+    async function loadSellerData() {
+      setIsLoading(true);
+      fetch(
+        "http://localhost:9000/getPurchaseRequests?" +
+          new URLSearchParams({
+            sessionToken: user.getSessionToken(),
+            ownerAddress: user.get("ethAddress"),
+          })
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          console.log("getting data")
+          var temp = [];
+          for (var i = 0; i < res.length; i++) {
+            var e = res[i];
+            temp.push({
+              key: i,
+              address: shortenAddress(e.address, 25),
+              propertyID: e.propertyObjectId,
+              dateRequested: e.createdAt,
+            });
+          }
+          setDataSourceSeller(temp);
+          console.log(res);
+        });
+      setIsLoading(false);
+    }
 
     const loadBuyerRequests = async () => {
       try {
@@ -125,7 +126,8 @@ const PurchaseRequests = (props) => {
     };
     // calling the functions
     loadBuyerRequests();
-    // loadSellerData();
+
+    loadSellerData();
   }, []);
 
   // removes the request with the property ID
@@ -154,25 +156,6 @@ const PurchaseRequests = (props) => {
     return arr;
   };
 
-  function compareByAddress(a, b) {
-    if (a.address < b.address) {
-      return -1;
-    }
-    if (a.address > b.address) {
-      return 1;
-    }
-    return 0;
-  }
-
-  function compareByDecision(a, b) {
-    if (a.status < b.status) {
-      return -1;
-    }
-    if (a.status > b.status) {
-      return 1;
-    }
-    return 0;
-  }
 
   const columnsSeller = [
     {

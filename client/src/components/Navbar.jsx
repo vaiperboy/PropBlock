@@ -52,6 +52,7 @@ const Navbar = (props) => {
   };
 
   useEffect(() => {
+    const tt = isAuthenticated; //refresh variable 
     document.addEventListener("click", function handleClickOutsideBox(event) {
       const userButtons = document.getElementById("userButtons");
       const avatarIcon = document.getElementById("avatarIcon");
@@ -71,10 +72,13 @@ const Navbar = (props) => {
       const userAddress = Web3.utils.toChecksumAddress(tempAddress);
       const users = Moralis.Object.extend("GovernmentUsers");
       const query = new Moralis.Query(users);
+      console.log("address: " + userAddress)
       query.equalTo("ethAddress", userAddress);
       query.limit(1);
       query.withCount();
+
       const results = await query.find();
+
       if (results.count === 0) {
         setIsGovernmentUser(false);
       } else {
@@ -83,6 +87,7 @@ const Navbar = (props) => {
       setIsLoading(false);
     };
     checkUserType();
+
   }, []);
 
   return (
