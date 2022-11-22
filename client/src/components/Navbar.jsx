@@ -56,7 +56,6 @@ const Navbar = (props) => {
     document.addEventListener("click", function handleClickOutsideBox(event) {
       const userButtons = document.getElementById("userButtons");
       const avatarIcon = document.getElementById("avatarIcon");
-
       if (
         !userButtons.contains(event.target) &&
         !avatarIcon.contains(event.target)
@@ -67,27 +66,28 @@ const Navbar = (props) => {
 
     // check if normal user or govenment user
     const checkUserType = async () => {
-      setIsLoading(true);
-      const tempAddress = user.get("ethAddress");
-      const userAddress = Web3.utils.toChecksumAddress(tempAddress);
-      const users = Moralis.Object.extend("GovernmentUsers");
-      const query = new Moralis.Query(users);
-      console.log("address: " + userAddress)
-      query.equalTo("ethAddress", userAddress);
-      query.limit(1);
-      query.withCount();
-
-      const results = await query.find();
-
-      if (results.count === 0) {
-        setIsGovernmentUser(false);
-      } else {
-        setIsGovernmentUser(true);
+      if (isAuthenticated) {
+        setIsLoading(true);
+        const tempAddress = user.get("ethAddress");
+        const userAddress = Web3.utils.toChecksumAddress(tempAddress);
+        const users = Moralis.Object.extend("GovernmentUsers");
+        const query = new Moralis.Query(users);
+        console.log("address: " + userAddress)
+        query.equalTo("ethAddress", userAddress);
+        query.limit(1);
+        query.withCount();
+  
+        const results = await query.find();
+  
+        if (results.count === 0) {
+          setIsGovernmentUser(false);
+        } else {
+          setIsGovernmentUser(true);
+        }
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
     checkUserType();
-    console.log(isAuthenticated)
   }, []);
 
   return (
@@ -104,7 +104,7 @@ const Navbar = (props) => {
             <nav>
               {window.location.pathname === "/howPropBlockWorks" ? (
                 <Link to="/howPropBlockWorks" className="link">
-                  <div className="current">How it works</div>
+                  <div className="current">How it Works</div>
                 </Link>
               ) : (
                 <Link to="/howPropBlockWorks" className="link">
@@ -214,11 +214,11 @@ const Navbar = (props) => {
               )}
               {window.location.pathname === "/howPropBlockWorks" ? (
                 <Link to="/howPropBlockWorks" className="link">
-                  <div className="current">How it works</div>
+                  <div className="current">How it Works</div>
                 </Link>
               ) : (
                 <Link to="/howPropBlockWorks" className="link">
-                  <div>how it works</div>
+                  <div>how it Works</div>
                 </Link>
               )}
               {window.location.pathname === "/aboutus" ? (

@@ -84,11 +84,21 @@ module.exports.getUser = async function(address) {
 //parameters
 module.exports.processFiltering = async function(params, query) {
     if (params["propertyType"] != undefined) {
-        query.equalTo("propertyType", params["propertyType"]);
+        query.equalTo("propertyType", params["propertyType"].toLowerCase());
     }
 
     if (params["facilities"] != undefined && params["facilities"] > 0) {
         query.greaterThan("facilities", params["facilities"]);
+    }
+    
+    if (params["minPrice"] != undefined) {
+        var minPrice = parseInt(params["minPrice"]);
+        if (!isNaN(minPrice)) query.greaterThan("listedPrice", minPrice);
+    }
+
+    if (params["maxPrice"] != undefined) {
+        var maxPrice = parseInt(params["maxPrice"]);
+        if (!isNaN(maxPrice)) query.greaterThan("listedPrice", maxPrice);
     }
 
     
