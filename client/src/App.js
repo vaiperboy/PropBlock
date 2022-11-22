@@ -19,6 +19,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import ContactUs from "./pages/ContactUs";
 import GovtDashboard from "./pages/MainContainerGovt/MainContainer";
 import ProtectedRouteGovernment from "./ProtectedRouteGovernment";
+import HowPropBlockWorks from "./pages/HowPropBlockWorks";
 
 function App() {
   let optionsForScroll = {
@@ -46,9 +47,12 @@ function App() {
           path="/government"
           element={<ProtectedRouteGovernment component={<GovtDashboard />} />}
         />
-        {/* <Route path="/government" element={<GovtDashboard />}></Route> */}
         <Route path="/PropertyFunctions" element={<PropertyFunc />}></Route>
         <Route path="/AgreementFunctions" element={<AgreementFunc />}></Route>
+        <Route
+          path="/HowPropBlockWorks"
+          element={<HowPropBlockWorks />}
+        ></Route>
         <Route path="/properties" element={<Properties />}></Route>
         <Route path="/property/:id" element={<Property />}></Route>
         <Route path="*" element={<NoMatch />}></Route>

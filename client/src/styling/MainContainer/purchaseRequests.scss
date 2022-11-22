@@ -3,19 +3,65 @@
     }
     .tableContainer {
         height: 100rem;
-        // border: 1px solid #d1d1d1;
-        width: 100rem;
         height: 75rem;
-        margin-top: -2.5rem;
         .ant-spin-container {
         }
-        th {
-            background-color: rgb(#3daeee, 0.3);
+        table {
+            width: 100vw;
+            th {
+                background-color: rgb(#3daeee, 0.3);
+                border-right: 1px solid rgb(195, 195, 195);
+                padding: 1rem 1rem;
+                font-size: 1.7rem;
+                color: #555;
+                font-weight: 550;
+            }
+            tr {
+                color: #555;
+            }
+            tr:nth-child(odd) {
+                background-color: #efefef;
+            }
+            .notBuyerFirstRowAccepted {
+                font-size: 1.5rem;
+                td {
+                    border-right: 1px solid rgb(230, 230, 230);
+                }
+                &:hover {
+                    background-color: rgba(#2db32d, 0.1);
+                }
+                .requestAccepted {
+                    &:hover {
+                    }
+                }
+                .requestRejected {
+                }
+            }
+            .notBuyerFirstRowPending {
+                font-size: 1.5rem;
+                td {
+                    border-right: 1px solid rgb(230, 230, 230);
+                }
+                &:hover {
+                    background-color: rgba(#9dabb3, 0.1);
+                }
+                .requestAccepted {
+                    &:hover {
+                    }
+                }
+                .requestRejected {
+                }
+            }
+            .notBuyerFirstRowRejected {
+                td {
+                    border-right: 1px solid rgb(230, 230, 230);
+                }
+                &:hover {
+                    background-color: rgba(red, 0.1);
+                }
+            }
         }
-        .ant-table-title {
-            font-size: 1.7rem;
-            font-weight: 600;
-        }
+
         ul {
             margin-right: 5rem;
         }

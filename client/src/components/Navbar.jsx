@@ -52,6 +52,7 @@ const Navbar = (props) => {
   };
 
   useEffect(() => {
+    const tt = isAuthenticated; //refresh variable 
     document.addEventListener("click", function handleClickOutsideBox(event) {
       const userButtons = document.getElementById("userButtons");
       const avatarIcon = document.getElementById("avatarIcon");
@@ -71,10 +72,13 @@ const Navbar = (props) => {
       const userAddress = Web3.utils.toChecksumAddress(tempAddress);
       const users = Moralis.Object.extend("GovernmentUsers");
       const query = new Moralis.Query(users);
+      console.log("address: " + userAddress)
       query.equalTo("ethAddress", userAddress);
       query.limit(1);
       query.withCount();
+
       const results = await query.find();
+
       if (results.count === 0) {
         setIsGovernmentUser(false);
       } else {
@@ -98,6 +102,15 @@ const Navbar = (props) => {
           </div>
           <div className="rightSide">
             <nav>
+              {window.location.pathname === "/howPropBlockWorks" ? (
+                <Link to="/howPropBlockWorks" className="link">
+                  <div className="current">How it works</div>
+                </Link>
+              ) : (
+                <Link to="/howPropBlockWorks" className="link">
+                  <div>How it Works</div>
+                </Link>
+              )}
               {window.location.pathname === "/properties" ? (
                 <Link to="/properties" className="link">
                   <div className="current">Properties</div>
@@ -191,7 +204,7 @@ const Navbar = (props) => {
           <div className="rightSide">
             <nav>
               {window.location.pathname === "/properties" ? (
-                <Link to="/properties" className="link">
+                <Link to="/howPropBlockWorks" className="link">
                   <div className="current">Properties</div>
                 </Link>
               ) : (
@@ -199,7 +212,15 @@ const Navbar = (props) => {
                   <div>Properties</div>
                 </Link>
               )}
-
+              {window.location.pathname === "/howPropBlockWorks" ? (
+                <Link to="/howPropBlockWorks" className="link">
+                  <div className="current">How it works</div>
+                </Link>
+              ) : (
+                <Link to="/howPropBlockWorks" className="link">
+                  <div>how it works</div>
+                </Link>
+              )}
               {window.location.pathname === "/aboutus" ? (
                 <Link to="/aboutus" className="link">
                   <div className="current">About</div>

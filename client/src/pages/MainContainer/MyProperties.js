@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { PlusOutlined, InboxOutlined } from "@ant-design/icons";
 import "../../styling/MainContainer/CreateProperty.scss";
-import { Input, Stepper, Select } from "@web3uikit/core";
+import { Input, Stepper } from "@web3uikit/core";
 import blueTick from "./assets/blue_tick.png";
 import image from "../../assets/blue_tick.png";
 import moment from "moment";
@@ -119,7 +119,28 @@ const MyProperties = () => {
     return current && current > moment().endOf("day");
   };
 
+  // Property Facilities
+  const [facilitiesOptions, setFacilitiesOptions] = useState([
+    { value: 1, label: "Free Parking" },
+    { value: 2, label: "Kitchen" },
+    { value: 4, label: "Security" },
+    { value: 8, label: "Free WiFi" },
+    { value: 16, label: "Coffee Maker" },
+    { value: 64, label: "Restaurant" },
+    { value: 128, label: "24 hour access" },
+    { value: 256, label: "TV Access" },
+  ]);
   const [facilitiesXor, setFacilitiesXor] = useState(0);
+  //only made it for lowest number (least option)
+  const handleFacilities = (arr) => {
+    if (arr.length > 0) {
+      var lowest = arr[0];
+      for (var i = 1; i < arr.length; i++) {
+        if (arr[i] < lowest) lowest = arr[i];
+      }
+      this.setState({ facilitiesXor: lowest });
+    } else this.setState({ facilitiesXor: 0 });
+  };
 
   const addProperty = async () => {
     setIsCreatingProperty(true);
@@ -352,7 +373,15 @@ const MyProperties = () => {
 
   // Validation Functions
   // ---------------------
-  const validateInputFirst = (deedno, deedyr, type) => {
+  const validateInputFirst = (
+    deedno,
+    deedyr,
+    type,
+    street,
+    area,
+    apartno,
+    price
+  ) => {
     try {
       const numbersOnly = /^[0-9]*$/;
       if (deedno === "") {
@@ -369,6 +398,32 @@ const MyProperties = () => {
       }
       if (type === "" || type === "none") {
         message.error("Please fill the input for Property Type");
+        return;
+      }
+      if (street === "") {
+        message.error("Please fill the input for Property Street");
+        return;
+      }
+      if (area === "") {
+        message.error("Please fill the input for Area");
+        return;
+      }
+      if (!numbersOnly.test(area)) {
+        message.error("Invalid Format! Area input should only contain numbers");
+        return;
+      }
+      if (apartno === "") {
+        message.error("Please fill the input for Apartment Number");
+        return;
+      }
+      if (price === "") {
+        message.error("Please fill the input for Price of the Property");
+        return;
+      }
+      if (!numbersOnly.test(price)) {
+        message.error(
+          "Invalid Format! Price input should only contain numbers"
+        );
         return;
       }
       setIsValidatedFirst(true);
@@ -579,23 +634,6 @@ const MyProperties = () => {
                 <Property_Card props={property} />
               ))}
               <div
-                onClick={() =>
-                  // addProperty(
-                  //   samplePropertyDetails.addr,
-                  //   samplePropertyDetails.propertyType,
-                  //   samplePropertyDetails.titleDeedNo,
-                  //   samplePropertyDetails.titleDeedYear,
-                  //   samplePropertyDetails.streetNum,
-                  //   samplePropertyDetails.area,
-                  //   samplePropertyDetails.apartmentNum,
-                  //   samplePropertyDetails.listedPrice,
-                  //   samplePropertyDetails.ipfs,
-                  //   samplePropertyDetails.facilities
-                  // )
-                  {
-                    setAddPropertyView(false);
-                  }
-                }
                 style={{
                   display: "flex",
                   justifyContent: "center",
@@ -611,6 +649,9 @@ const MyProperties = () => {
                   viewBox="0 0 77 77"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  onClick={() => {
+                    setAddPropertyView(false);
+                  }}
                 >
                   <circle
                     cx="38.5"
@@ -643,7 +684,7 @@ const MyProperties = () => {
           }}
         >
           <div>
-            <p className="rightsidebar_title">My Profile</p>
+            <p className="rightsidebar_title">Creating a new property</p>
           </div>
         </div>
         <div
@@ -670,6 +711,19 @@ const MyProperties = () => {
                       content: (
                         <div className="fullform">
                           <div className="inputs-container">
+                            {/* Owner's Details */}
+                            <div className="input-item">
+                              <h1
+                                style={{
+                                  marginBottom: "0",
+                                  paddingBottom: "0.2rem",
+                                  fontSize: "2rem",
+                                  color: "#3daeee",
+                                }}
+                              >
+                                Owner's Details
+                              </h1>
+                            </div>
                             <div className="input-item">
                               <label for="InputAddress">Owner's Address</label>
                               <Input
@@ -716,6 +770,41 @@ const MyProperties = () => {
                               />
                             </div>
                             <div className="input-item">
+                              <label for="InputName">Owner's Email</label>
+                              <Input
+                                type="text"
+                                id="InputName"
+                                name="name"
+                                className="emailAddressInput"
+                                placeholder={`${emailAddress}`}
+                                onChange={(e) => {
+                                  setEmailAddress(e.target.value);
+                                  setIsValidatedSecond(false);
+                                }}
+                                disabled
+                                style={{
+                                  backgroundColor: "#9fcbe4",
+                                }}
+                              />
+                            </div>
+                            <div
+                              style={{ border: "0.5px solid #a9dffd" }}
+                            ></div>
+                            {/* Title Deed Details */}
+                            <div className="input-item">
+                              <h1
+                                style={{
+                                  marginTop: "1rem",
+                                  marginBottom: "0",
+                                  paddingBottom: "0.2rem",
+                                  fontSize: "2rem",
+                                  color: "#3daeee",
+                                }}
+                              >
+                                Title Deed Details
+                              </h1>
+                            </div>
+                            <div className="input-item">
                               <label for="InputDeedno">Title Deed No.</label>
                               <Input
                                 openByDefault
@@ -753,6 +842,23 @@ const MyProperties = () => {
                                 }}
                               />
                             </div>
+                            <div
+                              style={{ border: "0.5px solid #a9dffd" }}
+                            ></div>
+                            {/* Property Details */}
+                            <div className="input-item">
+                              <h1
+                                style={{
+                                  marginTop: "1rem",
+                                  marginBottom: "0",
+                                  paddingBottom: "0.2rem",
+                                  fontSize: "2rem",
+                                  color: "#3daeee",
+                                }}
+                              >
+                                Property Details
+                              </h1>
+                            </div>
                             <div className="input-item">
                               <label for="property-type">Property Type</label>
                               <div>
@@ -760,7 +866,7 @@ const MyProperties = () => {
                                   defaultValue="none"
                                   className="selectPropertyType"
                                   style={{
-                                    width: "200",
+                                    width: "14rem",
                                   }}
                                   onChange={(value) => {
                                     setType(value);
@@ -795,110 +901,6 @@ const MyProperties = () => {
                                 />
                               </div>
                             </div>
-                          </div>
-                          <div className="buttons-container">
-                            <button
-                              className="prevButton"
-                              onClick={() => setAddPropertyView(true)}
-                              style={{
-                                padding: "0.5rem 2rem",
-                                height: "fit-content",
-                              }}
-                            >
-                              Go Back
-                            </button>
-
-                            {!isValidatedFirst && (
-                              <button
-                                id="validateButtonFirst"
-                                className="validatebtn"
-                                text="Validate"
-                                onClick={() =>
-                                  validateInputFirst(deedno, deedyr, type)
-                                }
-                              >
-                                Validate
-                              </button>
-                            )}
-
-                            {isValidatedFirst && (
-                              <button
-                                id="next"
-                                className="nextButton  "
-                                text="Next"
-                              >
-                                Next
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      ),
-                      title: "",
-                    },
-                    {
-                      content: (
-                        <div className="fullform">
-                          <div className="inputs-container">
-                            <div className="input-item">
-                              <label for="prop-id">Property ID</label>
-                              <Input
-                                type="text"
-                                id="prop-id"
-                                name="propertyid"
-                                className="propertyIdInput"
-                                placeholder={`${propertyid}`}
-                                value={propertyid}
-                                onChange={(e) => {
-                                  setPropertyId(e.target.value);
-                                  setIsValidatedSecond(false);
-                                }}
-                                disabled
-                                style={{
-                                  backgroundColor: "#9fcbe4",
-                                }}
-                              />
-                            </div>
-                            <div className="input-item">
-                              <label for="InputName">Owner's Email</label>
-                              <Input
-                                type="text"
-                                id="InputName"
-                                name="name"
-                                className="emailAddressInput"
-                                placeholder={`${emailAddress}`}
-                                onChange={(e) => {
-                                  setEmailAddress(e.target.value);
-                                  setIsValidatedSecond(false);
-                                }}
-                                disabled
-                                style={{
-                                  backgroundColor: "#9fcbe4",
-                                }}
-                              />
-                            </div>
-                            <div className="input-item">
-                              <label for="InputDeedno">Owner's Address</label>
-                              <Input
-                                type="text"
-                                id="InputDeedno"
-                                name="titleno"
-                                className="ethAddressInput"
-                                placeholder={`${
-                                  ethAddress.slice(0, 6) +
-                                  "..." +
-                                  ethAddress.slice(25, 35)
-                                }`}
-                                value={address}
-                                onChange={(e) => {
-                                  setAddress(e.target.value);
-                                  setIsValidatedSecond(false);
-                                }}
-                                disabled
-                                style={{
-                                  backgroundColor: "#9fcbe4",
-                                }}
-                              />
-                            </div>
                             <div className="input-item">
                               <label for="street">Street Name</label>
                               <Input
@@ -909,7 +911,7 @@ const MyProperties = () => {
                                 value={street}
                                 onChange={(e) => {
                                   setStreet(e.target.value);
-                                  setIsValidatedSecond(false);
+                                  setIsValidatedFirst(false);
                                 }}
                                 validation={{
                                   required: true,
@@ -926,7 +928,7 @@ const MyProperties = () => {
                                 value={area}
                                 onChange={(e) => {
                                   setArea(e.target.value);
-                                  setIsValidatedSecond(false);
+                                  setIsValidatedFirst(false);
                                 }}
                                 validation={{
                                   regExp: "[0-9]+([,.][0-9]+)?",
@@ -944,7 +946,7 @@ const MyProperties = () => {
                                 value={apartno}
                                 onChange={(e) => {
                                   setApartmentNo(e.target.value);
-                                  setIsValidatedSecond(false);
+                                  setIsValidatedFirst(false);
                                 }}
                               />
                             </div>
@@ -958,7 +960,7 @@ const MyProperties = () => {
                                 value={price}
                                 onChange={(e) => {
                                   setPrice(e.target.value);
-                                  setIsValidatedSecond(false);
+                                  setIsValidatedFirst(false);
                                 }}
                                 validation={{
                                   regExp: "[0-9]+([,.][0-9]+)?",
@@ -966,29 +968,108 @@ const MyProperties = () => {
                                 }}
                               />
                             </div>
+                            <div className="input-item">
+                              <div className="inputs-container-2">
+                                <div className="first-container">
+                                  <div className="label-container">
+                                    <label for="NumberofBeds">
+                                      No. of Beds
+                                    </label>
+                                    <InputNumber
+                                      className="bedsInputNumber"
+                                      min={1}
+                                      max={10}
+                                      defaultValue={1}
+                                      onChange={(value) => {
+                                        setBedNumber(value);
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="label-container">
+                                    <label for="NumberofBathrooms">
+                                      No. of Bathrooms
+                                    </label>
+                                    <InputNumber
+                                      className="bedsInputNumber"
+                                      min={0}
+                                      max={10}
+                                      defaultValue={0}
+                                      onChange={(value) => {
+                                        setBathNumber(value);
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="label-container">
+                                    <label for="occupancynum">
+                                      Occupancy No.
+                                    </label>
+                                    <InputNumber
+                                      className="bedsInputNumber"
+                                      min={1}
+                                      max={20}
+                                      defaultValue={1}
+                                      onChange={(value) => {
+                                        setOccupNumber(value);
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div
+                              style={{ border: "0.5px solid #a9dffd" }}
+                            ></div>
+                            {/* Property Facilities */}
+                            <div className="input-item">
+                              <h1
+                                style={{
+                                  marginBottom: "0",
+                                  paddingBottom: "0.2rem",
+                                  fontSize: "2rem",
+                                  color: "#3daeee",
+                                }}
+                              >
+                                Select the Facilities that apply
+                              </h1>
+                            </div>
+                            <div
+                              className="input-item"
+                              style={{ width: "100%" }}
+                            >
+                              <SelectAnt
+                                mode="tags"
+                                className="facilitiesSelect"
+                                size={"medium"}
+                                placeholder="Please select"
+                                onChange={handleFacilities}
+                                style={{
+                                  width: "100%",
+                                }}
+                                options={facilitiesOptions}
+                              />
+                            </div>
                           </div>
                           <div className="buttons-container">
                             <button
                               className="prevButton"
-                              id="prev"
-                              onClick={() => {
-                                setIsValidatedFirst(false);
-                                setType("");
-                              }}
+                              onClick={() => setAddPropertyView(true)}
                               style={{
                                 padding: "0.5rem 2rem",
                                 height: "fit-content",
                               }}
                             >
-                              Back
+                              Go Back
                             </button>
-                            {!isValidatedSecond && (
+                            {!isValidatedFirst && (
                               <button
-                                id="validatebtn"
+                                id="validateButtonFirst"
                                 className="validatebtn"
                                 text="Validate"
                                 onClick={() =>
-                                  validateInputSecond(
+                                  validateInputFirst(
+                                    deedno,
+                                    deedyr,
+                                    type,
                                     street,
                                     area,
                                     apartno,
@@ -999,7 +1080,7 @@ const MyProperties = () => {
                                 Validate
                               </button>
                             )}
-                            {isValidatedSecond && (
+                            {isValidatedFirst && (
                               <button
                                 id="next"
                                 className="nextButton"
@@ -1011,319 +1092,7 @@ const MyProperties = () => {
                           </div>
                         </div>
                       ),
-                    },
-                    {
-                      content: (
-                        <div className="fullform-third">
-                          <div className="inputs-container">
-                            <p style={{ fontWeight: "600", fontSize: "2rem" }}>
-                              Enter Additional Property Details
-                            </p>
-                            <div className="first-container">
-                              <div className="label-container">
-                                <label for="NumberofBeds">No. of Beds</label>
-                                <InputNumber
-                                  className="bedsInputNumber"
-                                  min={1}
-                                  max={10}
-                                  defaultValue={1}
-                                  onChange={(value) => {
-                                    setBedNumber(value);
-                                  }}
-                                />
-                              </div>
-                              <div className="label-container">
-                                <label for="NumberofBathrooms">
-                                  No. of Bathrooms
-                                </label>
-                                <InputNumber
-                                  className="bedsInputNumber"
-                                  min={0}
-                                  max={10}
-                                  defaultValue={0}
-                                  onChange={(value) => {
-                                    setBathNumber(value);
-                                  }}
-                                />
-                              </div>
-                              <div className="label-container">
-                                <label for="occupancynum">Occupancy No.</label>
-                                <InputNumber
-                                  className="bedsInputNumber"
-                                  min={1}
-                                  max={20}
-                                  defaultValue={1}
-                                  onChange={(value) => {
-                                    setOccupNumber(value);
-                                  }}
-                                />
-                              </div>
-                            </div>
-                            <p
-                              style={{
-                                fontWeight: "600",
-                                fontSize: "2rem",
-                                margin: "3rem 0 2rem 0",
-                              }}
-                            >
-                              Check The Facilities that Apply
-                            </p>
-                            <div className="icons-container">
-                              <div className="icons-row">
-                                <div className="facility">
-                                  <img
-                                    alt="freeparking"
-                                    className="facilityIcon"
-                                    src={require("../../assets/pic1.png")}
-                                  ></img>
-                                  <label for="freeparking">Free Parking</label>
-                                  <Input
-                                    type="checkbox"
-                                    id="freeparking"
-                                    name="freeparking"
-                                    onChange={(e) => {
-                                      let value = e.target.checked;
-                                      setFacilities({
-                                        ...facilities,
-                                        parking: value,
-                                      });
-                                    }}
-                                    style={{
-                                      outline: "none",
-                                      maxWidth: "6rem",
-                                    }}
-                                  />
-                                </div>
-                                <div className="facility">
-                                  <img
-                                    alt=""
-                                    className="facilityIcon"
-                                    src={require("../../assets/Picture2.png")}
-                                  ></img>
-                                  <label for="freewifi">Free Wifi</label>
-                                  <Input
-                                    type="checkbox"
-                                    id="freewifi"
-                                    name="freewifi"
-                                    onChange={(e) => {
-                                      let value = e.target.checked;
-                                      setFacilities({
-                                        ...facilities,
-                                        freeWifi: value,
-                                      });
-                                    }}
-                                    style={{
-                                      outline: "none",
-                                      maxWidth: "6rem",
-                                    }}
-                                  />{" "}
-                                </div>
-                                <div className="facility">
-                                  <img
-                                    alt=""
-                                    className="facilityIcon"
-                                    src={require("../../assets/Picture3.png")}
-                                  ></img>
-                                  <label for="restaurant">Restaurant</label>
-                                  <Input
-                                    type="checkbox"
-                                    id="restaurant"
-                                    name="restaurant"
-                                    onChange={(e) => {
-                                      let value = e.target.checked;
-                                      setFacilities({
-                                        ...facilities,
-                                        restaurant: value,
-                                      });
-                                    }}
-                                    style={{
-                                      outline: "none",
-                                      maxWidth: "6rem",
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                              <div className="icons-row">
-                                <div className="facility">
-                                  <img
-                                    alt=""
-                                    className="facilityIcon"
-                                    src={require("../../assets/Picture5.png")}
-                                  ></img>{" "}
-                                  <label for="kitchen">Kitchen</label>
-                                  <Input
-                                    type="checkbox"
-                                    id="kitchen"
-                                    name="kitchen"
-                                    onChange={(e) => {
-                                      let value = e.target.checked;
-                                      setFacilities({
-                                        ...facilities,
-                                        kitchen: value,
-                                      });
-                                    }}
-                                    style={{
-                                      outline: "none",
-                                      maxWidth: "6rem",
-                                    }}
-                                  />{" "}
-                                </div>
-                                <div className="facility">
-                                  <img
-                                    alt=""
-                                    className="facilityIcon"
-                                    src={require("../../assets/Picture6.png")}
-                                  ></img>{" "}
-                                  <label for="coffee">Coffee Maker</label>
-                                  <Input
-                                    type="checkbox"
-                                    id="coffee"
-                                    name="coffee"
-                                    onChange={(e) => {
-                                      let value = e.target.checked;
-                                      setFacilities({
-                                        ...facilities,
-                                        coffee: value,
-                                      });
-                                    }}
-                                    style={{
-                                      outline: "none",
-                                      maxWidth: "6rem",
-                                    }}
-                                  />{" "}
-                                </div>
-                                <div className="facility">
-                                  <img
-                                    alt=""
-                                    className="facilityIcon"
-                                    src={require("../../assets/Picture7.png")}
-                                  ></img>{" "}
-                                  <label for="access">24 Hour Access</label>
-                                  <Input
-                                    type="checkbox"
-                                    id="access"
-                                    name="access"
-                                    onChange={(e) => {
-                                      let value = e.target.checked;
-                                      setFacilities({
-                                        ...facilities,
-                                        hourAccess: value,
-                                      });
-                                    }}
-                                    style={{
-                                      outline: "none",
-                                      maxWidth: "6rem",
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                              <div className="icons-row">
-                                <div className="facility">
-                                  <img
-                                    alt=""
-                                    className="facilityIcon"
-                                    src={require("../../assets/Picture8.png")}
-                                  ></img>{" "}
-                                  <label for="security">Security</label>
-                                  <Input
-                                    type="checkbox"
-                                    id="security"
-                                    name="security"
-                                    onChange={(e) => {
-                                      let value = e.target.checked;
-                                      setFacilities({
-                                        ...facilities,
-                                        security: value,
-                                      });
-                                    }}
-                                    style={{
-                                      outline: "none",
-                                      maxWidth: "6rem",
-                                    }}
-                                  />
-                                </div>
-                                <div className="facility">
-                                  <img
-                                    alt=""
-                                    className="facilityIcon"
-                                    src={require("../../assets/Picture4.png")}
-                                  ></img>{" "}
-                                  <label for="pool">Swimming Pool</label>
-                                  <Input
-                                    type="checkbox"
-                                    id="pool"
-                                    name="pool"
-                                    onChange={(e) => {
-                                      let value = e.target.checked;
-                                      setFacilities({
-                                        ...facilities,
-                                        pool: value,
-                                      });
-                                    }}
-                                    style={{
-                                      outline: "none",
-                                      maxWidth: "6rem",
-                                    }}
-                                  />
-                                </div>
-                                <div className="facility">
-                                  <img
-                                    alt=""
-                                    className="facilityIcon"
-                                    src={require("../../assets/Picture9.png")}
-                                  ></img>
-                                  <label for="tv">TV</label>
-                                  <Input
-                                    type="checkbox"
-                                    id="tv"
-                                    name="tv"
-                                    onChange={(e) => {
-                                      let value = e.target.checked;
-                                      setFacilities({
-                                        ...facilities,
-                                        tv: value,
-                                      });
-                                    }}
-                                    style={{
-                                      outline: "none",
-                                      maxWidth: "6rem",
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="buttons-container">
-                            <div className="col-75">
-                              <button
-                                className="prevButton btn-submit reset"
-                                id="prev"
-                                style={{
-                                  padding: "0.5rem 2rem",
-                                  height: "fit-content",
-                                }}
-                                onClick={() => {
-                                  setIsValidatedSecond(false);
-                                }}
-                              >
-                                Back
-                              </button>
-                            </div>
-                            <div className="col-25">
-                              <button
-                                id="next"
-                                className="nextButton  "
-                                text="Next"
-                                onClick={() => {
-                                  validateInputFirst(deedno, deedyr, type);
-                                }}
-                              >
-                                Next
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ),
+                      title: "",
                     },
                     {
                       content: (
@@ -1412,6 +1181,9 @@ const MyProperties = () => {
                               }}
                               onClick={() => {
                                 setImageNames([]);
+                                setIsValidatedFirst(false);
+                                setDeedyr("");
+                                setType("");
                               }}
                             >
                               Back
@@ -1460,17 +1232,16 @@ const MyProperties = () => {
                               <p className="text done">
                                 Your property was created Successfully!
                               </p>
-                              <div id="dashboardend">
-                                <button
-                                  className="nextButton btn-submit end"
-                                  id="finishButton"
-                                  onClick={() => {
-                                    window.location.reload(false);
-                                  }}
-                                >
-                                  Finish
-                                </button>
-                              </div>
+                              <button
+                                className="nextButton btn-submit end"
+                                id="finishButton"
+                                onClick={() => {
+                                  window.location.reload(false);
+                                }}
+                                style={{ marginTop: "0" }}
+                              >
+                                Finish
+                              </button>
                             </div>
                           )}
                         </div>
