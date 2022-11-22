@@ -83,6 +83,7 @@ const Navbar = (props) => {
       setIsLoading(false);
     };
     checkUserType();
+    console.log(isAuthenticated)
   }, []);
 
   return (
