@@ -12,7 +12,11 @@ import {
   Modal,
   Radio,
 } from "antd";
-import { PlusOutlined, InboxOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  InboxOutlined,
+  ArrowLeftOutlined,
+} from "@ant-design/icons";
 import "../../styling/MainContainer/CreateProperty.scss";
 import { Input, Stepper } from "@web3uikit/core";
 import blueTick from "./assets/blue_tick.png";
@@ -699,6 +703,13 @@ const MyProperties = () => {
           <div className="create-property">
             <div className="container">
               <div className="containerchild">
+                <ArrowLeftOutlined
+                  className="arrowBack"
+                  onClick={() => {
+                    setAddPropertyView(true);
+                  }}
+                />
+                {/* <button className="backButton"></button> */}
                 <Stepper
                   style={{
                     position: "relative",

@@ -11,50 +11,34 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "../../styling/MainContainer/purchaseRequests.scss";
 import { computeAddress, hexlify } from "ethers/lib/utils";
+import realEstate from "../../artifacts/contracts/realEstate.sol/realEstate.json";
 
 // importing images
 import no_data from "../../assets/no_data.png";
+
 const web3 = require("web3");
+const { ethers } = require("ethers");
 const console = require("console-browserify");
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 const PurchaseRequests = (props) => {
-  const columnsBuyer = [
-    {
-      title: "Address Of User",
-      width: 300,
-      dataIndex: "address",
-      key: "name",
-      fixed: "left",
-    },
-    {
-      title: "Property ID",
-      width: 250,
-      dataIndex: "propertyID",
-      key: "1",
-    },
-    {
-      title: "Date Requested",
-      dataIndex: "dateRequested",
-      key: "2",
-    },
-    {
-      title: "Decision",
-      fixed: "right",
-      keu: "status",
-      render: (_, record) =>
-        record.status === "Accepted" ? (
-          <h3 style={{ color: "red" }}>Accepted</h3>
-        ) : (
-          <h3 style={{ color: "green" }}>Rejected</h3>
-        ),
-      kay: "3",
-      width: 200,
-      innerHeight: 100,
-    },
-  ];
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  const API_URL = `https://eth-goerli.g.alchemy.com/v2/${API_KEY}`;
+  const PRIVATE_KEY = process.env.REACT_APP_PRIVATE_KEY;
+  const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
 
+  const provider = new ethers.providers.JsonRpcProvider(API_URL);
+  // Signer - this represents an Ethereum account that has the ability to sign transactions.
+  const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+  // Contract - this is an Ethers.js object that represents a specific contract deployed on-chain.
+  const realEstateContract = new ethers.Contract(
+    CONTRACT_ADDRESS,
+    realEstate.abi,
+    signer
+  );
+
+  // Function to shorten the address
   const shortenAddress = (text, maxWords) => {
     if (maxWords < text.length && maxWords >= 18) {
       text = text.substring(0, 15) + " ... " + text.substring(text.length - 10);
@@ -64,33 +48,35 @@ const PurchaseRequests = (props) => {
 
   // loads the dataSourceBuyer & dataSourceSeller
   useEffect(() => {
-    // async function loadSellerData() {
-    //   setIsLoading(true);
-    //   fetch(
-    //     "http://localhost:9000/getPurchaseRequests?" +
-    //       new URLSearchParams({
-    //         sessionToken: user.getSessionToken(),
-    //         ownerAddress: user.get("ethAddress"),
-    //       })
-    //   )
-    //     .then((res) => res.json())
-    //     .then((res) => {
-    //       var temp = [];
-    //       for (var i = 0; i < res.length; i++) {
-    //         var e = res[i];
-    //         temp.push({
-    //           key: i,
-    //           address: shortenAddress(e.address, 25),
-    //           propertyID: e.propertyObjectId,
-    //           dateRequested: e.createdAt,
-    //         });
-    //       }
-    //       setDataSourceSeller(temp);
-    //       console.log(res);
-    //     });
-    //   setIsLoading(false);
-    // }
+    // For Sellers
+    async function loadSellerData() {
+      setIsLoading(true);
+      fetch(
+        "http://localhost:9000/getPurchaseRequests?" +
+          new URLSearchParams({
+            sessionToken: user.getSessionToken(),
+            ownerAddress: user.get("ethAddress"),
+          })
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          var temp = [];
+          for (var i = 0; i < res.length; i++) {
+            var e = res[i];
+            temp.push({
+              key: i,
+              address: shortenAddress(e.address, 25),
+              propertyID: e.propertyObjectId,
+              dateRequested: e.createdAt,
+            });
+          }
+          setDataSourceSeller(temp);
+          console.log(res);
+        });
+      setIsLoading(false);
+    }
 
+    // For Buyers
     const loadBuyerRequests = async () => {
       try {
         const userEmails = Moralis.Object.extend("PurchaseRequest");
@@ -117,7 +103,7 @@ const PurchaseRequests = (props) => {
           });
         });
         setDataSourceBuyer(tempArray);
-        // tempArray.sort(compareByDecision);
+        tempArray.sort(compareByDecision);
         // tempArray.sort(compareByAddress);
       } catch (error) {
         console.log("Error: ", error);
@@ -125,15 +111,89 @@ const PurchaseRequests = (props) => {
     };
     // calling the functions
     loadBuyerRequests();
-    // loadSellerData();
+    loadSellerData();
   }, []);
 
+  // comparison functions
+  // --------------------
+  function compareByAddress(a, b) {
+    if (a.address < b.address) {
+      return -1;
+    }
+    if (a.address > b.address) {
+      return 1;
+    }
+    return 0;
+  }
+  function compareByDecision(a, b) {
+    if (a.isAccepted > b.isAccepted) {
+      return -1;
+    }
+    if (a.isAccepted < b.isAccepted) {
+      return 1;
+    }
+    return 0;
+  }
+
+  // variables
+  const [dataSourceBuyer, setDataSourceBuyer] = useState([]);
+  const [dataSourceSellerTemp, setDataSourceSellerTemp] = useState([
+    {
+      key: "1",
+      address: "0x4001A8651c51...5da60538b327b96",
+      propertyID: "y7dM24zgRcYAs68Hs03FMSVi",
+      dateRequested: "10 Nov 2022",
+      isPending: true,
+    },
+    {
+      key: "2",
+      address: "0x4001A8651c51...5da60538b327b96",
+      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+      dateRequested: "10 Nov 2022",
+      isPending: false,
+    },
+    {
+      key: "3",
+      address: "0x4001A8651c51...5da60538b327b96",
+      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+      dateRequested: "10 Nov 2022",
+      isPending: true,
+    },
+  ]);
+  const [dataSourceSeller, setDataSourceSeller] = useState([]);
+  const [pruchaseRequests, setPurchaseRequests] = useState([]);
+  const [accepted, setAccepted] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Functions for Seller to 'accept' or 'reject' the request
+  const acceptRequest = (requesterAddress, propertyId) => {
+    message.success(
+      "Request Accepted for user (" + requesterAddress.slice(0, 12) + "...) "
+    );
+    removeRequest(dataSourceSellerTemp, requesterAddress, propertyId);
+  };
+
+  const rejectRequest = (address, propertyId) => {
+    message.error(
+      "Request Accepted for owner: " + address + " & propertyId: " + propertyId
+    );
+  };
+
   // removes the request with the property ID
-  const removeRequest = (propertyId, ownerAddress) => {
-    removeByAttr();
-    const temp = dataSourceBuyer;
-    removeByAttr(temp, "propertyID", propertyId, "address", ownerAddress);
-    setDataSourceBuyer(temp);
+  const removeRequest = (arr, ownerAddress, propertyId) => {
+    let index;
+    arr.map((request, k) => {
+      if (
+        request.address === ownerAddress &&
+        request.propertyID === propertyId &&
+        request.isPending === true
+      ) {
+        index = k;
+      }
+      const temp = setDataSourceSellerTemp;
+      temp[index].isPending = false;
+      setDataSourceSellerTemp(temp);
+    });
   };
 
   // removes the object by the key and value
@@ -154,190 +214,46 @@ const PurchaseRequests = (props) => {
     return arr;
   };
 
-  function compareByAddress(a, b) {
-    if (a.address < b.address) {
-      return -1;
-    }
-    if (a.address > b.address) {
-      return 1;
-    }
-    return 0;
-  }
+  // creates the agreementDraft for the property
+  const createAgreementDraft = async (
+    ownerAddress,
+    propertyId,
+    buyerAddress,
+    agreementHash
+  ) => {
+    try {
+      // if (!onlyNumbers(propertyId)) {
+      //   message.error("Invalid Input: Id entered is in incorrect format.");
+      //   return;
+      // }
+      // if (propertyId === "0") {
+      //   message.error("Invalid ID! Property Id cannot be zero.");
+      //   return;
+      // }
+      // if (terms == "") {
+      //   message.error("Invalid Input! Terms of agreement cannot be empty.");
+      //   return;
+      // }
 
-  function compareByDecision(a, b) {
-    if (a.status < b.status) {
-      return -1;
+      // generating a random strings for the Agreement Hash
+      const rand1 = Math.random().toString(36).substring(2, 12);
+      const rand2 = Math.random().toString(36).substring(2, 12);
+      const rand3 = Math.random().toString(36).substring(2, 12);
+      const rand4 = Math.random().toString(36).substring(2, 8);
+      const hash = rand1 + rand2 + rand3 + rand4;
+      await realEstateContract.submitDraft(
+        ownerAddress,
+        parseInt(propertyId),
+        buyerAddress,
+        hash
+      );
+      message.success(
+        "Agreement deployed successfully (hash: " + hash.slice(0, 10) + "...)"
+      );
+    } catch (error) {
+      message.error("Error: " + error.error.reason);
     }
-    if (a.status > b.status) {
-      return 1;
-    }
-    return 0;
-  }
-
-  const columnsSeller = [
-    {
-      title: "Address Of User",
-      width: 300,
-      dataIndex: "address",
-      key: "name",
-      fixed: "left",
-    },
-    {
-      title: "Property ID",
-      width: 250,
-      dataIndex: "propertyID",
-      key: "1",
-    },
-    {
-      title: "Date Requested",
-      dataIndex: "dateRequested",
-      key: "2",
-    },
-    {
-      title: "Decision",
-      key: "operation",
-      fixed: "right",
-      width: 200,
-      innerHeight: 100,
-      render: (_, record) =>
-        !accepted ? (
-          <>
-            <Popconfirm
-              title="Are you sure to accepet this purchase request?"
-              onConfirm={() => {
-                handleDelete(record.key);
-                message.success("Accepted Purchase Request");
-              }}
-              onCancel={() => {
-                return;
-              }}
-              okText="Accept"
-              cancelText="Cancel"
-            >
-              <button
-                id="acceptButton"
-                onClick={() => {
-                  // message.success("Accepted Purchase Request");
-                  // handleDelete(record.key);
-                }}
-              >
-                Accept
-              </button>
-            </Popconfirm>
-            <Popconfirm
-              title="Are you sure to reject this purchase request?"
-              onConfirm={() => {
-                handleDelete(record.key);
-                message.info("Purchase Request Rejected");
-              }}
-              onCancel={() => {
-                return;
-              }}
-              okText="Reject"
-              cancelText="Cancel"
-            >
-              <button
-                id="rejectButton"
-                onClick={() => {
-                  handleDelete(record.key);
-                  handleDelete();
-                }}
-              >
-                Reject
-              </button>
-            </Popconfirm>
-          </>
-        ) : (
-          <>Accepted</>
-        ),
-    },
-  ];
-
-  // const [dataSourceSeller, setDataSourceSeller] = useState([
-  //   {
-  //     key: "1",
-  //     address: "0x4001A8651c51...5da60538b327b96",
-  //     propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-  //     dateRequested: "10 Nov 2022",
-  //   },
-  //   {
-  //     key: "2",
-  //     address: "0x4001A8651c51...5da60538b327b96",
-  //     propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-  //     dateRequested: "10 Nov 2022",
-  //   },
-  //   {
-  //     key: "3",
-  //     address: "0x4001A8651c51...5da60538b327b96",
-  //     propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-  //     dateRequested: "10 Nov 2022",
-  //   },
-  //   {
-  //     key: "4",
-  //     address: "0x4001A8651c51...5da60538b327b96",
-  //     propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-  //     dateRequested: "10 Nov 2022",
-  //   },
-  //   {
-  //     key: "5",
-  //     address: "0x4001A8651c51...5da60538b327b96",
-  //     propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-  //     dateRequested: "10 Nov 2022",
-  //   },
-  //   {
-  //     key: "6",
-  //     address: "0x4001A8651c51...5da60538b327b96",
-  //     propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-  //     dateRequested: "10 Nov 2022",
-  //   },
-  //   {
-  //     key: "7",
-  //     address: "0x4001A8651c51...5da60538b327b96",
-  //     propertyID: "z7dM24zgRcYAs68Hs03FMSki",
-  //     dateRequested: "12 Nov 2022",
-  //   },
-  //   {
-  //     key: "8",
-  //     address: "0x4001A8651c51...5da60538b327b96",
-  //     propertyID: "u7dM24zgRcYAs68Hs03FMSki",
-  //     dateRequested: "15 Nov 2022",
-  //   },
-  // ]);
-
-  // handles the deletion of the row in the table
-  const handleDelete = (key) => {
-    const newData = dataSourceSeller.filter((item) => item.key !== key);
-    setDataSourceSeller(newData);
   };
-
-  const [dataSourceBuyer, setDataSourceBuyer] = useState([]);
-  const [dataSourceSellerTemp, setDataSourceSellerTemp] = useState([
-    {
-      key: "1",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "None",
-    },
-    {
-      key: "2",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "None",
-    },
-    {
-      key: "3",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "None",
-    },
-  ]);
-  const [dataSourceSeller, setDataSourceSeller] = useState([]);
-  const [pruchaseRequests, setPurchaseRequests] = useState([]);
-  const [accepted, setAccepted] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     authenticate,
@@ -354,6 +270,7 @@ const PurchaseRequests = (props) => {
     ...rest
   } = useMoralis();
 
+  // shows the buyer purchase requests section
   if (props.isBuyer === "true") {
     if (!isLoading) {
       return (
@@ -377,6 +294,7 @@ const PurchaseRequests = (props) => {
                       <th>Date Requested</th>
                       <th>Seller Decision</th>
                     </tr>
+                    {/* Array is empty */}
                     {dataSourceBuyer.length === 0 && (
                       <tr>
                         <td colSpan="4" style={{ textAlign: "center" }}>
@@ -400,13 +318,14 @@ const PurchaseRequests = (props) => {
                             <td>{item.dateRequested}</td>
                             <td
                               className="requestAccepted"
-                              style={{ color: "#9dabb3" }}
+                              style={{ color: "#666" }}
                             >
                               Pending
                             </td>
                           </tr>
                         );
                       }
+                      // Accepted
                       if (
                         item.isAccepted === true &&
                         item.isPending === false
@@ -423,11 +342,17 @@ const PurchaseRequests = (props) => {
                               className="requestAccepted"
                               style={{ color: "#2db32d" }}
                             >
-                              Accepted
+                              <button
+                                className="createAgreementDraftButton"
+                                onClick={() => {}}
+                              >
+                                Create Agreement
+                              </button>
                             </td>
                           </tr>
                         );
                       }
+                      // Rejected
                       if (
                         item.isAccepted === false &&
                         item.isPending === false
@@ -475,6 +400,7 @@ const PurchaseRequests = (props) => {
       );
     }
   } else {
+    // shows the Seller purchase requests section
     if (!isLoading) {
       return (
         <div className="rightsidebar_container">
@@ -499,7 +425,8 @@ const PurchaseRequests = (props) => {
                       <th>Date Requested</th>
                       <th>Your Decision</th>
                     </tr>
-                    {dataSourceSeller.length === 0 && (
+                    {/* show no data icon if array is empty */}
+                    {dataSourceSellerTemp.length === 0 && (
                       <tr>
                         <td colspan="4" style={{ textAlign: "center" }}>
                           <img
@@ -510,52 +437,46 @@ const PurchaseRequests = (props) => {
                         </td>
                       </tr>
                     )}
-                    {dataSourceSeller.map((item) =>
-                      item.status.toString() === "true" ? (
-                        <tr key={item.key} className="notBuyerFirstRowAccepted">
-                          <td>{item.address}</td>
-                          <td>{item.propertyID}</td>
-                          <td>{item.dateRequested}</td>
-                          {item.status.toString() === "true" ? (
-                            <td
-                              className="requestAccepted"
-                              style={{ color: "#2db32d" }}
-                            >
-                              Accepted
+                    {dataSourceSellerTemp.map((item) => {
+                      if (item.isPending === true) {
+                        return (
+                          <tr
+                            key={item.key}
+                            className="notBuyerFirstRowAccepted"
+                          >
+                            <td>{item.address}</td>
+                            <td>{item.propertyID}</td>
+                            <td>{item.dateRequested}</td>
+                            <td style={{ display: "flex", gap: "1rem" }}>
+                              <button
+                                className="acceptButton"
+                                onClick={() => {
+                                  acceptRequest(item.address, item.propertyID);
+                                }}
+                              >
+                                Accept
+                              </button>
+                              <button
+                                className="rejectButton"
+                                onClick={() => {
+                                  rejectRequest(item.address, item.propertyID);
+                                }}
+                              >
+                                Reject
+                              </button>
                             </td>
-                          ) : (
-                            <td
-                              className="requestRejected"
-                              style={{ color: "#FF0000" }}
-                            >
-                              Rejected
-                            </td>
-                          )}
-                        </tr>
-                      ) : (
-                        <tr key={item.key} className="notBuyerFirstRowRejected">
-                          <td>{item.address}</td>
-                          <td>{item.propertyID}</td>
-                          <td>{item.dateRequested}</td>
-                          {item.status.toString() === "true" ? (
-                            <td
-                              className="requestAccepted"
-                              style={{ color: "#2db32d" }}
-                            >
-                              Accepted
-                            </td>
-                          ) : (
-                            <td
-                              className="requestRejected"
-                              style={{ color: "#FF0000" }}
-                            >
-                              Rejected
-                            </td>
-                          )}
-                        </tr>
-                      )
-                    )}
+                          </tr>
+                        );
+                      }
+                    })}
                   </table>
+                  <button
+                    onClick={() => {
+                      // removeByAttr(dataSourceSellerTemp, "address");
+                    }}
+                  >
+                    remove row
+                  </button>
                 </div>
               </div>
             </div>

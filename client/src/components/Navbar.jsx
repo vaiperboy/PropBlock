@@ -140,7 +140,7 @@ const Navbar = (props) => {
                     theme="image"
                     className="avatar"
                     onClick={() => {
-                      // showButtons();
+                      showButtons();
                     }}
                   />
                 ) : (

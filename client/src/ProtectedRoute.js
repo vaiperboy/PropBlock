@@ -24,8 +24,8 @@ function ProtectedRoute({ component }) {
   } = useMoralis();
 
   // useState vars
-  const [isNormalUser, setIsNormalUser] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isNormalUser, setIsNormalUser] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   // checks if the user is not a government User
   const checkUserType = async () => {
