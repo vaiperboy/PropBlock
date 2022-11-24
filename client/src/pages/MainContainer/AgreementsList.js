@@ -8,6 +8,8 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import MyAgreements from "./MyAgreements";
+import no_data from "../../assets/no_data.png";
+import "../../styling/MainContainer/Agreements.scss";
 const console = require("console-browserify");
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -16,214 +18,188 @@ const AgreementsList = (props) => {
   const [showAgreement, setShowAgreements] = useState(false);
   const [currentAgreementId, setCurrentAgreementId] = useState("");
 
-  const columnsBuyer = [
-    {
-      title: "Address Of User",
-      width: 300,
-      dataIndex: "address",
-      key: "name",
-      fixed: "left",
-    },
-    {
-      title: "Property ID",
-      width: 250,
-      dataIndex: "propertyID",
-      key: "1",
-    },
-    {
-      title: "Date Requested",
-      dataIndex: "dateRequested",
-      key: "2",
-    },
-    {
-      title: "Decision",
-      key: "3",
-      dataIndex: "status",
-      fixed: "right",
-      width: 200,
-      innerHeight: 100,
-    },
-  ];
-  const columnsSeller = [
-    {
-      title: "Address Of User",
-      width: 300,
-      dataIndex: "address",
-      key: "name",
-      fixed: "left",
-    },
-    {
-      title: "Property ID",
-      width: 250,
-      dataIndex: "propertyID",
-      key: "1",
-    },
-    {
-      title: "Date Requested",
-      dataIndex: "dateRequested",
-      key: "2",
-    },
-    {
-      title: "Decision",
-      key: "operation",
-      fixed: "right",
-      width: 200,
-      innerHeight: 100,
-      render: (_, record) =>
-        !isUploaded ? (
-          <>
-            <button
-              id="acceptButton"
-              onClick={() => {
-                setShowAgreements(true);
-                setIsUploaded(true);
-              }}
-            >
-              Upload
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              id="acceptButton"
-              style={{ pointerEvents: "none" }}
-              onClick={() => {}}
-              className
-            >
-              Uploaded
-            </button>
-          </>
-        ),
-    },
-  ];
-
   const [dataSourceSeller, setDataSourceSeller] = useState([
+    // upload documents - first time
     {
       key: "1",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
+      ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
+      buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
+      propertyID: "1",
+      propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
+      areDocsUploaded: false,
+      isBeingVerfied: false,
+      notFirstTime: false,
+      isRevisionRequired: false,
+      isGovernmentVerified: false,
+      isBuyerCancelled: false,
+      isOwnerCancelled: false,
+      buyerPaymentComplete: false,
     },
+    // uploaded documents - first time
     {
-      key: "2",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
+      key: "1",
+      ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
+      buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
+      propertyID: "1",
+      propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
+      areDocsUploaded: true,
+      isBeingVerfied: false,
+      notFirstTime: false,
+      isRevisionRequired: false,
+      isGovernmentVerified: false,
+      isBuyerCancelled: false,
+      isOwnerCancelled: false,
+      buyerPaymentComplete: false,
     },
+    // uploaded && approved
     {
-      key: "3",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
+      key: "1",
+      ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
+      buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
+      propertyID: "1",
+      propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
+      areDocsUploaded: true,
+      isBeingVerfied: true,
+      notFirstTime: false,
+      isRevisionRequired: false,
+      isGovernmentVerified: true,
+      isBuyerCancelled: false,
+      isOwnerCancelled: false,
+      buyerPaymentComplete: false,
     },
+    // needs revision - upload needed second time
     {
-      key: "4",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
+      key: "1",
+      ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
+      buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
+      propertyID: "1",
+      propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
+      areDocsUploaded: false,
+      isBeingVerfied: true,
+      notFirstTime: true,
+      isRevisionRequired: true,
+      isGovernmentVerified: false,
+      isBuyerCancelled: false,
+      isOwnerCancelled: false,
+      buyerPaymentComplete: false,
     },
+    // uploaded second time - after revision
     {
-      key: "5",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
+      key: "1",
+      ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
+      buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
+      propertyID: "1",
+      propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
+      areDocsUploaded: true,
+      isBeingVerfied: false,
+      notFirstTime: true,
+      isRevisionRequired: false,
+      isGovernmentVerified: false,
+      isBuyerCancelled: false,
+      isOwnerCancelled: false,
+      buyerPaymentComplete: false,
     },
+    // buyer cancelled
     {
-      key: "6",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
+      key: "1",
+      ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
+      buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
+      propertyID: "1",
+      propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
+      areDocsUploaded: true,
+      isBeingVerfied: false,
+      notFirstTime: false,
+      isRevisionRequired: false,
+      isGovernmentVerified: false,
+      isBuyerCancelled: true,
+      isOwnerCancelled: false,
+      buyerPaymentComplete: false,
     },
+    // owner cancelled
     {
-      key: "7",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "z7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "12 Nov 2022",
-    },
-    {
-      key: "8",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "u7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "15 Nov 2022",
+      key: "1",
+      ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
+      buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
+      propertyID: "1",
+      propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
+      areDocsUploaded: true,
+      isBeingVerfied: false,
+      notFirstTime: false,
+      isRevisionRequired: false,
+      isGovernmentVerified: false,
+      isBuyerCancelled: false,
+      isOwnerCancelled: true,
+      buyerPaymentComplete: false,
     },
   ]);
-
   const [dataSourceBuyer, setDataSourceBuyer] = useState([
     {
       key: "1",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "Accepted",
+      ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
+      propertyID: "1",
+      propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
+      isGovernmentVerified: false,
+      isOwnerCancelled: false,
+      isBuyerCancelled: false,
     },
     {
       key: "2",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "Declined",
+      ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
+      propertyID: "2",
+      propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
+      isGovernmentVerified: true,
+      isOwnerCancelled: false,
+      isBuyerCancelled: false,
     },
     {
       key: "3",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "Accepted",
+      ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
+      propertyID: "3",
+      propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
+      isGovernmentVerified: false,
+      isOwnerCancelled: true,
+      isBuyerCancelled: false,
     },
     {
       key: "4",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "accepted",
-    },
-    {
-      key: "5",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "accepted",
-    },
-    {
-      key: "6",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "10 Nov 2022",
-      status: "accepted",
-    },
-    {
-      key: "7",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "z7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "12 Nov 2022",
-      status: "accepted",
-    },
-    {
-      key: "8",
-      address: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "u7dM24zgRcYAs68Hs03FMSki",
-      dateRequested: "15 Nov 2022",
-      status: "accepted",
+      ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
+      propertyID: "4",
+      propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
+      isGovernmentVerified: false,
+      isOwnerCancelled: false,
+      isBuyerCancelled: true,
     },
   ]);
-
-  // handles the deletion of the row in the table
-  const handleDelete = (key) => {
-    const newData = dataSourceSeller.filter((item) => item.key !== key);
-    setDataSourceSeller(newData);
-  };
-
-  // is run for the table
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log("params", pagination, filters, sorter, extra);
-  };
-
   const [agreements, setAgreements] = useState([]);
-
   const [isLoading, setIsLoading] = useState(true);
   const [isUploaded, setIsUploaded] = useState(false);
 
-  console.log("buyer: ", props.isBuyer);
+  // Function to shorten the address
+  const shortenAddress = (text, maxWords) => {
+    if (maxWords < text.length && maxWords >= 18) {
+      text = text.substring(0, 15) + " ... " + text.substring(text.length - 10);
+    }
+    return text;
+  };
+
+  // function run when clicked on finish agreement button
+  const completeAgreement = () => {
+    try {
+      message.success("Agreement Completed");
+    } catch (error) {
+      console.log("error: " + error);
+    }
+  };
+
+  function sortByAction(a, b) {
+    if (a.isGovernmentVerified > b.isGovernmentVerified) {
+      return -1;
+    }
+    if (a.isGovernmentVerified < b.isGovernmentVerified) {
+      return 1;
+    }
+    return 0;
+  }
 
   const {
     authenticate,
@@ -278,8 +254,9 @@ const AgreementsList = (props) => {
       setIsLoading(false);
       console.log(tmpData);
     }
-
     loadData();
+
+    // dataSourceBuyer.sort(sortByAction);
   }, []);
 
   if (props.isBuyer === "true") {
@@ -296,21 +273,95 @@ const AgreementsList = (props) => {
           >
             <div>
               <p className="rightsidebar_title">Agreements </p>
-              <div className="purchaseRequestsContainer">
+              <div className="agreementsContainer">
                 <div className="tableContainer">
-                  <Table
-                    columns={columnsBuyer}
-                    dataSource={dataSourceBuyer}
-                    onChange={onChange}
-                    pagination={{
-                      pageSize: 50,
-                    }}
-                    scroll={{
-                      y: 600,
-                    }}
-                    bordered
-                    title={() => "Agreements"}
-                  />
+                  <table className="buyersTable">
+                    <tr>
+                      <th width="37%">Owner's Address</th>
+                      <th width="13%">Property ID</th>
+                      <th>Agreement Status</th>
+                      <th width="25%">Action</th>
+                    </tr>
+                    {/* Array is empty */}
+                    {dataSourceBuyer.length === 0 && (
+                      <tr>
+                        <td colSpan="4" style={{ textAlign: "center" }}>
+                          <img
+                            src={no_data}
+                            style={{ width: "10rem" }}
+                            alt="no_Data"
+                          ></img>
+                        </td>
+                      </tr>
+                    )}
+                    {dataSourceBuyer.map((item) => {
+                      // Agreement is cancelled by the buyer
+                      if (item.isBuyerCancelled === true) {
+                        return (
+                          <tr key={item.key} className="agreementCancelled">
+                            <td>{shortenAddress(item.ownerAddress, 20)}</td>
+                            <td>{item.propertyID}</td>
+                            <td style={{ color: "#cb4335" }}>Cancelled</td>
+                            <td>-</td>
+                          </tr>
+                        );
+                      }
+                      // Agreement is cancelled by the owner of the property
+                      if (item.isOwnerCancelled === true) {
+                        return (
+                          <tr key={item.key} className="agreementCancelled">
+                            <td>{shortenAddress(item.ownerAddress, 20)}</td>
+                            <td>{item.propertyID}</td>
+                            <td style={{ color: "#cb4335" }}>
+                              Cancelled by Owner
+                            </td>
+                            <td>-</td>
+                          </tr>
+                        );
+                      }
+                      // Complete Agreement
+                      if (
+                        item.isGovernmentVerified === true &&
+                        item.isOwnerCancelled === false &&
+                        item.isBuyerCancelled === false
+                      ) {
+                        return (
+                          <tr key={item.key} className="agreementComplete">
+                            <td>{shortenAddress(item.ownerAddress, 20)}</td>
+                            <td>{item.propertyID}</td>
+                            <td style={{ color: "#2ecc71" }}>Govt. Verified</td>
+                            <td className="acceptAgreement">
+                              <button
+                                className="finishAgreementButton"
+                                onClick={() => {
+                                  completeAgreement();
+                                }}
+                              >
+                                Finish Agreement
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      }
+                      // Agreement waiting for government approval
+                      if (
+                        item.isGovernmentVerified === false &&
+                        item.isOwnerCancelled === false &&
+                        item.isBuyerCancelled === false
+                      ) {
+                        return (
+                          <tr key={item.key} className="agreementCancelled">
+                            <td>{shortenAddress(item.ownerAddress, 20)}</td>
+                            <td>{item.propertyID}</td>
+                            <td style={{ color: "#3daeee" }}>
+                              Govt. Approval Pending
+                            </td>
+                            <td className="acceptAgreement">- </td>
+                          </tr>
+                        );
+                      }
+                    })}
+                  </table>
                 </div>
               </div>
             </div>
@@ -350,21 +401,149 @@ const AgreementsList = (props) => {
             >
               <div>
                 <p className="rightsidebar_title">My Properties Agreements</p>
-                <div className="purchaseRequestsContainer">
+                <div className="agreementsContainer">
                   <div className="tableContainer">
-                    <Table
-                      pagination={{
-                        pageSize: 50,
-                      }}
-                      scroll={{
-                        y: 600,
-                      }}
-                      columns={columnsSeller}
-                      dataSource={dataSourceSeller}
-                      onChange={onChange}
-                      bordered
-                      title={() => "Agreements"}
-                    />
+                    <table className="buyersTable">
+                      <tr>
+                        <th width="30%">Owner's Address</th>
+                        <th width="13%">Property ID</th>
+                        <th>Agreement Status</th>
+                        <th width="20%">Action</th>
+                      </tr>
+                      {/* Array is empty */}
+                      {dataSourceSeller.length === 0 && (
+                        <tr>
+                          <td colSpan="4" style={{ textAlign: "center" }}>
+                            <img
+                              src={no_data}
+                              style={{ width: "10rem" }}
+                              alt="no_Data"
+                            ></img>
+                          </td>
+                        </tr>
+                      )}
+                      {dataSourceSeller.map((item) => {
+                        // Agreement is cancelled by the owner of the property
+                        if (item.isOwnerCancelled === true) {
+                          return (
+                            <tr key={item.key} className="agreementCancelled">
+                              <td>{shortenAddress(item.ownerAddress, 20)}</td>
+                              <td>{item.propertyID}</td>
+                              <td style={{ color: "red" }}>
+                                Cancelled by Owner
+                              </td>
+                              <td>-</td>
+                            </tr>
+                          );
+                        }
+                        // Agreement is cancelled by the buyer
+                        if (item.isBuyerCancelled === true) {
+                          return (
+                            <tr key={item.key} className="agreementCancelled">
+                              <td>{shortenAddress(item.ownerAddress, 20)}</td>
+                              <td>{item.propertyID}</td>
+                              <td style={{ color: "red" }}>Cancelled</td>
+                              <td>-</td>
+                            </tr>
+                          );
+                        }
+                        // Upload documents for the agreement - first time
+                        if (
+                          item.areDocsUploaded === false &&
+                          item.notFirstTime === false
+                        ) {
+                          return (
+                            <tr key={item.key} className="agreementCancelled">
+                              <td>{shortenAddress(item.ownerAddress, 20)}</td>
+                              <td>{item.propertyID}</td>
+                              <td style={{ color: "#3daeee" }}>
+                                Upload Documents for agreement
+                              </td>
+                              <td>
+                                <buttom className="uploadDocumentsButton">
+                                  Upload Documents
+                                </buttom>
+                              </td>
+                            </tr>
+                          );
+                        }
+                        // Document are uploaded - first time && waiting approval
+                        if (
+                          item.areDocsUploaded === true &&
+                          item.notFirstTime === false &&
+                          item.isBeingVerfied === false
+                        ) {
+                          return (
+                            <tr key={item.key} className="agreementComplete">
+                              <td>{shortenAddress(item.ownerAddress, 20)}</td>
+                              <td>{item.propertyID}</td>
+                              <td style={{ color: "#666666" }}>
+                                Govt. Approval Pending
+                              </td>
+                              <td> - </td>
+                            </tr>
+                          );
+                        }
+                        // Document are uploaded - not first time && waiting approval
+                        if (
+                          item.areDocsUploaded === true &&
+                          item.notFirstTime === true &&
+                          item.isBeingVerfied === false
+                        ) {
+                          return (
+                            <tr key={item.key} className="agreementComplete">
+                              <td>{shortenAddress(item.ownerAddress, 20)}</td>
+                              <td>{item.propertyID}</td>
+                              <td style={{ color: "#666666" }}>
+                                Govt. Approval Pending (After revision)
+                              </td>
+                              <td> - </td>
+                            </tr>
+                          );
+                        }
+                        // documents are uploaded and approved
+                        if (
+                          item.areDocsUploaded === true &&
+                          item.isGovernmentVerified === true
+                        ) {
+                          return (
+                            <tr key={item.key} className="agreementComplete">
+                              <td>{shortenAddress(item.ownerAddress, 20)}</td>
+                              <td>{item.propertyID}</td>
+                              <td style={{ color: "#2ecc71" }}>
+                                Govt. Approved
+                              </td>
+                              <td> - </td>
+                            </tr>
+                          );
+                        }
+                        // documents need revison
+                        if (
+                          item.areDocsUploaded === false &&
+                          item.notFirstTime === true &&
+                          item.isBeingVerfied === true &&
+                          item.isRevisionRequired === true
+                        ) {
+                          return (
+                            <tr key={item.key} className="agreementComplete">
+                              <td>{shortenAddress(item.ownerAddress, 20)}</td>
+                              <td>{item.propertyID}</td>
+                              <td style={{ color: "#dc8d0f" }}>
+                                Documents Invalid - Upload valid Documents
+                              </td>
+                              <td>
+                                <buttom className="uploadDocumentsButton">
+                                  Upload Documents
+                                </buttom>
+                              </td>
+                            </tr>
+                          );
+                        }
+                        // docs are uploaded but rejected && needs revision
+
+                        // docs uploaded but needs revision
+                      })}
+                    </table>
                   </div>
                 </div>
               </div>

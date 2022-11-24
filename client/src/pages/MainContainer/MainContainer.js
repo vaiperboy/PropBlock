@@ -35,7 +35,7 @@ class MainContainer extends React.Component {
       profileView: false,
       settingView: false,
     },
-    isLoading: true,
+    // isLoading: false,
     isBuyer: true,
   };
 
@@ -67,6 +67,22 @@ class MainContainer extends React.Component {
         purchaseRequestView: false,
         dashboardView: false,
         propertiesView: val,
+        statsView: false,
+        paymentView: false,
+        profileView: false,
+        settingView: false,
+      },
+    });
+  };
+
+  toggleAgreementsView = (val) => {
+    this.setState({
+      menuState: {
+        uploadMode: false,
+        agreementView: val,
+        purchaseRequestView: false,
+        dashboardView: false,
+        propertiesView: false,
         statsView: false,
         paymentView: false,
         profileView: false,
@@ -189,8 +205,8 @@ class MainContainer extends React.Component {
 
   componentDidMount = async () => {
     // Set loading state to true initially
-    await new Promise((r) => setTimeout(r, 500));
-    this.setState({ isLoading: false });
+    // await new Promise((r) => setTimeout(r, 500));
+    // this.setState({ isLoading: false });
   };
 
   render() {
@@ -242,12 +258,12 @@ class MainContainer extends React.Component {
                   toggleSettingView={this.toggleSettingView}
                   toggleProfileView={this.toggleProfileView}
                   togglePaymentView={this.togglePaymentView}
+                  toggleAgreementView={this.toggleAgreementView}
                   toggleStatsView={this.toggleStatsView}
                   togglePropertiesView={this.togglePropertiesView}
                   toggleDashboardView={this.toggleDashboardView}
                   purchaseRequestView={this.state.purchaseRequestView}
                   toggleView={this.toggleView}
-                  toggleAgreementView={this.toggleAgreementView}
                   togglePurchaseRequestView={this.togglePurchaseRequestView}
                 />
               ) : null}

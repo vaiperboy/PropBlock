@@ -21,7 +21,7 @@ const MyAgreements = (props) => {
       >
         <div>
           <p className="rightsidebar_title">My Agreements</p>
-          <p className="rightsidebar_subtitle">Agreement ID - #12212</p>
+          <p className="rightsidebar_subtitle">Agreement ID - #{props.id}</p>
         </div>
         <div>
           <svg
