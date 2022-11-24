@@ -44,17 +44,42 @@ module.exports.getLinks = async function (cid) {
     return hashes;
 }
 
-//makes sure user is authenticated
-module.exports.isAuthenticated = async function(sessionToken) {
+//makes sure user is authenticated & with the matching address
+//passing the address is optional
+module.exports.isAuthenticated = async function(sessionToken, address) {
     return new Promise(async (resolve, reject) => {
         try {
-            var query = new Moralis.Query("_Session");
-            query.equalTo("sessionToken", sessionToken);
-            query.limit(1);
-            query.withCount();
-            const result = await query.find({useMasterKey: true});
-            resolve(result.count === 1); //if session exsists its authenticated
-            return;
+            var sessionQuery = new Moralis.Query("_Session");
+            sessionQuery.equalTo("sessionToken", sessionToken);
+            sessionQuery.limit(1);
+            const result = await sessionQuery.find({useMasterKey: true});
+            if (result.length === 0) {
+                resolve(false)
+                return;
+            }
+            
+            //if not address is passed
+            if (address === undefined) {
+               
+                resolve(true)
+                return
+            }
+
+            const userId = JSON.parse(JSON.stringify(result))[0].user.objectId
+
+            //check _User table
+            var userQuery = new Moralis.Query("_User")
+            userQuery.equalTo("objectId", userId)
+            userQuery.limit(1)
+            const userQueryResult = await userQuery.find({useMasterKey: true})
+            if (userQueryResult.length === 0) {
+                resolve(false)
+                return;
+            }
+            const _result = JSON.parse(JSON.stringify(userQueryResult))[0]
+            const matchingUserAddress = _result.ethAddress
+            resolve(matchingUserAddress.toLowerCase() == address.toLowerCase())
+            return
         } catch {
             resolve(false);
         }
