@@ -10,6 +10,7 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import MyAgreements from "./MyAgreements";
 import no_data from "../../assets/no_data.png";
 import "../../styling/MainContainer/Agreements.scss";
+import AgreementView from "./AgreementView";
 const console = require("console-browserify");
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -25,6 +26,7 @@ const AgreementsList = (props) => {
       ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
       buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
       propertyID: "1",
+      agreementId: "1",
       propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
       areDocsUploaded: false,
       isBeingVerfied: false,
@@ -41,6 +43,7 @@ const AgreementsList = (props) => {
       ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
       buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
       propertyID: "1",
+      agreementId: "1",
       propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
       areDocsUploaded: true,
       isBeingVerfied: false,
@@ -57,6 +60,7 @@ const AgreementsList = (props) => {
       ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
       buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
       propertyID: "1",
+      agreementId: "1",
       propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
       areDocsUploaded: true,
       isBeingVerfied: true,
@@ -73,6 +77,7 @@ const AgreementsList = (props) => {
       ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
       buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
       propertyID: "1",
+      agreementId: "1",
       propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
       areDocsUploaded: false,
       isBeingVerfied: true,
@@ -89,6 +94,7 @@ const AgreementsList = (props) => {
       ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
       buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
       propertyID: "1",
+      agreementId: "1",
       propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
       areDocsUploaded: true,
       isBeingVerfied: false,
@@ -105,6 +111,7 @@ const AgreementsList = (props) => {
       ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
       buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
       propertyID: "1",
+      agreementId: "1",
       propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
       areDocsUploaded: true,
       isBeingVerfied: false,
@@ -121,6 +128,7 @@ const AgreementsList = (props) => {
       ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
       buyerAddress: "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3",
       propertyID: "1",
+      agreementId: "1",
       propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
       areDocsUploaded: true,
       isBeingVerfied: false,
@@ -173,6 +181,7 @@ const AgreementsList = (props) => {
   const [agreements, setAgreements] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUploaded, setIsUploaded] = useState(false);
+  const [uploadDocumentsView, setUploadDocumentsView] = useState(false);
 
   // Function to shorten the address
   const shortenAddress = (text, maxWords) => {
@@ -200,6 +209,18 @@ const AgreementsList = (props) => {
     }
     return 0;
   }
+
+  const handleUploadDocuments = (ownerAddress, agreementId) => {
+    try {
+      setUploadDocumentsView(true);
+      props.setOwnerAddress(ownerAddress);
+      props.setAgreementId(agreementId);
+      props.toggleAgreementView(false);
+      props.toggleAgreementView(1);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
 
   const {
     authenticate,
@@ -388,7 +409,7 @@ const AgreementsList = (props) => {
   } else {
     if (!isLoading) {
       if (showAgreement) return <MyAgreements />;
-      else
+      else {
         return (
           <div className="rightsidebar_container">
             <div
@@ -460,7 +481,15 @@ const AgreementsList = (props) => {
                                 Upload Documents for agreement
                               </td>
                               <td>
-                                <buttom className="uploadDocumentsButton">
+                                <buttom
+                                  className="uploadDocumentsButton"
+                                  onClick={() => {
+                                    handleUploadDocuments(
+                                      item.ownerAddress,
+                                      item.agreementId
+                                    );
+                                  }}
+                                >
                                   Upload Documents
                                 </buttom>
                               </td>
@@ -550,6 +579,7 @@ const AgreementsList = (props) => {
             </div>
           </div>
         );
+      }
     } else {
       if (showAgreement) {
         try {

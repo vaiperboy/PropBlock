@@ -187,7 +187,7 @@ class PurchaseRequests extends React.Component {
             <div
               className="dashboard_card"
               onClick={() => {
-                this.props.toggleAgreementView(true);
+                this.props.toggleAgreementListView(true);
               }}
             >
               <div className="dashboard_card_icon">

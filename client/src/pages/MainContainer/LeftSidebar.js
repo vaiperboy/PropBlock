@@ -211,7 +211,7 @@ class LeftSidebar extends React.Component {
                 }}
                 onClick={() => {
                   this.props.toggleView(false);
-                  this.props.toggleAgreementView(1);
+                  this.props.toggleAgreementListView(1);
                 }}
               >
                 <svg
@@ -470,7 +470,7 @@ class LeftSidebar extends React.Component {
                 }}
                 onClick={() => {
                   this.props.toggleView(false);
-                  this.props.toggleAgreementView(1);
+                  this.props.toggleAgreementListView(1);
                 }}
               >
                 <svg

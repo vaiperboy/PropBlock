@@ -291,8 +291,8 @@
 
     .agreement_view_subtitle {
         font-size: 24px;
-        font-weight: 700;
-        color: #e54335;
+        font-weight: 550;
+        color: #3daeee;
     }
 
     .agreement_view_value {
@@ -658,6 +658,36 @@
             width: 2rem;
         }
     }
+
+    .agreementView {
+        height: 130vh;
+        .ant-upload-list-text-container {
+            width: 80%;
+        }
+        .uploadAgreementDocs {
+            margin-top: 3rem;
+            h3 {
+                color: #555;
+                font-weight: 400;
+                font-size: 1.8rem;
+            }
+            .uploadFiles {
+                width: 80%;
+                border: 1px solid rgb(#3daeee, 0.5);
+                &:hover {
+                    border: 1px dashed #3daeee;
+                }
+            }
+            .agreementUploadHeading {
+                display: flex;
+                justify-content: space-between;
+                width: 80%;
+                align-items: center;
+                margin: 4rem 0 0.5rem 0;
+            }
+        }
+    }
+
     @media only screen and (max-width: 1099px) and (min-width: 768px) {
     }
 
