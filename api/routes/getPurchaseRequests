@@ -9,74 +9,66 @@ var router = express.Router();
 //getting purchases requests for a seller
 router.get("/getPurchaseRequests", async function (req, res, next) {
   const sessionToken = req.query.sessionToken;
-  if (!helper.isAuthenticated(sessionToken)) {
+  var isLoggedIn = await helper.isAuthenticated(sessionToken)
+  if (!isLoggedIn) {
     res.status(401);
-    res.send("not authenticated!");
+    res.send("not authenticated")
     return;
   }
-  const ownerAddress = req.query.ownerAddress;
+
+  const ownerAddress = req.query.ownerAddress.toLowerCase();
   if (ownerAddress) {
 
     const requestsQuery = new Moralis.Query("PurchaseRequest");
-    requestsQuery.equalTo("sellerEthAddress", ownerAddress.toLowerCase());
+    requestsQuery.equalTo("sellerEthAddress", ownerAddress);
+    requestsQuery.equalTo("isPending", true)
     const requestResult = await requestsQuery.find();
 
+     //because moralis object is very bad
+     //so ill just treat it as a JSON
+    const result = JSON.parse(JSON.stringify(requestResult))
+    // console.log("total result: " + result.length)
+    
     const data = [];
-    for (let i = 0; i < requestResult.length; i++) {
-      var currentResult = requestResult[i];
+    for (let i = 0; i < result.length; i++) {
+      var currentResult = result[i];
+      console.log(currentResult)
       //only return results with isBeingProcessed status
-      
-      console.log(currentResult.get("isBeingProccessed"));
-      if (
-        currentResult.get("isBeingProccessed") == undefined ||
-        currentResult.get("isBeingProccessed")
-      ) {
-        var requestorAddress = currentResult.get("requesterEthAddress");
-        var inCache = false;
-        var user = {};
-        const requestsQuery = new Moralis.Query("PurchaseRequest");
-        requestsQuery.equalTo("sellerEthAddress", ownerAddress);
-        const requestResult = await requestsQuery.find();
-        const data = [];
-        for (let i = 0; i < requestResult.length; i++) {
-          var currentResult = requestResult[i];
-          //only return results with isBeingProcessed status
-          console.log(currentResult.get("isBeingProccessed"));
-          if (currentResult.get("isBeingProccessed") == undefined || currentResult.get("isBeingProccessed")) {
-            var requestorAddress = currentResult.get("requesterEthAddress");
 
-            //make local caching
-            var inCache = false;
-            var user = {};
+      var inCache = false;
+      var user = {};
+      var requestorAddress = currentResult.requesterEthAddress;
 
-            for (var j = 0; j < data.length; j++) {
-              //if user exists in cache
-              if (data[j]["address"] == requestorAddress) {
-                inCache = true;
-                user = {
-                  fullName: data[j]["fullName"],
-                  address: data[j]["address"]
-                }
-                break;
-              }
-            }
+      //make local caching
+      var inCache = false;
+      var user = {};
 
-            if (!inCache) user = await helper.getUser(requestorAddress);
-            data.push({
-              fullName: user["fullName"],
-              address: user["address"],
-              isAccepted: currentResult.get("isAccepted"),
-              isBeingProcessed: currentResult.get("isBeingProccessed") ?? true,
-              createdAt: currentResult.get("createdAt"),
-              propertyObjectId: currentResult.get("propertyObjectId")
-            });
+      for (var j = 0; j < data.length; j++) {
+        //if user exists in cache
+        if (data[j]["address"] == requestorAddress) {
+          inCache = true;
+          user = {
+            fullName: data[j]["fullName"],
+            address: data[j]["address"]
           }
+          break;
         }
-        res.send(data);
-        return;
       }
+
+      if (!inCache) user = await helper.getUser(requestorAddress);
+      
+      data.push({
+        id: currentResult.objectId,
+        fullName: user.fullName,
+        address: user.address,
+        isAccepted: currentResult.isAccepted,
+        isPending: currentResult.isPending ?? true,
+        createdAt: currentResult.createdAt,
+        propertyObjectId: currentResult.propertyObjectId
+      });
     }
-  }
+    res.send(data);
+    }
 });
 
 module.exports = router;

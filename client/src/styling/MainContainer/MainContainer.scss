@@ -375,7 +375,7 @@
     .dashboard_card_container {
         display: flex;
         flex-wrap: wrap;
-        width: 100%;
+        width: 90%;
         gap: 3rem;
         margin: 2px;
     }
@@ -704,6 +704,7 @@
             }
         }
         .dashboard_card {
+            width: 50px;
             border-radius: 1rem;
             margin-right: 1rem;
             border: 1px solid #dedede;

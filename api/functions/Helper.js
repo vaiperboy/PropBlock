@@ -52,8 +52,11 @@ module.exports.isAuthenticated = async function(sessionToken) {
             query.equalTo("sessionToken", sessionToken);
             query.limit(1);
             query.withCount();
-            const result = await query.find();
-            resolve(result.count == 1); //if session exsists its authenticated
+            const result = await query.find({useMasterKey: true});
+            console.log("authenticating with: " + sessionToken)
+            console.log(result)
+            resolve(result.count === 1); //if session exsists its authenticated
+            return;
         } catch {
             resolve(false);
         }
