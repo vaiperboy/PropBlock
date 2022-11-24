@@ -294,7 +294,7 @@ const AgreementsList = (props) => {
                         </td>
                       </tr>
                     )}
-                    {dataSourceBuyer.map((item) => {
+                    {dataSourceBuyer.map((item, i) => {
                       // Agreement is cancelled by the buyer
                       if (item.isBuyerCancelled === true) {
                         return (
@@ -405,7 +405,7 @@ const AgreementsList = (props) => {
                   <div className="tableContainer">
                     <table className="buyersTable">
                       <tr>
-                        <th width="30%">Owner's Address</th>
+                        <th width="28%">Owner's Address</th>
                         <th width="13%">Property ID</th>
                         <th>Agreement Status</th>
                         <th width="20%">Action</th>
