@@ -53,8 +53,6 @@ module.exports.isAuthenticated = async function(sessionToken) {
             query.limit(1);
             query.withCount();
             const result = await query.find({useMasterKey: true});
-            console.log("authenticating with: " + sessionToken)
-            console.log(result)
             resolve(result.count === 1); //if session exsists its authenticated
             return;
         } catch {
@@ -67,7 +65,6 @@ module.exports.isAuthenticated = async function(sessionToken) {
 //caching
 module.exports.getUser = async function(address) {
     return new Promise(async (resolve, reject) => {
-        console.log("finding with: " + address);
         const query = new Moralis.Query("_User");
         query.equalTo("ethAddress", address.toLowerCase());
         query.limit(1);

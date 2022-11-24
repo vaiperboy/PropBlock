@@ -27,26 +27,20 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
      //because moralis object is very bad
      //so ill just treat it as a JSON
     const result = JSON.parse(JSON.stringify(requestResult))
-    // console.log("total result: " + result.length)
     
     const data = [];
     for (let i = 0; i < result.length; i++) {
       var currentResult = result[i];
-      console.log(currentResult)
       //only return results with isBeingProcessed status
 
-      var inCache = false;
       var user = {};
       var requestorAddress = currentResult.requesterEthAddress;
-
       //make local caching
-      var inCache = false;
       var user = {};
 
       for (var j = 0; j < data.length; j++) {
         //if user exists in cache
-        if (data[j]["address"] == requestorAddress) {
-          inCache = true;
+        if (data[j]["address"] == requestorAddress.toLowerCase()) {
           user = {
             fullName: data[j]["fullName"],
             address: data[j]["address"]
@@ -55,7 +49,7 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
         }
       }
 
-      if (!inCache) user = await helper.getUser(requestorAddress);
+      if (Object.keys(user).length === 0) user = await helper.getUser(requestorAddress)
       
       data.push({
         id: currentResult.objectId,
