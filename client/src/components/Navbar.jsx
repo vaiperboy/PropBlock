@@ -7,6 +7,7 @@ import NavbarIcon from "../assets/framer-1.png";
 import { message } from "antd";
 import { LogoutOutlined, ProfileOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import avatar_image from "../assets/avatar_icon.png";
 var Web3 = require("web3");
 
 const console = require("console-browserify");
@@ -148,6 +149,7 @@ const Navbar = (props) => {
                     isRounded
                     theme="image"
                     className="avatar"
+                    image={avatar_image}
                     onClick={() => {
                       showButtons();
                     }}

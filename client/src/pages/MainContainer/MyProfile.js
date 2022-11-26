@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMoralis, useMoralisQuery } from "react-moralis";
 import { Input } from "@web3uikit/core";
 import { message } from "antd";
+import avatar_icon from "../../assets/avatar_icon.png";
 const console = require("console-browserify");
 
 const MyProfile = () => {
@@ -31,12 +32,13 @@ const MyProfile = () => {
   };
   const [emailAddress, setEmailAddress] = useState("");
   const [fullName, setFullName] = useState("");
-  const [description, setDescription] = useState("");
+  // const [description, setDescription] = useState("");
+  const [emailAddressInput, setEmailAddressInput] = useState("");
+  const [fullNameInput, setFullNameInput] = useState("");
 
   useEffect(() => {
     setEmailAddress(user.get("email"));
     setFullName(user.get("fullName"));
-    setDescription("big data");
     console.log(user.getSessionToken());
   }, [user]);
 
@@ -64,18 +66,38 @@ const MyProfile = () => {
   };
 
   const updateProfile = () => {
-    if (Moralis.User.current()) {
-      if (validateProfile()) {
-        try {
-          user.set("fullName", fullName);
-          user.set("email", emailAddress);
-          user.save();
-          message.success("Updated profile!");
-        } catch (error) {
-          message.error("Error in updating profile: " + error);
-        }
+    try {
+      if (fullNameInput === "" || emailAddressInput === "") {
+        message.error(
+          "Input is Empty! Please enter a input to edit your profile."
+        );
+        return;
       }
-    } else message.error("you are not logged in??");
+      if (fullName === fullNameInput) {
+        message.error("Invalid Full Name! Enter a different name to continue.");
+        return;
+      }
+      if (emailAddress === emailAddressInput) {
+        message.error(
+          "Invalid Email Address! Enter a different email address to continue."
+        );
+        return;
+      }
+      if (Moralis.User.current()) {
+        if (validateProfile()) {
+          try {
+            user.set("fullName", fullName);
+            user.set("email", emailAddress);
+            user.save();
+            message.success("Updated profile!");
+          } catch (error) {
+            message.error("Error in updating profile: " + error);
+          }
+        }
+      } else message.error("you are not logged in??");
+    } catch (error) {
+      console.log("Error: ", error);
+    }
   };
 
   return (
@@ -103,7 +125,9 @@ const MyProfile = () => {
       >
         <div className="profile_banner">
           <div className="profile_bottom">
-            <div className="profile_picture" />
+            <div className="profile_picture">
+              <img src={avatar_icon} alt="Avatar Icon"></img>
+            </div>
             <div
               style={{
                 display: "flex",
@@ -115,32 +139,28 @@ const MyProfile = () => {
               <p className="profile_address" style={{ fontSize: "2.5rem" }}>
                 Address - [{shortenAddress(user.get("ethAddress"), 18)}]
               </p>
-              <div style={{ display: "flex", gap: "15px" }}>
-                <button
-                  className="profile_button"
-                  style={{ userSelect: "none", height: "fit-content" }}
-                  onClick={updateProfile}
-                >
-                  Edit Profile
-                </button>
-              </div>
+              <div style={{ display: "flex", gap: "15px" }}></div>
             </div>
           </div>
         </div>
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            gap: "30px",
-            borderRadius: "8px",
-            padding: "16px",
-            flexWrap: "wrap",
-            justifyContent: "center",
-          }}
-        >
-          <div>
-            <p>Name</p>
+        <div className="profileSection" style={{}}>
+          <div className="currentDetails">
+            <h2>Current Details</h2>
+            <div className="profileDetails">
+              <div className="leftSide">
+                <h3>Name</h3>
+                <h3>Email Address</h3>
+              </div>
+              <div className="rightSide">
+                <div className="userDetail">{fullName}</div>
+                <div className="userDetail">{emailAddress}</div>
+              </div>
+            </div>
+          </div>
+          <div className="sectionLine"></div>
+          <h2>Edit Details</h2>
+          <div className="editSection">
+            <p>New Full Name</p>
             <Input
               type="text"
               placeholder={fullName}
@@ -148,11 +168,11 @@ const MyProfile = () => {
                 required: true,
                 characterMinLength: 3,
               }}
-              onChange={(e) => setFullName(e.target.value)}
+              onChange={(e) => setFullNameInput(e.target.value)}
             />
           </div>
-          <div>
-            <p>Email</p>
+          <div className="editSection">
+            <p>New Email Address</p>
             <Input
               type="text"
               style={{ width: "550px" }}
@@ -162,17 +182,28 @@ const MyProfile = () => {
                 regExp: "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$",
                 regExpInvalidMessage: "Invalid email address",
               }}
-              onChange={(e) => setEmailAddress(e.target.value)}
+              onChange={(e) => setEmailAddressInput(e.target.value)}
             />
           </div>
-          <div>
+          {/* <div className="editSection">
             <p>Description</p>
             <textarea
               className="profile_form_textarea"
               type="text"
               placeholder={description}
             />
-          </div>
+          </div> */}
+          <button
+            className="profile_button"
+            style={{
+              userSelect: "none",
+              width: "fit-content",
+              height: "fit-content",
+            }}
+            onClick={updateProfile}
+          >
+            Edit Profile
+          </button>
         </div>
       </div>
     </div>
