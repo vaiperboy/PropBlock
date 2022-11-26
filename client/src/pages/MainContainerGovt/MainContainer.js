@@ -6,6 +6,7 @@ import LeftSidebar from "./LeftSidebar";
 import AgreementsList from "./AgreementsList";
 import MySettings from "./MySettings";
 import AgreementView from "./AgreementView";
+import { Spin, Skeleton, Avatar, List } from "antd";
 
 class MainContainer extends React.Component {
   state = {
@@ -14,6 +15,7 @@ class MainContainer extends React.Component {
       agreementView: false,
       settingView: false,
     },
+    isLoading: true,
   };
 
   componentDidMount = () => {};
@@ -38,39 +40,63 @@ class MainContainer extends React.Component {
     });
   };
 
+  componentDidMount = async () => {
+    // Set loading state to true initially
+    await new Promise((r) => setTimeout(r, 500));
+    this.setState({ isLoading: false });
+  };
+
   render() {
-    return (
+    return this.state.isLoading ? (
       <div
-        className="main_container"
         style={{
-          scrollbarColor: "transparent transparent",
-          scrollbarWidth: "none",
-          userSelect: "text",
+          textAlign: "center",
+          display: "flex",
+          gap: "3rem",
+          justifyContent: "center",
+          marginTop: "30rem",
+          alignItems: "center",
         }}
       >
-        <Navbar />
-        <div style={{ display: "flex" }}>
-          <LeftSidebar
-            menuState={this.state.menuState}
-            toggleSettingView={this.toggleSettingView}
-            toggleView={this.toggleView}
-            toggleAgreementView={this.toggleAgreementView}
-          />
-          {this.state.menuState.uploadMode ? (
-            <AgreementsList
-              toggleView={this.toggleView}
-              toggleAgreementView={this.toggleAgreementView}
-            />
-          ) : null}
-          {this.state.menuState.agreementView ? (
-            <AgreementView toggleAgreementView={this.toggleAgreementView} />
-          ) : null}
-          {this.state.menuState.settingView ? (
-            <MySettings toggleSettingView={this.toggleSettingView} />
-          ) : null}
-        </div>
-        <Footer />
+        <Spin size="large" />
+        <h1 style={{ fontSize: "2.5rem", color: "#3daeee" }}>Loading . . . </h1>
       </div>
+    ) : (
+      <div>
+        <Navbar />
+        <main>
+          <div
+            className="main_container"
+            style={{
+              scrollbarColor: "transparent transparent",
+              scrollbarWidth: "none",
+              userSelect: "text",
+            }}
+          >
+            <div style={{ display: "flex", marginTop: "5rem" }}>
+              <LeftSidebar
+                menuState={this.state.menuState}
+                toggleSettingView={this.toggleSettingView}
+                toggleView={this.toggleView}
+                toggleAgreementView={this.toggleAgreementView}
+              />
+              {this.state.menuState.uploadMode ? (
+                <AgreementsList
+                  toggleView={this.toggleView}
+                  toggleAgreementView={this.toggleAgreementView}
+                />
+              ) : null}
+              {this.state.menuState.agreementView ? (
+                <AgreementView toggleAgreementView={this.toggleAgreementView} />
+              ) : null}
+              {this.state.menuState.settingView ? (
+                <MySettings toggleSettingView={this.toggleSettingView} />
+              ) : null}
+            </div>
+			</div>
+			</main>
+            <Footer />
+          </div>
     );
   }
 }
