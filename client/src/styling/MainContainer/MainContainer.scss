@@ -245,16 +245,29 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        align-content: center;
         gap: 15px;
         font-size: 20px;
         color: rgba(102, 102, 102, 0.8);
         padding: 2rem;
         user-select: none;
         cursor: pointer;
+        .icon {
+            width: 2.3rem;
+            height: auto;
+        }
+        h2 {
+            color: #666;
+            font-size: 1.9rem;
+            margin: 0;
+            font-weight: 400;
+        }
     }
 
     .leftsidebar_item:hover {
-        color: #3daeee;
+        h2 {
+            color: #3daeee;
+        }
     }
 
     .rightsidebar_container {
@@ -660,7 +673,7 @@
     }
 
     .agreementView {
-        height: 130vh;
+        height: 135vh;
         .ant-upload-list-text-container {
             width: 80%;
         }
@@ -684,6 +697,46 @@
                 width: 80%;
                 align-items: center;
                 margin: 4rem 0 0.5rem 0;
+            }
+            .bottomSection {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+                .ant-checkbox-wrapper {
+                    margin-top: 1.5rem;
+                    #checkBox {
+                    }
+                    span {
+                        font-size: 1.8rem;
+                        color: #333;
+                    }
+                }
+                .finishButton {
+                    border: none;
+                    background-color: #3daeee;
+                    padding: 0.5rem 2rem;
+                    font-size: 1.8rem;
+                    color: #fff;
+                    cursor: pointer;
+                    width: fit-content;
+                    border-radius: 1rem;
+                    &:hover {
+                        background-color: rgb(#3daeee, 0.8);
+                    }
+                }
+                .disabledFinishButton {
+                    border: none;
+                    background-color: rba(#3daeee, 0.7);
+                    padding: 0.5rem 2rem;
+                    font-size: 1.8rem;
+                    color: #fff;
+                    cursor: pointer;
+                    width: fit-content;
+                    border-radius: 1rem;
+                    &:hover {
+                        cursor: not-allowed;
+                    }
+                }
             }
         }
     }
