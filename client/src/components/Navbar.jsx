@@ -149,7 +149,7 @@ const Navbar = (props) => {
                     isRounded
                     theme="image"
                     className="avatar"
-                    image={avatar_image}
+                    // image={avatar_image}
                     onClick={() => {
                       showButtons();
                     }}

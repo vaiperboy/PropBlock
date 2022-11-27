@@ -122,49 +122,6 @@ class PurchaseRequests extends React.Component {
             <div
               className="dashboard_card"
               onClick={() => {
-                this.props.toggleStatsView(true);
-              }}
-            >
-              <div className="dashboard_card_icon">
-                <img src={stats} style={{ width: "30px" }} />
-              </div>
-              <div className="dashboard_card_text">Statistics</div>
-            </div>
-            <div
-              className="dashboard_card"
-              onClick={() => {
-                this.props.togglePaymentView(true);
-              }}
-            >
-              <div className="dashboard_card_icon">
-                <svg
-                  width="23"
-                  height="41"
-                  viewBox="0 0 23 41"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11.5 1V39.5"
-                    stroke="#444444"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M20.25 8H7.125C5.50055 8 3.94263 8.64531 2.79397 9.79397C1.64531 10.9426 1 12.5005 1 14.125C1 15.7495 1.64531 17.3074 2.79397 18.456C3.94263 19.6047 5.50055 20.25 7.125 20.25H15.875C17.4995 20.25 19.0574 20.8953 20.206 22.044C21.3547 23.1926 22 24.7505 22 26.375C22 27.9995 21.3547 29.5574 20.206 30.706C19.0574 31.8547 17.4995 32.5 15.875 32.5H1"
-                    stroke="#444444"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </div>
-              <div className="dashboard_card_text">Payments</div>
-            </div>
-            <div
-              className="dashboard_card"
-              onClick={() => {
                 this.props.togglePurchaseRequestView(true);
               }}
             >
@@ -213,6 +170,50 @@ class PurchaseRequests extends React.Component {
               </div>
               <div className="dashboard_card_text">Agreements</div>
             </div>
+            <div
+              className="dashboard_card"
+              onClick={() => {
+                this.props.toggleStatsView(true);
+              }}
+            >
+              <div className="dashboard_card_icon">
+                <img src={stats} style={{ width: "30px" }} />
+              </div>
+              <div className="dashboard_card_text">Statistics</div>
+            </div>
+            <div
+              className="dashboard_card"
+              onClick={() => {
+                this.props.togglePaymentView(true);
+              }}
+            >
+              <div className="dashboard_card_icon">
+                <svg
+                  width="23"
+                  height="41"
+                  viewBox="0 0 23 41"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11.5 1V39.5"
+                    stroke="#444444"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M20.25 8H7.125C5.50055 8 3.94263 8.64531 2.79397 9.79397C1.64531 10.9426 1 12.5005 1 14.125C1 15.7495 1.64531 17.3074 2.79397 18.456C3.94263 19.6047 5.50055 20.25 7.125 20.25H15.875C17.4995 20.25 19.0574 20.8953 20.206 22.044C21.3547 23.1926 22 24.7505 22 26.375C22 27.9995 21.3547 29.5574 20.206 30.706C19.0574 31.8547 17.4995 32.5 15.875 32.5H1"
+                    stroke="#444444"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div className="dashboard_card_text">Payments</div>
+            </div>
+
             <div
               className="dashboard_card"
               onClick={() => {

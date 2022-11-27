@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useMoralis, useMoralisQuery } from "react-moralis";
+import { Avatar } from "@web3uikit/core";
 import { Input } from "@web3uikit/core";
 import { message } from "antd";
 import avatar_icon from "../../assets/avatar_icon.png";
@@ -50,10 +51,10 @@ const MyProfile = () => {
   const validateProfile = () => {
     var errors = [];
     const nameReg = /^[a-zA-Z]+$/;
-    if (!nameReg.test(fullName)) {
+    if (!nameReg.test(fullNameInput)) {
       errors.push("Error: Full Name can only contain characters");
     }
-    const isValid = validateEmail(emailAddress);
+    const isValid = validateEmail(emailAddressInput);
     if (!isValid) {
       errors.push(
         "Invalid Email address! Enter a valid email address to continue."
@@ -86,10 +87,12 @@ const MyProfile = () => {
       if (Moralis.User.current()) {
         if (validateProfile()) {
           try {
-            user.set("fullName", fullName);
-            user.set("email", emailAddress);
+            user.set("fullName", fullNameInput);
+            user.set("email", emailAddressInput);
             user.save();
             message.success("Updated profile!");
+            setFullName(fullNameInput);
+            setEmailAddress(emailAddressInput);
           } catch (error) {
             message.error("Error in updating profile: " + error);
           }
@@ -126,7 +129,19 @@ const MyProfile = () => {
         <div className="profile_banner">
           <div className="profile_bottom">
             <div className="profile_picture">
-              <img src={avatar_icon} alt="Avatar Icon"></img>
+              {/* <img src={avatar_icon} alt="Avatar Icon"></img> */}
+              <Avatar
+                isRounded
+                theme="image"
+                className="avatar"
+                size={110}
+                // image={avatar_image}
+                style={{
+                  width: "20rem",
+                  backgroundColor: "#3daeee",
+                  height: "12rem",
+                }}
+              />
             </div>
             <div
               style={{
