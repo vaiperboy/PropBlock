@@ -11,10 +11,11 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "../../styling/MainContainer/purchaseRequests.scss";
 import realEstate from "../../artifacts/contracts/realEstate.sol/realEstate.json";
-
+import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 // importing images
 import no_data from "../../assets/no_data.png";
 
+const { ethereum } = window;
 const web3 = require("web3");
 const { ethers } = require("ethers");
 const console = require("console-browserify");
@@ -193,6 +194,55 @@ const PurchaseRequests = (props) => {
     ...rest
   } = useMoralis();
 
+  // function to create the agreement
+  const createAgreement = async (buyerAddress, propertyId) => {
+    try {
+      let realEstateDappContract;
+      let ownerAddress = user.get("ethAddress");
+      const uintPropertyId = parseInt(propertyId);
+
+      // checking if metamask extension is installed
+      if (!window.ethereum) {
+        message.error(
+          "Metamask not detected! Please install metamask to continue."
+        );
+        return;
+      }
+
+      // if metamask is installed
+      if (ethereum) {
+        const accounts = await ethereum.request({ method: "eth_accounts" });
+        // connected
+        //set up transaction parameters
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const walletAddress = accounts[0]; // first account in MetaMask
+        const signerNew = provider.getSigner(walletAddress);
+        realEstateDappContract = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          realEstate.abi,
+          signerNew
+        );
+
+        const result = await realEstateDappContract.submitDraft(
+          ownerAddress,
+          propertyId,
+          buyerAddress
+        );
+        console.log("result: ", result);
+      }
+    } catch (error) {
+      const parsedEthersError = getParsedEthersError(error);
+      if (parsedEthersError.errorCode === "REJECTED_TRANSACTION") {
+        message.error(
+          "Error: You rejected the transaction. Please accept the transaction to continue the agreement."
+        );
+      } else {
+        message.error("Error: " + parsedEthersError.errorCode);
+      }
+      return;
+    }
+  };
+
   // shows the buyer purchase requests section
   if (props.isBuyer === "true") {
     if (!isLoading) {
@@ -267,7 +317,12 @@ const PurchaseRequests = (props) => {
                             >
                               <button
                                 className="createAgreementDraftButton"
-                                onClick={() => {}}
+                                onClick={() => {
+                                  createAgreement(
+                                    item.address,
+                                    item.propertyID
+                                  );
+                                }}
                               >
                                 Create Agreement
                               </button>
@@ -399,9 +454,27 @@ const PurchaseRequests = (props) => {
                             <td>{item.address}</td>
                             <td>{item.propertyID}</td>
                             <td>{item.dateRequested}</td>
-                            <td style={{ display: "flex", gap: "1rem" }}>
-                              {item.isAccepted ? "accepted" : "rejected"}
-                            </td>
+                            {item.isAccepted ? (
+                              <td
+                                style={{
+                                  display: "flex",
+                                  gap: "1rem",
+                                  color: "#1bb059",
+                                }}
+                              >
+                                Accepted
+                              </td>
+                            ) : (
+                              <td
+                                style={{
+                                  display: "flex",
+                                  gap: "1rem",
+                                  color: "red",
+                                }}
+                              >
+                                Rejected
+                              </td>
+                            )}
                           </tr>
                         );
                       }

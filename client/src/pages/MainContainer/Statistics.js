@@ -6,50 +6,9 @@ import transactions_icon from "../../assets/transactions_icon.png";
 import properties_icon from "../../assets/properties_icon.png";
 import agreements_icon from "../../assets/agreements_icon.png";
 import { useMoralis } from "react-moralis";
-const web3 = require("web3");
+import gas_icon from "../../assets/gas_icon.png";
+const Web3 = require("web3");
 const console = require("console-browserify");
-
-const daily = [
-  {
-    label: "Series 1",
-    data: [
-      { x: -1, y: 25 },
-      { x: 1, y: 24 },
-      { x: 2, y: 27 },
-      { x: 3, y: 24 },
-      { x: 4, y: 25 },
-      { x: 5, y: 28 },
-    ],
-  },
-];
-
-const weekly = [
-  {
-    label: "Series 1",
-    data: [
-      { x: -1, y: 25 },
-      { x: 2, y: 24 },
-      { x: 3, y: 27 },
-      { x: 4, y: 24 },
-      { x: 5, y: 25 },
-      { x: 6, y: 28 },
-    ],
-  },
-];
-
-const monthly = [
-  {
-    label: "Series 1",
-    data: [
-      { x: -1, y: 25 },
-      { x: 1, y: 24 },
-      { x: 2, y: 27 },
-      { x: 4, y: 24 },
-      { x: 5, y: 25 },
-      { x: 6, y: 28 },
-    ],
-  },
-];
 
 const axes = [
   { primary: true, type: "linear", position: "bottom" },
@@ -57,6 +16,13 @@ const axes = [
 ];
 
 const Statistics = () => {
+  const [dailyChart, setDailyChart] = useState({});
+  const [weeklyChart, setWeeklyChart] = useState({});
+  const [monthlyChart, setMonthylChart] = useState({});
+  const [totalDaily, setTotalDaily] = useState("");
+  const [totalWeekly, setTotalWeekly] = useState("");
+  const [totalMonthly, setTotalMonthly] = useState("");
+
   const {
     authenticate,
     signup,
@@ -75,11 +41,12 @@ const Statistics = () => {
   // fetching the properties, transactions & agreements
   useEffect(() => {
     setIsLoading(true);
-    async function fetchNumOfAgreements() {
+    // fetching the number of concurrent agreements for the user
+    const fetchNumOfAgreements = async () => {
       const request = Moralis.Object.extend("AgreementsTable");
       const agreementQuery = new Moralis.Query(request);
       const address = user.get("ethAddress");
-      const ownerAddress = await web3.utils.toChecksumAddress(address);
+      const ownerAddress = await Web3.utils.toChecksumAddress(address);
       agreementQuery.equalTo("ownerAddress", ownerAddress);
       const results = await agreementQuery.find();
       if (results.length > 0) {
@@ -87,12 +54,13 @@ const Statistics = () => {
       } else {
         setNumOfAgreements(0);
       }
-    }
-    async function fetchNumOfProperties() {
+    };
+    // fetching the number of properties for the user
+    const fetchNumOfProperties = async () => {
       const request = Moralis.Object.extend("PropertiesAdded");
       const address = user.get("ethAddress");
       const propertiesQuery = new Moralis.Query(request);
-      const ownerAddress = await web3.utils.toChecksumAddress(address);
+      const ownerAddress = await Web3.utils.toChecksumAddress(address);
       // const ownerAddress = "0x4D06acf12147CfD22C5a3d0A73ece625D0999aE3";
       propertiesQuery.equalTo("landlordAddress", ownerAddress);
       const results = await propertiesQuery.find();
@@ -101,8 +69,9 @@ const Statistics = () => {
       } else {
         setNumOfProperties(0);
       }
-    }
-    async function fetchNumOfTransactions() {
+    };
+    // fetching the number of transactions for the user
+    const fetchNumOfTransactions = async () => {
       const request = Moralis.Object.extend("EthTransactions");
       const address = user.get("ethAddress");
       const transactionsQuery = new Moralis.Query(request);
@@ -115,10 +84,142 @@ const Statistics = () => {
         setNumOfTransactions(0);
       }
       console.log("transactions no. : " + numOfTransactions);
-    }
+    };
+    // fetching the gas used by the user per day
+    const fetchGasUsedByDay = async () => {
+      const request = Moralis.Object.extend("EthTransactions");
+      const address = user.get("ethAddress");
+      const gasQuery = new Moralis.Query(request);
+      // transactionsQuery.equalTo("from_address", address.toLowerCase());
+      gasQuery.equalTo("from_address", address.toLowerCase());
+      gasQuery.descending("createdAt");
+      const results = await gasQuery.find();
+      let todaysGas = 0;
+      let yesterdaysGas = 0;
+      let today = new Date();
+      let yesterday = new Date(Date.now() - 86400000);
+      if (results.length > 0) {
+        for (let i = 0; i < results.length; i++) {
+          let date = new Date(results[i].get("createdAt").toString());
+          if (today.toDateString() === date.toDateString()) {
+            // totalGasPerDay += parseInt(results[i].get("receipt_gas_used"));
+            todaysGas += parseInt(results[i].get("receipt_gas_used"));
+          }
+          if (yesterday.toDateString() === date.toDateString()) {
+            // totalGasPerDay += parseInt(results[i].get("receipt_gas_used"));
+            yesterdaysGas += parseInt(results[i].get("receipt_gas_used"));
+          }
+        }
+        const chart = [
+          {
+            label: "Series 1",
+            data: [
+              { x: 1, y: 1 },
+              { x: yesterdaysGas, y: yesterdaysGas },
+              { x: todaysGas, y: todaysGas },
+            ],
+          },
+        ];
+        setDailyChart(chart);
+        let dailyEth = Web3.utils.fromWei(todaysGas.toString(), "Gwei");
+        setTotalDaily(dailyEth.toString());
+      }
+    };
+    // fetching the gas used by the user per week
+    const fetchGasUsedByWeek = async () => {
+      const request = Moralis.Object.extend("EthTransactions");
+      const address = user.get("ethAddress");
+      const gasQuery = new Moralis.Query(request);
+      // transactionsQuery.equalTo("from_address", address.toLowerCase());
+      gasQuery.equalTo("from_address", address.toLowerCase());
+      gasQuery.descending("createdAt");
+      const results = await gasQuery.find();
+      let oneWeekAgoGas = 0;
+      let twoWeeksAgoGas = 0;
+      let today = new Date();
+      let oneWeekAgo;
+      let twoWeeksAgo;
+      oneWeekAgo = new Date(today.getTime() - 60 * 60 * 24 * 7 * 1000);
+      twoWeeksAgo = new Date(today.getTime() - 60 * 60 * 24 * 14 * 1000);
+      console.log("one week ago date: " + oneWeekAgo);
+      if (results.length > 0) {
+        for (let i = 0; i < results.length; i++) {
+          let date = new Date(results[i].get("createdAt").toString());
+          if (date.toDateString() >= oneWeekAgo.toDateString()) {
+            oneWeekAgoGas += parseInt(results[i].get("receipt_gas_used"));
+          }
+          if (
+            twoWeeksAgo.toDateString() < date.toDateString() &&
+            oneWeekAgo.toDateString() >= date.toDateString()
+          ) {
+            twoWeeksAgoGas += parseInt(results[i].get("receipt_gas_used"));
+          }
+        }
+        const chart = [
+          {
+            label: "Series 1",
+            data: [
+              { x: 1, y: 1 },
+              { x: twoWeeksAgoGas, y: twoWeeksAgoGas },
+              { x: oneWeekAgoGas, y: oneWeekAgoGas },
+            ],
+          },
+        ];
+        setWeeklyChart(chart);
+        let weeklyEth = Web3.utils.fromWei(oneWeekAgoGas.toString(), "Gwei");
+        setTotalWeekly(weeklyEth.toString());
+      }
+    };
+    // fetching the gas used by the user per month
+    const fetchGasUsedByMonth = async () => {
+      const request = Moralis.Object.extend("EthTransactions");
+      const address = user.get("ethAddress");
+      const gasQuery = new Moralis.Query(request);
+      // transactionsQuery.equalTo("from_address", address.toLowerCase());
+      gasQuery.equalTo("from_address", address.toLowerCase());
+      gasQuery.descending("createdAt");
+      const results = await gasQuery.find();
+      let oneMonthsAgoGas = 0;
+      let twoMonthsAgoGas = 0;
+      let oneMonthAgo = new Date();
+      let twoMonthAgo = new Date();
+      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+      twoMonthAgo.setMonth(twoMonthAgo.getMonth() - 2);
+      if (results.length > 0) {
+        for (let i = 0; i < results.length; i++) {
+          let date = new Date(results[i].get("createdAt").toString());
+          if (oneMonthAgo.toDateString() <= date.toDateString()) {
+            // totalGasPerDay += parseInt(results[i].get("receipt_gas_used"));
+            oneMonthsAgoGas += parseInt(results[i].get("receipt_gas_used"));
+          }
+          if (twoMonthAgo.toDateString() <= date.toDateString()) {
+            // totalGasPerDay += parseInt(results[i].get("receipt_gas_used"));
+            twoMonthsAgoGas += parseInt(results[i].get("receipt_gas_used"));
+          }
+        }
+        const chart = [
+          {
+            label: "Series 1",
+            data: [
+              { x: 1, y: 1 },
+              { x: twoMonthsAgoGas, y: twoMonthsAgoGas },
+              { x: oneMonthsAgoGas, y: oneMonthsAgoGas },
+            ],
+          },
+        ];
+        setMonthylChart(chart);
+        let monthlyEth = Web3.utils.fromWei(oneMonthsAgoGas.toString(), "Gwei");
+        setTotalMonthly(monthlyEth.toString());
+      }
+    };
+
+    // calling the functions
     fetchNumOfAgreements();
     fetchNumOfProperties();
     fetchNumOfTransactions();
+    fetchGasUsedByDay();
+    fetchGasUsedByWeek();
+    fetchGasUsedByMonth();
     setIsLoading(false);
   }, []);
 
@@ -371,11 +472,78 @@ const Statistics = () => {
                   paddingTop: 40,
                 }}
               >
-                <span className="income_amt">$1,250,000</span>
-                <p style={{ color: "#1877F2" }}>Total Income</p>
+                <span className="income_amt"></span>
+                {incomeBy === "daily" && (
+                  <>
+                    <span className="income_amt">
+                      <img
+                        src={gas_icon}
+                        alt="gas icon"
+                        style={{ width: "4rem", marginRight: "1rem" }}
+                      ></img>
+                      {totalDaily}
+                    </span>
+                    <p
+                      style={{
+                        color: "#1877F2",
+                        marginTop: "-2rem",
+                        marginLeft: "5rem",
+                        fontWeight: "500",
+                      }}
+                    >
+                      Gas Per Day (in Gwei)
+                    </p>
+                  </>
+                )}
+                {incomeBy === "weekly" && (
+                  <>
+                    <span className="income_amt">
+                      <img
+                        src={gas_icon}
+                        alt="gas icon"
+                        style={{ width: "4rem", marginRight: "1rem" }}
+                      ></img>
+                      {totalWeekly}
+                    </span>
+                    <p
+                      style={{
+                        color: "#1877F2",
+                        marginTop: "-2rem",
+                        marginLeft: "5rem",
+                        fontWeight: "500",
+                      }}
+                    >
+                      Gas Per Week (in Gwei)
+                    </p>
+                  </>
+                )}
+                {incomeBy === "monthly" && (
+                  <>
+                    <span className="income_amt">
+                      <img
+                        src={gas_icon}
+                        alt="gas icon"
+                        style={{
+                          width: "4rem",
+                          marginRight: "1rem",
+                        }}
+                      ></img>
+                      {totalMonthly}
+                    </span>
+                    <p
+                      style={{
+                        color: "#1877F2",
+                        marginTop: "-2rem",
+                        marginLeft: "5rem",
+                        fontWeight: "500",
+                      }}
+                    >
+                      Gas Per Month (in Gwei)
+                    </p>
+                  </>
+                )}
               </div>
             </div>
-
             {incomeBy === "daily" && (
               <div
                 style={{
@@ -383,7 +551,7 @@ const Statistics = () => {
                   width: "95%",
                 }}
               >
-                <Chart className="statistics" data={daily} axes={axes} />
+                <Chart className="statistics" data={dailyChart} axes={axes} />
               </div>
             )}
             {incomeBy === "weekly" && (
@@ -393,7 +561,7 @@ const Statistics = () => {
                   width: "95%",
                 }}
               >
-                <Chart className="statistics" data={weekly} axes={axes} />
+                <Chart className="statistics" data={weeklyChart} axes={axes} />
               </div>
             )}
             {incomeBy === "monthly" && (
@@ -403,7 +571,7 @@ const Statistics = () => {
                   width: "95%",
                 }}
               >
-                <Chart className="statistics" data={monthly} axes={axes} />
+                <Chart className="statistics" data={monthlyChart} axes={axes} />
               </div>
             )}
           </div>
