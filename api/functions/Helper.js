@@ -44,16 +44,41 @@ module.exports.getLinks = async function (cid) {
     return hashes;
 }
 
-//makes sure user is authenticated
-module.exports.isAuthenticated = async function(sessionToken) {
+//makes sure user is authenticated & with the matching address
+//passing the address is optional
+module.exports.isAuthenticated = async function(sessionToken, address) {
     return new Promise(async (resolve, reject) => {
         try {
-            var query = new Moralis.Query("_Session");
-            query.equalTo("sessionToken", sessionToken);
-            query.limit(1);
-            query.withCount();
-            const result = await query.find();
-            resolve(result.count == 1); //if session exsists its authenticated
+            var sessionQuery = new Moralis.Query("_Session");
+            sessionQuery.equalTo("sessionToken", sessionToken);
+            sessionQuery.limit(1);
+            const result = await sessionQuery.find({useMasterKey: true});
+            if (result.length === 0) {
+                resolve(false)
+                return;
+            }
+
+            //if not address is passed
+            if (address === undefined) {
+                resolve(true)
+                return
+            }
+
+            const userId = JSON.parse(JSON.stringify(result))[0].user.objectId
+
+            //check _User table
+            var userQuery = new Moralis.Query("_User")
+            userQuery.equalTo("objectId", userId)
+            userQuery.limit(1)
+            const userQueryResult = await userQuery.find({useMasterKey: true})
+            if (userQueryResult.length === 0) {
+                resolve(false)
+                return;
+            }
+            const _result = JSON.parse(JSON.stringify(userQueryResult))[0]
+            const matchingUserAddress = _result.ethAddress
+            resolve(matchingUserAddress.toLowerCase() == address.toLowerCase())
+            return
         } catch {
             resolve(false);
         }
@@ -64,7 +89,6 @@ module.exports.isAuthenticated = async function(sessionToken) {
 //caching
 module.exports.getUser = async function(address) {
     return new Promise(async (resolve, reject) => {
-        console.log("finding with: " + address);
         const query = new Moralis.Query("_User");
         query.equalTo("ethAddress", address.toLowerCase());
         query.limit(1);
@@ -84,11 +108,21 @@ module.exports.getUser = async function(address) {
 //parameters
 module.exports.processFiltering = async function(params, query) {
     if (params["propertyType"] != undefined) {
-        query.equalTo("propertyType", params["propertyType"]);
+        query.equalTo("propertyType", params["propertyType"].toLowerCase());
     }
 
     if (params["facilities"] != undefined && params["facilities"] > 0) {
         query.greaterThan("facilities", params["facilities"]);
+    }
+    
+    if (params["minPrice"] != undefined) {
+        var minPrice = parseInt(params["minPrice"]);
+        if (!isNaN(minPrice)) query.greaterThan("listedPrice", minPrice);
+    }
+
+    if (params["maxPrice"] != undefined) {
+        var maxPrice = parseInt(params["maxPrice"]);
+        if (!isNaN(maxPrice)) query.greaterThan("listedPrice", maxPrice);
     }
 
     

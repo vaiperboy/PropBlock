@@ -12,6 +12,7 @@ var testAPIRouter = require("./routes/testAPI");
 var getAllPropertiesRouter = require("./routes/getAllProperties");
 var getPropertyRouter = require("./routes/getProperty");
 var getPurchaseRequestsRouter = require("./routes/getPurchaseRequests");
+var processPurchaseRequestRouter = require("./routes/processPurchaseRequest")
 
 var app = express();
 app.use(cors());
@@ -34,6 +35,7 @@ app.use("/testAPI", testAPIRouter);
 app.use("/getProperties", getAllPropertiesRouter);
 app.use("/property", getPropertyRouter);
 app.use("/", getPurchaseRequestsRouter);
+app.use("/", processPurchaseRequestRouter)
 
 
 //await Moralis.start({process.env.MORALIS_SERVER_URL, process.env.MORALIS_})

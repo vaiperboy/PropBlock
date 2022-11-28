@@ -7,6 +7,8 @@ import avatar_icon from "../../assets/avatar_icon.png";
 const console = require("console-browserify");
 
 const MyProfile = () => {
+  const console = require("console-browserify");
+
   const {
     Moralis,
     authenticated,

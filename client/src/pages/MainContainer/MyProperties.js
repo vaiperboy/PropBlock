@@ -156,13 +156,10 @@ const MyProperties = () => {
 
   //only made it for lowest number (least option)
   const handleFacilities = (arr) => {
-    if (arr.length > 0) {
-      var lowest = arr[0];
-      for (var i = 1; i < arr.length; i++) {
-        if (arr[i] < lowest) lowest = arr[i];
-      }
-      this.setState({ facilitiesXor: lowest });
-    } else this.setState({ facilitiesXor: 0 });
+    var tmp = 0;
+    for (var i = 0; i < arr.length; i++) tmp = tmp | arr[i];
+    setFacilitiesXor(tmp);
+    console.log(tmp);
   };
 
   // cannot select date after 'Today'
@@ -216,18 +213,6 @@ const MyProperties = () => {
           return;
         }
 
-        console.log("before on-chain");
-        console.log(
-          ownerAddress,
-          propertyType,
-          uintTitleDeedNo,
-          uintTitleDeedYear,
-          propertyStreet,
-          uintArea,
-          propertyApartmentNo,
-          uintListedPrice,
-          ipfsHash
-        );
         const result = await realEstateDappContract.createPropertyListing(
           ownerAddress,
           propertyType,
@@ -239,7 +224,6 @@ const MyProperties = () => {
           uintListedPrice,
           ipfsHash
         );
-        console.log("after on-chain");
 
         console.log(result.hash);
         // OFF-Chain function goes here
@@ -267,7 +251,6 @@ const MyProperties = () => {
           occupantsNumber: occupancyNum,
         };
 
-        console.log("before off-chain");
         save(data, {
           onSuccess: (obj) => {
             message.success(
@@ -280,7 +263,6 @@ const MyProperties = () => {
             console.log(error);
           },
         });
-        console.log("after off-chain");
       }
     } catch (error) {
       if (error.code === 4001) {
@@ -361,10 +343,9 @@ const MyProperties = () => {
         var hash = "";
         console.log("files to add: " + files);
         for await (const result of ipfs.addAll(files, options)) {
-          console.log(result);
           hash = result.cid._baseCache.entries().next().value[1];
         }
-
+        console.log(hash);
         resolve(hash);
       } catch (error) {
         message.error("error with IPFS: " + error);

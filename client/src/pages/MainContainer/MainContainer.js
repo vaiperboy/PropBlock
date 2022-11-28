@@ -13,7 +13,6 @@ import MyProperties from "./MyProperties";
 import MyPayments from "./MyPayments";
 import MyProfile from "./MyProfile";
 import stats from "./stats.png";
-import MySettings from "./MySettings";
 import { useMoralis } from "react-moralis";
 import { Spin, Skeleton, Avatar, List } from "antd";
 
@@ -312,7 +311,6 @@ class MainContainer extends React.Component {
               {this.state.menuState.statsView ? <Statistics /> : null}
               {this.state.menuState.paymentView ? <MyPayments /> : null}
               {this.state.menuState.profileView ? <MyProfile /> : null}
-              {this.state.menuState.settingView ? <MySettings /> : null}
             </div>
           </div>
         </main>

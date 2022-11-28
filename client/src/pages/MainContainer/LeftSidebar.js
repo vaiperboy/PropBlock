@@ -244,25 +244,6 @@ class LeftSidebar extends React.Component {
                   Profile
                 </h2>
               </div>
-              <div
-                className="leftsidebar_item"
-                onClick={() => {
-                  this.props.toggleSettingView(true);
-                }}
-              >
-                <img
-                  src={settings_icon}
-                  alt="Settings Icon"
-                  className="icon"
-                ></img>
-                <h2
-                  style={{
-                    color: this.props.menuState.settingView ? "#3DAEEE" : "",
-                  }}
-                >
-                  Settings
-                </h2>
-              </div>
             </>
           ) : (
             <>
