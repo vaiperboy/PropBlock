@@ -173,7 +173,6 @@ const MyProperties = () => {
     try {
       let realEstateDappContract;
       setIsCreatingProperty(true);
-      processFacilities();
       // converting the data from string to int type
       const uintTitleDeedNo = parseInt(propertyTitleDeedNumber);
       const uintTitleDeedYear = parseInt(propertyTitleDeedYear);
@@ -279,57 +278,6 @@ const MyProperties = () => {
     setIsCreatingProperty(false);
   };
 
-  //convert the boolean facilities to flags by XoR
-  const processFacilities = () => {
-    var _enum = {
-      parking: 1,
-      kitchen: 2,
-      security: 4,
-      freeWifi: 8,
-      coffee: 16,
-      pool: 32,
-      restaurant: 64,
-      hourAccess: 128,
-      tv: 256,
-    };
-
-    let flags;
-
-    if (facilities.parking) {
-      flags = flags | _enum.parking;
-    }
-
-    if (facilities.kitchen) {
-      flags = flags | _enum.kitchen;
-    }
-
-    if (facilities.security) {
-      flags = flags | _enum.security;
-    }
-    if (facilities.freeWifi) {
-      flags = flags | _enum.freeWifi;
-    }
-    if (facilities.coffee) {
-      flags = flags | _enum.coffee;
-    }
-    if (facilities.pool) {
-      flags = flags | _enum.pool;
-    }
-
-    if (facilities.restaurant) {
-      flags = flags | _enum.restaurant;
-    }
-    if (facilities.hourAccess) {
-      flags = flags | _enum.hourAccess;
-    }
-
-    if (facilities.tv) {
-      flags = flags | _enum.tv;
-    }
-
-    console.log("flags: " + flags);
-    setFacilitiesXor(flags);
-  };
 
   // function to upload via IPFS
   const uploadIpfs = async () => {
@@ -868,7 +816,7 @@ const MyProperties = () => {
                               />
                             </div>
                             <div className="input-item">
-                              <label for="type">Area</label>
+                              <label for="type">Plot Size</label>
                               <Input
                                 type="text"
                                 id="area"

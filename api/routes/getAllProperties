@@ -21,8 +21,9 @@ router.get("/getAllProperties", async function(req, res, next) {
         var images = {images: await helper.getImages(result.results[i].ipfsHash)}
         Object.assign(result.results[i], result.results[i], extraDetails, images)
     }
+    result.totalPages = helper.getTotalPageNumbers(result.count, config.pageSize)
     res.json(result)
-    
+
 });
 
 module.exports = router;

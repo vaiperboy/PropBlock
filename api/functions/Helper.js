@@ -2,6 +2,7 @@ const auth = require("../modules/ipfs");
 var config = require('../config');
 var axios = require('axios');
 var Moralis = require("../modules/moralis");
+const { pageSize } = require("../config");
 
 
 //to cache the result
@@ -126,6 +127,10 @@ module.exports.processFiltering = async function(params, query) {
     }
 }
 
+//calculates the number of pages
+module.exports.getTotalPageNumbers = function(totalCount, pageSize) {
+    return totalCount < pageSize ? 1 : Math.ceil(totalCount / pageSize)
+}
 
 
 //gets extra details about the property
@@ -135,11 +140,13 @@ module.exports.getPropertyExtraDetails = async function(txHash) {
         const query = new Moralis.Query("PropertyDetails")
         query.equalTo("txHash", txHash)
         const _result = await query.find()
-        const result = JSON.parse(JSON.stringify(_result))
+        var result = JSON.parse(JSON.stringify(_result))
+        console.log(result)
         if (result) {
+            result = result[0]
             tmp  = {
                 facilities: result.facilities,
-                bedsNumber: result.bedsNumbers,
+                bedsNumber: result.bedsNumber,
                 bathsNumber: result.bathsNumber,
                 propertyTitle: result.propertyTitle,
                 propertyDescription: result.propertyDescription,
