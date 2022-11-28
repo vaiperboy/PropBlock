@@ -10,7 +10,6 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "../../styling/MainContainer/purchaseRequests.scss";
-import { computeAddress, hexlify } from "ethers/lib/utils";
 import realEstate from "../../artifacts/contracts/realEstate.sol/realEstate.json";
 
 // importing images
@@ -377,7 +376,7 @@ const PurchaseRequests = (props) => {
                               <button
                                 className="acceptButton"
                                 onClick={() => {
-                                  acceptRequest(item.address, item.propertyID);
+                                  processRequest(item.key, true)
                                 }}
                               >
                                 Accept
@@ -385,7 +384,7 @@ const PurchaseRequests = (props) => {
                               <button
                                 className="rejectButton"
                                 onClick={() => {
-                                  rejectRequest(item.address, item.propertyID);
+                                  processRequest(item.key, false)
                                 }}
                               >
                                 Reject

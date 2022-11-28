@@ -9,7 +9,7 @@ var hashesDict = [];
 
 
 //gets all the links inside a ipfs directory
-module.exports.getLinks = async function (cid) {
+module.exports.getImages = async function (cid) {
     var hashes = [];
 
     //if cache doesn't exist
@@ -124,6 +124,28 @@ module.exports.processFiltering = async function(params, query) {
         var maxPrice = parseInt(params["maxPrice"]);
         if (!isNaN(maxPrice)) query.greaterThan("listedPrice", maxPrice);
     }
+}
 
-    
+
+
+//gets extra details about the property
+module.exports.getPropertyExtraDetails = async function(txHash) {
+    return new Promise(async (resolve, reject) => {
+        var tmp = {}
+        const query = new Moralis.Query("PropertyDetails")
+        query.equalTo("txHash", txHash)
+        const _result = await query.find()
+        const result = JSON.parse(JSON.stringify(_result))
+        if (result) {
+            tmp  = {
+                facilities: result.facilities,
+                bedsNumber: result.bedsNumbers,
+                bathsNumber: result.bathsNumber,
+                propertyTitle: result.propertyTitle,
+                propertyDescription: result.propertyDescription,
+                occupantsNumber: result.occupantsNumber
+            }
+        }
+        resolve(tmp)
+    })
 }
