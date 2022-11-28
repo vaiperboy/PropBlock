@@ -48,57 +48,20 @@ const PurchaseRequests = (props) => {
 
   // loads the dataSourceBuyer & dataSourceSeller
   useEffect(() => {
-    async function loadSellerData() {
-      setIsLoading(true);
-      fetch(
-        "http://localhost:9000/getPurchaseRequests?" +
-          new URLSearchParams({
-            sessionToken: user.getSessionToken(),
-            ownerAddress: user.get("ethAddress"),
-          })
-      )
-        .then((res) => res.json())
-        .then((res) => {
-          console.log("getting data")
-          var temp = [];
-          for (var i = 0; i < res.length; i++) {
-            var e = res[i];
-            temp.push({
-              key: i,
-              address: shortenAddress(e.address, 25),
-              propertyID: e.propertyObjectId,
-              dateRequested: e.createdAt,
-            });
-          }
-          setDataSourceSeller(temp);
-          console.log(res);
-        });
-      setIsLoading(false);
-    }
     // For Sellers
     async function loadSellerData() {
       setIsLoading(true);
       fetch(
         "http://localhost:9000/getPurchaseRequests?" +
           new URLSearchParams({
+            mode: "seller",
             sessionToken: user.getSessionToken(),
             ownerAddress: user.get("ethAddress"),
           })
       )
         .then((res) => res.json())
         .then((res) => {
-          var temp = [];
-          for (var i = 0; i < res.length; i++) {
-            var e = res[i];
-            temp.push({
-              key: i,
-              address: shortenAddress(e.address, 25),
-              propertyID: e.propertyObjectId,
-              dateRequested: e.createdAt,
-            });
-          }
-          setDataSourceSeller(temp);
-          console.log(res);
+         
         });
       setIsLoading(false);
     }

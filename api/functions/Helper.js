@@ -57,10 +57,9 @@ module.exports.isAuthenticated = async function(sessionToken, address) {
                 resolve(false)
                 return;
             }
-            
+
             //if not address is passed
             if (address === undefined) {
-               
                 resolve(true)
                 return
             }
