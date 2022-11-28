@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import stats from "../../assets/etienne-beauregard-riverin.png";
 import {
   message,
   DatePicker,
@@ -17,7 +16,7 @@ import { Input, Stepper, TextArea, Upload } from "@web3uikit/core";
 // import blueTick from "./assets/blue_tick.png";
 import image from "../../assets/blue_tick.png";
 import moment from "moment";
-import { useMoralis } from "react-moralis";
+import { useMoralis, useNewMoralisObject } from "react-moralis";
 import { useNavigate } from "react-router-dom";
 import Property_Card from "./Property_Card";
 import ipfs from "../../modules/ipfs";
@@ -32,6 +31,8 @@ const console = require("console-browserify");
 // const { Dragger } = Upload;
 
 const MyProperties = () => {
+  const { save } = useNewMoralisObject("PropertyDetails");
+
   // contract address
   const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
 
@@ -86,7 +87,7 @@ const MyProperties = () => {
   const [imageList, setImageList] = useState([]);
   const [titleDeedFile, setTitleDeedFile] = useState({});
   const [imageNames, setImageNames] = useState([]);
-  const { user, ...rest } = useMoralis();
+  const { user, Moralis } = useMoralis();
   const [propertyDescription, setPropertyDescription] = useState("");
   const [propertyTitle, setPropertyTitle] = useState("");
 
@@ -207,22 +208,79 @@ const MyProperties = () => {
 
         // calling the contract function 'createPropertyListing' to create a property
         // getting the transaction hash
+        message.info("Property is being added....");
+        const ipfsHash = await uploadIpfs();
+        //const ipfsHash = "123123123";
+        if (ipfsHash.length == 0) {
+          message.error("Could not upload files via IPFS!");
+          return;
+        }
+
+        console.log("before on-chain");
+        console.log(
+          ownerAddress,
+          propertyType,
+          uintTitleDeedNo,
+          uintTitleDeedYear,
+          propertyStreet,
+          uintArea,
+          propertyApartmentNo,
+          uintListedPrice,
+          ipfsHash
+        );
         const result = await realEstateDappContract.createPropertyListing(
           ownerAddress,
           propertyType,
           uintTitleDeedNo,
           uintTitleDeedYear,
           propertyStreet,
-          propertyArea,
+          uintArea,
           propertyApartmentNo,
           uintListedPrice,
-          ipfs
+          ipfsHash
         );
-        // setting the transaction hash
-        setTransactionHash(result.hash);
+        console.log("after on-chain");
 
+        console.log(result.hash);
         // OFF-Chain function goes here
         // ----------------------------
+        //facilities, beds#, tx Hash, occup#, baths#, propertyTitle, proeprtyDescription
+        const property = Moralis.Object.extend("PropertyDetails");
+        const query = new Moralis.Query(property);
+        query.equalTo("txHash", result.hash);
+        query.limit(1);
+        query.withCount();
+        const results = await query.find();
+        if (results.count > 0) {
+          message.error("Details for this property already exists!");
+          return;
+        }
+
+        message.info("Adding extra details");
+        const data = {
+          txHash: result.hash,
+          facilities: facilitiesXor,
+          bedsNumber: bedNumber,
+          bathsNumber: bathNumber,
+          propertyTitle: propertyTitle,
+          propertyDescription: propertyDescription,
+          occupantsNumber: occupancyNum,
+        };
+
+        console.log("before off-chain");
+        save(data, {
+          onSuccess: (obj) => {
+            message.success(
+              `Property added for landlord (address: ${ownerAddress})`
+            );
+          },
+          onError: (error) => {
+            message.error("Couldn't send request!");
+            message.error(error.message);
+            console.log(error);
+          },
+        });
+        console.log("after off-chain");
       }
     } catch (error) {
       if (error.code === 4001) {
@@ -235,23 +293,8 @@ const MyProperties = () => {
         return;
       }
     }
-    setIsCreatingProperty(false);
 
-    message.info("uploading documents...");
-    const ipfsHash = await uploadIpfs();
-    //const ipfsHash = "123123123";
-    if (ipfsHash.length == 0) {
-      message.error("Could not upload files via IPFS!");
-      return;
-    }
-    message.success("Documents are successfully uploaded!");
-    message.info("Adding property ...");
-    message.success(`Property added for landlord (address: ${ownerAddress})`);
     setIsCreatingProperty(false);
-  };
-
-  const displayPropertyDetails = () => {
-    console.log(samplePropertyDetails.addr, samplePropertyDetails.area);
   };
 
   //convert the boolean facilities to flags by XoR
@@ -481,7 +524,7 @@ const MyProperties = () => {
   };
 
   useEffect(() => {
-    setEthAddress(user.get("ethAddress"));
+    setOwnerAddress(user.get("ethAddress"));
     setEmailAddress(user.get("email"));
     setFullName(user.get("fullName"));
   }, [user]);
@@ -665,9 +708,6 @@ const MyProperties = () => {
                                   ethAddress.slice(25, 35)
                                 }`}
                                 value={ownerAddress}
-                                onChange={(e) => {
-                                  setOwnerAddress(e.target.value);
-                                }}
                                 validation={{
                                   readOnly: true,
                                 }}
