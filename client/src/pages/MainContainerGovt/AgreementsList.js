@@ -10,6 +10,7 @@ import { Table, message, Popconfirm, Spin } from "antd";
 
 import no_data from "../../assets/no_data.png";
 import AgreementView from "./AgreementView";
+import "./Agreementview.scss"
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
@@ -715,12 +716,12 @@ const AgreementsList = (props) => {
               justifyContent: "flex-end",
             }}
           >
-            <button className="apply_button" style={{ userSelect: "none" }}>
-              Apply Changes
+            <button className="applyy_button" style={{ userSelect: "none" }} onClick={() => {
+                            setTable(true);
+                          }}>
+              &#8592; Go Back
             </button>
-            <button className="revert_button" style={{ userSelect: "none" }}>
-              Revert
-            </button>
+       
           </div>
         </div>
       </div>

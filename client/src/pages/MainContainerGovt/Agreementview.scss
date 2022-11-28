@@ -1,5 +1,4 @@
 .governmentAgreementsListContainer {
-
   .FirstRow {
     font-size: 1.5rem;
     td {
@@ -16,7 +15,6 @@
     .requestRejected {
     }
   }
-
 
   .tableContainer {
     height: 100rem;
@@ -68,33 +66,42 @@
   }
 }
 
-.rightsidebar_container{
-    width: 1700px;
-    .agreementview{
-        font-size: 12px;
-        size: 12px;
-        background-color: red;
-    
+.rightsidebar_container {
+  width: 1700px;
+  .agreementview {
+    font-size: 12px;
+    size: 12px;
+    background-color: red;
+  }
+
+  .rightchild {
+    zoom: 85%;
+    min-width: 1350px;
+    overflow: hidden; /* will contain if #first is longer than #second */
+    .buyerdoc {
+      width: 50%;
+      float: left; /* add this */
+      margin-right: 40px;
     }
-    
-    .rightchild{
-        zoom: 85%;
-        min-width: 1350px;
-        overflow: hidden; /* will contain if #first is longer than #second */
-        .buyerdoc{
-            width: 50%;
-            float:left; /* add this */
-            margin-right: 40px;
-        
-        }
-        .sellerdoc{
-            overflow: hidden; /* if you don't want #second to wrap below #first */
-        }
-        textarea {
-            overflow:hidden;
-        }
-    
+    .sellerdoc {
+      overflow: hidden; /* if you don't want #second to wrap below #first */
+    }
+    textarea {
+      overflow: hidden;
     }
 
+    .applyy_button {
+      width: 190px;
+      height: 40px;
+      background-color: #3daeee;
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 20px;
+      border: unset;
+      &:hover {
+        background-color: #23658c;
+        cursor: pointer;
+      }
+    }
+  }
 }
-
