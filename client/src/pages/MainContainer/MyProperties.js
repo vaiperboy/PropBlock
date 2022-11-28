@@ -156,13 +156,11 @@ const MyProperties = () => {
 
   //only made it for lowest number (least option)
   const handleFacilities = (arr) => {
-    if (arr.length > 0) {
-      var lowest = arr[0];
-      for (var i = 1; i < arr.length; i++) {
-        if (arr[i] < lowest) lowest = arr[i];
-      }
-      this.setState({ facilitiesXor: lowest });
-    } else this.setState({ facilitiesXor: 0 });
+    var tmp = 0;
+    for (var i = 0; i < arr.length; i++)
+      tmp = tmp | arr[i]
+    setFacilitiesXor(tmp)
+    console.log(tmp)
   };
 
   // cannot select date after 'Today'
@@ -208,15 +206,14 @@ const MyProperties = () => {
 
         // calling the contract function 'createPropertyListing' to create a property
         // getting the transaction hash
-        message.info("Property is being added....")
+        message.info("Property is being added....");
         const ipfsHash = await uploadIpfs();
         //const ipfsHash = "123123123";
         if (ipfsHash.length == 0) {
           message.error("Could not upload files via IPFS!");
           return;
         }
-
-        console.log("before on-chain")
+        
         const result = await realEstateDappContract.createPropertyListing(
           ownerAddress,
           propertyType,
@@ -228,17 +225,14 @@ const MyProperties = () => {
           uintListedPrice,
           ipfsHash
         );
-        console.log("after on-chain")
-        
-        // setting the transaction hash
-        setTransactionHash(result.hash);
 
+        console.log(result.hash);
         // OFF-Chain function goes here
         // ----------------------------
         //facilities, beds#, tx Hash, occup#, baths#, propertyTitle, proeprtyDescription
         const property = Moralis.Object.extend("PropertyDetails");
         const query = new Moralis.Query(property);
-        query.equalTo("txHash", transactionHash);
+        query.equalTo("txHash", result.hash);
         query.limit(1);
         query.withCount();
         const results = await query.find();
@@ -249,19 +243,20 @@ const MyProperties = () => {
 
         message.info("Adding extra details");
         const data = {
-          hxHash: transactionHash,
+          txHash: result.hash,
           facilities: facilitiesXor,
           bedsNumber: bedNumber,
           bathsNumber: bathNumber,
           propertyTitle: propertyTitle,
           propertyDescription: propertyDescription,
-          occupantsNumber: occupancyNum
+          occupantsNumber: occupancyNum,
         };
 
-        console.log("before off-chain")
         save(data, {
           onSuccess: (obj) => {
-            message.success(`Property added for landlord (address: ${ownerAddress})`);
+            message.success(
+              `Property added for landlord (address: ${ownerAddress})`
+            );
           },
           onError: (error) => {
             message.error("Couldn't send request!");
@@ -269,8 +264,6 @@ const MyProperties = () => {
             console.log(error);
           },
         });
-        console.log("after off-chain")
-
       }
     } catch (error) {
       if (error.code === 4001) {
@@ -284,7 +277,7 @@ const MyProperties = () => {
       }
     }
 
-    setIsCreatingProperty(false)
+    setIsCreatingProperty(false);
   };
 
   //convert the boolean facilities to flags by XoR
@@ -351,10 +344,9 @@ const MyProperties = () => {
         var hash = "";
         console.log("files to add: " + files);
         for await (const result of ipfs.addAll(files, options)) {
-          console.log(result);
           hash = result.cid._baseCache.entries().next().value[1];
         }
-
+        console.log(hash)
         resolve(hash);
       } catch (error) {
         message.error("error with IPFS: " + error);
@@ -459,7 +451,7 @@ const MyProperties = () => {
       ) {
         message.error(
           "Please make sure the file extension are: " +
-          extensionsAllowed.join(",")
+            extensionsAllowed.join(",")
         );
         return;
       }
@@ -514,7 +506,7 @@ const MyProperties = () => {
   };
 
   useEffect(() => {
-    setEthAddress(user.get("ethAddress"));
+    setOwnerAddress(user.get("ethAddress"));
     setEmailAddress(user.get("email"));
     setFullName(user.get("fullName"));
   }, [user]);
@@ -541,7 +533,7 @@ const MyProperties = () => {
     imageList[primaryImageIndex] = first;
   };
 
-  const printAllData = () => { };
+  const printAllData = () => {};
 
   useEffect(() => {
     console.log(primaryImageOption);
@@ -692,14 +684,12 @@ const MyProperties = () => {
                                 id="InputAddress"
                                 className="ethAddressInput"
                                 name="address"
-                                placeholder={`${ethAddress.slice(0, 6) +
+                                placeholder={`${
+                                  ethAddress.slice(0, 6) +
                                   "..." +
                                   ethAddress.slice(25, 35)
-                                  }`}
+                                }`}
                                 value={ownerAddress}
-                                onChange={(e) => {
-                                  setOwnerAddress(e.target.value);
-                                }}
                                 validation={{
                                   readOnly: true,
                                 }}
