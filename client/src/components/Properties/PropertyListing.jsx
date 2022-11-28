@@ -5,6 +5,8 @@ import { useMoralis } from "react-moralis";
 import "../../styling/Properties/PropertyListing.scss";
 import LocationPoint from "../../assets/location-point.svg"
 import HeartNotFilled from "../../assets/heart-not-filled.svg";
+import Testpopup from "./Popup";
+
 
 class PropetyListing extends React.Component {
 
@@ -95,6 +97,7 @@ class PropetyListing extends React.Component {
                                 </div>
                                 <div className="lower-body">
                                     <div className="address-box">
+                                        <Testpopup/>
                                         <img id="walletImage" src={this.props.walletImage} />
                                         <p id="walletAddress">({this.shortenAddress(this.props.walletAddress, 20)})</p>
                                     </div>

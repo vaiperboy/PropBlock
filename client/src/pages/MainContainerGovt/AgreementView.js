@@ -28,6 +28,7 @@ class AgreementView extends React.Component{
 	}
 
 	render(){
+		console.log("TTTTTTTTTTTTTTTTTT")
 
 		return(
 				<div className='rightsidebar_container'>

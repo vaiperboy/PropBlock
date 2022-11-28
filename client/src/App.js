@@ -21,6 +21,7 @@ import GovtDashboard from "./pages/MainContainerGovt/MainContainer";
 import ProtectedRouteGovernment from "./ProtectedRouteGovernment";
 import HowPropBlockWorks from "./pages/HowPropBlockWorks";
 import AgreementView from "./pages/MainContainer/AgreementView";
+import Test from "./pages/Test.js"
 
 function App() {
   let optionsForScroll = {
@@ -37,6 +38,7 @@ function App() {
         <Route path="/signup" element={<SignUp />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/FAQ" element={<FAQ />}></Route>
+        <Route path="/test" element={<Test></Test>}></Route>
         <Route
           path="/Terms&Conditions"
           element={<TermsAndConditions />}
