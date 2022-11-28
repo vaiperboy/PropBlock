@@ -244,16 +244,29 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        align-content: center;
         gap: 15px;
         font-size: 20px;
         color: rgba(102, 102, 102, 0.8);
         padding: 2rem;
         user-select: none;
         cursor: pointer;
+        .icon {
+            width: 2.3rem;
+            height: auto;
+        }
+        h2 {
+            color: #666;
+            font-size: 1.9rem;
+            margin: 0;
+            font-weight: 400;
+        }
     }
 
     .leftsidebar_item:hover {
-        color: #3daeee;
+        h2 {
+            color: #3daeee;
+        }
     }
 
     .rightsidebar_container {
@@ -290,8 +303,8 @@
 
     .agreement_view_subtitle {
         font-size: 24px;
-        font-weight: 700;
-        color: #e54335;
+        font-weight: 550;
+        color: #3daeee;
     }
 
     .agreement_view_value {
@@ -378,6 +391,19 @@
         width: 90%;
         gap: 3rem;
         margin: 2px;
+        .incomeByButton {
+            border: none;
+            background-color: #fff;
+            cursor: pointer;
+            width: fit-content;
+            height: fit-content;
+            &:hover {
+                color: rgba(#1877f2, 0.5);
+            }
+        }
+        .selected {
+            color: #1877f2;
+        }
     }
 
     .filepond--drop-label {
@@ -476,6 +502,7 @@
         font-size: 40px;
         color: #1877f2;
     }
+    // Profile Section
 
     .profile_banner {
         width: 100%;
@@ -486,7 +513,73 @@
         justify-content: flex-end;
         align-items: center;
         background: rgba(61, 174, 238, 0.2);
-        height: 260px;
+        height: 18rem;
+        margin-top: -3rem;
+        margin-bottom: 2rem;
+    }
+
+    .profileSection {
+        width: 100%;
+        gap: 2rem;
+        padding: 1.6rem;
+        border-radius: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: center;
+        h2 {
+            color: #3daeee;
+            font-size: 2.3rem;
+        }
+        .sectionLine {
+            border: 0.5px solid rgb(#3daeee, 0.5);
+        }
+        .currentDetails {
+            display: flex;
+            flex-direction: column;
+            .profileDetails {
+                display: flex;
+                align-items: center;
+                width: 80%;
+                margin-bottom: 1.5rem;
+                .leftSide {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2.5rem;
+                }
+                .rightSide {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2rem;
+                    margin-left: 22%;
+                }
+                h3 {
+                    margin: 0;
+                    font-size: 1.7rem;
+                    color: #555;
+                }
+                .userDetail {
+                    margin-left: 5rem;
+                    border-radius: 5rem;
+                    padding: 0.5rem 3rem;
+                    background-color: #888;
+                    color: #fff;
+                    font-size: 1.7rem;
+                }
+            }
+        }
+        .editSection {
+            display: flex;
+            align-items: center;
+            gap: 7rem;
+            width: 70%;
+            justify-content: space-between;
+            margin-top: 1rem;
+            p {
+                margin: 0;
+                font-size: 1.7rem;
+            }
+        }
     }
 
     .profile_bottom {
@@ -509,7 +602,6 @@
         width: 120px;
         height: 120px;
         border-radius: 50%;
-        background: url("../../assets/framer-1.png");
         position: relative;
         bottom: 75px;
         left: 30px;
@@ -657,6 +749,76 @@
             width: 2rem;
         }
     }
+
+    .agreementView {
+        height: 135vh;
+        .ant-upload-list-text-container {
+            width: 80%;
+        }
+        .uploadAgreementDocs {
+            margin-top: 3rem;
+            h3 {
+                color: #555;
+                font-weight: 400;
+                font-size: 1.8rem;
+            }
+            .uploadFiles {
+                width: 80%;
+                border: 1px solid rgb(#3daeee, 0.5);
+                &:hover {
+                    border: 1px dashed #3daeee;
+                }
+            }
+            .agreementUploadHeading {
+                display: flex;
+                justify-content: space-between;
+                width: 80%;
+                align-items: center;
+                margin: 4rem 0 0.5rem 0;
+            }
+            .bottomSection {
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+                .ant-checkbox-wrapper {
+                    margin-top: 1.5rem;
+                    #checkBox {
+                    }
+                    span {
+                        font-size: 1.8rem;
+                        color: #333;
+                    }
+                }
+                .finishButton {
+                    border: none;
+                    background-color: #3daeee;
+                    padding: 0.5rem 2rem;
+                    font-size: 1.8rem;
+                    color: #fff;
+                    cursor: pointer;
+                    width: fit-content;
+                    border-radius: 1rem;
+                    &:hover {
+                        background-color: rgb(#3daeee, 0.8);
+                    }
+                }
+                .disabledFinishButton {
+                    border: none;
+                    background-color: rba(#3daeee, 0.7);
+                    padding: 0.5rem 2rem;
+                    font-size: 1.8rem;
+                    color: #fff;
+                    cursor: pointer;
+                    width: fit-content;
+                    border-radius: 1rem;
+                    &:hover {
+                        cursor: not-allowed;
+                    }
+                }
+            }
+        }
+    }
+
     @media only screen and (max-width: 1099px) and (min-width: 768px) {
     }
 
@@ -701,6 +863,15 @@
                 margin-bottom: 0;
             }
             .recent_activity_container {
+                background: #ecf7fe;
+                width: 80%;
+                transition: all ease 0.3s;
+                &:hover {
+                    transition: all ease 0.3s;
+                    scale: (1.01);
+                    transform: translateY(-0.2rem);
+                    cursor: pointer;
+                }
             }
         }
         .dashboard_card {

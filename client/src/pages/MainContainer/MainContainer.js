@@ -21,12 +21,15 @@ class MainContainer extends React.Component {
   constructor(props) {
     super(props);
     this.setToBuyer = this.setToBuyer.bind(this);
+    this.setToOwnerAddress = this.setToOwnerAddress.bind(this);
+    this.setToAgreementId = this.setToAgreementId.bind(this);
   }
 
   state = {
     menuState: {
       uploadMode: false,
       agreementView: false,
+      agreementListView: false,
       purchaseRequestView: false,
       dashboardView: true,
       propertiesView: false,
@@ -37,10 +40,20 @@ class MainContainer extends React.Component {
     },
     // isLoading: false,
     isBuyer: true,
+    ownerAddress: "",
+    agreementId: "",
   };
 
   setToBuyer = (val) => {
     this.setState({ isBuyer: val });
+  };
+
+  setToOwnerAddress = (val) => {
+    this.setState({ ownerAddress: val });
+  };
+
+  setToAgreementId = (val) => {
+    this.setState({ agreementId: val });
   };
 
   toggleView = (val) => {
@@ -48,6 +61,24 @@ class MainContainer extends React.Component {
       menuState: {
         uploadMode: val,
         agreementView: false,
+        agreementListView: false,
+        purchaseRequestView: false,
+        dashboardView: false,
+        propertiesView: false,
+        statsView: false,
+        paymentView: false,
+        profileView: false,
+        settingView: false,
+      },
+    });
+  };
+
+  toggleAgreementListView = (val) => {
+    this.setState({
+      menuState: {
+        uploadMode: false,
+        agreementView: false,
+        agreementListView: val,
         purchaseRequestView: false,
         dashboardView: false,
         propertiesView: false,
@@ -64,6 +95,7 @@ class MainContainer extends React.Component {
       menuState: {
         uploadMode: false,
         agreementView: false,
+        agreementListView: false,
         purchaseRequestView: false,
         dashboardView: false,
         propertiesView: val,
@@ -75,28 +107,13 @@ class MainContainer extends React.Component {
     });
   };
 
-  toggleAgreementsView = (val) => {
-    this.setState({
-      menuState: {
-        uploadMode: false,
-        agreementView: val,
-        purchaseRequestView: false,
-        dashboardView: false,
-        propertiesView: false,
-        statsView: false,
-        paymentView: false,
-        profileView: false,
-        settingView: false,
-      },
-    });
-  };
-
   toggleAgreementView = (val) => {
     this.setState({
       menuState: {
-        agreementView: val,
-        purchaseRequestView: false,
         uploadMode: false,
+        agreementView: val,
+        agreementListView: false,
+        purchaseRequestView: false,
         dashboardView: false,
         propertiesView: false,
         statsView: false,
@@ -112,6 +129,7 @@ class MainContainer extends React.Component {
       menuState: {
         agreementView: false,
         uploadMode: false,
+        agreementListView: false,
         purchaseRequestView: val,
         dashboardView: false,
         propertiesView: false,
@@ -128,6 +146,7 @@ class MainContainer extends React.Component {
       menuState: {
         dashboardView: val,
         agreementView: false,
+        agreementListView: false,
         uploadMode: false,
         purchaseRequestView: false,
         propertiesView: false,
@@ -145,6 +164,7 @@ class MainContainer extends React.Component {
         dashboardView: false,
         agreementView: false,
         uploadMode: false,
+        agreementListView: false,
         purchaseRequestView: false,
         propertiesView: false,
         statsView: val,
@@ -161,6 +181,7 @@ class MainContainer extends React.Component {
         dashboardView: false,
         agreementView: false,
         uploadMode: false,
+        agreementListView: false,
         purchaseRequestView: false,
         propertiesView: false,
         statsView: false,
@@ -177,6 +198,7 @@ class MainContainer extends React.Component {
         dashboardView: false,
         agreementView: false,
         uploadMode: false,
+        agreementListView: false,
         purchaseRequestView: false,
         propertiesView: false,
         statsView: false,
@@ -193,6 +215,7 @@ class MainContainer extends React.Component {
         dashboardView: false,
         agreementView: false,
         uploadMode: false,
+        agreementListView: false,
         purchaseRequestView: false,
         propertiesView: false,
         statsView: false,
@@ -249,7 +272,7 @@ class MainContainer extends React.Component {
                 toggleDashboardView={this.toggleDashboardView}
                 purchaseRequestView={this.state.purchaseRequestView}
                 toggleView={this.toggleView}
-                toggleAgreementView={this.toggleAgreementView}
+                toggleAgreementListView={this.toggleAgreementListView}
                 togglePurchaseRequestView={this.togglePurchaseRequestView}
               />
               {this.state.menuState.dashboardView ? (
@@ -258,7 +281,7 @@ class MainContainer extends React.Component {
                   toggleSettingView={this.toggleSettingView}
                   toggleProfileView={this.toggleProfileView}
                   togglePaymentView={this.togglePaymentView}
-                  toggleAgreementView={this.toggleAgreementView}
+                  toggleAgreementListView={this.toggleAgreementListView}
                   toggleStatsView={this.toggleStatsView}
                   togglePropertiesView={this.togglePropertiesView}
                   toggleDashboardView={this.toggleDashboardView}
@@ -267,20 +290,21 @@ class MainContainer extends React.Component {
                   togglePurchaseRequestView={this.togglePurchaseRequestView}
                 />
               ) : null}
-              {this.state.menuState.uploadMode ? (
-                <MyAgreements isBuyer={this.state.isBuyer} />
-              ) : this.state.menuState.agreementView === 1 &&
-                !this.state.menuState.purchaseRequestView &&
-                !this.state.menuState.dashboardView ? (
+              {this.state.menuState.agreementListView ? (
                 <AgreementsList
                   isBuyer={this.state.isBuyer.toString()}
-                  toggleView={this.toggleView}
                   toggleAgreementView={this.toggleAgreementView}
+                  setOwnerAddress={this.setToOwnerAddress}
+                  setAgreementId={this.setToAgreementId}
                 />
               ) : null}
-              {this.state.menuState.agreementView === 2 ? (
-                <AgreementView />
+              {this.state.menuState.agreementView ? (
+                <AgreementView
+                  ownerAddress={this.state.ownerAddress}
+                  agreementId={this.state.agreementId}
+                />
               ) : null}
+              {this.state.menuState.agreement}
               {this.state.menuState.purchaseRequestView ? (
                 <PurchaseRequests isBuyer={this.state.isBuyer.toString()} />
               ) : null}

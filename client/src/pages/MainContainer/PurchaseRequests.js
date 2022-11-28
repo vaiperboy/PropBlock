@@ -460,13 +460,6 @@ const PurchaseRequests = (props) => {
                       }
                     })}
                   </table>
-                  <button
-                    onClick={() => {
-                      // removeByAttr(dataSourceSellerTemp, "address");
-                    }}
-                  >
-                    remove row
-                  </button>
                 </div>
               </div>
             </div>

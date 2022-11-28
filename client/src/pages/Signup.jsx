@@ -317,6 +317,13 @@ const App = () => {
   };
 
   const checkOTPCode = async (code) => {
+    // Returns a random integer from 0 to 9:
+    let num1 = Math.floor(Math.random() * 10);
+    let num2 = Math.floor(Math.random() * 10);
+    let num3 = Math.floor(Math.random() * 10);
+    let num4 = Math.floor(Math.random() * 10);
+    let otp =
+      num1.toString() + num2.toString() + num3.toString() + num4.toString();
     if (code === "1112") {
       message.success("Code Validated Successfully!");
       setCodeVerified(true);
@@ -516,6 +523,7 @@ const App = () => {
                               //setWalletConnected(false);
                               //setUserAddress("");
                             }}
+                            style={{ width: "40rem" }}
                           >
                             Disconnect Wallet from metamask & refresh
                           </button>
@@ -623,7 +631,7 @@ const App = () => {
                         <ArrowLeftOutlined /> Back
                       </button>
                       <h2>Upload Identification Documents</h2>
-                      <p>Upload passport - Front Page</p>
+                      <p>Upload passport Page</p>
                       <Upload
                         value=""
                         theme="withIcon"

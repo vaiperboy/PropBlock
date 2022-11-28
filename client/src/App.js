@@ -20,6 +20,7 @@ import ContactUs from "./pages/ContactUs";
 import GovtDashboard from "./pages/MainContainerGovt/MainContainer";
 import ProtectedRouteGovernment from "./ProtectedRouteGovernment";
 import HowPropBlockWorks from "./pages/HowPropBlockWorks";
+import AgreementView from "./pages/MainContainer/AgreementView";
 
 function App() {
   let optionsForScroll = {
@@ -42,6 +43,7 @@ function App() {
         ></Route>
         <Route path="/ContactUs" element={<ContactUs />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/Agreement/:id" element={<AgreementView />}></Route>
         <Route
           exact
           path="/government"
