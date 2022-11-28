@@ -18,56 +18,99 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
     return;
   }
 
-  if (req.query.mode.toLowerCase() == "seller") {
-    if (ownerAddress) {
-      const requestsQuery = new Moralis.Query("PurchaseRequest");
-      requestsQuery.equalTo("sellerEthAddress", ownerAddress);
-      requestsQuery.equalTo("isPending", true)
-      const requestResult = await requestsQuery.find();
-
-      //because moralis object is very bad
-      //so ill just treat it as a JSON
-      const result = JSON.parse(JSON.stringify(requestResult))
-
-      const data = [];
-      for (let i = 0; i < result.length; i++) {
-        var currentResult = result[i];
-        //only return results with isBeingProcessed status
-
-        var user = {};
-        var requestorAddress = currentResult.requesterEthAddress;
-        //make local caching
-        var user = {};
-
-        for (var j = 0; j < data.length; j++) {
-          //if user exists in cache
-          if (data[j]["address"] == requestorAddress.toLowerCase()) {
-            user = {
-              fullName: data[j]["fullName"],
-              address: data[j]["address"]
-            }
-            break;
-          }
-        }
-
-        if (Object.keys(user).length === 0) user = await helper.getUser(requestorAddress)
-        
-        data.push({
-          key: currentResult.objectId,
-          address: user.address,
-          propertyID: currentResult.propertyObjectId,
-          dateRequested: currentResult.createdAt,
-          isPending: currentResult.isPending ?? true
-        });
-      }
-      res.send(data);
-    }
-  }
-  else if (req.query.mode.toLowerCase() == "buyer") {
-    //yet to be implemnted
-    res.status(404)
-    res.send("not implemented...")
+  if (req.query.mode === undefined || ownerAddress === undefined) {
+    res.send(404, "wrong input")
     return
+  }
+
+  if (req.query.mode.toLowerCase() == "seller") {
+    const requestsQuery = new Moralis.Query("PurchaseRequest");
+    requestsQuery.equalTo("sellerEthAddress", ownerAddress);
+    // requestsQuery.equalTo("isPending", true)
+    const requestResult = await requestsQuery.find();
+
+    //because moralis object is very bad
+    //so ill just treat it as a JSON
+    const result = JSON.parse(JSON.stringify(requestResult))
+
+    const data = [];
+    for (let i = 0; i < result.length; i++) {
+      var currentResult = result[i];
+      //only return results with isBeingProcessed status
+
+      var user = {};
+      var requestorAddress = currentResult.requesterEthAddress;
+      //make local caching
+      var user = {};
+
+      for (var j = 0; j < data.length; j++) {
+        //if user exists in cache
+        if (data[j]["address"] == requestorAddress.toLowerCase()) {
+          user = {
+            fullName: data[j]["fullName"],
+            address: data[j]["address"]
+          }
+          break;
+        }
+      }
+
+      if (Object.keys(user).length === 0) user = await helper.getUser(requestorAddress)
+      
+      data.push({
+        key: currentResult.objectId,
+        address: user.address,
+        propertyID: currentResult.propertyObjectId,
+        dateRequested: currentResult.createdAt,
+        isPending: currentResult.isPending ?? true,
+        isAccepted: currentResult.isAccepted ?? false
+      });
+    }
+    res.send(data); 
+  }
+
+  else if (req.query.mode.toLowerCase() == "buyer") {
+    const requestsQuery = new Moralis.Query("PurchaseRequest");
+    requestsQuery.equalTo("requesterEthAddress", ownerAddress);
+    // requestsQuery.equalTo("isPending", true)
+    const requestResult = await requestsQuery.find();
+
+    //because moralis object is very bad
+    //so ill just treat it as a JSON
+    const result = JSON.parse(JSON.stringify(requestResult))
+
+    const data = [];
+    for (let i = 0; i < result.length; i++) {
+      var currentResult = result[i];
+      //only return results with isBeingProcessed status
+
+      var user = {};
+      var requestorAddress = currentResult.requesterEthAddress;
+      //make local caching
+      var user = {};
+
+      for (var j = 0; j < data.length; j++) {
+        //if user exists in cache
+        if (data[j]["address"] == requestorAddress.toLowerCase()) {
+          user = {
+            fullName: data[j]["fullName"],
+            address: data[j]["address"]
+          }
+          break;
+        }
+      }
+
+      if (Object.keys(user).length === 0) user = await helper.getUser(requestorAddress)
+      
+      data.push({
+        key: currentResult.objectId,
+        address: user.address,
+        propertyID: currentResult.propertyObjectId,
+        dateRequested: currentResult.createdAt,
+        isPending: currentResult.isPending ?? true,
+        isAccepted: currentResult.isAccepted ?? false
+      });
+    }
+    res.send(data);
   }
   else {
     res.status(404)

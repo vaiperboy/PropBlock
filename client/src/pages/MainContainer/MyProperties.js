@@ -190,31 +190,6 @@ const MyProperties = () => {
     try {
       let realEstateDappContract;
       console.log("here");
-
-      //input error handling
-      /*if (
-        addr === "" ||
-        propertyType === "" ||
-        streetNum === "" ||
-        apartmentNum === "" ||
-        ipfs === ""
-      ) {
-        message.error("Invalid input! Please fill in all the field required.");
-        return;
-      }
-      if (
-        titleDeedNo === 0 ||
-        titleDeedYear === 0 ||
-        area === 0 ||
-        listedPrice === 0 ||
-        facilities === 0
-      ) {
-        message.error(
-          "Invalid input! Please fill the inputs with the right feild types."
-        );
-        return;
-      }*/
-
       if (
         !onlyNumbers(titleDeedNo) ||
         !onlyNumbers(titleDeedYear) ||
@@ -249,7 +224,8 @@ const MyProperties = () => {
           realEstate.abi,
           signerNew
         );
-        await realEstateDappContract.createPropertyListing(
+
+        const tmp = await realEstateDappContract.createPropertyListing(
           addr,
           propertyType,
           uintTitleDeedNo,
@@ -261,6 +237,8 @@ const MyProperties = () => {
           ipfs,
           uintFacilities
         );
+
+        console.log(tmp)
         setIsCreatingProperty(false);
         message.success(`Property added for landlord (address: ${addr})`);
       }

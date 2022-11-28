@@ -1,0 +1,47 @@
+var express = require("express");
+require("dotenv").config();
+var Moralis = require("../modules/moralis");
+var config = require("../config");
+var helper = require("../functions/Helper");
+
+var router = express.Router();
+
+//getting purchases requests for a seller
+router.get("/processPurchaseRequest", async function (req, res, next) {
+    const sessionToken = req.query.sessionToken;
+    const ownerAddress = req.query.ownerAddress.toLowerCase();
+
+    var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
+    if (!isLoggedIn) {
+        res.send(401, "not authenticated")
+        return;
+    }
+
+    if (req.query.type === undefined || req.query.key === undefined) {
+        res.status(404).send("wrong input")
+        return;
+    }
+
+    if (req.query.type.toLowerCase() != "accept" && req.query.type.toLowerCase() != "reject") {
+        res.status(404).send("wrong input")
+        return
+    }
+
+    const purchaseRequests = Moralis.Object.extend("PurchaseRequest")
+    const query = new Moralis.Query(purchaseRequests)
+    query.equalTo("objectId", req.query.key)
+    console.log("before")
+    const request = await query.first()
+    console.log("after")
+    if (request === undefined) {
+        res.status(404).send("couldn't find key")
+        return
+    } else console.log("no correct")
+    request.set("isPending", false);
+    request.set("isAccepted", req.query.type.toLowerCase() == "accept" ? true : false)
+    request.save()
+    res.send("updated")
+    return
+});
+
+module.exports = router;

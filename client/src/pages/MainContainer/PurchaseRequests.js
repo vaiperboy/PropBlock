@@ -46,60 +46,46 @@ const PurchaseRequests = (props) => {
     return text;
   };
 
+  async function loadSellerData() {
+    setIsLoading(true);
+    fetch(
+      "http://localhost:9000/getPurchaseRequests?" +
+      new URLSearchParams({
+        mode: "seller",
+        sessionToken: user.getSessionToken(),
+        ownerAddress: user.get("ethAddress"),
+      })
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        setDataSourceSeller(res)
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  async function loadBuyerRequests() {
+    setIsLoading(true);
+    fetch(
+      "http://localhost:9000/getPurchaseRequests?" +
+      new URLSearchParams({
+        mode: "buyer",
+        sessionToken: user.getSessionToken(),
+        ownerAddress: user.get("ethAddress"),
+      })
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        setDataSourceBuyer(res)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }
+
   // loads the dataSourceBuyer & dataSourceSeller
   useEffect(() => {
-    // For Sellers
-    async function loadSellerData() {
-      setIsLoading(true);
-      fetch(
-        "http://localhost:9000/getPurchaseRequests?" +
-          new URLSearchParams({
-            mode: "seller",
-            sessionToken: user.getSessionToken(),
-            ownerAddress: user.get("ethAddress"),
-          })
-      )
-        .then((res) => res.json())
-        .then((res) => {
-         
-        });
-      setIsLoading(false);
-    }
-
-    // For Buyers
-    const loadBuyerRequests = async () => {
-      try {
-        const userEmails = Moralis.Object.extend("PurchaseRequest");
-        const query = new Moralis.Query(userEmails);
-        const userAddress = web3.utils.toChecksumAddress(
-          user.get("ethAddress")
-        );
-        query.equalTo("requesterEthAddress", userAddress);
-        const results = await query.find();
-        let tempArray = [];
-        let date;
-        results.forEach((request, key) => {
-          let day = request.createdAt.getDate().toString();
-          let month = request.createdAt.getMonth().toString();
-          let year = request.createdAt.getFullYear().toString();
-          date = day + " - " + month + " - " + year;
-          tempArray.push({
-            key: key + 1,
-            address: request.get("sellerEthAddress"),
-            propertyID: request.get("propertyObjectId"),
-            dateRequested: date,
-            isAccepted: request.get("isAccepted"),
-            isPending: request.get("isPending"),
-          });
-        });
-        setDataSourceBuyer(tempArray);
-        tempArray.sort(compareByDecision);
-        // tempArray.sort(compareByAddress);
-      } catch (error) {
-        console.log("Error: ", error);
-      }
-    };
-    // calling the functions
     loadBuyerRequests();
     loadSellerData();
   }, []);
@@ -115,6 +101,7 @@ const PurchaseRequests = (props) => {
     }
     return 0;
   }
+
   function compareByDecision(a, b) {
     if (a.isAccepted > b.isAccepted) {
       return -1;
@@ -123,6 +110,37 @@ const PurchaseRequests = (props) => {
       return 1;
     }
     return 0;
+  }
+
+
+
+  const [isProcessing, setIsProcessing] = useState(false)
+  const processRequest = async (key, doAccept) => {
+    if (!isProcessing) {
+      setIsProcessing(true)
+
+      fetch(
+        "http://localhost:9000/processPurchaseRequest?" +
+        new URLSearchParams({
+          sessionToken: user.getSessionToken(),
+          ownerAddress: user.get("ethAddress"),
+          key: key,
+          type: doAccept ? "accept" : "reject"
+        })
+      )
+        .then((res) => {
+          message.success("Process has been " + (doAccept ? "accepted" : "rejected"))
+          loadSellerData()
+        }).catch(error => {
+          message.error(error)
+        })
+        .finally(() => {
+          setIsProcessing(false)
+        })
+    } else {
+      message.info("process already in progress...")
+    }
+
   }
 
   // variables
@@ -155,94 +173,10 @@ const PurchaseRequests = (props) => {
   const [accepted, setAccepted] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Functions for Seller to 'accept' or 'reject' the request
-  const acceptRequest = (requesterAddress, propertyId) => {
-    message.success(
-      "Request Accepted for user (" + requesterAddress.slice(0, 12) + "...) "
-    );
-    removeRequest(dataSourceSellerTemp, requesterAddress, propertyId);
-  };
-
   const rejectRequest = (address, propertyId) => {
     message.error(
       "Request Accepted for owner: " + address + " & propertyId: " + propertyId
     );
-  };
-
-  // removes the request with the property ID
-  const removeRequest = (arr, ownerAddress, propertyId) => {
-    let index;
-    arr.map((request, k) => {
-      if (
-        request.address === ownerAddress &&
-        request.propertyID === propertyId &&
-        request.isPending === true
-      ) {
-        index = k;
-      }
-      const temp = setDataSourceSellerTemp;
-      temp[index].isPending = false;
-      setDataSourceSellerTemp(temp);
-    });
-  };
-
-  // removes the object by the key and value
-  let removeByAttr = function (arr, attr1, value1, attr2, value2) {
-    var i = arr.length;
-    while (i--) {
-      if (
-        arr[i] &&
-        arr[i].hasOwnProperty(attr1) &&
-        arr[i].hasOwnProperty(attr2) &&
-        arguments.length > 2 &&
-        arr[i][attr1] === value1 &&
-        arr[i][attr2] === value2
-      ) {
-        arr.splice(i, 1);
-      }
-    }
-    return arr;
-  };
-
-  // creates the agreementDraft for the property
-  const createAgreementDraft = async (
-    ownerAddress,
-    propertyId,
-    buyerAddress,
-    agreementHash
-  ) => {
-    try {
-      // if (!onlyNumbers(propertyId)) {
-      //   message.error("Invalid Input: Id entered is in incorrect format.");
-      //   return;
-      // }
-      // if (propertyId === "0") {
-      //   message.error("Invalid ID! Property Id cannot be zero.");
-      //   return;
-      // }
-      // if (terms == "") {
-      //   message.error("Invalid Input! Terms of agreement cannot be empty.");
-      //   return;
-      // }
-
-      // generating a random strings for the Agreement Hash
-      const rand1 = Math.random().toString(36).substring(2, 12);
-      const rand2 = Math.random().toString(36).substring(2, 12);
-      const rand3 = Math.random().toString(36).substring(2, 12);
-      const rand4 = Math.random().toString(36).substring(2, 8);
-      const hash = rand1 + rand2 + rand3 + rand4;
-      await realEstateContract.submitDraft(
-        ownerAddress,
-        parseInt(propertyId),
-        buyerAddress,
-        hash
-      );
-      message.success(
-        "Agreement deployed successfully (hash: " + hash.slice(0, 10) + "...)"
-      );
-    } catch (error) {
-      message.error("Error: " + error.error.reason);
-    }
   };
 
   const {
@@ -259,6 +193,8 @@ const PurchaseRequests = (props) => {
     Moralis,
     ...rest
   } = useMoralis();
+
+
 
   // shows the buyer purchase requests section
   if (props.isBuyer === "true") {
@@ -334,7 +270,7 @@ const PurchaseRequests = (props) => {
                             >
                               <button
                                 className="createAgreementDraftButton"
-                                onClick={() => {}}
+                                onClick={() => { }}
                               >
                                 Create Agreement
                               </button>
@@ -416,7 +352,7 @@ const PurchaseRequests = (props) => {
                       <th>Your Decision</th>
                     </tr>
                     {/* show no data icon if array is empty */}
-                    {dataSourceSellerTemp.length === 0 && (
+                    {dataSourceSeller.length === 0 && (
                       <tr>
                         <td colspan="4" style={{ textAlign: "center" }}>
                           <img
@@ -427,7 +363,7 @@ const PurchaseRequests = (props) => {
                         </td>
                       </tr>
                     )}
-                    {dataSourceSellerTemp.map((item) => {
+                    {dataSourceSeller.map((item) => {
                       if (item.isPending === true) {
                         return (
                           <tr
@@ -438,23 +374,45 @@ const PurchaseRequests = (props) => {
                             <td>{item.propertyID}</td>
                             <td>{item.dateRequested}</td>
                             <td style={{ display: "flex", gap: "1rem" }}>
-                              <button
-                                className="acceptButton"
-                                onClick={() => {
-                                  acceptRequest(item.address, item.propertyID);
-                                }}
+                              <Popconfirm
+                                title="Are you sure to accept the purchase request? (All other requests for this property will be rejected by default)"
+                                onConfirm={() => processRequest(item.key, true)}
+                                okText="Yes"
+                                cancelText="No"
                               >
-                                Accept
-                              </button>
+                                <button
+                                  className="acceptButton"
+                                  disabled={isProcessing}
+                                >
+                                  Accept
+                                </button>
+                              </Popconfirm>
+                              <Popconfirm
+                                title="Are you sure to reject the purchase request?"
+                                onConfirm={() => processRequest(item.key, false)}
+                                okText="Yes"
+                                cancelText="No"
+                              >
                               <button
                                 className="rejectButton"
-                                onClick={() => {
-                                  rejectRequest(item.address, item.propertyID);
-                                }}
+                                disabled={isProcessing}
                               >
                                 Reject
                               </button>
+                              </Popconfirm>
                             </td>
+                          </tr>
+                        );
+                      } else {
+                        return (
+                          <tr
+                            key={item.key}
+                            className="notBuyerFirstRowAccepted"
+                          >
+                            <td>{item.address}</td>
+                            <td>{item.propertyID}</td>
+                            <td>{item.dateRequested}</td>
+                            <td style={{ display: "flex", gap: "1rem" }}>{item.isAccepted ? "accepted" : "rejected"}</td>
                           </tr>
                         );
                       }
