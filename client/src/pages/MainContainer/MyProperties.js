@@ -18,7 +18,7 @@ import {
   ArrowLeftOutlined,
 } from "@ant-design/icons";
 import "../../styling/MainContainer/CreateProperty.scss";
-import { Input, Stepper } from "@web3uikit/core";
+import { Input, Stepper, TextArea } from "@web3uikit/core";
 import blueTick from "./assets/blue_tick.png";
 import image from "../../assets/blue_tick.png";
 import moment from "moment";
@@ -81,17 +81,6 @@ const MyProperties = () => {
   const [deedyr, setDeedyr] = useState("");
   const [type, setType] = useState("");
   const [isValidatedFirst, setIsValidatedFirst] = useState(false);
-
-  // step - 2
-  const [propertyid, setPropertyId] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
-  const [street, setStreet] = useState("");
-  const [area, setArea] = useState("");
-  const [apartno, setApartmentNo] = useState("");
-  const [price, setPrice] = useState("");
-  const [isValidatedSecond, setIsValidatedSecond] = useState(false);
-
-  // step - 3
   const [bednumber, setBedNumber] = useState(1);
   const [bathnumber, setBathNumber] = useState(0);
   const [occupNum, setOccupNumber] = useState(1);
@@ -107,8 +96,15 @@ const MyProperties = () => {
     tv: false,
   });
 
-  // step - 4
-  // ---------------
+  const [propertyid, setPropertyId] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [street, setStreet] = useState("");
+  const [area, setArea] = useState("");
+  const [apartno, setApartmentNo] = useState("");
+  const [price, setPrice] = useState("");
+  const [isValidatedSecond, setIsValidatedSecond] = useState(false);
+
+  // step - 2
   const [isValidatedFourth, setIsValidatedFourth] = useState(false);
   const [primaryImageIndex, setPrimaryImageIndex] = useState(0);
   const [primaryImageOption, setPrimaryImageOption] = useState("");
@@ -116,6 +112,8 @@ const MyProperties = () => {
   const [titleDeedFile, setTitleDeedFile] = useState({});
   const [imageNames, setImageNames] = useState([]);
   const { user, ...rest } = useMoralis();
+  const [propertyDescription, setPropertyDescription] = useState("");
+  const [propertyTitle, setPropertyTitle] = useState("");
 
   const [isCreatingProperty, setIsCreatingProperty] = useState(true);
   const disabledDate = (current) => {
@@ -1108,18 +1106,55 @@ const MyProperties = () => {
                     {
                       content: (
                         <div className="fullform">
+                          <div className="input-item">
+                            <label for="InputName">Property Title</label>
+                            <Input
+                              type="text"
+                              id="InputName"
+                              name="name"
+                              className="propertyTitle"
+                              placeholder="Jumeriah Homes ..."
+                              onChange={(e) => {
+                                setPropertyTitle(e.target.value);
+                                setIsValidatedSecond(false);
+                                console.log("Des: ", propertyTitle);
+                              }}
+                              width="60rem"
+                            />
+                          </div>
+                          <div className="input-item">
+                            <label
+                              for="InputName"
+                              style={{ marginBottom: "1rem" }}
+                            >
+                              Property Description
+                            </label>
+                            <TextArea
+                              name="propertyDescription"
+                              className="propertyDescription"
+                              onChange={(e) => {
+                                setPropertyDescription(e.target.value);
+                                setIsValidatedSecond(false);
+                              }}
+                              placeholder="Enter your property description here ..."
+                              width="100rem"
+                              style={{
+                                resize: "none",
+                              }}
+                            />
+                          </div>
                           <div className="inputs-container">
-                            <p>
+                            <p
+                              className="text upload"
+                              style={{ marginTop: "2rem" }}
+                            >
+                              Upload Title Deed
+                            </p>
+                            <p className="note">
                               Upload the required title deed and images for your
                               property. Make sure that the images are high
                               quality for better viewing. You can upload upto 8
                               images for your property.
-                            </p>
-                            <p
-                              className="text upload"
-                              style={{ marginTop: "3rem" }}
-                            >
-                              Upload Title Deed
                             </p>
                             <div>
                               <Dragger
