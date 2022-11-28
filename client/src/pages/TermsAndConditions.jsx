@@ -23,7 +23,11 @@ const TermsAndConditions = () => {
             </p>
           </div>
           <div className="rightSide">
-            <img src={illustration} alt="illustration_terms_And_conditions" />
+            <img
+              src={illustration}
+              alt="illustration_terms_And_conditions"
+              style={{ width: "25rem" }}
+            />
           </div>
         </div>
         <div className="termsSection">
@@ -484,7 +488,9 @@ const TermsAndConditions = () => {
             our rights and property and to facilitate the proper functioning of
             the Site.
           </p>
-          <div id="privacyPolicy">14. PRIVACY POLICY</div>
+          <div id="privacyPolicy" className="heading">
+            14. PRIVACY POLICY
+          </div>
           <p>
             We care about data privacy and security. By using the Site, you
             agree to be bound by our Privacy Policy posted on the Site, which is
@@ -558,7 +564,9 @@ const TermsAndConditions = () => {
             exclusive jurisdiction to resolve any dispute which may arise in
             connection with these terms.
           </p>
-          <div id="disputeResolution">18. DISPUTE RESOLUTION</div>
+          <div id="disputeResolution" className="heading">
+            18. DISPUTE RESOLUTION
+          </div>
           <p>
             You agree to irrevocably submit all disputes related to Terms or the
             relationship established by this Agreement to the jurisdiction of

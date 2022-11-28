@@ -267,318 +267,344 @@ const Statistics = () => {
   const [numOfAgreements, setNumOfAgreements] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  return (
-    <div className="rightsidebar_container">
+  if (isLoading) {
+    return (
       <div
         style={{
-          width: "100%",
+          textAlign: "center",
+          width: "60%",
+          height: "50rem",
+          marginLeft: "5rem",
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <div>
-          <p className="rightsidebar_title">Statistics</p>
-        </div>
+        <Spin size="large" style={{ margin: "0 2rem 0 0 " }} /> Loading
       </div>
-      <div
-        className="rightsidebar_content"
-        style={{
-          width: "100%",
-          display: "flex",
-          height: "auto",
-        }}
-      >
-        <div className="dashboard_card_container">
-          <div
-            className="dashboard_card"
-            style={{ height: "120px", background: "rgba(61, 174, 238, 0.1)" }}
-            onClick={() => {
-              this.props.togglePropertiesView(true);
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "10px",
-              }}
-            >
-              <div
-                className="dashboard_card_text"
-                style={{ height: "fit-content", color: "#1877F2" }}
-              >
-                Properties
-              </div>
-              <img
-                src={properties_icon}
-                alt="Properties Icon"
-                style={{ width: "2rem" }}
-              ></img>
-            </div>
-            {isLoading ? (
-              <div style={{ fontSize: "40px", color: "#1877F2" }}>
-                <Spin />
-              </div>
-            ) : (
-              <div style={{ fontSize: "40px", color: "#1877F2" }}>
-                {numOfProperties}
-              </div>
-            )}
-          </div>
-
-          <div
-            className="dashboard_card"
-            style={{ height: "125px", background: "rgba(61, 174, 238, 0.1)" }}
-            onClick={() => {
-              this.props.togglePropertiesView(true);
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "10px",
-              }}
-            >
-              <div
-                className="dashboard_card_text"
-                style={{ height: "fit-content", color: "#1877F2" }}
-              >
-                Agreements
-              </div>
-              <img
-                src={agreements_icon}
-                alt="Transactions Icon"
-                className="icon"
-                style={{ width: "2.5rem" }}
-              ></img>
-            </div>
-            {isLoading ? (
-              <div style={{ fontSize: "40px", color: "#1877F2" }}>
-                <Spin />
-              </div>
-            ) : (
-              <div style={{ fontSize: "40px", color: "#1877F2" }}>
-                {numOfAgreements}
-              </div>
-            )}
-          </div>
-          <div
-            className="dashboard_card"
-            style={{ height: "125px", background: "rgba(61, 174, 238, 0.1)" }}
-            onClick={() => {
-              this.props.togglePropertiesView(true);
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "10px",
-              }}
-            >
-              <div
-                className="dashboard_card_text"
-                style={{ height: "fit-content", color: "#1877F2" }}
-              >
-                Transactions
-              </div>
-              <img
-                src={transactions_icon}
-                alt="Transactions Icon"
-                className="icon"
-                style={{ width: "2.5rem" }}
-              ></img>
-            </div>
-            {isLoading ? (
-              <div style={{ fontSize: "40px", color: "#1877F2" }}>
-                <Spin />
-              </div>
-            ) : (
-              <div style={{ fontSize: "40px", color: "#1877F2" }}>
-                {numOfTransactions}
-              </div>
-            )}
+    );
+  } else {
+    return (
+      <div className="rightsidebar_container">
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <p className="rightsidebar_title">Statistics</p>
           </div>
         </div>
         <div
-          className="dashboard_card_container"
-          style={{ flexDirection: "column", gap: 0 }}
+          className="rightsidebar_content"
+          style={{
+            width: "100%",
+            display: "flex",
+            height: "auto",
+          }}
         >
-          <div
-            style={{
-              marginTop: "4rem",
-              display: "flex",
-              justifyContent: "space-between",
-              width: "80%",
-            }}
-          >
-            <p
-              className="rightsidebar_subtitle"
-              style={{ fontWeight: 500, color: "#555555" }}
-            >
-              Income Overview
-            </p>
-            <div style={{ display: "flex", gap: "30px" }}>
-              <button
-                className="incomeByButton selected"
-                id="dailyButton"
-                onClick={() => {
-                  handleIncome("daily");
-                }}
-              >
-                Daily
-              </button>
-              <button
-                className="incomeByButton"
-                id="weeklyButton"
-                onClick={() => {
-                  handleIncome("weekly");
-                }}
-              >
-                Weekly
-              </button>
-              <button
-                className="incomeByButton"
-                id="monthlyButton"
-                onClick={() => {
-                  handleIncome("monthly");
-                }}
-              >
-                Monthly
-              </button>
-            </div>
-          </div>
-          <div className="recent_activity_container">
+          <div className="dashboard_card_container">
             <div
-              style={{
-                display: "flex",
-                gap: "15px",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginLeft: 30,
+              className="dashboard_card"
+              style={{ height: "120px", background: "rgba(61, 174, 238, 0.1)" }}
+              onClick={() => {
+                this.props.togglePropertiesView(true);
               }}
             >
               <div
                 style={{
                   display: "flex",
-                  flexDirection: "column",
-                  gap: "15px",
-                  alignItems: "left",
-                  paddingTop: 40,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "10px",
                 }}
               >
-                <span className="income_amt"></span>
-                {incomeBy === "daily" && (
-                  <>
-                    <span className="income_amt">
-                      <img
-                        src={gas_icon}
-                        alt="gas icon"
-                        style={{ width: "4rem", marginRight: "1rem" }}
-                      ></img>
-                      {totalDaily}
-                    </span>
-                    <p
-                      style={{
-                        color: "#1877F2",
-                        marginTop: "-2rem",
-                        marginLeft: "5rem",
-                        fontWeight: "500",
-                      }}
-                    >
-                      Gas Per Day (in Gwei)
-                    </p>
-                  </>
-                )}
-                {incomeBy === "weekly" && (
-                  <>
-                    <span className="income_amt">
-                      <img
-                        src={gas_icon}
-                        alt="gas icon"
-                        style={{ width: "4rem", marginRight: "1rem" }}
-                      ></img>
-                      {totalWeekly}
-                    </span>
-                    <p
-                      style={{
-                        color: "#1877F2",
-                        marginTop: "-2rem",
-                        marginLeft: "5rem",
-                        fontWeight: "500",
-                      }}
-                    >
-                      Gas Per Week (in Gwei)
-                    </p>
-                  </>
-                )}
-                {incomeBy === "monthly" && (
-                  <>
-                    <span className="income_amt">
-                      <img
-                        src={gas_icon}
-                        alt="gas icon"
-                        style={{
-                          width: "4rem",
-                          marginRight: "1rem",
-                        }}
-                      ></img>
-                      {totalMonthly}
-                    </span>
-                    <p
-                      style={{
-                        color: "#1877F2",
-                        marginTop: "-2rem",
-                        marginLeft: "5rem",
-                        fontWeight: "500",
-                      }}
-                    >
-                      Gas Per Month (in Gwei)
-                    </p>
-                  </>
-                )}
+                <div
+                  className="dashboard_card_text"
+                  style={{ height: "fit-content", color: "#1877F2" }}
+                >
+                  Properties
+                </div>
+                <img
+                  src={properties_icon}
+                  alt="Properties Icon"
+                  style={{ width: "2rem" }}
+                ></img>
+              </div>
+              {isLoading ? (
+                <div style={{ fontSize: "40px", color: "#1877F2" }}>
+                  <Spin />
+                </div>
+              ) : (
+                <div style={{ fontSize: "40px", color: "#1877F2" }}>
+                  {numOfProperties}
+                </div>
+              )}
+            </div>
+
+            <div
+              className="dashboard_card"
+              style={{ height: "125px", background: "rgba(61, 174, 238, 0.1)" }}
+              onClick={() => {
+                this.props.togglePropertiesView(true);
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "10px",
+                }}
+              >
+                <div
+                  className="dashboard_card_text"
+                  style={{ height: "fit-content", color: "#1877F2" }}
+                >
+                  Agreements
+                </div>
+                <img
+                  src={agreements_icon}
+                  alt="Transactions Icon"
+                  className="icon"
+                  style={{ width: "2.5rem" }}
+                ></img>
+              </div>
+              {isLoading ? (
+                <div style={{ fontSize: "40px", color: "#1877F2" }}>
+                  <Spin />
+                </div>
+              ) : (
+                <div style={{ fontSize: "40px", color: "#1877F2" }}>
+                  {numOfAgreements}
+                </div>
+              )}
+            </div>
+            <div
+              className="dashboard_card"
+              style={{ height: "125px", background: "rgba(61, 174, 238, 0.1)" }}
+              onClick={() => {
+                this.props.togglePropertiesView(true);
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "10px",
+                }}
+              >
+                <div
+                  className="dashboard_card_text"
+                  style={{ height: "fit-content", color: "#1877F2" }}
+                >
+                  Transactions
+                </div>
+                <img
+                  src={transactions_icon}
+                  alt="Transactions Icon"
+                  className="icon"
+                  style={{ width: "2.5rem" }}
+                ></img>
+              </div>
+              {isLoading ? (
+                <div style={{ fontSize: "40px", color: "#1877F2" }}>
+                  <Spin />
+                </div>
+              ) : (
+                <div style={{ fontSize: "40px", color: "#1877F2" }}>
+                  {numOfTransactions}
+                </div>
+              )}
+            </div>
+          </div>
+          <div
+            className="dashboard_card_container"
+            style={{ flexDirection: "column", gap: 0 }}
+          >
+            <div
+              style={{
+                marginTop: "4rem",
+                display: "flex",
+                justifyContent: "space-between",
+                width: "80%",
+              }}
+            >
+              <p
+                className="rightsidebar_subtitle"
+                style={{ fontWeight: 500, color: "#555555" }}
+              >
+                Estimated Gas Fees
+              </p>
+              <div style={{ display: "flex", gap: "30px" }}>
+                <button
+                  className="incomeByButton selected"
+                  id="dailyButton"
+                  onClick={() => {
+                    handleIncome("daily");
+                  }}
+                >
+                  Daily
+                </button>
+                <button
+                  className="incomeByButton"
+                  id="weeklyButton"
+                  onClick={() => {
+                    handleIncome("weekly");
+                  }}
+                >
+                  Weekly
+                </button>
+                <button
+                  className="incomeByButton"
+                  id="monthlyButton"
+                  onClick={() => {
+                    handleIncome("monthly");
+                  }}
+                >
+                  Monthly
+                </button>
               </div>
             </div>
-            {incomeBy === "daily" && (
+            <div className="recent_activity_container">
               <div
                 style={{
-                  height: "20rem",
-                  width: "95%",
+                  display: "flex",
+                  gap: "15px",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginLeft: 30,
                 }}
               >
-                <Chart className="statistics" data={dailyChart} axes={axes} />
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "15px",
+                    alignItems: "left",
+                    paddingTop: 40,
+                  }}
+                >
+                  <span className="income_amt"></span>
+                  {incomeBy === "daily" && (
+                    <>
+                      <span className="income_amt">
+                        <img
+                          src={gas_icon}
+                          alt="gas icon"
+                          style={{ width: "4rem", marginRight: "1rem" }}
+                        ></img>
+                        {totalDaily}
+                      </span>
+                      <p
+                        style={{
+                          color: "#1877F2",
+                          marginTop: "-2rem",
+                          marginLeft: "5rem",
+                          fontWeight: "500",
+                        }}
+                      >
+                        Gas Per Day (in Gwei)
+                      </p>
+                    </>
+                  )}
+                  {incomeBy === "weekly" && (
+                    <>
+                      <span className="income_amt">
+                        <img
+                          src={gas_icon}
+                          alt="gas icon"
+                          style={{ width: "4rem", marginRight: "1rem" }}
+                        ></img>
+                        {totalWeekly}
+                      </span>
+                      <p
+                        style={{
+                          color: "#1877F2",
+                          marginTop: "-2rem",
+                          marginLeft: "5rem",
+                          fontWeight: "500",
+                        }}
+                      >
+                        Gas Per Week (in Gwei)
+                      </p>
+                    </>
+                  )}
+                  {incomeBy === "monthly" && (
+                    <>
+                      <span className="income_amt">
+                        <img
+                          src={gas_icon}
+                          alt="gas icon"
+                          style={{
+                            width: "4rem",
+                            marginRight: "1rem",
+                          }}
+                        ></img>
+                        {totalMonthly}
+                      </span>
+                      <p
+                        style={{
+                          color: "#1877F2",
+                          marginTop: "-2rem",
+                          marginLeft: "5rem",
+                          fontWeight: "500",
+                        }}
+                      >
+                        Gas Per Month (in Gwei)
+                      </p>
+                    </>
+                  )}
+                </div>
               </div>
-            )}
-            {incomeBy === "weekly" && (
-              <div
-                style={{
-                  height: "20rem",
-                  width: "95%",
-                }}
-              >
-                <Chart className="statistics" data={weeklyChart} axes={axes} />
-              </div>
-            )}
-            {incomeBy === "monthly" && (
-              <div
-                style={{
-                  height: "20rem",
-                  width: "95%",
-                }}
-              >
-                <Chart className="statistics" data={monthlyChart} axes={axes} />
-              </div>
-            )}
+              {incomeBy === "daily" && (
+                <div
+                  style={{
+                    height: "20rem",
+                    width: "95%",
+                  }}
+                >
+                  <Chart className="statistics" data={dailyChart} axes={axes} />
+                </div>
+              )}
+              {incomeBy === "weekly" && (
+                <div
+                  style={{
+                    height: "20rem",
+                    width: "95%",
+                  }}
+                >
+                  <Chart
+                    className="statistics"
+                    data={weeklyChart}
+                    axes={axes}
+                  />
+                </div>
+              )}
+              {incomeBy === "monthly" && (
+                <div
+                  style={{
+                    height: "20rem",
+                    width: "95%",
+                  }}
+                >
+                  <Chart
+                    className="statistics"
+                    data={monthlyChart}
+                    axes={axes}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default Statistics;
