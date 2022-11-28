@@ -22,6 +22,8 @@ import Property_Card from "./Property_Card";
 import ipfs from "../../modules/ipfs";
 
 // smart contract imports and defs
+import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
+
 import realEstate from "../../artifacts/contracts/realEstate.sol/realEstate.json";
 const { ethers } = require("ethers");
 const { ethereum } = window;
@@ -64,6 +66,7 @@ const MyProperties = () => {
   const [bedNumber, setBedNumber] = useState(1);
   const [bathNumber, setBathNumber] = useState(0);
   const [occupancyNum, setOccupancyNumber] = useState(1);
+  const [propertyCity, setPropertyCity] = useState("");
   const [facilities, setFacilities] = useState({
     parking: false,
     kitchen: false,
@@ -244,6 +247,7 @@ const MyProperties = () => {
         const data = {
           txHash: result.hash,
           facilities: facilitiesXor,
+          city: propertyCity,
           bedsNumber: bedNumber,
           bathsNumber: bathNumber,
           propertyTitle: propertyTitle,
@@ -265,14 +269,13 @@ const MyProperties = () => {
         });
       }
     } catch (error) {
-      if (error.code === 4001) {
-        message.error("You rejected the transaction");
-        window.reload();
-        return;
+      const parsedEthersError = getParsedEthersError(error);
+      if (parsedEthersError.errorCode === "REJECTED_TRANSACTION") {
+        message.error(
+          "Error: You rejected the transaction. Please accept the transaction to continue the agreement."
+        );
       } else {
-        message.error("Error: " + error);
-        console.log("Error: " + error.message);
-        return;
+        message.error("Error: " + parsedEthersError.errorCode);
       }
     }
 
@@ -361,6 +364,7 @@ const MyProperties = () => {
   const validateInputFirst = (
     propertyTitleDeedNumber,
     propertyTitleDeedYear,
+    propertyCity,
     propertyType,
     propertyStreet,
     propertyArea,
@@ -379,6 +383,10 @@ const MyProperties = () => {
       }
       if (propertyTitleDeedYear === "") {
         message.error("Please fill the input for Title deed Year");
+        return;
+      }
+      if (propertyCity === "" || propertyCity === "none") {
+        message.error("Please fill the input for Property City");
         return;
       }
       if (propertyType === "" || propertyType === "none") {
@@ -809,6 +817,58 @@ const MyProperties = () => {
                               </h1>
                             </div>
                             <div className="input-item">
+                              <label for="property-city">Property City</label>
+                              <div>
+                                <SelectAnt
+                                  defaultValue="none"
+                                  className="selectPropertyType"
+                                  style={{
+                                    width: "17rem",
+                                  }}
+                                  onChange={(value) => {
+                                    setPropertyCity(value);
+                                    setIsValidatedFirst(false);
+                                  }}
+                                  options={[
+                                    {
+                                      value: "none",
+                                      label: "None",
+                                    },
+                                    {
+                                      value: "Abu Dhabi",
+                                      label: "Abu Dhabi",
+                                    },
+                                    {
+                                      value: "Dubai",
+                                      label: "Dubai",
+                                    },
+                                    {
+                                      value: "Ajman",
+                                      label: "Ajman",
+                                    },
+                                    {
+                                      value: "Sharjah",
+                                      label: "Sharjah",
+                                    },
+                                    {
+                                      value: "Ras Al Khaimah",
+                                      label: "Ras Al Khaimah",
+                                    },
+
+                                    {
+                                      value: "Umm Al Quwain",
+                                      label: "Umm Al Quwain",
+                                    },
+
+                                    {
+                                      value: "Fujairah",
+                                      label: "Fujairah",
+                                    },
+                                  ]}
+                                />
+                              </div>
+                            </div>
+                            <div className="input-item">
                               <label for="property-type">Property Type</label>
                               <div>
                                 <SelectAnt
@@ -868,7 +928,7 @@ const MyProperties = () => {
                               />
                             </div>
                             <div className="input-item">
-                              <label for="type">Area</label>
+                              <label for="type">Plot Size</label>
                               <Input
                                 type="text"
                                 id="area"
@@ -1018,6 +1078,7 @@ const MyProperties = () => {
                                   validateInputFirst(
                                     propertyTitleDeedNumber,
                                     propertyTitleDeedYear,
+                                    propertyCity,
                                     propertyType,
                                     propertyStreet,
                                     propertyArea,
