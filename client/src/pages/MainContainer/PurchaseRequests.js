@@ -49,15 +49,15 @@ const PurchaseRequests = (props) => {
     setIsLoading(true);
     fetch(
       "http://localhost:9000/getPurchaseRequests?" +
-      new URLSearchParams({
-        mode: "seller",
-        sessionToken: user.getSessionToken(),
-        ownerAddress: user.get("ethAddress"),
-      })
+        new URLSearchParams({
+          mode: "seller",
+          sessionToken: user.getSessionToken(),
+          ownerAddress: user.get("ethAddress"),
+        })
     )
       .then((res) => res.json())
       .then((res) => {
-        setDataSourceSeller(res)
+        setDataSourceSeller(res);
       })
       .finally(() => {
         setIsLoading(false);
@@ -68,19 +68,19 @@ const PurchaseRequests = (props) => {
     setIsLoading(true);
     fetch(
       "http://localhost:9000/getPurchaseRequests?" +
-      new URLSearchParams({
-        mode: "buyer",
-        sessionToken: user.getSessionToken(),
-        ownerAddress: user.get("ethAddress"),
-      })
+        new URLSearchParams({
+          mode: "buyer",
+          sessionToken: user.getSessionToken(),
+          ownerAddress: user.get("ethAddress"),
+        })
     )
       .then((res) => res.json())
       .then((res) => {
-        setDataSourceBuyer(res)
+        setDataSourceBuyer(res);
       })
       .finally(() => {
-        setIsLoading(false)
-      })
+        setIsLoading(false);
+      });
   }
 
   // loads the dataSourceBuyer & dataSourceSeller
@@ -111,36 +111,36 @@ const PurchaseRequests = (props) => {
     return 0;
   }
 
-
-
-  const [isProcessing, setIsProcessing] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false);
   const processRequest = async (key, doAccept) => {
     if (!isProcessing) {
-      setIsProcessing(true)
+      setIsProcessing(true);
 
       fetch(
         "http://localhost:9000/processPurchaseRequest?" +
-        new URLSearchParams({
-          sessionToken: user.getSessionToken(),
-          ownerAddress: user.get("ethAddress"),
-          key: key,
-          type: doAccept ? "accept" : "reject"
-        })
+          new URLSearchParams({
+            sessionToken: user.getSessionToken(),
+            ownerAddress: user.get("ethAddress"),
+            key: key,
+            type: doAccept ? "accept" : "reject",
+          })
       )
         .then((res) => {
-          message.success("Process has been " + (doAccept ? "accepted" : "rejected"))
-          loadSellerData()
-        }).catch(error => {
-          message.error(error)
+          message.success(
+            "Process has been " + (doAccept ? "accepted" : "rejected")
+          );
+          loadSellerData();
+        })
+        .catch((error) => {
+          message.error(error);
         })
         .finally(() => {
-          setIsProcessing(false)
-        })
+          setIsProcessing(false);
+        });
     } else {
-      message.info("process already in progress...")
+      message.info("process already in progress...");
     }
-
-  }
+  };
 
   // variables
   const [dataSourceBuyer, setDataSourceBuyer] = useState([]);
@@ -192,8 +192,6 @@ const PurchaseRequests = (props) => {
     Moralis,
     ...rest
   } = useMoralis();
-
-
 
   // shows the buyer purchase requests section
   if (props.isBuyer === "true") {
@@ -269,7 +267,7 @@ const PurchaseRequests = (props) => {
                             >
                               <button
                                 className="createAgreementDraftButton"
-                                onClick={() => { }}
+                                onClick={() => {}}
                               >
                                 Create Agreement
                               </button>
@@ -401,7 +399,9 @@ const PurchaseRequests = (props) => {
                             <td>{item.address}</td>
                             <td>{item.propertyID}</td>
                             <td>{item.dateRequested}</td>
-                            <td style={{ display: "flex", gap: "1rem" }}>{item.isAccepted ? "accepted" : "rejected"}</td>
+                            <td style={{ display: "flex", gap: "1rem" }}>
+                              {item.isAccepted ? "accepted" : "rejected"}
+                            </td>
                           </tr>
                         );
                       }

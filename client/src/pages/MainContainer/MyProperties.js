@@ -157,10 +157,9 @@ const MyProperties = () => {
   //only made it for lowest number (least option)
   const handleFacilities = (arr) => {
     var tmp = 0;
-    for (var i = 0; i < arr.length; i++)
-      tmp = tmp | arr[i]
-    setFacilitiesXor(tmp)
-    console.log(tmp)
+    for (var i = 0; i < arr.length; i++) tmp = tmp | arr[i];
+    setFacilitiesXor(tmp);
+    console.log(tmp);
   };
 
   // cannot select date after 'Today'
@@ -213,7 +212,7 @@ const MyProperties = () => {
           message.error("Could not upload files via IPFS!");
           return;
         }
-        
+
         const result = await realEstateDappContract.createPropertyListing(
           ownerAddress,
           propertyType,
@@ -346,7 +345,7 @@ const MyProperties = () => {
         for await (const result of ipfs.addAll(files, options)) {
           hash = result.cid._baseCache.entries().next().value[1];
         }
-        console.log(hash)
+        console.log(hash);
         resolve(hash);
       } catch (error) {
         message.error("error with IPFS: " + error);

@@ -38,40 +38,44 @@
       }
       .property-listing {
         width: 100%;
-        height: 28rem;
         .resultsText {
           margin-top: -3.5rem;
           margin-bottom: 1rem;
           font-size: 1.7rem;
         }
-        .property {
-          width: 70rem;
-          display: flex;
-          margin-bottom: 10rem;
-          #property-image {
-            width: 25rem;
-            padding: 1rem;
-          }
-          .address-box {
-            width: 24rem;
-            height: 2rem;
+        .propertyCards {
+          width: fit-content;
+          height: fit-content;
+          // background-color: red;
+          .property {
+            width: 70rem;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            align-content: center;
-            margin-top: 10rem;
-            #walletImage {
-              width: 2.5rem;
-              height: 2.5rem;
-              margin: 0;
+            margin-bottom: 10rem;
+            #property-image {
+              width: 25rem;
+              padding: 1rem;
             }
-            #walletAddress {
-              color: #3daeee;
-              margin-left: 4rem;
+            .address-box {
+              width: 24rem;
+              height: 2rem;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              align-content: center;
+              margin-top: 10rem;
+              #walletImage {
+                width: 2.5rem;
+                height: 2.5rem;
+                margin: 0;
+              }
+              #walletAddress {
+                color: #3daeee;
+                margin-left: 4rem;
+              }
             }
-          }
-          .property-button {
-            margin: 1rem;
+            .property-button {
+              margin: 1rem;
+            }
           }
         }
       }
