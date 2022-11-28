@@ -97,48 +97,46 @@ class App extends Component {
                       {this.state.queriesCount} properties
                     </p>
                   </p>
-                  <PropertyListing
-                    className="property"
-                    image={SampleImage}
-                    propertyName="Villa"
-                    locationName="Dubai, UAE"
-                    propertyPrice={1500230}
-                    features={["3 BKH", "Lorem ipsum", "Lorem ipsum"]}
-                    body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
-                    walletImage={SampleWalletImage}
-                    walletAddress="0x4001A8651c51a799ED5808ae45da60538b327b96"
-                    objectId="7OEIKOHlC761LejpUBTeK4Gv"
-                  />
+                  <div className="propertyCards">
+                    <PropertyListing
+                      className="property"
+                      image={SampleImage}
+                      propertyName="Villa"
+                      locationName="Dubai, UAE"
+                      propertyPrice={1500230}
+                      features={["3 BKH", "Lorem ipsum", "Lorem ipsum"]}
+                      body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
+                      walletImage={SampleWalletImage}
+                      walletAddress="0x4001A8651c51a799ED5808ae45da60538b327b96"
+                      objectId="7OEIKOHlC761LejpUBTeK4Gv"
+                    />
+                    <PropertyListing
+                      className="property"
+                      image={SampleImage}
+                      propertyName="Villa"
+                      locationName="Dubai, UAE"
+                      propertyPrice={1500230}
+                      features={["3 BKH", "Lorem ipsum", "Lorem ipsum"]}
+                      body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
+                      walletImage={SampleWalletImage}
+                      walletAddress="0x4001A8651c51a799ED5808ae45da60538b327b96"
+                      objectId="7OEIKOHlC761LejpUBTeK4Gv"
+                    />
+                    <PropertyListing
+                      className="property"
+                      image={SampleImage}
+                      propertyName="Villa"
+                      locationName="Dubai, UAE"
+                      propertyPrice={1500230}
+                      features={["3 BKH", "Lorem ipsum", "Lorem ipsum"]}
+                      body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
+                      walletImage={SampleWalletImage}
+                      walletAddress="0x4001A8651c51a799ED5808ae45da60538b327b96"
+                      objectId="7OEIKOHlC761LejpUBTeK4Gv"
+                    />
+                  </div>
                 </div>
 
-                <div class="property-listing">
-                  <PropertyListing
-                    className="property"
-                    image={SampleImage}
-                    propertyName="Villa"
-                    locationName="Dubai, UAE"
-                    propertyPrice={1500230}
-                    features={["3 BKH", "Lorem ipsum", "Lorem ipsum"]}
-                    body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
-                    walletImage={SampleWalletImage}
-                    walletAddress="0x4001A8651c51a799ED5808ae45da60538b327b96"
-                    objectId="7OEIKOHlC761LejpUBTeK4Gv"
-                  />
-                </div>
-                <div class="property-listing">
-                  <PropertyListing
-                    className="property"
-                    image={SampleImage}
-                    propertyName="Villa"
-                    locationName="Dubai, UAE"
-                    propertyPrice={1500230}
-                    features={["3 BKH", "Lorem ipsum", "Lorem ipsum"]}
-                    body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
-                    walletImage={SampleWalletImage}
-                    walletAddress="0x4001A8651c51a799ED5808ae45da60538b327b96"
-                    objectId="7OEIKOHlC761LejpUBTeK4Gv"
-                  />
-                </div>
                 <div className="page-numbers">{this.constructPagesCount()}</div>
               </div>
             </div>
