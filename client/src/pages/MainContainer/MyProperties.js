@@ -2,15 +2,10 @@ import React, { useState, useEffect } from "react";
 import stats from "../../assets/etienne-beauregard-riverin.png";
 import {
   message,
-  Alert,
-  notification,
-  Checkbox,
   DatePicker,
-  Upload,
+  Upload as UploadAntDesign,
   InputNumber,
   Select as SelectAnt,
-  Modal,
-  Radio,
 } from "antd";
 import {
   PlusOutlined,
@@ -18,11 +13,11 @@ import {
   ArrowLeftOutlined,
 } from "@ant-design/icons";
 import "../../styling/MainContainer/CreateProperty.scss";
-import { Input, Stepper, TextArea } from "@web3uikit/core";
-import blueTick from "./assets/blue_tick.png";
+import { Input, Stepper, TextArea, Upload } from "@web3uikit/core";
+// import blueTick from "./assets/blue_tick.png";
 import image from "../../assets/blue_tick.png";
 import moment from "moment";
-import { useFiatBuy, useMoralis, useMoralisQuery } from "react-moralis";
+import { useMoralis } from "react-moralis";
 import { useNavigate } from "react-router-dom";
 import Property_Card from "./Property_Card";
 import ipfs from "../../modules/ipfs";
@@ -34,31 +29,11 @@ const { ethereum } = window;
 
 // import Moralis from "moralis-v1/types";
 const console = require("console-browserify");
-const { Dragger } = Upload;
+// const { Dragger } = Upload;
 
 const MyProperties = () => {
-  // ----------------------------------
-  // Smart Contract Variables
-  // ----------------------------------
-
-  const API_KEY = process.env.REACT_APP_API_KEY;
-  const API_URL = `https://eth-goerli.g.alchemy.com/v2/${API_KEY}`;
-  const PRIVATE_KEY = process.env.REACT_APP_PRIVATE_KEY;
+  // contract address
   const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
-
-  const provider = new ethers.providers.JsonRpcProvider(API_URL);
-  // Signer - this represents an Ethereum account that has the ability to sign transactions.
-  const signer = new ethers.Wallet(PRIVATE_KEY, provider);
-  // Contract - this is an Ethers.js object that represents a specific contract deployed on-chain.
-  const realEstateContract = new ethers.Contract(
-    CONTRACT_ADDRESS,
-    realEstate.abi,
-    signer
-  );
-
-  // -------------------------------------------
-  // Smart Contract Functions
-  // -------------------------------------------
 
   // checks if the string only has numbers
   const onlyNumbers = (str) => {
@@ -74,16 +49,20 @@ const MyProperties = () => {
   const [addPropertyView, setAddPropertyView] = useState(true);
 
   // step - 1
-  const [address, setAddress] = useState("");
+  const [ownerAddress, setOwnerAddress] = useState("");
   const [ethAddress, setEthAddress] = useState("");
   const [fullName, setFullName] = useState("");
-  const [deedno, setDeedno] = useState("");
-  const [deedyr, setDeedyr] = useState("");
-  const [type, setType] = useState("");
-  const [isValidatedFirst, setIsValidatedFirst] = useState(false);
-  const [bednumber, setBedNumber] = useState(1);
-  const [bathnumber, setBathNumber] = useState(0);
-  const [occupNum, setOccupNumber] = useState(1);
+  const [emailAddress, setEmailAddress] = useState("");
+  const [propertyTitleDeedNumber, setPropertyTitleDeedNumber] = useState("");
+  const [propertyTitleDeedYear, setPropertyTitleDeedYear] = useState("");
+  const [propertyType, setPropertyType] = useState("");
+  const [propertyStreet, setPropertyStreet] = useState("");
+  const [propertyArea, setPropertyArea] = useState("");
+  const [propertyApartmentNo, setPropertyApartmentNo] = useState("");
+  const [propertyPrice, setPropertyPrice] = useState("");
+  const [bedNumber, setBedNumber] = useState(1);
+  const [bathNumber, setBathNumber] = useState(0);
+  const [occupancyNum, setOccupancyNumber] = useState(1);
   const [facilities, setFacilities] = useState({
     parking: false,
     kitchen: false,
@@ -95,17 +74,13 @@ const MyProperties = () => {
     hourAccess: false,
     tv: false,
   });
+  const [isValidatedFirst, setIsValidatedFirst] = useState(false);
 
-  const [propertyid, setPropertyId] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
-  const [street, setStreet] = useState("");
-  const [area, setArea] = useState("");
-  const [apartno, setApartmentNo] = useState("");
-  const [price, setPrice] = useState("");
-  const [isValidatedSecond, setIsValidatedSecond] = useState(false);
-
+  // -------------------------------
   // step - 2
-  const [isValidatedFourth, setIsValidatedFourth] = useState(false);
+  const [isValidatedSecond, setIsValidatedSecond] = useState(false);
+  const [transactionHash, setTransactionHash] = useState(false);
+  const [titleDeedRemoved, setTitleDeedRemoved] = useState(false);
   const [primaryImageIndex, setPrimaryImageIndex] = useState(0);
   const [primaryImageOption, setPrimaryImageOption] = useState("");
   const [imageList, setImageList] = useState([]);
@@ -116,10 +91,6 @@ const MyProperties = () => {
   const [propertyTitle, setPropertyTitle] = useState("");
 
   const [isCreatingProperty, setIsCreatingProperty] = useState(true);
-  const disabledDate = (current) => {
-    // Can not select days before today and today
-    return current && current > moment().endOf("day");
-  };
 
   // Property Facilities
   const [facilitiesOptions, setFacilitiesOptions] = useState([
@@ -133,6 +104,55 @@ const MyProperties = () => {
     { value: 256, label: "TV Access" },
   ]);
   const [facilitiesXor, setFacilitiesXor] = useState(0);
+  const samplePropertyDetails = {
+    addr: "0x6F7CBEE1098D7b5890299FA1B16b98F458926636",
+    propertyType: "villa",
+    titleDeedNo: 12344,
+    titleDeedYear: 2020,
+    streetNum: "12 Street",
+    area: 2500,
+    apartmentNum: "12A",
+    listedPrice: 1250000,
+    ipfs: "asdasdmkalksfm",
+    facilities: 1,
+  };
+  const sampleProperties = [
+    {
+      id: 1,
+      ownerAddress: "0xd1D3dB802977ee31062477E37a51B0BB452275f9",
+      label: "Villa, Jumeirah",
+      city: "Dubai",
+      country: "UAE",
+      description: "Set in exotic landscaped gardens",
+      price: "750,000",
+      imageLocation: "realEstate_3-min.png",
+    },
+    {
+      id: 2,
+      ownerAddress: "0xd1D3dB802977ee31062477E37a51B0BB452275f9",
+      label: "Smart Building Apartment",
+      city: "Dubai",
+      country: "UAE",
+      description: "Set in exotic landscaped gardens",
+      price: "1,500,000",
+      imageLocation: "realEstate_2-min.png",
+    },
+    {
+      id: 2,
+      ownerAddress: "0xd1D3dB802977ee31062477E37a51B0BB452275f9",
+      label: "Smart Building Apartment",
+      city: "Dubai",
+      country: "UAE",
+      description: "Set in exotic landscaped gardens",
+      price: "1,500,000",
+      imageLocation: "realEstate_2-min.png",
+    },
+  ];
+
+  // -------------------------------
+  // Functions
+  // -------------------------------
+
   //only made it for lowest number (least option)
   const handleFacilities = (arr) => {
     if (arr.length > 0) {
@@ -144,52 +164,42 @@ const MyProperties = () => {
     } else this.setState({ facilitiesXor: 0 });
   };
 
-  const addProperty = async () => {
-    setIsCreatingProperty(true);
-    processFacilities();
-    message.info("uploading documents...");
-    const ipfsHash = await uploadIpfs();
-    //const ipfsHash = "123123123";
-    if (ipfsHash.length == 0) {
-      message.error("Could not upload files via IPFS!");
-      return;
-    }
-    message.success("documents uploaded!");
-
-    message.info("adding property...");
-    await deployProperty(
-      ethAddress,
-      type,
-      deedno,
-      deedyr,
-      street,
-      area,
-      apartno,
-      price,
-      ipfsHash,
-      facilitiesXor
-    );
-    message.success("property added!");
-
-    //setIsCreatingProperty(false);
+  // cannot select date after 'Today'
+  const disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current > moment().endOf("day");
   };
 
-  // Adding a new property
-  const deployProperty = async (
-    addr,
-    propertyType,
-    titleDeedNo,
-    titleDeedYear,
-    streetNum,
-    area,
-    apartmentNum,
-    listedPrice,
-    ipfs,
-    facilities
-  ) => {
+  // function to add property
+  const addProperty = async () => {
     try {
       let realEstateDappContract;
       console.log("here");
+
+      //input error handling
+      /*if (
+        addr === "" ||
+        propertyType === "" ||
+        streetNum === "" ||
+        apartmentNum === "" ||
+        ipfs === ""
+      ) {
+        message.error("Invalid input! Please fill in all the field required.");
+        return;
+      }
+      if (
+        titleDeedNo === 0 ||
+        titleDeedYear === 0 ||
+        area === 0 ||
+        listedPrice === 0 ||
+        facilities === 0
+      ) {
+        message.error(
+          "Invalid input! Please fill the inputs with the right feild types."
+        );
+        return;
+      }*/
+
       if (
         !onlyNumbers(titleDeedNo) ||
         !onlyNumbers(titleDeedYear) ||
@@ -206,12 +216,8 @@ const MyProperties = () => {
         );
         return;
       }
-      // converting the data from string to int type
-      const uintTitleDeedNo = parseInt(titleDeedNo);
-      const uintTitleDeedYear = parseInt(titleDeedYear);
-      const uintArea = parseInt(area);
-      const uintListedPrice = parseInt(listedPrice);
-      const uintFacilities = parseInt(facilities);
+
+      // if metamask is installed
       if (ethereum) {
         const accounts = await ethereum.request({ method: "eth_accounts" });
         // connected
@@ -224,46 +230,44 @@ const MyProperties = () => {
           realEstate.abi,
           signerNew
         );
-
-        const tmp = await realEstateDappContract.createPropertyListing(
+        await realEstateDappContract.createPropertyListing(
           addr,
           propertyType,
           uintTitleDeedNo,
           uintTitleDeedYear,
-          streetNum,
-          uintArea,
-          apartmentNum,
+          propertyStreet,
+          propertyArea,
+          propertyApartmentNo,
           uintListedPrice,
-          ipfs,
-          uintFacilities
+          ipfs
         );
-
-        console.log(tmp)
         setIsCreatingProperty(false);
         message.success(`Property added for landlord (address: ${addr})`);
       }
     } catch (error) {
       if (error.code === 4001) {
-        message.error("Error " + error.code + ": " + error.message);
+        message.error("You rejected the transaction");
+        window.reload();
+        return;
       } else {
         message.error("Error: " + error);
         console.log("Error: " + error.message);
+        return;
       }
     }
     setIsCreatingProperty(false);
-  };
 
-  const samplePropertyDetails = {
-    addr: "0x6F7CBEE1098D7b5890299FA1B16b98F458926636",
-    propertyType: "villa",
-    titleDeedNo: 12344,
-    titleDeedYear: 2020,
-    streetNum: "12 Street",
-    area: 2500,
-    apartmentNum: "12A",
-    listedPrice: 1250000,
-    ipfs: "asdasdmkalksfm",
-    facilities: 1,
+    message.info("uploading documents...");
+    const ipfsHash = await uploadIpfs();
+    //const ipfsHash = "123123123";
+    if (ipfsHash.length == 0) {
+      message.error("Could not upload files via IPFS!");
+      return;
+    }
+    message.success("Documents are successfully uploaded!");
+    message.info("Adding property ...");
+    message.success(`Property added for landlord (address: ${ownerAddress})`);
+    setIsCreatingProperty(false);
   };
 
   const displayPropertyDetails = () => {
@@ -322,6 +326,7 @@ const MyProperties = () => {
     setFacilitiesXor(flags);
   };
 
+  // function to upload via IPFS
   const uploadIpfs = async () => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -329,12 +334,6 @@ const MyProperties = () => {
           wrapWithDirectory: true,
           //progress: (prog) => console.log(`[ipfs] received: ${prog}`)
         };
-
-        /*const files = [
-          titleDeedFile,
-          ...imageList
-        ];*/
-
         const files = imageList;
         var hash = "";
         console.log("files to add: " + files);
@@ -353,54 +352,56 @@ const MyProperties = () => {
 
   // Validation Functions
   // ---------------------
+
+  // step - 1
   const validateInputFirst = (
-    deedno,
-    deedyr,
-    type,
-    street,
-    area,
-    apartno,
-    price
+    propertyTitleDeedNumber,
+    propertyTitleDeedYear,
+    propertyType,
+    propertyStreet,
+    propertyArea,
+    propertyApartmentNo,
+    propertyPrice
   ) => {
     try {
       const numbersOnly = /^[0-9]*$/;
-      if (deedno === "") {
+      if (propertyTitleDeedNumber === "") {
         message.error("Please fill the input for Title Deed No.");
         return;
       }
-      if (!numbersOnly.test(deedno)) {
+      if (!numbersOnly.test(propertyTitleDeedNumber)) {
         message.error("Invalid Deed No. Format. Must be only numbers.");
         return;
       }
-      if (deedyr === "") {
+      if (propertyTitleDeedYear === "") {
         message.error("Please fill the input for Title deed Year");
         return;
       }
-      if (type === "" || type === "none") {
+      if (propertyType === "" || propertyType === "none") {
         message.error("Please fill the input for Property Type");
         return;
       }
-      if (street === "") {
+      if (propertyStreet === "") {
         message.error("Please fill the input for Property Street");
         return;
       }
-      if (area === "") {
+      if (propertyArea === "") {
         message.error("Please fill the input for Area");
         return;
       }
-      if (!numbersOnly.test(area)) {
+      if (!numbersOnly.test(propertyArea)) {
         message.error("Invalid Format! Area input should only contain numbers");
         return;
       }
-      if (apartno === "") {
+      if (propertyApartmentNo === "") {
         message.error("Please fill the input for Apartment Number");
         return;
       }
-      if (price === "") {
+      if (propertyPrice === "") {
         message.error("Please fill the input for Price of the Property");
         return;
       }
-      if (!numbersOnly.test(price)) {
+      if (!numbersOnly.test(propertyPrice)) {
         message.error(
           "Invalid Format! Price input should only contain numbers"
         );
@@ -411,38 +412,73 @@ const MyProperties = () => {
       console.log("Error Message1: " + error);
     }
   };
-  const validateInputSecond = (street, area, apartno, price) => {
-    const numbersOnly = /^[0-9]*$/;
+
+  const getExtension = (file) => {
+    return file.slice(((file.lastIndexOf(".") - 1) >>> 0) + 2);
+  };
+
+  //true if extension within range
+  const checkExtension = (val, arr) => {
+    return arr.indexOf(val) !== -1;
+  };
+
+  const extensionsAllowed = ["pdf"];
+
+  // step - 2
+  const validateInputSecond = () => {
     try {
-      if (street === "") {
-        message.error("Please fill the input for Property Street");
+      if (propertyTitle === "") {
+        message.error("Please enter the title for the property");
         return;
       }
-      if (area === "") {
-        message.error("Please fill the input for Area");
+      if (propertyDescription === "") {
+        message.error("Please upload the description for the property");
         return;
       }
-      if (!numbersOnly.test(area)) {
-        message.error("Invalid Format! Area input should only contain numbers");
+      if (titleDeedFile === "") {
+        message.error("Please enter the title deed file for the property");
         return;
       }
-      if (apartno === "") {
-        message.error("Please fill the input for Apartment Number");
-        return;
-      }
-      if (price === "") {
-        message.error("Please fill the input for Price of the Property");
-        return;
-      }
-      if (!numbersOnly.test(price)) {
+      if (
+        titleDeedFile === undefined ||
+        titleDeedFile.name === undefined ||
+        !checkExtension(getExtension(titleDeedFile.name), extensionsAllowed)
+      ) {
         message.error(
-          "Invalid Format! Price input should only contain numbers"
+          "Please make sure the file extension are: " +
+            extensionsAllowed.join(",")
         );
         return;
       }
+      if (imageList.length === 0) {
+        message.error("Please add at least one picture for the property");
+        return;
+      }
+      if (primaryImageOption === "" || primaryImageOption === undefined) {
+        message.error("Please select a primary image to continue");
+        return;
+      }
+      message.success("Data stored successfully!");
+      console.log(
+        "All data: ",
+        ownerAddress,
+        propertyStreet,
+        propertyArea,
+        propertyApartmentNo,
+        emailAddress,
+        fullName,
+        propertyTitleDeedNumber,
+        propertyTitleDeedYear,
+        propertyType,
+        bedNumber,
+        bathNumber,
+        occupancyNum
+      );
+      console.log("uploads: ", imageList, titleDeedFile);
+      console.log("facilities: ", facilities);
       setIsValidatedSecond(true);
     } catch (error) {
-      message.error("Error Message: " + error);
+      console.log("Error: ", error);
     }
   };
 
@@ -464,18 +500,6 @@ const MyProperties = () => {
     setImageList(files);
   };
 
-  // props for uploading files
-  const propsDragger = {
-    name: "file",
-    multiple: true,
-    accept: ".pdf",
-    maxCount: 1,
-    onChange(info) {
-      setTitleDeedFile(info.file.originFileObj);
-    },
-    onRemove(e) {},
-  };
-
   useEffect(() => {
     setEthAddress(user.get("ethAddress"));
     setEmailAddress(user.get("email"));
@@ -483,82 +507,19 @@ const MyProperties = () => {
   }, [user]);
 
   const clearState = () => {
-    setAddress("");
+    setOwnerAddress("");
     setFullName("");
-    setDeedno("");
-    setDeedyr("");
-    setType("");
+    setPropertyTitleDeedNumber("");
+    setPropertyTitleDeedYear("");
+    setPropertyType("");
   };
 
   let navigate = useNavigate();
-
-  const validateInputFourth = () => {
-    try {
-      if (primaryImageOption === "" || primaryImageOption === undefined) {
-        message.info("Please select a primary image to continue");
-        return;
-      }
-      message.success("Data stored successfully!");
-      console.log(
-        "Inputs: ",
-        ethAddress,
-        street,
-        area,
-        apartno,
-        emailAddress,
-        fullName,
-        deedno,
-        deedyr,
-        type,
-        bednumber,
-        bathnumber,
-        occupNum
-      );
-      console.log("uploads: ", imageList, titleDeedFile);
-      console.log("facilities: ", facilities);
-      setIsValidatedFourth(true);
-    } catch (error) {
-      console.log("Error: ", error);
-    }
-  };
 
   const handlePrimaryImageChange = (e) => {
     setPrimaryImageOption(e);
     console.log("option checked", primaryImageOption);
   };
-
-  const sampleProperties = [
-    {
-      id: 1,
-      ownerAddress: "0xd1D3dB802977ee31062477E37a51B0BB452275f9",
-      label: "Villa, Jumeirah",
-      city: "Dubai",
-      country: "UAE",
-      description: "Set in exotic landscaped gardens",
-      price: "750,000",
-      imageLocation: "realEstate_3-min.png",
-    },
-    {
-      id: 2,
-      ownerAddress: "0xd1D3dB802977ee31062477E37a51B0BB452275f9",
-      label: "Smart Building Apartment",
-      city: "Dubai",
-      country: "UAE",
-      description: "Set in exotic landscaped gardens",
-      price: "1,500,000",
-      imageLocation: "realEstate_2-min.png",
-    },
-    {
-      id: 2,
-      ownerAddress: "0xd1D3dB802977ee31062477E37a51B0BB452275f9",
-      label: "Smart Building Apartment",
-      city: "Dubai",
-      country: "UAE",
-      description: "Set in exotic landscaped gardens",
-      price: "1,500,000",
-      imageLocation: "realEstate_2-min.png",
-    },
-  ];
 
   const makePrimaryImage = () => {
     //swapping
@@ -723,9 +684,9 @@ const MyProperties = () => {
                                   "..." +
                                   ethAddress.slice(25, 35)
                                 }`}
-                                value={address}
+                                value={ownerAddress}
                                 onChange={(e) => {
-                                  setAddress(e.target.value);
+                                  setOwnerAddress(e.target.value);
                                 }}
                                 validation={{
                                   readOnly: true,
@@ -798,9 +759,9 @@ const MyProperties = () => {
                                 id="InputDeedno"
                                 name="titleno"
                                 placeholder="#789456"
-                                value={deedno}
+                                value={propertyTitleDeedNumber}
                                 onChange={(e) => {
-                                  setDeedno(e.target.value);
+                                  setPropertyTitleDeedNumber(e.target.value);
                                   setIsValidatedFirst(false);
                                 }}
                                 validation={{
@@ -824,7 +785,7 @@ const MyProperties = () => {
                                   }
                                 }
                                 onChange={(e) => {
-                                  setDeedyr(e._d.getFullYear());
+                                  setPropertyTitleDeedYear(e._d.getFullYear());
                                   setIsValidatedFirst(false);
                                 }}
                               />
@@ -856,7 +817,7 @@ const MyProperties = () => {
                                     width: "14rem",
                                   }}
                                   onChange={(value) => {
-                                    setType(value);
+                                    setPropertyType(value);
                                     setIsValidatedFirst(false);
                                   }}
                                   options={[
@@ -895,9 +856,9 @@ const MyProperties = () => {
                                 id="street"
                                 name="street"
                                 placeholder="Sheikh Mohammed Bin Zayed Str"
-                                value={street}
+                                value={propertyStreet}
                                 onChange={(e) => {
-                                  setStreet(e.target.value);
+                                  setPropertyStreet(e.target.value);
                                   setIsValidatedFirst(false);
                                 }}
                                 validation={{
@@ -912,9 +873,9 @@ const MyProperties = () => {
                                 id="area"
                                 name="area"
                                 placeholder="12500 (in sqft)"
-                                value={area}
+                                value={propertyArea}
                                 onChange={(e) => {
-                                  setArea(e.target.value);
+                                  setPropertyArea(e.target.value);
                                   setIsValidatedFirst(false);
                                 }}
                                 validation={{
@@ -930,9 +891,9 @@ const MyProperties = () => {
                                 id="apartno"
                                 name="apartno"
                                 placeholder="12B"
-                                value={apartno}
+                                value={propertyApartmentNo}
                                 onChange={(e) => {
-                                  setApartmentNo(e.target.value);
+                                  setPropertyApartmentNo(e.target.value);
                                   setIsValidatedFirst(false);
                                 }}
                               />
@@ -944,9 +905,9 @@ const MyProperties = () => {
                                 id="price"
                                 name="price"
                                 placeholder="999 AED"
-                                value={price}
+                                value={propertyPrice}
                                 onChange={(e) => {
-                                  setPrice(e.target.value);
+                                  setPropertyPrice(e.target.value);
                                   setIsValidatedFirst(false);
                                 }}
                                 validation={{
@@ -996,7 +957,7 @@ const MyProperties = () => {
                                       max={20}
                                       defaultValue={1}
                                       onChange={(value) => {
-                                        setOccupNumber(value);
+                                        setOccupancyNumber(value);
                                       }}
                                     />
                                   </div>
@@ -1054,13 +1015,13 @@ const MyProperties = () => {
                                 text="Validate"
                                 onClick={() =>
                                   validateInputFirst(
-                                    deedno,
-                                    deedyr,
-                                    type,
-                                    street,
-                                    area,
-                                    apartno,
-                                    price
+                                    propertyTitleDeedNumber,
+                                    propertyTitleDeedYear,
+                                    propertyType,
+                                    propertyStreet,
+                                    propertyArea,
+                                    propertyApartmentNo,
+                                    propertyPrice
                                   )
                                 }
                               >
@@ -1085,7 +1046,9 @@ const MyProperties = () => {
                       content: (
                         <div className="fullform">
                           <div className="input-item">
-                            <label for="InputName">Property Title</label>
+                            <label for="InputName" style={{ color: "#3daeee" }}>
+                              Property Title
+                            </label>
                             <Input
                               type="text"
                               id="InputName"
@@ -1103,7 +1066,7 @@ const MyProperties = () => {
                           <div className="input-item">
                             <label
                               for="InputName"
-                              style={{ marginBottom: "1rem" }}
+                              style={{ marginBottom: "1rem", color: "#3daeee" }}
                             >
                               Property Description
                             </label>
@@ -1124,18 +1087,16 @@ const MyProperties = () => {
                           <div className="inputs-container">
                             <p
                               className="text upload"
-                              style={{ marginTop: "2rem" }}
+                              style={{ marginTop: "2rem", color: "#3daeee" }}
                             >
                               Upload Title Deed
                             </p>
                             <p className="note">
-                              Upload the required title deed and images for your
-                              property. Make sure that the images are high
-                              quality for better viewing. You can upload upto 8
-                              images for your property.
+                              Upload the required title deed for your property.
+                              (Only .pdf format is accepted)
                             </p>
                             <div>
-                              <Dragger
+                              {/* <Dragger
                                 {...propsDragger}
                                 className="uploadFiles"
                               >
@@ -1148,15 +1109,30 @@ const MyProperties = () => {
                                 <p className="ant-upload-hint">
                                   Support for a single or bulk upload.
                                 </p>
-                              </Dragger>
+                              </Dragger> */}
+                              <Upload
+                                descriptionText="Only .pdf files are accepted"
+                                onChange={(e) => {
+                                  setTitleDeedFile(e);
+                                }}
+                                style={{}}
+                                theme="withIcon"
+                              />
                             </div>
                             <br></br>
-                            <p className="text upload">
+                            <p
+                              className="text upload"
+                              style={{ color: "#3daeee" }}
+                            >
                               Upload Images (Max - 5)
                             </p>
+                            <p className="note">
+                              Upload the property images and make sure that the
+                              images are high quality for better viewing. You
+                              can upload upto 5 images for your property.
+                            </p>
                             <div className="imagesUploadContainer">
-                              <Upload
-                                action=""
+                              <UploadAntDesign
                                 onChange={handleChangeImages}
                                 multiple={true}
                                 listType="picture-card"
@@ -1174,7 +1150,14 @@ const MyProperties = () => {
                                     Upload
                                   </div>
                                 </div>{" "}
-                              </Upload>
+                              </UploadAntDesign>
+                              {/* <Upload
+                                acceptedFiles="image/jpeg"
+                                descriptionText="Only .jpeg files are accepted"
+                                onChange={function noRefCheck() {}}
+                                style={{}}
+                                theme="withIcon"
+                              /> */}
                             </div>
                             {imageNames.length > 0 ? (
                               <div className="primaryImage">
@@ -1206,19 +1189,19 @@ const MyProperties = () => {
                               onClick={() => {
                                 setImageNames([]);
                                 setIsValidatedFirst(false);
-                                setDeedyr("");
-                                setType("");
+                                setPropertyTitleDeedYear("");
+                                setPropertyType("");
                               }}
                             >
                               Back
                             </button>
-                            {!isValidatedFourth ? (
+                            {!isValidatedSecond ? (
                               <button
                                 id="validatebtn"
                                 className="validatebtn"
                                 text="Validate"
                                 onClick={() => {
-                                  validateInputFourth();
+                                  validateInputSecond();
                                 }}
                               >
                                 Validate

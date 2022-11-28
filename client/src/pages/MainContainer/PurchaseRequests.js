@@ -374,32 +374,22 @@ const PurchaseRequests = (props) => {
                             <td>{item.propertyID}</td>
                             <td>{item.dateRequested}</td>
                             <td style={{ display: "flex", gap: "1rem" }}>
-                              <Popconfirm
-                                title="Are you sure to accept the purchase request? (All other requests for this property will be rejected by default)"
-                                onConfirm={() => processRequest(item.key, true)}
-                                okText="Yes"
-                                cancelText="No"
+                              <button
+                                className="acceptButton"
+                                onClick={() => {
+                                  acceptRequest(item.address, item.propertyID);
+                                }}
                               >
-                                <button
-                                  className="acceptButton"
-                                  disabled={isProcessing}
-                                >
-                                  Accept
-                                </button>
-                              </Popconfirm>
-                              <Popconfirm
-                                title="Are you sure to reject the purchase request?"
-                                onConfirm={() => processRequest(item.key, false)}
-                                okText="Yes"
-                                cancelText="No"
-                              >
+                                Accept
+                              </button>
                               <button
                                 className="rejectButton"
-                                disabled={isProcessing}
+                                onClick={() => {
+                                  rejectRequest(item.address, item.propertyID);
+                                }}
                               >
                                 Reject
                               </button>
-                              </Popconfirm>
                             </td>
                           </tr>
                         );
