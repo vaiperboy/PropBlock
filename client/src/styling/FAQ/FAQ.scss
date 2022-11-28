@@ -31,12 +31,17 @@
             font-size: 2.5rem;
             font-weight: 500;
             font-family: "FS_Me";
+            margin-top: 1.5rem;
             .answer {
                 font-family: "FS_Me";
                 font-size: 1.7rem;
                 font-weight: 500;
                 padding-left: 2.5rem;
             }
+        }
+        .ant-collapse-arrow svg {
+            font-size: 2.5rem;
+            fill: #3daeee;
         }
     }
     .blob {

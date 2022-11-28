@@ -28,7 +28,11 @@ const Footer = () => {
             <Link to="/properties" className="link">
               Properties
             </Link>
-            <Link to="/buy" className="link">
+            <Link
+              to="/buy"
+              className="link"
+              style={{ pointerEvents: "none", color: "grey" }}
+            >
               Buy
             </Link>
             <Link

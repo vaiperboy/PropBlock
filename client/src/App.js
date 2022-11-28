@@ -7,7 +7,6 @@ import PropertyFunc from "./Functions/PropertyFunc";
 import SignUp from "./pages/Signup";
 import AgreementFunc from "./Functions/AgreementFunc";
 import Properties from "./pages/Properties_2";
-import Buy from "./pages/Buy";
 import Property from "./pages/Property";
 import NoMatch from "./pages/NoMatch";
 import Scrollbar from "smooth-scrollbar";
@@ -32,7 +31,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/buy" element={<Buy />}></Route>
         <Route path="/aboutus" element={<Aboutus />}></Route>
         <Route path="/signup" element={<SignUp />}></Route>
         <Route path="/login" element={<Login />}></Route>
