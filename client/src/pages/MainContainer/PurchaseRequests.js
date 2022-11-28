@@ -135,6 +135,15 @@ const PurchaseRequests = (props) => {
     return 0;
   }
 
+  const confirm = (e) => {
+    console.log(e);
+    message.success("Clicked on Yes");
+  };
+  const cancel = (e) => {
+    console.log(e);
+    message.error("Clicked on No");
+  };
+
   // variables
   const [dataSourceBuyer, setDataSourceBuyer] = useState([]);
   const [dataSourceSellerTemp, setDataSourceSellerTemp] = useState([
@@ -448,22 +457,44 @@ const PurchaseRequests = (props) => {
                             <td>{item.propertyID}</td>
                             <td>{item.dateRequested}</td>
                             <td style={{ display: "flex", gap: "1rem" }}>
-                              <button
-                                className="acceptButton"
-                                onClick={() => {
-                                  acceptRequest(item.address, item.propertyID);
-                                }}
+                              <Popconfirm
+                                title="Are you sure to accept the purchase request? (All other requests for this property will be reject by default)"
+                                onConfirm={confirm}
+                                onCancel={cancel}
+                                okText="Yes"
+                                cancelText="No"
                               >
-                                Accept
-                              </button>
-                              <button
-                                className="rejectButton"
-                                onClick={() => {
-                                  rejectRequest(item.address, item.propertyID);
-                                }}
+                                <button
+                                  className="acceptButton"
+                                  onClick={() => {
+                                    // acceptRequest(
+                                    //   item.address,
+                                    //   item.propertyID
+                                    // );
+                                  }}
+                                >
+                                  Accept
+                                </button>
+                              </Popconfirm>
+                              <Popconfirm
+                                title="Are you sure to reject the purchase request?"
+                                onConfirm={confirm}
+                                onCancel={cancel}
+                                okText="Yes"
+                                cancelText="No"
                               >
-                                Reject
-                              </button>
+                                <button
+                                  className="rejectButton"
+                                  onClick={() => {
+                                    rejectRequest(
+                                      item.address,
+                                      item.propertyID
+                                    );
+                                  }}
+                                >
+                                  Reject
+                                </button>
+                              </Popconfirm>
                             </td>
                           </tr>
                         );

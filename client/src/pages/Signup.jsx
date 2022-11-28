@@ -401,22 +401,14 @@ const App = () => {
       var errors = [];
       var frontExtension = "";
       var backExtension = "";
-      if (
-        frontPassportDocument.name == undefined ||
-        backPassportDocument.name == undefined
-      ) {
-        errors.push("Please make sure you upload files for both fields!");
+      if (frontPassportDocument.name == undefined) {
+        errors.push("Please make sure to upload your file!");
       } else {
         frontExtension = getExtension(frontPassportDocument.name);
         backExtension = getExtension(backPassportDocument.name);
         if (!checkExtension(frontExtension, extensionsAllowed))
           errors.push(
             "Make sure front passport has the following format: " +
-              extensionsAllowed.join(", ")
-          );
-        if (!checkExtension(backExtension, extensionsAllowed))
-          errors.push(
-            "Make sure back passport has the following format: " +
               extensionsAllowed.join(", ")
           );
       }
@@ -430,12 +422,7 @@ const App = () => {
           frontPassportDocument,
           "front passport." + frontExtension
         );
-        const back = renameFile(
-          backPassportDocument,
-          "back passport." + backExtension
-        );
         setFrontPassportDocument(front);
-        setBackPassportDocument(back);
       } else {
         e.target.checked = false;
         setPassportDocumentsVerified(false);
@@ -636,14 +623,6 @@ const App = () => {
                         value=""
                         theme="withIcon"
                         onChange={setFrontPassportDocument}
-                      />
-                      <p style={{ marginTop: "1.5rem" }}>
-                        Upload passport - Back Page
-                      </p>
-                      <Upload
-                        value=""
-                        onChange={setBackPassportDocument}
-                        theme="withIcon"
                       />
                       <div>
                         <div className="checkBoxDiv">
