@@ -31,6 +31,7 @@ const App = (props) => {
   const switchPage = (e, page) => {
     //window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
     console.log(page);
+    setCurrentPageNumber(page)
   }
 
 
@@ -62,7 +63,7 @@ const App = (props) => {
         setTotalResult(res.count)
       })
       .catch(err => {
-        message.error(err)
+        message.error("error with API")
       })
       .finally(() => {
         setIsLoading(false);
