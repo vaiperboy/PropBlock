@@ -1,4 +1,22 @@
 .purchaseRequestsContainer {
+    .refreshSection {
+        display: flex;
+        justify-content: flex-end;
+        .refreshButton {
+            border: 1px solid #3daeee;
+            background-color: #fff;
+            color: #555;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            &:hover {
+                cursor: pointer;
+                background-color: rgb(#3daeee, 0.2);
+            }
+        }
+    }
     .ant-table-header {
     }
     .tableContainer {

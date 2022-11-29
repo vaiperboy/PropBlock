@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import stats from "./stats.png";
 import { FilePond, File, registerPlugin } from "react-filepond";
 import { useFiatBuy, useMoralis, useMoralisQuery } from "react-moralis";
@@ -14,6 +14,7 @@ import realEstate from "../../artifacts/contracts/realEstate.sol/realEstate.json
 import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 // importing images
 import no_data from "../../assets/no_data.png";
+import refresh_icon from "../../assets/refresh_iconx2.png";
 
 const { ethereum } = window;
 const web3 = require("web3");
@@ -112,11 +113,9 @@ const PurchaseRequests = (props) => {
     return 0;
   }
 
-  const [isProcessing, setIsProcessing] = useState(false);
   const processRequest = async (key, doAccept) => {
     if (!isProcessing) {
       setIsProcessing(true);
-
       fetch(
         "http://localhost:9000/processPurchaseRequest?" +
           new URLSearchParams({
@@ -144,6 +143,7 @@ const PurchaseRequests = (props) => {
   };
 
   // variables
+  const [isProcessing, setIsProcessing] = useState(false);
   const [dataSourceBuyer, setDataSourceBuyer] = useState([]);
   const [dataSourceSellerTemp, setDataSourceSellerTemp] = useState([
     {
@@ -172,6 +172,9 @@ const PurchaseRequests = (props) => {
   const [pruchaseRequests, setPurchaseRequests] = useState([]);
   const [accepted, setAccepted] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFechingRequestsBuyer, setIsFetchingRequestsBuyer] = useState(false);
+  const [isFechingRequestsSeller, setIsFetchingRequestsSeller] =
+    useState(false);
 
   const rejectRequest = (address, propertyId) => {
     message.error(
@@ -259,6 +262,17 @@ const PurchaseRequests = (props) => {
             <div>
               <p className="rightsidebar_title">My Purchase Requests</p>
               <div className="purchaseRequestsContainer">
+                <div className="refreshSection">
+                  <button
+                    className="refreshButton"
+                    onClick={() => {
+                      loadBuyerRequests();
+                    }}
+                  >
+                    Refresh{" "}
+                    <img src={refresh_icon} alt="Refresh Icon" width={20}></img>
+                  </button>
+                </div>
                 <div className="tableContainer">
                   <table className="normalTable">
                     <tr>
@@ -395,6 +409,17 @@ const PurchaseRequests = (props) => {
                 Purchase Requests for Properties
               </p>
               <div className="purchaseRequestsContainer">
+                <div className="refreshSection">
+                  <button
+                    className="refreshButton"
+                    onClick={() => {
+                      loadSellerData();
+                    }}
+                  >
+                    Refresh{" "}
+                    <img src={refresh_icon} alt="Refresh Icon" width={20}></img>
+                  </button>
+                </div>
                 <div className="tableContainer">
                   <table className="normalTable">
                     <tr>

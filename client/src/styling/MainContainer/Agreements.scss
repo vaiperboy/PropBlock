@@ -1,73 +1,93 @@
-.tableContainer {
-    .buyersTable {
-        width: 100vw;
-        th {
-            background-color: rgb(#3daeee, 0.5);
-            border-right: 1px solid rgb(195, 195, 195);
-            padding: 1rem 1rem;
-            font-size: 1.6rem;
+.agreementsContainer {
+    .refreshSection {
+        display: flex;
+        justify-content: flex-end;
+        .refreshButton {
+            border: 1px solid #3daeee;
+            background-color: #fff;
             color: #555;
-            font-weight: 550;
-        }
-        tr {
-            color: #555;
-            font-size: 1.4rem;
-        }
-        td {
-        }
-        tr:nth-child(odd) {
-            background-color: #f9f9f9;
-        }
-        .agreementCancelled {
-            td {
-                border-right: 1px solid rgb(230, 230, 230);
-            }
-            &:hover {
-                background-color: rgba(#cb4335, 0.05);
-            }
-            .requestAccepted {
-                &:hover {
-                }
-            }
-            .requestRejected {
-            }
-        }
-        .agreementComplete {
-            td {
-                border-right: 1px solid rgb(230, 230, 230);
-            }
-            &:hover {
-                background-color: rgba(#2ecc71, 0.05);
-            }
-            .requestAccepted {
-                &:hover {
-                }
-            }
-            .requestRejected {
-            }
-        }
-        .finishAgreementButton {
-            color: #fff;
-            background-color: #1db95e;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
             font-weight: 500;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
             &:hover {
                 cursor: pointer;
-                background-color: rgb(#2ecc71, 0.8);
+                background-color: rgb(#3daeee, 0.2);
             }
         }
-        .uploadDocumentsButton {
-            color: #fff;
-            background-color: #3daeee;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            &:hover {
-                cursor: pointer;
-                background-color: rgb(#3daeee, 0.8);
+    }
+    .tableContainer {
+        .buyersTable {
+            width: 100vw;
+            th {
+                background-color: rgb(#3daeee, 0.5);
+                border-right: 1px solid rgb(195, 195, 195);
+                padding: 1rem 1rem;
+                font-size: 1.6rem;
+                color: #555;
+                font-weight: 550;
+            }
+            tr {
+                color: #555;
+                font-size: 1.4rem;
+            }
+            td {
+            }
+            tr:nth-child(odd) {
+                background-color: #f9f9f9;
+            }
+            .agreementCancelled {
+                td {
+                    border-right: 1px solid rgb(230, 230, 230);
+                }
+                &:hover {
+                    background-color: rgba(#cb4335, 0.05);
+                }
+                .requestAccepted {
+                    &:hover {
+                    }
+                }
+                .requestRejected {
+                }
+            }
+            .agreementComplete {
+                td {
+                    border-right: 1px solid rgb(230, 230, 230);
+                }
+                &:hover {
+                    background-color: rgba(#2ecc71, 0.05);
+                }
+                .requestAccepted {
+                    &:hover {
+                    }
+                }
+                .requestRejected {
+                }
+            }
+            .finishAgreementButton {
+                color: #fff;
+                background-color: #1db95e;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                font-weight: 500;
+                &:hover {
+                    cursor: pointer;
+                    background-color: rgb(#2ecc71, 0.8);
+                }
+            }
+            .uploadDocumentsButton {
+                color: #fff;
+                background-color: #3daeee;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                font-weight: 500;
+                &:hover {
+                    cursor: pointer;
+                    background-color: rgb(#3daeee, 0.8);
+                }
             }
         }
     }

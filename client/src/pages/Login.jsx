@@ -80,13 +80,21 @@ const Login2 = () => {
         let user = Moralis.User.current();
         if (!user) {
           if (!isAuthenticated) {
-            await authenticate()
+            await authenticate({
+              signingMessage: "Click on 'Sign' to login to your account.",
+            })
               .then(function (user) {
                 console.log("user address: ", user.get("ethAddress"));
                 loggedin();
               })
               .catch(function (error) {
-                console.log("here: ", error.code);
+                if (error.code === undefined) {
+                  message.error(
+                    "You failed to sign! Please click on 'Sign' to login to your account."
+                  );
+                  return;
+                }
+                console.log("Error: ", error);
               });
           }
         } else {
@@ -118,7 +126,7 @@ const Login2 = () => {
 
   const loggedin = async () => {
     message.success("Login successful. Redirecting to home page.");
-    await sleep(2500);
+    await sleep(1500);
     navigate("/");
   };
 
