@@ -341,7 +341,7 @@ class LeftSidebar extends React.Component {
                     color: this.props.menuState.agreementView ? "#3DAEEE" : "",
                   }}
                 >
-                  Agreements
+                  My Agreements
                 </h2>
               </div>
               <div

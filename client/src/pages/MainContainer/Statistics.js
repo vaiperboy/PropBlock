@@ -508,7 +508,7 @@ const Statistics = () => {
                           fontWeight: "500",
                         }}
                       >
-                        Gas Per Day (in Gwei)
+                        Gas spent today (in Gwei)
                       </p>
                     </>
                   )}
@@ -530,7 +530,7 @@ const Statistics = () => {
                           fontWeight: "500",
                         }}
                       >
-                        Gas Per Week (in Gwei)
+                        Gas spent this week (in Gwei)
                       </p>
                     </>
                   )}
@@ -555,7 +555,7 @@ const Statistics = () => {
                           fontWeight: "500",
                         }}
                       >
-                        Gas Per Month (in Gwei)
+                        Gas spent this month (in Gwei)
                       </p>
                     </>
                   )}

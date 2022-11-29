@@ -275,6 +275,19 @@ class MainContainer extends React.Component {
                 togglePurchaseRequestView={this.togglePurchaseRequestView}
               />
               {this.state.menuState.dashboardView ? (
+                // <Dashboard
+                //   menuState={this.state.menuState}
+                //   toggleSettingView={this.toggleSettingView}
+                //   toggleProfileView={this.toggleProfileView}
+                //   togglePaymentView={this.togglePaymentView}
+                //   toggleAgreementListView={this.toggleAgreementListView}
+                //   toggleStatsView={this.toggleStatsView}
+                //   togglePropertiesView={this.togglePropertiesView}
+                //   toggleDashboardView={this.toggleDashboardView}
+                //   purchaseRequestView={this.state.purchaseRequestView}
+                //   toggleView={this.toggleView}
+                //   togglePurchaseRequestView={this.togglePurchaseRequestView}
+                // />
                 <Dashboard
                   menuState={this.state.menuState}
                   toggleSettingView={this.toggleSettingView}

@@ -11,6 +11,8 @@ import MyAgreements from "./MyAgreements";
 import no_data from "../../assets/no_data.png";
 import "../../styling/MainContainer/Agreements.scss";
 import AgreementView from "./AgreementView";
+import refresh_icon from "../../assets/refresh_iconx2.png";
+
 const console = require("console-browserify");
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
@@ -295,6 +297,17 @@ const AgreementsList = (props) => {
             <div>
               <p className="rightsidebar_title">Agreements </p>
               <div className="agreementsContainer">
+                <div className="refreshSection">
+                  <button
+                    className="refreshButton"
+                    onClick={() => {
+                      message.info("clicked");
+                    }}
+                  >
+                    Refresh{" "}
+                    <img src={refresh_icon} alt="Refresh Icon" width={20}></img>
+                  </button>
+                </div>
                 <div className="tableContainer">
                   <table className="buyersTable">
                     <tr>
@@ -423,6 +436,21 @@ const AgreementsList = (props) => {
               <div>
                 <p className="rightsidebar_title">My Properties Agreements</p>
                 <div className="agreementsContainer">
+                  <div className="refreshSection">
+                    <button
+                      className="refreshButton"
+                      onClick={() => {
+                        message.info("clicked");
+                      }}
+                    >
+                      Refresh{" "}
+                      <img
+                        src={refresh_icon}
+                        alt="Refresh Icon"
+                        width={20}
+                      ></img>
+                    </button>
+                  </div>
                   <div className="tableContainer">
                     <table className="buyersTable">
                       <tr>
