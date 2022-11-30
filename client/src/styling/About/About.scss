@@ -11,7 +11,7 @@ main {
                 color: #444444;
                 span {
                     color: line;
-                    background-image: linear-gradient(45deg, #3daeee, #ff9517);
+                    background-image: linear-gradient(45deg, #3daeee, #9747ff);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
                 }
@@ -89,7 +89,7 @@ main {
             span {
                 color: line;
                 padding: 0 0.35rem;
-                background-image: linear-gradient(45deg, #ff9517, #3daeee);
+                background-image: linear-gradient(45deg, #9747ff, #3daeee);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
             }
@@ -113,6 +113,7 @@ main {
                 }
                 h2 {
                     margin-top: 2rem;
+                    color: #9747ff;
                 }
                 p {
                     width: 80%;
@@ -124,7 +125,7 @@ main {
         width: 90%;
         margin: 12rem auto 5rem auto;
         .box {
-            background-color: #444444;
+            background: linear-gradient(100deg, rgba(61, 174, 238, 0.7) 0%, rgba(151, 71, 255, 0.5) 100%);
             border-radius: 5rem;
             height: 25rem;
             h1 {
@@ -148,7 +149,7 @@ main {
                     }
                     p {
                         font-size: 2rem;
-                        color: #ffffff;
+                        color: #555555;
                     }
                 }
             }
@@ -169,7 +170,7 @@ main {
             font-weight: 600;
             width: 70%;
             margin: 0 auto;
-            background: linear-gradient(to right, #ff9517 20%, #3daeee 40%, #3daeee 60%, #444444 80%, #ff9517 100%);
+            background: linear-gradient(to right, #9747ff 20%, #3daeee 40%, #3daeee 60%, #9747ff 80%, #9747ff 100%);
             background-size: 200% auto;
             background-clip: text;
             text-fill-color: transparent;
@@ -243,11 +244,10 @@ main {
                 }
             }
             .orange {
-                background-color: rgba(#ff9517, 0.5);
+                background-color: rgba(#9747ff, 0.5);
             }
         }
     }
-
     .partners {
         width: 90%;
         margin: 0 auto 10rem auto;

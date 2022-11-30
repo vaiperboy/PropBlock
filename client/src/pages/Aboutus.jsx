@@ -152,7 +152,7 @@ const Aboutus = () => {
                   <stop offset="100%" stopColor="#3daeee">
                     <animate
                       attributeName="stop-color"
-                      values="#9ED7F7;  #9ED7F7;#ffffff;#ffffff;#FFCA8B;#FFCA8B;#ffffff;#ffffff; #9ED7F7;  #9ED7F7;"
+                      values="#9ED7F7;  #9ED7F7;#ffffff;#cbaaf6;#cbaaf6;#ffffff; #9ED7F7;  #9ED7F7;"
                       dur="10s"
                       repeatCount="indefinite"
                     />

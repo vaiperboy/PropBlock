@@ -1,7 +1,7 @@
 .footerMain {
     display: flex;
     flex-direction: column;
-    background-color: #1e2833;
+    background-color: rgb(#9747ff, 0.6);
     color: white;
     margin-top: auto;
     width: 100%;
@@ -22,14 +22,15 @@
             p {
                 font-size: 1.8rem;
                 margin: 0;
+                font-weight: 500;
                 margin-right: 1rem;
             }
             .exploreButton {
                 width: 10rem;
                 height: 4rem;
                 font-weight: 500;
-                background-color: #3daeee;
-                color: white;
+                background-color: #ffffff;
+                color: #9747ff;
                 border: none;
                 border-radius: 0.5rem;
                 cursor: pointer;
@@ -37,7 +38,7 @@
                 transition: all 0.2s ease;
                 &:hover {
                     transition: all 0.2s ease;
-                    background-color: #147ebb;
+                    background-color: #e4e4e4;
                 }
                 .exploreLink {
                     text-decoration: none;
@@ -51,17 +52,22 @@
     .link {
         text-decoration: none;
         color: white;
+        &:hover {
+            color: #e4e4e4;
+        }
     }
     h3 {
-        font-weight: 400;
-        color: #3daeee;
+        font-weight: 600;
+        font-size: 2.3rem;
+        color: #ffffff;
     }
     .bottomSection {
         display: flex;
         gap: 14rem;
         justify-content: center;
         height: 30rem;
-        font-size: 1.5rem;
+        font-size: 1.8rem;
+        font-weight: 500;
         margin-top: 1rem;
         .col1 {
             display: flex;
@@ -83,6 +89,18 @@
             flex-direction: column;
             gap: 1.5rem;
             .socialLinks {
+                display: flex;
+                gap: 3rem;
+                margin-top: 2rem;
+                a {
+                    img {
+                        width: 2.8rem;
+                        &:hover {
+                            opacity: 0.8;
+                            cursor: pointer;
+                        }
+                    }
+                }
             }
         }
     }
