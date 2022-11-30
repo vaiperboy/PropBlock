@@ -52,7 +52,7 @@
                 font-family: "Roboto Mono", monospace;
                 font-size: 1.8rem;
                 transform: translate(0);
-                background-image: linear-gradient(45deg, #2bc0e4, #edb037);
+                background-image: linear-gradient(45deg, #2bc0e4, #9747ff);
                 border-radius: 5px;
                 box-shadow: 0 22px 44px rgba(gray, 0.1);
                 transition: box-shadow 0.25s;
@@ -60,11 +60,11 @@
                 .text {
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
-                    background-image: linear-gradient(45deg, #2bc0e4, #edb037);
+                    background-image: linear-gradient(45deg, #2bc0e4, #9747ff);
                 }
                 .text {
                     text-align: center;
-                    background-image: linear-gradient(-45deg, #2bc0e4, #edb037);
+                    background-image: linear-gradient(-45deg, #2bc0e4, #9747ff);
                 }
                 img {
                     width: 3rem;
@@ -82,7 +82,7 @@
                     background: white;
                 }
                 &:hover {
-                    background-image: linear-gradient(-45deg, #2bc0e4, #edb037);
+                    background-image: linear-gradient(-45deg, #2bc0e4, #9747ff);
                     box-shadow: 0 12px 24px rgba(#3daeee, 0.15);
                 }
             }
@@ -95,7 +95,7 @@
                 outline: none;
                 cursor: pointer;
                 transform: translate(0);
-                background-image: linear-gradient(45deg, #2bc0e4, #edb037);
+                background-image: linear-gradient(45deg, #2bc0e4, #9747ff);
                 border-radius: 5px;
                 box-shadow: 0 22px 44px rgba(gray, 0.1);
                 transition: box-shadow 0.25s;
@@ -106,7 +106,7 @@
                 }
                 &:hover {
                     transition: all 0.3s ease;
-                    background-image: linear-gradient(45deg, rgba(#2bc0e4, 0.8), rgba(#edb037, 0.9));
+                    background-image: linear-gradient(45deg, rgba(#2bc0e4, 0.8), rgba(#9747ff, 0.9));
                     box-shadow: 0 12px 24px rgba(#3daeee, 0.15);
                 }
             }

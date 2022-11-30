@@ -1,6 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import FooterIcon from "../assets/framer-1.png";
+// import FooterIcon from "../assets/framer-1.png";
+import FooterIcon from "../assets/framer_white.png";
+import Facebook_icon from "../assets/facebook_icon.png";
+import Insta_icon from "../assets/insta_icon.png";
+import Twitter_icon from "../assets/twitter_icon.png";
 import "../styling/Footer/Footer.scss";
 
 const Footer = () => {
@@ -57,7 +61,21 @@ const Footer = () => {
             <Link to="/contactus" className="link">
               Contact Us
             </Link>
-            <div className="socialLinks"></div>
+            <div className="socialLinks">
+              <a href="#" target="_blank">
+                <img
+                  src={Facebook_icon}
+                  alt="Facebook Icon"
+                  style={{ width: "1.5rem" }}
+                />
+              </a>
+              <a href="#" target="_blank">
+                <img src={Insta_icon} alt="Instagram Icon" />
+              </a>
+              <a href="#" target="_blank">
+                <img src={Twitter_icon} alt="Twitter" />
+              </a>
+            </div>
           </div>
         </div>
       </div>
