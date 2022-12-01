@@ -78,10 +78,25 @@
     zoom: 85%;
     min-width: 1350px;
     overflow: hidden; /* will contain if #first is longer than #second */
+    .horizontalline{
+      border-top: 1px solid rgba(102, 102, 102, 0.8);
+      margin-top: 8px;
+    }
+    svg{
+      cursor: pointer;
+    }
     .buyerdoc {
       width: 50%;
       float: left; /* add this */
       margin-right: 40px;
+      .rightPic {
+        margin-left: 10px;
+        border-radius: 50%;
+        height: 52px;
+        width: 52px;
+        border: 2px solid #00000096;
+        background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB7WOft_Yed83SLXPSHpdGxI9Ms2HQVT9q1w&usqp=CAU");
+      }
     }
     .sellerdoc {
       overflow: hidden; /* if you don't want #second to wrap below #first */

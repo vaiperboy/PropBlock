@@ -21,7 +21,7 @@ import GovtDashboard from "./pages/MainContainerGovt/MainContainer";
 import ProtectedRouteGovernment from "./ProtectedRouteGovernment";
 import HowPropBlockWorks from "./pages/HowPropBlockWorks";
 import AgreementView from "./pages/MainContainer/AgreementView";
-import Test from "./pages/Test.js"
+import Test from "./pages/Test.jsx"
 
 function App() {
   let optionsForScroll = {
