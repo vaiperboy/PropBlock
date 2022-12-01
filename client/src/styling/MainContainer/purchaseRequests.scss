@@ -1,124 +1,118 @@
 .purchaseRequestsContainer {
-    .refreshSection {
-        display: flex;
-        justify-content: flex-end;
-        .refreshButton {
-            border: 1px solid #3daeee;
-            background-color: #fff;
-            color: #555;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-            font-weight: 500;
-            border-radius: 0.5rem;
-            padding: 0.5rem 1rem;
-            &:hover {
-                cursor: pointer;
-                background-color: rgb(#3daeee, 0.2);
-            }
-        }
+  .refreshSection {
+    display: flex;
+    justify-content: flex-end;
+    .refreshButton {
+      border: 1px solid #3daeee;
+      background-color: #fff;
+      color: #555;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      font-weight: 500;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      &:hover {
+        cursor: pointer;
+        background-color: rgb(#3daeee, 0.2);
+      }
     }
-    .ant-table-header {
+  }
+  .ant-table-header {
+  }
+  table {
+    width: 100vw;
+    th {
+      background-color: rgb(#3daeee, 0.5);
+      border-right: 1px solid rgb(195, 195, 195);
+      padding: 1rem 1rem;
+      font-size: 1.6rem;
+      color: #555;
+      font-weight: 550;
     }
-    .tableContainer {
-        height: 100rem;
-        height: 75rem;
-        .ant-spin-container {
+    tr {
+      font-size: 1.4rem;
+      color: #555;
+    }
+    td {
+    }
+    tr:nth-child(odd) {
+      background-color: #f9f9f9;
+    }
+    .notBuyerFirstRowAccepted {
+      font-size: 1.5rem;
+      td {
+        border-right: 1px solid rgb(230, 230, 230);
+      }
+      &:hover {
+        background-color: rgba(#2db32d, 0.1);
+      }
+      .requestAccepted {
+        &:hover {
         }
-        table {
-            width: 100vw;
-            th {
-                background-color: rgb(#3daeee, 0.5);
-                border-right: 1px solid rgb(195, 195, 195);
-                padding: 1rem 1rem;
-                font-size: 1.6rem;
-                color: #555;
-                font-weight: 550;
-            }
-            tr {
-                font-size: 1.4rem;
-                color: #555;
-            }
-            td {
-            }
-            tr:nth-child(odd) {
-                background-color: #f9f9f9;
-            }
-            .notBuyerFirstRowAccepted {
-                font-size: 1.5rem;
-                td {
-                    border-right: 1px solid rgb(230, 230, 230);
-                }
-                &:hover {
-                    background-color: rgba(#2db32d, 0.1);
-                }
-                .requestAccepted {
-                    &:hover {
-                    }
-                }
-                .requestRejected {
-                }
-            }
-            .notBuyerFirstRowPending {
-                font-size: 1.5rem;
-                td {
-                    border-right: 1px solid rgb(230, 230, 230);
-                }
-                &:hover {
-                    background-color: rgba(#9dabb3, 0.1);
-                }
-                .requestAccepted {
-                    &:hover {
-                    }
-                }
-                .requestRejected {
-                }
-            }
-            .notBuyerFirstRowRejected {
-                td {
-                    border-right: 1px solid rgb(230, 230, 230);
-                }
-                &:hover {
-                    background-color: rgba(red, 0.1);
-                }
-            }
+      }
+      .requestRejected {
+      }
+    }
+    .notBuyerFirstRowPending {
+      font-size: 1.5rem;
+      td {
+        border-right: 1px solid rgb(230, 230, 230);
+      }
+      &:hover {
+        background-color: rgba(#9dabb3, 0.1);
+      }
+      .requestAccepted {
+        &:hover {
         }
+      }
+      .requestRejected {
+      }
+    }
+    .notBuyerFirstRowRejected {
+      td {
+        border-right: 1px solid rgb(230, 230, 230);
+      }
+      &:hover {
+        background-color: rgba(red, 0.1);
+      }
+    }
+  }
 
-        ul {
-            margin-right: 5rem;
-        }
-        .acceptButton {
-            color: #fff;
-            background-color: #2ecc71;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            &:hover {
-                cursor: pointer;
-                background-color: rgb(#2ecc71, 0.8);
-            }
-        }
-        .rejectButton {
-            color: #fff;
-            background-color: #d63321;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            margin-left: 1rem;
-            &:hover {
-                cursor: pointer;
-                background-color: rgb(#d63321, 0.8);
-            }
-        }
-        .createAgreementDraftButton {
-            color: #fff;
-            background-color: #3daeee;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            &:hover {
-                cursor: pointer;
-                background-color: #3daeee;
-            }
-        }
+  ul {
+    margin-right: 5rem;
+  }
+  .acceptButton {
+    color: #fff;
+    background-color: #2ecc71;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    &:hover {
+      cursor: pointer;
+      background-color: rgb(#2ecc71, 0.8);
     }
+  }
+  .rejectButton {
+    color: #fff;
+    background-color: #d63321;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-left: 1rem;
+    &:hover {
+      cursor: pointer;
+      background-color: rgb(#d63321, 0.8);
+    }
+  }
+  .createAgreementDraftButton {
+    color: #fff;
+    background-color: #3daeee;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    &:hover {
+      cursor: pointer;
+      background-color: #3daeee;
+    }
+  }
 }

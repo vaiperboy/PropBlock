@@ -1,0 +1,105 @@
+.userProfileSection {
+    margin-left: 5rem;
+    width: 100%;
+    .user_profile_banner {
+        width: 90%;
+        height: fit-content;
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        border-radius: 8px;
+        height: 10rem;
+        background: rgb(hsl(202, 84%, 59%), 0.5);
+        margin-bottom: 2rem;
+        padding-left: 1rem;
+        .profile_address {
+            padding: 0;
+            margin: 0;
+        }
+    }
+
+    .profileSection {
+        width: 100%;
+        gap: 2rem;
+        padding: 1.6rem;
+        border-radius: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: center;
+        h2 {
+            color: #3daeee;
+            font-size: 2.3rem;
+        }
+        .sectionLine {
+            border: 0.5px solid rgb(#3daeee, 0.5);
+        }
+        .currentDetails {
+            display: flex;
+            flex-direction: column;
+            .profileDetails {
+                display: flex;
+                align-items: center;
+                width: 80%;
+                margin-bottom: 1.5rem;
+                .leftSide {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2.5rem;
+                }
+                .rightSide {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2rem;
+                    margin-left: 22%;
+                }
+                h3 {
+                    margin: 0;
+                    font-size: 1.7rem;
+                    color: #555;
+                }
+                .userDetail {
+                    margin-left: 5rem;
+                    border-radius: 5rem;
+                    padding: 0.5rem 3rem;
+                    background-color: #888;
+                    color: #fff;
+                    font-size: 1.7rem;
+                }
+            }
+        }
+    }
+
+    .documentsSection {
+        display: flex;
+        justify-content: space-between;
+        width: 50%;
+        .documentTitleContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            .documentTitle {
+                margin: 0;
+                font-size: 1.7rem;
+                color: #555;
+                font-weight: 500;
+            }
+        }
+        .documentFileContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+
+            .documentItem {
+                border: 1px solid #3daeee;
+                padding: 0.5rem 1rem;
+                font-size: 1.5rem;
+                &:hover {
+                    background-color: #3daeee;
+                    color: #fff;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
