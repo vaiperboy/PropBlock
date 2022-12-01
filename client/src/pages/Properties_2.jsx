@@ -89,7 +89,7 @@ const App = (props) => {
           message.error("error with API")
         })
         .finally(() => {
-          // setIsLoading(false);
+          setIsLoading(false);
         });
     } catch (err) {
       message.error("error with setting data from API")
