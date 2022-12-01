@@ -89,7 +89,7 @@ const App = (props) => {
           message.error("error with API")
         })
         .finally(() => {
-          setIsLoading(false);
+          // setIsLoading(false);
         });
     } catch (err) {
       message.error("error with setting data from API")
@@ -170,18 +170,6 @@ const App = (props) => {
                             )
                           })
                         }
-                        {/* <PropertyListing
-                    className="property"
-                    image={SampleImage}
-                    propertyName="Villa"
-                    locationName="Dubai, UAE"
-                    propertyPrice={1500230}
-                    features={["3 BKH", "Lorem ipsum", "Lorem ipsum"]}
-                    body="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
-                    walletImage={SampleWalletImage}
-                    walletAddress="0x4001A8651c51a799ED5808ae45da60538b327b96"
-                    objectId="7OEIKOHlC761LejpUBTeK4Gv"
-                  /> */}
 
                       </div>
                     </div>
