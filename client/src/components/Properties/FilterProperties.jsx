@@ -22,26 +22,16 @@ class FilterProperties extends React.Component {
         { value: 128, label: "24 hour access" },
         { value: 256, label: "TV Access" },
       ],
-      facilitiesXor: 0,
     };
     this.handleFacilities = this.handleFacilities.bind(this);
   }
 
   //only made it for lowest number (least option)
   handleFacilities(arr) {
-    /*let tmp = 1;
-    for (const e of arr) {
-      tmp = tmp | e;
-    }
-    this.setState({facilitiesXor: tmp});
-    console.log(this.state.facilitiesXor);*/
     if (arr.length > 0) {
-      var lowest = arr[0];
-      for (var i = 1; i < arr.length; i++) {
-        if (arr[i] < lowest) lowest = arr[i];
-      }
-      this.setState({ facilitiesXor: lowest });
-    } else this.setState({ facilitiesXor: 0 });
+      var lowest = Math.min(...arr)
+      this.props.parentCallBack("facilities", lowest)
+    } else this.props.parentCallBack("facilities", 0)
   }
 
   render() {
@@ -72,12 +62,15 @@ class FilterProperties extends React.Component {
             <p>Property Type</p>
             <div className="inputDiv">
               <Select
-                placeholder="Apartment "
+              placeholder="All"
                 style={{
                   width: "100%",
                 }}
-                //onChange={handleChange}
+                onChange={(e) => {
+                  this.props.parentCallBack("propertyType", e)
+                }}
               >
+                <Option value="">All</Option>
                 <Option value="Apartment">Apartment</Option>
                 <Option value="Villa">Villa</Option>
                 <Option value="Townhouse">Townhouse</Option>
@@ -96,6 +89,7 @@ class FilterProperties extends React.Component {
               }
               type="number"
               min="0"
+              max="20"
             />
             <hr></hr>
             <p>Facilities</p>

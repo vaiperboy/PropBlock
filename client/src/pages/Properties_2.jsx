@@ -20,11 +20,23 @@ const App = (props) => {
   const [totalResult, setTotalResult] = useState(0)
   const [totalPagesNumber, setTotalPageNumber] = useState(1)
 
+  const [filterValues, setFilterValues] = useState({
+    prices: {
+      minPrice: 100,
+      maxPrice: 100000,
+    },
+    propertyType: "",
+    minimumBeds: 0,
+    facilities: 0,
+    location: "",
+  })
+
+
   //to pass information from child to parent
   const handleFiltering = (_name, value) => {
-    var oldState = { ...this.state.filteringParameters };
+    var oldState = { ...filterValues };
     oldState[_name] = value;
-    this.setState({ filteringParameters: oldState });
+    setFilterValues(oldState)
     console.log(_name + ": " + value);
   }
 
@@ -128,14 +140,14 @@ const App = (props) => {
                               <PropertyListing
                                 className="property"
                                 image={item.images[0]}
-                                propertyName={item.propertyTitle}
+                                propertyName={item.details.propertyTitle}
                                 locationName="some where"
                                 propertyPrice={parseInt(item.listedPrice)}
-                                features={[ item.bedsNumber + " BKH", item.bathsNumber + " Baths", item.occupantsNumber + " Occupants"]}
-                                body={item.propertyDescription}
+                                features={[ item.details.bedsNumber + " BKH", item.details.bathsNumber + " Baths", item.details.occupantsNumber + " Occupants"]}
+                                body={item.details.propertyDescription}
                                 walletImage={SampleWalletImage}
                                 walletAddress={item.address}
-                                objectId="7OEIKOHlC761LejpUBTeK4Gv"
+                                objectId={item.objectId}
                               />
                             )
                           })

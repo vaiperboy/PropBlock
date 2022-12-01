@@ -8,21 +8,77 @@ var router = express.Router();
 
 //getting all properties from Moralis
 router.get("/getAllProperties", async function(req, res, next) {
+    // const query = new Moralis.Query("PropertiesAdded");
+    // const pageNumber = parseInt(req.query.pageNumber) || 1;
+    // query.skip(config.pageSize * (pageNumber - 1))
+    // query.limit(config.pageSize)
+    // query.withCount()
+    // const _result = await query.find();
+    // const result = JSON.parse(JSON.stringify(_result))
+    // for (var i = 0; i < result.results.length; i++) {
+    //     console.log("getting for " + result.results[i].transaction_hash)
+    //     var extraDetails = await helper.getPropertyExtraDetails(result.results[i].transaction_hash)
+    //     var images = {images: await helper.getImages(result.results[i].ipfsHash)}
+    //     Object.assign(result.results[i], result.results[i], extraDetails, images)
+    // }
+    // result.totalPages = helper.getTotalPageNumbers(result.count, config.pageSize)
+    // res.json(result)
+
     const query = new Moralis.Query("PropertiesAdded");
     const pageNumber = parseInt(req.query.pageNumber) || 1;
-    query.skip(config.pageSize * (pageNumber - 1))
-    query.limit(config.pageSize)
-    query.withCount()
-    const _result = await query.find();
+    const toSkip = config.pageSize * (pageNumber - 1)
+    const limit = config.pageSize
+    
+    const pipeline = [
+        {limit: limit},
+        {skip: toSkip},
+        {
+            lookup: {
+                from: "PropertyDetails",
+                localField: "transaction_hash",
+                foreignField: "txHash",
+                as: "details"
+            }
+        },
+        {
+            project: {
+                "details.propertyTitle": 1,
+                "details.propertyDescription": 1,
+                "details.bedsNumber": 1,
+                "details.bathsNumber": 1,
+                "details.occupantsNumber": 1,
+                "listedPrice": 1,
+                "createdAt": 1,
+                "address": 1,
+                "ipfsHash": 1,
+            }
+        },
+        {
+            match: {
+                and
+            }
+        }
+    ]
+
+
+    const _result = await query.aggregate(pipeline)
     const result = JSON.parse(JSON.stringify(_result))
-    for (var i = 0; i < result.results.length; i++) {
-        console.log("getting for " + result.results[i].transaction_hash)
-        var extraDetails = await helper.getPropertyExtraDetails(result.results[i].transaction_hash)
-        var images = {images: await helper.getImages(result.results[i].ipfsHash)}
-        Object.assign(result.results[i], result.results[i], extraDetails, images)
+
+    for (var i = 0; i < result.length; i++) {
+        var images = {images: await helper.getImages(result[i].ipfsHash)}
+        Object.assign(result[i], result[i], images)
+        result[i].details = result[i].details[0]
     }
+
+    const output = {
+        results: result,
+        count: 1
+    }
+
+    console.log(JSON.stringify(result))
+    
     result.totalPages = helper.getTotalPageNumbers(result.count, config.pageSize)
-    res.json(result)
+    res.json(output)
 
 });
 
