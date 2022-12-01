@@ -5,12 +5,14 @@
     align-items: center;
     text-align: center;
     margin: 2rem auto 1.5rem auto;
-    // position: sticky;
+    position: sticky;
     // background: linear-gradient(white, white) padding-box, linear-gradient(to right, #3daeee, #9747ff) border-box;
-    // border-radius: 50em;
-    // border: 3px solid transparent;
-    // border-radius: 1rem;
+    border-radius: 50em;
+    border: 3px solid transparent;
+    border-radius: 1rem;
     padding: 1rem 1rem;
+    position: relative;
+    z-index: 1;
     .avatarSection {
         display: flex;
         flex-direction: column;
