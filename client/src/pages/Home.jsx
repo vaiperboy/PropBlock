@@ -42,6 +42,9 @@ import emailjs from "emailjs-com";
 const console = require("console-browserify");
 
 function Home() {
+  const[city, setCity] = useState("")
+  const[propertyType, setPropertyType] = useState("")
+  const[maxPrice, setMaxPrice] = useState(1000000)
   const countryOptions = [
     {
       value: "Abu Dhabi",
@@ -185,7 +188,7 @@ function Home() {
                     width: "100%",
                   }}
                   options={countryOptions}
-                  placeholder="Dubai"
+                  placeholder="All"
                   filterOption={(inputValue, option) =>
                     option.value
                       .toUpperCase()
@@ -202,12 +205,13 @@ function Home() {
               </div>
               <div className="inputDiv">
                 <Select
-                  placeholder="Apartment "
+                  placeholder="All"
                   style={{
                     width: "100%",
                   }}
                   onChange={handleChange}
                 >
+                  <Option value="">All</Option>
                   <Option value="Apartment">Apartment</Option>
                   <Option value="Villa">Villa</Option>
                   <Option value="Townhouse">Townhouse</Option>

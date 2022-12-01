@@ -6,13 +6,13 @@ import {
   ArrowRightOutlined,
 } from "@ant-design/icons";
 
-import { AutoComplete, Select, InputNumber } from "antd";
+import { AutoComplete, Select, InputNumber, message } from "antd";
 import location_icon from "../../assets/location-icon.png";
 import property_type_icon from "../../assets/home-icon.png";
 import beds_icon from "../../assets/beds-icon.svg";
 import price_tag_icon from "../../assets/tag-icon.png";
 
-const SearchAvailability = () => {
+const SearchAvailability = (props) => {
   const countryOptions = [
     {
       value: "Abu Dhabi",
@@ -54,8 +54,11 @@ const SearchAvailability = () => {
             style={{
               width: "100%",
             }}
+            onChange={(e) => {
+              props.parentCallBack("city", e)
+            }}
             options={countryOptions}
-            placeholder="Dubai"
+            placeholder={props.filterValues.city.length == 0 ? "All" : props.filterValues.city}
             filterOption={(inputValue, option) =>
               option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
               -1
@@ -71,17 +74,23 @@ const SearchAvailability = () => {
         </div>
         <div className="inputDiv">
           <Select
-            placeholder="All"
+            placeholder={
+              (props.filterValues.propertyType === undefined || props.filterValues.propertyType.length == 0)
+               ? "All" : props.filterValues.propertyType
+            }
             style={{
               width: "100%",
             }}
+            onChange={(e) => {
+              props.parentCallBack("propertyType", e)
+            }}
           >
             <Option value="">All</Option>
-            <Option value="Apartment">Apartment</Option>
-            <Option value="Villa">Villa</Option>
-            <Option value="Townhouse">Townhouse</Option>
-            <Option value="Penthouse">Penthouse</Option>
-            <Option value="Duplex">Duplex</Option>
+            <Option value="apartment">Apartment</Option>
+            <Option value="villa">Villa</Option>
+            <Option value="townhouse">Townhouse</Option>
+            <Option value="penthouse">Penthouse</Option>
+            <Option value="duplex">Duplex</Option>
           </Select>
         </div>
       </div>
@@ -96,6 +105,11 @@ const SearchAvailability = () => {
             style={{
               width: "100%",
             }}
+            value={props.filterValues.prices.maxPrice}
+            onChange={(e) => props.parentCallBack("prices", {
+              minPrice: props.filterValues.minPrice,
+              maxPrice: e
+            })}
             defaultValue="1"
             min="0"
             max="10000000"

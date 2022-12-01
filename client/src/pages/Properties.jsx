@@ -1,95 +1,209 @@
-import "../styling/Home/Home.css";
 import Navbar from "../components/Navbar";
-import React, { Component } from "react";
-import { message, Descriptions, Typography } from "antd";
+import React, { Component, useEffect } from "react";
+import { message, Descriptions, Typography, Spin } from "antd";
 import GridLoader from "react-spinners/GridLoader";
+import PropertyListing from "../components/Properties/PropertyListing";
+import SampleImage from "../assets/sample-property.png";
+import SampleWalletImage from "../assets/sample-wallet-image.png";
+import SearchAvailability from "../components/Properties/SearchAvailability";
+import FilterProperties from "../components/Properties/FilterProperties";
+import { Pagination } from "@mui/material";
 import "../styling/Properties/Properties.scss";
+import Footer from "../components/Footer";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
+const console = require("console-browserify");
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      properties: [],
-      isLoading: true,
-    };
-  }
+const App = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [properties, setProperties] = useState([]);
+  const [currentPageNumber, setCurrentPageNumber] = useState(1);
+  const [totalResult, setTotalResult] = useState(0);
+  const [totalPagesNumber, setTotalPageNumber] = useState(1);
 
-  callAPI() {
-    fetch("http://localhost:9000/getProperties")
-      .then((res) => res.json())
-      .then((res) => this.setState({ properties: res }))
-      .catch((err) => err);
-  }
+  const [filterValues, setFilterValues] = useState({
+    prices: {
+      minPrice: 100,
+      maxPrice: 10000000,
+    },
+    propertyType: "",
+    minimumBeds: 0,
+    minimumBaths: 0,
+    facilities: 0,
+    city: "",
+  });
 
-  componentDidMount() {
-    this.callAPI();
-    this.state.isLoading = false;
-  }
+  const startingValues = {
+    minPrice: 100,
+    maxPrice: 10000000,
+  };
 
-  render() {
-    if (this.state.isLoading) {
-      return (
-        <div className="App">
-          <header className="App-header">
-            <Navbar />
-          </header>
-          <div className="hero-section">
-            <div className="container">
-              <div className="loader-container">
-                <GridLoader color="#36d7b7" size="20px" speedMultiplier="1.7" />
-              </div>
+  //to pass information from child to parent
+  const handleFiltering = (_name, value) => {
+    console.log("changed " + _name + " to " + JSON.stringify(value))
+    var oldState = { ...filterValues };
+    oldState[_name] = value;
+    setFilterValues(oldState);
+  };
+
+  const switchPage = (e, page) => {
+    //window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+    console.log(page);
+    setCurrentPageNumber(page);
+  };
+
+  //construct the pages count
+  const constructPagesCount = () => {
+    return (
+      <Pagination
+        count={totalPagesNumber}
+        color="primary"
+        size="large"
+        onChange={switchPage}
+        style={{ zoom: "130%" }}
+      />
+    );
+  };
+
+  const loadProperties = async () => {
+    setIsLoading(true);
+    try {
+      fetch(
+        "http://localhost:9000/getAllProperties?" +
+          new URLSearchParams({
+            pageNumber: currentPageNumber,
+            city: filterValues.city,
+            minPrice: filterValues.prices.minPrice,
+            maxPrice: filterValues.prices.maxPrice,
+            propertyType: filterValues.propertyType,
+            facilities: filterValues.facilities,
+            minimumBeds: filterValues.minimumBeds,
+            minimumBaths: filterValues.minimumBaths,
+          })
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          setProperties(res.results);
+          setTotalPageNumber(res.totalPages);
+          setTotalResult(res.count);
+        })
+        .catch((err) => {
+          message.error("error with API");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } catch (err) {
+      message.error("error with setting data from API");
+    } 
+  };
+
+  const location = useLocation()
+  const [isQueryLoading, setIsQueryLoading] = useState(true)
+
+  useEffect(() => {
+      const queryParams = new URLSearchParams(location.search)
+      console.log(queryParams.get("city") !== undefined)
+      if (queryParams.get("city") !== null) handleFiltering("city", queryParams.get("city"))
+      if (queryParams.get("maxPrice") !== null) {
+        handleFiltering("prices", {
+          minPrice: filterValues.prices.minPrice,
+          maxPrice: parseInt(queryParams.get("maxPrice"))
+        })
+      } 
+      if (queryParams.get("propertyType") !== null) handleFiltering("propertyType", queryParams.get("propertyType"))
+
+      setIsQueryLoading(false)
+  }, []);
+
+  
+  useEffect(() => {
+    if (!isQueryLoading) loadProperties()
+  }, [isQueryLoading])
+
+  return (
+    <div className="properties-page">
+      <header className="App-header">
+        <Navbar />
+      </header>
+      <div className="App">
+        <div className="upper-body">
+          <div className="topSearchSection">
+            <SearchAvailability 
+            parentCallBack={handleFiltering}
+            filterValues={filterValues}
+            />
+          </div>
+        </div>
+        <div className="body">
+          <>{JSON.stringify(filterValues)}</>
+          <div className="real-body">
+            <div className="left-body">
+              <FilterProperties
+                minPrice={startingValues.minPrice}
+                maxPrice={startingValues.maxPrice}
+                parentCallBack={handleFiltering}
+                loadPropertiesParent={loadProperties}
+                isLoading={isLoading}
+              />
+            </div>
+            <div className="right-body">
+              {isLoading ? (
+                <div
+                  style={{
+                    textAlign: "center",
+                    width: "60%",
+                    height: "50rem",
+                    marginLeft: "5rem",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Spin size="large" style={{ margin: "0 2rem 0 0 " }} />{" "}
+                  Loading
+                </div>
+              ) : (
+                <>
+                  <div class="property-listing">
+                    <p className="resultsText">
+                      Search result:
+                      <p className="queries-count">{totalResult} properties</p>
+                    </p>
+                    <div className="propertyCards">
+                      {properties.map((item) => {
+                        return (
+                          <PropertyListing
+                            className="property"
+                            image={item.images[0]}
+                            propertyName={item.details.propertyTitle}
+                            locationName="some where"
+                            propertyPrice={parseInt(item.listedPrice)}
+                            features={[
+                              item.details.bedsNumber + " BKH",
+                              item.details.bathsNumber + " Baths",
+                              item.details.occupantsNumber + " Occupants",
+                            ]}
+                            body={item.details.propertyDescription}
+                            walletImage={SampleWalletImage}
+                            walletAddress={item.address}
+                            objectId={item.objectId}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="page-numbers">{constructPagesCount()}</div>
+                </>
+              )}
             </div>
           </div>
         </div>
-      );
-    } else {
-      return (
-        <div className="App">
-          <header className="App-header">
-            <Navbar />
-          </header>
-          <div className="hero-section">
-            {this.state.properties.map((property, key) => {
-              return (
-                <Descriptions title="Property" bordered>
-                  <Descriptions.Item label="Property Id." span={4}>
-                    {property.counter}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Address" span={4}>
-                    {property.address}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Appartment Number" span={4}>
-                    {property.apartmentNum}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Area (sqft)" span={2}>
-                    {property.area}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Listed Price (AED)">
-                    {property.listedPrice}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Owner's Address" span={3}>
-                    {property.landlordAddress}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Image link" span={3}>
-                    {property.images.map((img) => (
-                      <img
-                        src={img}
-                        style={{
-                          height: "100px",
-                          width: "100px",
-                        }}
-                        alt="Property_Image"
-                      />
-                    ))}
-                  </Descriptions.Item>
-                </Descriptions>
-              );
-            })}
-          </div>
-        </div>
-      );
-    }
-  }
-}
+      </div>
+      <Footer />
+    </div>
+  );
+};
 
 export default App;

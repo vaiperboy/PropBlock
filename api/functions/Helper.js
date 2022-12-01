@@ -109,6 +109,7 @@ module.exports.getUser = async function(address) {
 module.exports.processFiltering = function(params) {
     const output = {};
     output.minimumBeds = parseInt(params.minimumBeds) || 0;
+    output.minimumBaths = parseInt(params.minimumBaths) || 0;
     output.minPrice = parseInt(params.minPrice) || 0;
     output.maxPrice = parseInt(params.maxPrice) || 10000000
     output.propertyType = params.propertyType === undefined ? "" : params.propertyType.toLowerCase()

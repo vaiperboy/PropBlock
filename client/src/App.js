@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import PropertyFunc from "./Functions/PropertyFunc";
 import SignUp from "./pages/Signup";
 import AgreementFunc from "./Functions/AgreementFunc";
-import Properties from "./pages/Properties_2";
+import Properties from "./pages/Properties";
 import Property from "./pages/Property";
 import NoMatch from "./pages/NoMatch";
 import Scrollbar from "smooth-scrollbar";

@@ -60,8 +60,9 @@ class FilterProperties extends React.Component {
             />
             <hr></hr>
             <hr></hr>
-            <p>Beds</p>
+            <p>Minimum Beds</p>
             <Input
+              placeholder="0"
               label="minimum beds?"
               name="bedsNumber"
               onChange={(e) =>
@@ -72,8 +73,9 @@ class FilterProperties extends React.Component {
               max="20"
             />
             <hr></hr>
-            <p>Baths</p>
+            <p>Minimum Baths</p>
             <Input
+              placeholder="0"
               label="minimum beds?"
               name="bedsNumber"
               onChange={(e) =>
@@ -82,6 +84,7 @@ class FilterProperties extends React.Component {
               type="number"
               min="0"
               max="20"
+              
             />
             <hr></hr>
             <p>Facilities</p>
