@@ -174,6 +174,42 @@
                 .propertyDescription {
                     margin: 2rem 0;
                     text-align: justify;
+                    min-height: 15rem;
+                }
+                .propertyFacilities {
+                    min-height: 5rem;
+                    width: 100%;
+                    // background-color: red;
+                    .heading {
+                        font-size: 2.5rem;
+                        font-weight: 550;
+                        color: #444444;
+                    }
+                    .facilitiesContainer {
+                        display: flex;
+                        margin-top: 2rem;
+                        justify-content: space-between;
+                        .column {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 2.5rem;
+                            .row {
+                                display: flex;
+                                gap: 2rem;
+                                .image {
+                                    width: 3rem;
+                                    height: 3rem;
+                                }
+                                .facilityTitle {
+                                    font-size: 1.6rem;
+                                    font-weight: 500;
+                                }
+                            }
+                            .disabled {
+                                opacity: 0.3;
+                            }
+                        }
+                    }
                 }
             }
         }

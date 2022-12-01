@@ -126,7 +126,7 @@ const App = (props) => {
                 <div
                   style={{
                     textAlign: "center",
-                    width: "60%",
+                    width: "60rem",
                     height: "50rem",
                     marginLeft: "5rem",
                     display: "flex",

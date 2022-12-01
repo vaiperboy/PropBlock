@@ -40,59 +40,63 @@ class FilterProperties extends React.Component {
         <div className="inner-rectangle">
           <div className="upper-body">Filters</div>
           <div className="filter-body">
-            <p>Price</p>
-            <MultiRangeSlider
-              className="slider"
-              min={this.props.minPrice}
-              max={this.props.maxPrice}
-              onChange={({ min, max }) => {
-                //because this object calls onchange
-                //when it is contructed, i placed
-                //a check to prevent that
-                if (min != this.state.oldMin || max != this.state.oldMax) {
-                  this.props.parentCallBack("prices", {
-                    minPrice: min,
-                    maxPrice: max,
-                  });
-                  this.setState({ oldMin: min, oldMax: max });
+            <div className="filterProperty">
+              <p>Price</p>
+              <MultiRangeSlider
+                className="slider"
+                min={this.props.minPrice}
+                max={this.props.maxPrice}
+                onChange={({ min, max }) => {
+                  //because this object calls onchange
+                  //when it is contructed, i placed
+                  //a check to prevent that
+                  if (min != this.state.oldMin || max != this.state.oldMax) {
+                    this.props.parentCallBack("prices", {
+                      minPrice: min,
+                      maxPrice: max,
+                    });
+                    this.setState({ oldMin: min, oldMax: max });
+                  }
+                }}
+              />
+            </div>
+            <div className="filterProperty">
+              <p>Beds</p>
+              <Input
+                label="minimum beds?"
+                name="bedsNumber"
+                onChange={(e) =>
+                  this.props.parentCallBack("minimumBeds", e.target.value)
                 }
-              }}
-            />
-            <hr></hr>
-            <hr></hr>
-            <p>Beds</p>
-            <Input
-              label="minimum beds?"
-              name="bedsNumber"
-              onChange={(e) =>
-                this.props.parentCallBack("minimumBeds", e.target.value)
-              }
-              type="number"
-              min="0"
-              max="20"
-            />
-            <hr></hr>
-            <p>Baths</p>
-            <Input
-              label="minimum beds?"
-              name="bedsNumber"
-              onChange={(e) =>
-                this.props.parentCallBack("minimumBaths", e.target.value)
-              }
-              type="number"
-              min="0"
-              max="20"
-            />
-            <hr></hr>
-            <p>Facilities</p>
-            <Select
-              mode="tags"
-              size={"medium"}
-              placeholder="Please select"
-              onChange={this.handleFacilities}
-              style={{ width: "100%", margin: "0 0 2rem 0" }}
-              options={this.state.facilitiesOptions}
-            />
+                type="number"
+                min="0"
+                max="20"
+              />
+            </div>
+            <div className="filterProperty">
+              <p>Baths</p>
+              <Input
+                label="minimum beds?"
+                name="bedsNumber"
+                onChange={(e) =>
+                  this.props.parentCallBack("minimumBaths", e.target.value)
+                }
+                type="number"
+                min="0"
+                max="20"
+              />
+            </div>
+            <div className="filterProperty last">
+              <p>Facilities</p>
+              <Select
+                mode="tags"
+                size={"medium"}
+                placeholder="Please select"
+                onChange={this.handleFacilities}
+                style={{ width: "100%", margin: "0 0 2rem 0" }}
+                options={this.state.facilitiesOptions}
+              />
+            </div>
           </div>
           {!this.props.isLoading ? (
             <button

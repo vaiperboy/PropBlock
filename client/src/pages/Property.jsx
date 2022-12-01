@@ -18,11 +18,21 @@ import people_icon from "../assets/people-icon.svg";
 import area_icon from "../assets/area-icon.svg";
 import profile_icon from "../assets/profile-icon.png";
 import mail_icon from "../assets/mail-icon.svg";
+import coffeee_icon from "../assets/coffee_icon.png";
+import wifi_icon from "../assets/wifi_icon.png";
+import swimming_pool_icon from "../assets/swimming_icon.png";
+import tv_access_icon from "../assets/tv_icon.png";
+import security_icon from "../assets/security_icon.png";
+import parking_icon from "../assets/parking_icon.png";
+import kitchen_icon from "../assets/kitchen_icon.png";
+import washing_icon from "../assets/washing_icon.png";
+import access_24_icon from "../assets/24_access_icon.png";
+
 import { useMoralis, useNewMoralisObject } from "react-moralis";
 
 const console = require("console-browserify");
 
-const Property = () => {
+const Property = (props) => {
   const {
     address,
     ownerId,
@@ -69,6 +79,10 @@ const Property = () => {
     console.log("visible", visible);
   }, [visible]);
 
+  useEffect(() => {
+    console.log("Facilities No. - ", props.facilities);
+  }, []);
+
   const tempImageArray = [
     {
       imageLocation: "realEstate_3-min.png",
@@ -108,7 +122,7 @@ const Property = () => {
       sellerEthAddress: ownerID,
       requesterEthAddress: user.get("ethAddress"),
       propertyObjectId: propertyObjectId,
-      isPending: true
+      isPending: true,
     };
 
     save(data, {
@@ -247,6 +261,71 @@ const Property = () => {
                 exercitationem cumque, ut deleniti accusamus quae ad enim illum?
                 Debitis consectetur cum officia qui, libero molestias
                 asperiores. Exercitationem quia aut asperiores tenetur ab.
+              </div>
+              <div className="propertyFacilities">
+                <div className="heading">Property Facilities</div>
+                <div className="facilitiesContainer">
+                  <div className="column">
+                    <div className="row">
+                      <div className="image">
+                        <img src={parking_icon} alt="Free Parking Icon" />
+                      </div>
+                      <div className="facilityTitle">Free Parking</div>
+                    </div>
+                    <div className="row">
+                      <div className="image">
+                        <img src={wifi_icon} alt="Free Parking Icon" />
+                      </div>
+                      <div className="facilityTitle">Free Wifi</div>
+                    </div>
+                    <div className="row">
+                      <div className="image">
+                        <img src={washing_icon} alt="Free Parking Icon" />
+                      </div>
+                      <div className="facilityTitle">Washing Machine</div>
+                    </div>
+                  </div>
+                  <div className="column">
+                    <div className="row">
+                      <div className="image">
+                        <img src={kitchen_icon} alt="Free Parking Icon" />
+                      </div>
+                      <div className="facilityTitle">Kitchen</div>
+                    </div>
+                    <div className="row disabled">
+                      <div className="image">
+                        <img src={coffeee_icon} alt="Free Parking Icon" />
+                      </div>
+                      <div className="facilityTitle">Coffee Maker</div>
+                    </div>
+                    <div className="row">
+                      <div className="image">
+                        <img src={access_24_icon} alt="Free Parking Icon" />
+                      </div>
+                      <div className="facilityTitle">24 Hour Access</div>
+                    </div>
+                  </div>
+                  <div className="column">
+                    <div className="row disabled">
+                      <div className="image">
+                        <img src={security_icon} alt="Free Parking Icon" />
+                      </div>
+                      <div className="facilityTitle">Security</div>
+                    </div>
+                    <div className="row">
+                      <div className="image">
+                        <img src={swimming_pool_icon} alt="Free Parking Icon" />
+                      </div>
+                      <div className="facilityTitle">Swimming Pool</div>
+                    </div>
+                    <div className="row disabled">
+                      <div className="image">
+                        <img src={tv_access_icon} alt="Free Parking Icon" />
+                      </div>
+                      <div className="facilityTitle">TV Access</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
