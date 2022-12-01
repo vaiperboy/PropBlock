@@ -7,21 +7,107 @@ var helper = require("../functions/Helper");
 var router = express.Router();
 
 //getting all properties from Moralis
-router.get("/", async function(req, res, next) {
-    const query = new Moralis.Query("Properties");
+router.get("/getAllProperties", async function (req, res, next) {
 
-    //define a hard-coded maximim query limit if condition fails
-    var limit = parseInt(req.query.limit);
-    query.limit(limit >  config.maxQueryLimit ? config.maxQueryLimit : limit);
-    const _results = await query.find();
+    const query = new Moralis.Query("PropertiesAdded");
+    const pageNumber = parseInt(req.query.pageNumber) || 1;
+    const toSkip = config.pageSize * (pageNumber - 1)
+    const limit = config.pageSize
 
-    //copy object to add another parameter(s)
-    var results = JSON.parse(JSON.stringify(_results));
-    for (var i = 0; i < results.length; i++) {
-        //add image link to object
-        results[i].images = await helper.getLinks(results[i].ipfsHash);
+    const filter = helper.processFiltering(req.query)
+    const pipeline = [
+        { limit: limit },
+        { skip: toSkip },
+        {
+            lookup: {
+                from: "PropertyDetails",
+                localField: "transaction_hash",
+                foreignField: "txHash",
+                as: "details"
+            }
+        },
+        {
+            project: {
+                "details.propertyTitle": 1,
+                "details.propertyDescription": 1,
+                "details.bedsNumber": 1,
+                "details.bathsNumber": 1,
+                "details.city": 1,
+                "details.facilities": 1,
+                "details.occupantsNumber": 1,
+                "listedPrice_decimal": 1,
+                "listedPrice": 1,
+                "createdAt": 1,
+                "address": 1,
+                "ipfsHash": 1,
+                "propertyType": 1
+            }
+        },
+        {
+            addFields: {
+                numericPrice: { $toInt: "$listedPrice" }
+            }
+        },
+        {
+            match: {
+                $expr: {
+                    $and: [
+                        {
+                            $and: [
+                                { $gte: ["$numericPrice", filter.minPrice] },
+                                { $lte: ["$numericPrice", filter.maxPrice] }
+                            ]
+                        },
+                        {
+                            ...(filter.propertyType.length > 0) && {
+                                $eq: ["$propertyType", filter.propertyType]
+                            }
+                        },
+                        {
+                            $gte: [{$first: "$details.bedsNumber"}, filter.minimumBeds]
+                        },
+                        {
+                            ...(filter.city.length > 0) && {
+                                $eq: [{$first: "$details.city"}, filter.city]
+                            }
+                        },
+                        {
+                            $gte: [{$first: "$details.facilities"}, filter.facilities]
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+
+    //copy array
+    const countPipeline = pipeline.slice()
+    countPipeline.push({
+        count: "count"
+    })
+    delete countPipeline.limit
+    delete countPipeline.skip
+    const countQuery = new Moralis.Query("PropertiesAdded");
+    const countResult = await countQuery.aggregate(countPipeline,  { useMasterKey: true })
+    const count = countResult.length == 0 ? 0 : countResult[0].count
+
+    const _result = await query.aggregate(pipeline, { useMasterKey: true })
+    const result = JSON.parse(JSON.stringify(_result))
+
+    for (var i = 0; i < result.length; i++) {
+        var images = { images: await helper.getImages(result[i].ipfsHash) }
+        Object.assign(result[i], result[i], images)
+        result[i].details = result[i].details[0]
     }
-    res.send(results);
+
+    const output = {
+        results: result,
+        count: count
+    }
+
+    output.totalPages = helper.getTotalPageNumbers(output.count, config.pageSize)
+    res.json(output)
+
 });
 
 module.exports = router;

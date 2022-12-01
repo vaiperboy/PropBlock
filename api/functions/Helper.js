@@ -2,6 +2,7 @@ const auth = require("../modules/ipfs");
 var config = require('../config');
 var axios = require('axios');
 var Moralis = require("../modules/moralis");
+const { pageSize } = require("../config");
 
 
 //to cache the result
@@ -9,7 +10,7 @@ var hashesDict = [];
 
 
 //gets all the links inside a ipfs directory
-module.exports.getLinks = async function (cid) {
+module.exports.getImages = async function (cid) {
     var hashes = [];
 
     //if cache doesn't exist
@@ -104,26 +105,46 @@ module.exports.getUser = async function(address) {
     });
 }
 
-//processes the moralis Query object with the 
-//parameters
-module.exports.processFiltering = async function(params, query) {
-    if (params["propertyType"] != undefined) {
-        query.equalTo("propertyType", params["propertyType"].toLowerCase());
-    }
-
-    if (params["facilities"] != undefined && params["facilities"] > 0) {
-        query.greaterThan("facilities", params["facilities"]);
-    }
-    
-    if (params["minPrice"] != undefined) {
-        var minPrice = parseInt(params["minPrice"]);
-        if (!isNaN(minPrice)) query.greaterThan("listedPrice", minPrice);
-    }
-
-    if (params["maxPrice"] != undefined) {
-        var maxPrice = parseInt(params["maxPrice"]);
-        if (!isNaN(maxPrice)) query.greaterThan("listedPrice", maxPrice);
-    }
-
-    
+//processes the filtering parameters
+module.exports.processFiltering = function(params) {
+    const output = {};
+    output.minimumBeds = parseInt(params.minimumBeds) || 0;
+    output.minPrice = parseInt(params.minPrice) || 0;
+    output.maxPrice = parseInt(params.maxPrice) || 10000000
+    output.propertyType = params.propertyType === undefined ? "" : params.propertyType.toLowerCase()
+    output.facilities = parseInt(params.facilities) || 0;
+    output.city = params.city === undefined ? "" : params.city.toLowerCase()
+    return output
 }
+
+//calculates the number of pages
+module.exports.getTotalPageNumbers = function(totalCount, pageSize) {
+    return totalCount < pageSize ? 1 : Math.ceil(totalCount / pageSize)
+}
+
+
+//gets extra details about the property
+module.exports.getPropertyExtraDetails = async function(txHash) {
+    return new Promise(async (resolve, reject) => {
+        var tmp = {}
+        const query = new Moralis.Query("PropertyDetails")
+        query.equalTo("txHash", txHash)
+        const _result = await query.find()
+        var result = JSON.parse(JSON.stringify(_result))
+        console.log(result)
+        if (result) {
+            result = result[0]
+            tmp  = {
+                facilities: result.facilities,
+                bedsNumber: result.bedsNumber,
+                bathsNumber: result.bathsNumber,
+                propertyTitle: result.propertyTitle,
+                propertyDescription: result.propertyDescription,
+                occupantsNumber: result.occupantsNumber
+            }
+        }
+        resolve(tmp)
+    })
+}
+
+

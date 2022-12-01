@@ -108,6 +108,7 @@ const Property = () => {
       sellerEthAddress: ownerID,
       requesterEthAddress: user.get("ethAddress"),
       propertyObjectId: propertyObjectId,
+      isPending: true
     };
 
     save(data, {

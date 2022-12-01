@@ -71,34 +71,18 @@ const SearchAvailability = () => {
         </div>
         <div className="inputDiv">
           <Select
-            placeholder="Apartment "
+            placeholder="All"
             style={{
               width: "100%",
             }}
           >
+            <Option value="">All</Option>
             <Option value="Apartment">Apartment</Option>
             <Option value="Villa">Villa</Option>
             <Option value="Townhouse">Townhouse</Option>
             <Option value="Penthouse">Penthouse</Option>
             <Option value="Duplex">Duplex</Option>
           </Select>
-        </div>
-      </div>
-      <div className="horizontal_line"></div>
-      <div className="bedsFilter">
-        <div className="filterDiv">
-          <label htmlFor="location">Beds</label>
-          <img src={beds_icon} alt="beds_icon" />
-        </div>
-        <div className="inputDiv">
-          <InputNumber
-            style={{
-              width: "100%",
-            }}
-            defaultValue="1"
-            min="0"
-            max="10"
-          />
         </div>
       </div>
       <div className="horizontal_line"></div>

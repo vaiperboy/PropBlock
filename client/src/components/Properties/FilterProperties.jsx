@@ -1,8 +1,8 @@
 import React from "react";
 import "../../styling/Properties/FilterProperties.scss";
 import MultiRangeSlider from "./multiRangeSlider/MultiRangeSlider";
-import { Checkbox, Input, Button } from "@web3uikit/core";
-import { Radio, Select } from "antd";
+import { Checkbox, Button } from "@web3uikit/core";
+import { Radio, Select, Input } from "antd";
 const console = require("console-browserify");
 const { Option } = Select;
 
@@ -22,26 +22,16 @@ class FilterProperties extends React.Component {
         { value: 128, label: "24 hour access" },
         { value: 256, label: "TV Access" },
       ],
-      facilitiesXor: 0,
     };
     this.handleFacilities = this.handleFacilities.bind(this);
   }
 
   //only made it for lowest number (least option)
   handleFacilities(arr) {
-    /*let tmp = 1;
-    for (const e of arr) {
-      tmp = tmp | e;
-    }
-    this.setState({facilitiesXor: tmp});
-    console.log(this.state.facilitiesXor);*/
     if (arr.length > 0) {
-      var lowest = arr[0];
-      for (var i = 1; i < arr.length; i++) {
-        if (arr[i] < lowest) lowest = arr[i];
-      }
-      this.setState({ facilitiesXor: lowest });
-    } else this.setState({ facilitiesXor: 0 });
+      var lowest = Math.min(...arr);
+      this.props.parentCallBack("facilities", lowest);
+    } else this.props.parentCallBack("facilities", 0);
   }
 
   render() {
@@ -69,25 +59,8 @@ class FilterProperties extends React.Component {
               }}
             />
             <hr></hr>
-            <p>Property Type</p>
-            <div className="inputDiv">
-              <Select
-                placeholder="Apartment "
-                style={{
-                  width: "100%",
-                }}
-                //onChange={handleChange}
-              >
-                <Option value="Apartment">Apartment</Option>
-                <Option value="Villa">Villa</Option>
-                <Option value="Townhouse">Townhouse</Option>
-                <Option value="Penthouse">Penthouse</Option>
-                <Option value="Duplex">Duplex</Option>
-              </Select>
-            </div>
             <hr></hr>
             <p>Beds</p>
-
             <Input
               label="minimum beds?"
               name="bedsNumber"
@@ -96,6 +69,19 @@ class FilterProperties extends React.Component {
               }
               type="number"
               min="0"
+              max="20"
+            />
+            <hr></hr>
+            <p>Baths</p>
+            <Input
+              label="minimum beds?"
+              name="bedsNumber"
+              onChange={(e) =>
+                this.props.parentCallBack("minimumBaths", e.target.value)
+              }
+              type="number"
+              min="0"
+              max="20"
             />
             <hr></hr>
             <p>Facilities</p>
@@ -108,7 +94,18 @@ class FilterProperties extends React.Component {
               options={this.state.facilitiesOptions}
             />
           </div>
-          <button className="filter-button">Filter Properties</button>
+          {!this.props.isLoading ? (
+            <button
+              className="filter-button"
+              onClick={() => {
+                this.props.loadPropertiesParent();
+              }}
+            >
+              Filter Properties
+            </button>
+          ) : (
+            <button className="filter-loading">Loading ...</button>
+          )}
         </div>
       </div>
     );
