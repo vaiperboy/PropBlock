@@ -17,7 +17,7 @@ const Navbar = (props) => {
   const [avatarClicked, setAvatarClicked] = useState(false);
   const [isGovenmentUser, setIsGovernmentUser] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [avatarLetters, setAvatarLetters] = useState("");
   const {
     authenticate,
     isAuthenticated,
@@ -88,7 +88,14 @@ const Navbar = (props) => {
         setIsLoading(false);
       }
     };
+
+    // Get users first Name letters
+    const getAvatarletters = async () => {
+      const temp = user.get("fullName");
+      setAvatarLetters(temp.toUpperCase().slice(0, 2));
+    };
     checkUserType();
+    getAvatarletters();
   }, []);
 
   return (
@@ -143,8 +150,12 @@ const Navbar = (props) => {
                 {isLoading ? (
                   <Avatar
                     isRounded
-                    theme="image"
+                    theme="letters"
+                    avatarBackground="#9747ff"
+                    text={avatarLetters}
+                    textColor="white"
                     className="avatar"
+                    style={{ color: "#fff" }}
                     onClick={() => {
                       showButtons();
                     }}
@@ -152,9 +163,12 @@ const Navbar = (props) => {
                 ) : (
                   <Avatar
                     isRounded
-                    theme="image"
+                    theme="letters"
+                    avatarBackground="#9747ff"
+                    text={avatarLetters}
+                    textColor="white"
                     className="avatar"
-                    // image={avatar_image}
+                    style={{ color: "#fff" }}
                     onClick={() => {
                       showButtons();
                     }}

@@ -38,7 +38,6 @@ const Disconnect = () => {
     try {
       await logout();
       message.success("Logged out... re-directing");
-      await sleep(2500);
       navigate("/");
     } catch (error) {
       message.error("Error: ", error);
