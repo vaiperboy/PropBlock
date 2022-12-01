@@ -23,13 +23,18 @@ const App = (props) => {
   const [filterValues, setFilterValues] = useState({
     prices: {
       minPrice: 100,
-      maxPrice: 100000,
+      maxPrice: 10000000,
     },
     propertyType: "",
     minimumBeds: 0,
     facilities: 0,
-    location: "",
+    city: "",
   })
+
+  const startingValues = {
+    minPrice:100,
+    maxPrice: 10000000
+  }
 
 
   //to pass information from child to parent
@@ -37,7 +42,6 @@ const App = (props) => {
     var oldState = { ...filterValues };
     oldState[_name] = value;
     setFilterValues(oldState)
-    console.log(_name + ": " + value);
   }
 
   const switchPage = (e, page) => {
@@ -62,24 +66,35 @@ const App = (props) => {
 
   const loadProperties = async () => {
     setIsLoading(true)
-    fetch(
-      "http://localhost:9000/getAllProperties?" +
-      new URLSearchParams({
-        pageNumber: currentPageNumber
-      })
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        setProperties(res.results)
-        setTotalPageNumber(res.totalPages)
-        setTotalResult(res.count)
-      })
-      .catch(err => {
-        message.error("error with API")
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      fetch(
+        "http://localhost:9000/getAllProperties?" +
+        new URLSearchParams({
+          pageNumber: currentPageNumber,
+          city: filterValues.city,
+          minPrice: filterValues.prices.minPrice,
+          maxPrice: filterValues.prices.maxPrice,
+          propertyType: filterValues.propertyType,
+          facilities: filterValues.facilities,
+          minimumBeds: filterValues.minimumBeds
+        })
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          setProperties(res.results)
+          setTotalPageNumber(res.totalPages)
+          setTotalResult(res.count)
+        })
+        .catch(err => {
+          message.error("error with API")
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } catch (err) {
+      message.error("error with setting data from API")
+    }
+    
   }
 
 
@@ -100,12 +115,15 @@ const App = (props) => {
           </div>
         </div>
         <div className="body">
+          <>{JSON.stringify(filterValues)}</>
           <div className="real-body">
             <div className="left-body">
               <FilterProperties
-                minPrice={100}
-                maxPrice={100000}
+                minPrice={startingValues.minPrice}
+                maxPrice={startingValues.maxPrice}
                 parentCallBack={handleFiltering}
+                loadPropertiesParent={loadProperties}
+                isLoading={isLoading}
               />
             </div>
             <div className="right-body">

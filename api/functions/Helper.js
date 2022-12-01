@@ -105,26 +105,16 @@ module.exports.getUser = async function(address) {
     });
 }
 
-//processes the moralis Query object with the 
-//parameters
-module.exports.processFiltering = async function(params, query) {
-    if (params["propertyType"] != undefined) {
-        query.equalTo("propertyType", params["propertyType"].toLowerCase());
-    }
-
-    if (params["facilities"] != undefined && params["facilities"] > 0) {
-        query.greaterThan("facilities", params["facilities"]);
-    }
-    
-    if (params["minPrice"] != undefined) {
-        var minPrice = parseInt(params["minPrice"]);
-        if (!isNaN(minPrice)) query.greaterThan("listedPrice", minPrice);
-    }
-
-    if (params["maxPrice"] != undefined) {
-        var maxPrice = parseInt(params["maxPrice"]);
-        if (!isNaN(maxPrice)) query.greaterThan("listedPrice", maxPrice);
-    }
+//processes the filtering parameters
+module.exports.processFiltering = function(params) {
+    const output = {};
+    output.minimumBeds = parseInt(params.minimumBeds) || 0;
+    output.minPrice = parseInt(params.minPrice) || 0;
+    output.maxPrice = parseInt(params.maxPrice) || 10000000
+    output.propertyType = params.propertyType === undefined ? "" : params.propertyType.toLowerCase()
+    output.facilities = parseInt(params.facilities) || 0;
+    output.city = params.city === undefined ? "" : params.city.toLowerCase()
+    return output
 }
 
 //calculates the number of pages
@@ -156,3 +146,5 @@ module.exports.getPropertyExtraDetails = async function(txHash) {
         resolve(tmp)
     })
 }
+
+

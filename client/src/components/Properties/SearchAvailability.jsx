@@ -71,11 +71,12 @@ const SearchAvailability = () => {
         </div>
         <div className="inputDiv">
           <Select
-            placeholder="Apartment "
+            placeholder="All"
             style={{
               width: "100%",
             }}
           >
+            <Option value="">All</Option>
             <Option value="Apartment">Apartment</Option>
             <Option value="Villa">Villa</Option>
             <Option value="Townhouse">Townhouse</Option>
@@ -97,7 +98,7 @@ const SearchAvailability = () => {
             }}
             defaultValue="1"
             min="0"
-            max="10"
+            max="20"
           />
         </div>
       </div>

@@ -7,31 +7,17 @@ var helper = require("../functions/Helper");
 var router = express.Router();
 
 //getting all properties from Moralis
-router.get("/getAllProperties", async function(req, res, next) {
-    // const query = new Moralis.Query("PropertiesAdded");
-    // const pageNumber = parseInt(req.query.pageNumber) || 1;
-    // query.skip(config.pageSize * (pageNumber - 1))
-    // query.limit(config.pageSize)
-    // query.withCount()
-    // const _result = await query.find();
-    // const result = JSON.parse(JSON.stringify(_result))
-    // for (var i = 0; i < result.results.length; i++) {
-    //     console.log("getting for " + result.results[i].transaction_hash)
-    //     var extraDetails = await helper.getPropertyExtraDetails(result.results[i].transaction_hash)
-    //     var images = {images: await helper.getImages(result.results[i].ipfsHash)}
-    //     Object.assign(result.results[i], result.results[i], extraDetails, images)
-    // }
-    // result.totalPages = helper.getTotalPageNumbers(result.count, config.pageSize)
-    // res.json(result)
+router.get("/getAllProperties", async function (req, res, next) {
 
     const query = new Moralis.Query("PropertiesAdded");
     const pageNumber = parseInt(req.query.pageNumber) || 1;
     const toSkip = config.pageSize * (pageNumber - 1)
     const limit = config.pageSize
-    
+
+    const filter = helper.processFiltering(req.query)
     const pipeline = [
-        {limit: limit},
-        {skip: toSkip},
+        { limit: limit },
+        { skip: toSkip },
         {
             lookup: {
                 from: "PropertyDetails",
@@ -46,38 +32,80 @@ router.get("/getAllProperties", async function(req, res, next) {
                 "details.propertyDescription": 1,
                 "details.bedsNumber": 1,
                 "details.bathsNumber": 1,
+                "details.city": 1,
+                "details.facilities": 1,
                 "details.occupantsNumber": 1,
+                "listedPrice_decimal": 1,
                 "listedPrice": 1,
                 "createdAt": 1,
                 "address": 1,
                 "ipfsHash": 1,
+                "propertyType": 1
+            }
+        },
+        {
+            addFields: {
+                numericPrice: { $toInt: "$listedPrice" }
             }
         },
         {
             match: {
-                and
+                $expr: {
+                    $and: [
+                        {
+                            $and: [
+                                { $gte: ["$numericPrice", filter.minPrice] },
+                                { $lte: ["$numericPrice", filter.maxPrice] }
+                            ]
+                        },
+                        {
+                            ...(filter.propertyType.length > 0) && {
+                                $eq: ["$propertyType", filter.propertyType]
+                            }
+                        },
+                        {
+                            $gte: [{$first: "$details.bedsNumber"}, filter.minimumBeds]
+                        },
+                        {
+                            ...(filter.city.length > 0) && {
+                                $eq: [{$first: "$details.city"}, filter.city]
+                            }
+                        },
+                        {
+                            $gte: [{$first: "$details.facilities"}, filter.facilities]
+                        }
+                    ]
+                }
             }
         }
     ]
 
+    //copy array
+    const countPipeline = pipeline.slice()
+    countPipeline.push({
+        count: "count"
+    })
+    delete countPipeline.limit
+    delete countPipeline.skip
+    const countQuery = new Moralis.Query("PropertiesAdded");
+    const countResult = await countQuery.aggregate(countPipeline,  { useMasterKey: true })
+    const count = countResult.length == 0 ? 0 : countResult[0].count
 
-    const _result = await query.aggregate(pipeline)
+    const _result = await query.aggregate(pipeline, { useMasterKey: true })
     const result = JSON.parse(JSON.stringify(_result))
 
     for (var i = 0; i < result.length; i++) {
-        var images = {images: await helper.getImages(result[i].ipfsHash)}
+        var images = { images: await helper.getImages(result[i].ipfsHash) }
         Object.assign(result[i], result[i], images)
         result[i].details = result[i].details[0]
     }
 
     const output = {
         results: result,
-        count: 1
+        count: count
     }
 
-    console.log(JSON.stringify(result))
-    
-    result.totalPages = helper.getTotalPageNumbers(result.count, config.pageSize)
+    output.totalPages = helper.getTotalPageNumbers(output.count, config.pageSize)
     res.json(output)
 
 });

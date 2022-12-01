@@ -59,25 +59,6 @@ class FilterProperties extends React.Component {
               }}
             />
             <hr></hr>
-            <p>Property Type</p>
-            <div className="inputDiv">
-              <Select
-              placeholder="All"
-                style={{
-                  width: "100%",
-                }}
-                onChange={(e) => {
-                  this.props.parentCallBack("propertyType", e)
-                }}
-              >
-                <Option value="">All</Option>
-                <Option value="Apartment">Apartment</Option>
-                <Option value="Villa">Villa</Option>
-                <Option value="Townhouse">Townhouse</Option>
-                <Option value="Penthouse">Penthouse</Option>
-                <Option value="Duplex">Duplex</Option>
-              </Select>
-            </div>
             <hr></hr>
             <p>Beds</p>
 
@@ -102,7 +83,7 @@ class FilterProperties extends React.Component {
               options={this.state.facilitiesOptions}
             />
           </div>
-          <button className="filter-button">Filter Properties</button>
+          <button className="filter-button" disabled={this.props.isLoading} onClick={() => this.props.loadPropertiesParent()}>Filter Properties</button>
         </div>
       </div>
     );
