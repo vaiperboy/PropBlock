@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import realEstate from "../../artifacts/contracts/realEstate.sol/realEstate.json";
+import { Table, message, Popconfirm, Spin } from "antd";
+
 const console = require("console-browserify");
+
 
 const { ethers } = require("ethers");
 

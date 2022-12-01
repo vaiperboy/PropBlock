@@ -1,0 +1,295 @@
+.governmentAgreementsListContainer {
+  .FirstRow {
+    font-size: 1.5rem;
+    td {
+      border-right: 1px solid rgb(230, 230, 230);
+    }
+    &:hover {
+      background-color: rgba(#9dabb3, 0.1);
+      cursor: pointer;
+    }
+    .requestAccepted {
+      &:hover {
+      }
+    }
+    .requestRejected {
+    }
+  }
+
+  .tableContainer {
+    height: 100rem;
+    height: 75rem;
+    table {
+      width: 100vw;
+      th {
+        background-color: rgb(#3daeee, 0.5);
+        border-right: 1px solid rgb(195, 195, 195);
+        padding: 1rem 1rem;
+        font-size: 1.6rem;
+        color: #444;
+        font-weight: 500;
+      }
+      tr {
+        font-size: 1.4rem;
+        color: #555;
+      }
+      td {
+      }
+      tr:nth-child(odd) {
+        background-color: #f9f9f9;
+      }
+    }
+  }
+
+  .acceptButton {
+    color: #fff;
+    background-color: #3daeee;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    &:hover {
+      cursor: pointer;
+      background-color: rgb(#3daeee, 0.8);
+    }
+  }
+  .rejectButton {
+    color: #fff;
+    background-color: #d63321;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-left: 1rem;
+    &:hover {
+      cursor: pointer;
+      background-color: rgb(#d63321, 0.8);
+    }
+  }
+}
+
+.rightsidebar_container {
+  width: 1700px;
+  .agreementview {
+    font-size: 12px;
+    size: 12px;
+    background-color: red;
+  }
+
+  .rightchild {
+    zoom: 85%;
+    min-width: 1350px;
+    overflow: hidden; /* will contain if #first is longer than #second */
+    .horizontalline {
+      border-top: 1px solid rgba(102, 102, 102, 0.8);
+      margin-top: 8px;
+    }
+    svg {
+      cursor: pointer;
+    }
+    .buyerdoc {
+      width: 50%;
+      float: left; /* add this */
+      margin-right: 40px;
+      .rightPic {
+        margin-left: 10px;
+        border-radius: 50%;
+        height: 52px;
+        width: 52px;
+        border: 2px solid #00000096;
+        background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB7WOft_Yed83SLXPSHpdGxI9Ms2HQVT9q1w&usqp=CAU");
+      }
+    }
+    .sellerdoc {
+      overflow: hidden; /* if you don't want #second to wrap below #first */
+    }
+    textarea {
+      overflow: hidden;
+    }
+
+    .applyy_button {
+      width: 190px;
+      height: 40px;
+      background-color: #3daeee;
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 20px;
+      border: unset;
+      &:hover {
+        background-color: #23658c;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.viewUserButton {
+  border: none;
+  background-color: #23bb20;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.1s ease;
+  &:hover {
+    transition: all 0.1s ease;
+    cursor: pointer;
+    background-color: rgb(#23bb20, 0.7);
+  }
+}
+
+.usersContainer {
+  margin-left: 5rem;
+}
+@media only screen and (max-width: 1440px) {
+  .governmentAgreementsListContainer {
+    .FirstRow {
+      font-size: 1.5rem;
+      td {
+        border-right: 1px solid rgb(230, 230, 230);
+      }
+      &:hover {
+        background-color: rgba(#9dabb3, 0.1);
+        cursor: pointer;
+      }
+      .requestAccepted {
+        &:hover {
+        }
+      }
+      .requestRejected {
+      }
+    }
+
+    .tableContainer {
+      height: 100rem;
+      height: 75rem;
+      table {
+        width: 70vw;
+        th {
+          background-color: rgb(#3daeee, 0.5);
+          border-right: 1px solid rgb(195, 195, 195);
+          padding: 1rem 1rem;
+          font-size: 1.6rem;
+          color: #444;
+          font-weight: 500;
+        }
+        tr {
+          font-size: 1.4rem;
+          color: #555;
+        }
+        td {
+        }
+        tr:nth-child(odd) {
+          background-color: #f9f9f9;
+        }
+      }
+    }
+
+    .acceptButton {
+      color: #fff;
+      background-color: #3daeee;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      &:hover {
+        cursor: pointer;
+        background-color: rgb(#3daeee, 0.8);
+      }
+    }
+    .rejectButton {
+      color: #fff;
+      background-color: #d63321;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      margin-left: 1rem;
+      &:hover {
+        cursor: pointer;
+        background-color: rgb(#d63321, 0.8);
+      }
+    }
+  }
+
+  .rightsidebar_container {
+    width: 1700px;
+    .agreementview {
+      font-size: 12px;
+      size: 12px;
+      background-color: red;
+    }
+    .rightchild {
+      zoom: 85%;
+      min-width: 1350px;
+      overflow: hidden; /* will contain if #first is longer than #second */
+      .horizontalline {
+        border-top: 1px solid rgba(102, 102, 102, 0.8);
+        margin-top: 8px;
+      }
+      svg {
+        cursor: pointer;
+      }
+      .buyerdoc {
+        width: 50%;
+        float: left; /* add this */
+        margin-right: 40px;
+        .rightPic {
+          margin-left: 10px;
+          border-radius: 50%;
+          height: 52px;
+          width: 52px;
+          border: 2px solid #00000096;
+          background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB7WOft_Yed83SLXPSHpdGxI9Ms2HQVT9q1w&usqp=CAU");
+        }
+      }
+      .sellerdoc {
+        overflow: hidden; /* if you don't want #second to wrap below #first */
+      }
+      textarea {
+        overflow: hidden;
+      }
+
+      .applyy_button {
+        width: 190px;
+        height: 40px;
+        background-color: #3daeee;
+        border-radius: 8px;
+        color: #ffffff;
+        font-size: 20px;
+        border: unset;
+        &:hover {
+          background-color: #23658c;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .usersSection {
+    .tableContainer {
+      height: 100rem;
+      height: 75rem;
+      table {
+        width: 60vw;
+        th {
+          background-color: rgb(#3daeee, 0.5);
+          border-right: 1px solid rgb(195, 195, 195);
+          padding: 1rem 1rem;
+          font-size: 1.6rem;
+          color: #444;
+          font-weight: 500;
+        }
+        tr {
+          font-size: 1.4rem;
+          color: #555;
+        }
+        td {
+        }
+        tr:nth-child(odd) {
+          background-color: #f9f9f9;
+        }
+      }
+    }
+    .usersTable {
+      th {
+        background-color: purple;
+      }
+    }
+  }
+}

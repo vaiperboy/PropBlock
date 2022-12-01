@@ -86,23 +86,6 @@ const SearchAvailability = () => {
         </div>
       </div>
       <div className="horizontal_line"></div>
-      <div className="bedsFilter">
-        <div className="filterDiv">
-          <label htmlFor="location">Beds</label>
-          <img src={beds_icon} alt="beds_icon" />
-        </div>
-        <div className="inputDiv">
-          <InputNumber
-            style={{
-              width: "100%",
-            }}
-            defaultValue="1"
-            min="0"
-            max="20"
-          />
-        </div>
-      </div>
-      <div className="horizontal_line"></div>
       <div className="priceFilter">
         <div className="filterDiv">
           <label htmlFor="location">Max Price</label>

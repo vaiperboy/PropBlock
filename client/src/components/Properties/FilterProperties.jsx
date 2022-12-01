@@ -1,8 +1,8 @@
 import React from "react";
 import "../../styling/Properties/FilterProperties.scss";
 import MultiRangeSlider from "./multiRangeSlider/MultiRangeSlider";
-import { Checkbox, Input, Button } from "@web3uikit/core";
-import { Radio, Select } from "antd";
+import { Checkbox, Button } from "@web3uikit/core";
+import { Radio, Select, Input } from "antd";
 const console = require("console-browserify");
 const { Option } = Select;
 
@@ -29,9 +29,9 @@ class FilterProperties extends React.Component {
   //only made it for lowest number (least option)
   handleFacilities(arr) {
     if (arr.length > 0) {
-      var lowest = Math.min(...arr)
-      this.props.parentCallBack("facilities", lowest)
-    } else this.props.parentCallBack("facilities", 0)
+      var lowest = Math.min(...arr);
+      this.props.parentCallBack("facilities", lowest);
+    } else this.props.parentCallBack("facilities", 0);
   }
 
   render() {
@@ -61,12 +61,23 @@ class FilterProperties extends React.Component {
             <hr></hr>
             <hr></hr>
             <p>Beds</p>
-
             <Input
               label="minimum beds?"
               name="bedsNumber"
               onChange={(e) =>
                 this.props.parentCallBack("minimumBeds", e.target.value)
+              }
+              type="number"
+              min="0"
+              max="20"
+            />
+            <hr></hr>
+            <p>Baths</p>
+            <Input
+              label="minimum beds?"
+              name="bedsNumber"
+              onChange={(e) =>
+                this.props.parentCallBack("minimumBaths", e.target.value)
               }
               type="number"
               min="0"
@@ -83,7 +94,18 @@ class FilterProperties extends React.Component {
               options={this.state.facilitiesOptions}
             />
           </div>
-          <button className="filter-button" disabled={this.props.isLoading} onClick={() => this.props.loadPropertiesParent()}>Filter Properties</button>
+          {!this.props.isLoading ? (
+            <button
+              className="filter-button"
+              onClick={() => {
+                this.props.loadPropertiesParent();
+              }}
+            >
+              Filter Properties
+            </button>
+          ) : (
+            <button className="filter-loading">Loading ...</button>
+          )}
         </div>
       </div>
     );

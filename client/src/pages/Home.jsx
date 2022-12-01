@@ -158,7 +158,11 @@ function Home() {
           </div>
           <Fade effect="fadeInUp" duration={3500}>
             <div className="rightSide">
-              <img src={hero_image} alt="hero_Section_Image" style={{height: "100%"}}/>
+              <img
+                src={hero_image}
+                alt="hero_Section_Image"
+                style={{ height: "100%" }}
+              />
             </div>
           </Fade>
         </div>
@@ -210,23 +214,6 @@ function Home() {
                   <Option value="Penthouse">Penthouse</Option>
                   <Option value="Duplex">Duplex</Option>
                 </Select>
-              </div>
-            </div>
-            <div className="horizontal_line"></div>
-            <div className="bedsFilter">
-              <div className="filterDiv">
-                <label htmlFor="location">Beds</label>
-                <img src={beds_icon} alt="beds_icon" />
-              </div>
-              <div className="inputDiv">
-                <InputNumber
-                  style={{
-                    width: "100%",
-                  }}
-                  defaultValue="1"
-                  min="0"
-                  max="10"
-                />
               </div>
             </div>
             <div className="horizontal_line"></div>

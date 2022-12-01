@@ -1,0 +1,149 @@
+.main-button{
+    border-radius: 10px;
+    width: 240px;
+    height: 40px;
+    position: absolute;
+    bottom: 1%;
+    left: 0;
+    z-index: 999;
+    background: transparent;
+    border: none ;
+    cursor: pointer;
+
+
+
+}
+.main{
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+
+    .field{
+        font-weight: 600;
+
+        color: #000000;
+    }
+   
+    
+
+
+
+    .ReactModal__Overlay {
+        opacity: 0;
+        transition: opacity 2000ms ease-in-out;
+    }
+    
+    .ReactModal__Overlay--after-open{
+        opacity: 1;
+    }
+    
+    .ReactModal__Overlay--before-close{
+        opacity: 0;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgb(111, 111, 111, 0.5); // Here you choose the color and opacity that you want to apply
+        z-index: 1; // You may need to manage the z-index values to make your overlay to stay behind your popup 
+    }
+    
+    .button-pop {
+        background-color: #3daeee;
+        border: none;
+        cursor: pointer;
+        border-radius: 1rem;
+        letter-spacing: 1px;
+        color: #ffffff;
+    
+        &:hover {
+          background-color: #5ab6eb;
+        }
+      }
+    
+    .modal {
+        
+        background-color: #f5fbfff9;
+        border-radius: 20px;
+        height: 320px;
+        width: 520px;
+        z-index: 999;
+
+        .field{
+            display: flex;
+            gap: 10px;
+        }
+
+        .text{
+            color: #0788d2;
+            border: none;
+            background:transparent;
+            font-weight: 400;
+            display: flex;
+            flex-direction: row;
+            
+    
+    
+        }
+    
+    
+    }
+    
+    .modal>.header {
+        z-index: 999;
+
+    
+        width: 100%;
+        border-bottom: 1px solid gray;
+        text-align: center;
+
+        padding: 10px;
+
+        img{
+            text-align: center;
+            display: flex;
+            float:left; 
+            width: 40px;
+        }
+    }
+    
+    .modal>.content {
+    
+        z-index: 999;
+    
+    
+    
+        width: 100%;
+        padding: 2rem 4rem;
+    }
+    
+    .modal>.actions {
+        z-index: 999;
+    
+        width: 100%;
+        padding: 10px 5px;
+        margin: auto;
+        text-align: center;
+    }
+    
+    .modal>.close {
+        z-index: 999;
+    
+        cursor: pointer;
+        position: absolute;
+        display: block;
+        padding: 2px 5px;
+        line-height: 20px;
+        right: -10px;
+        top: -10px;
+        font-size: 24px;
+        background: #3daeee;
+        border-radius: 18px;
+        border: 1px solid #cfcece;
+    
+    }
+
+}

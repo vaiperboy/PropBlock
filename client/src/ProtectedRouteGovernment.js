@@ -22,7 +22,7 @@ function ProtectedRouteGovernment({ component }) {
     ...rest
   } = useMoralis();
 
-  const [isGovernmentUser, setIsGovernmentUser] = useState(false);
+  const [isGovernmentUser, setIsGovernmentUser] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
   const checkGovernmentUser = async () => {
