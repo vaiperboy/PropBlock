@@ -281,7 +281,6 @@ const MyProperties = () => {
     setIsCreatingProperty(false);
   };
 
-
   // function to upload via IPFS
   const uploadIpfs = async () => {
     return new Promise(async (resolve, reject) => {
@@ -537,16 +536,21 @@ const MyProperties = () => {
               <div
                 style={{
                   display: "flex",
+                  flexDirection: "column",
+                  gap: "2rem ",
                   justifyContent: "center",
                   alignItems: "center",
                   width: "fit-content",
                   height: "28rem",
+                  width: "34rem",
+                  border: "1px solid #3daeee",
+                  marginLeft: "1rem",
                 }}
               >
                 <svg
                   className="add-property-sign"
-                  width="77"
-                  height="77"
+                  width="120"
+                  height="120"
                   viewBox="0 0 77 77"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -566,6 +570,9 @@ const MyProperties = () => {
                     fill="#3DAEEE"
                   />
                 </svg>
+                <p style={{ fontSize: "2rem", color: "#3daeee" }}>
+                  Add New Property
+                </p>
               </div>
             </div>
           </div>

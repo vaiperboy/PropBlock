@@ -431,7 +431,7 @@ const Statistics = () => {
                 marginTop: "4rem",
                 display: "flex",
                 justifyContent: "space-between",
-                width: "80%",
+                width: "77%",
               }}
             >
               <p
