@@ -26,7 +26,7 @@ function App() {
   let optionsForScroll = {
     damping: "0.2",
   };
-  Scrollbar.init(document.querySelector("body"), optionsForScroll);
+  // Scrollbar.init(document.querySelector("body"), optionsForScroll);
 
   return (
     <BrowserRouter>

@@ -26,17 +26,22 @@
             word-wrap: break-word;
         }
         .backToHomeButton {
-            background-color: #3daeee;
             border: none;
-            width: 15rem;
+            width: fit-content;
             padding: 1rem 2rem;
             font-size: 1.5rem;
             font-weight: 500;
             border-radius: 0.7rem;
             text-align: center;
             color: #ffffff;
+            background-image: linear-gradient(to right, #3daeee 0%, #9747ff 51%, #3daeee 100%);
+            background-size: 200% auto;
+            transition: all 0.3s ease;
             &:hover {
+                transition: all 0.3s ease;
                 background-color: #1582c2;
+                cursor: pointer;
+                background-position: right center; /* change the direction of the change here */
             }
         }
     }

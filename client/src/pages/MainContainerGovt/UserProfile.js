@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import { Avatar } from "@web3uikit/core";
-import { Spin } from "antd";
+import { Spin, message } from "antd";
 import "./userProfile.scss";
 import { DownloadOutlined } from "@ant-design/icons";
+import passport_icon from "../../assets/passport_icon.png";
+import id_icon from "../../assets/id_icon.png";
+
+const console = require("console-browserify");
 
 const UserProfile = (props) => {
   let fullName = "Sultan";
   const { Moralis, authenticated, ...rest } = useMoralis();
   const [isLoading, setIsLoading] = useState(false);
+  const [isBanned, setIsBaned] = useState(false);
 
   // Function to shorten the address
   const shortenAddress = (text, maxWords) => {
@@ -77,16 +82,64 @@ const UserProfile = (props) => {
           <h2>User Documents</h2>
           <div className="documentsSection">
             <div className="documentTitleContainer">
-              <div className="documentTitle">User Id Card</div>
-              <div className="documentTitle">User Passport</div>
+              <div className="documentTitle">
+                User Id Card{" "}
+                <img
+                  src={id_icon}
+                  alt="ID Icon"
+                  style={{ width: "3rem", marginLeft: "1rem" }}
+                ></img>
+              </div>
+              <div className="documentTitle">
+                User Passport
+                <img
+                  src={passport_icon}
+                  alt="Passport Icon"
+                  style={{ width: "3rem", marginLeft: "1rem" }}
+                ></img>
+              </div>
+              <div className="documentTitle">Ban User</div>
             </div>
             <div className="documentFileContainer">
-              <div className="documentItem">
+              <div
+                className="documentItem downloadButton"
+                onClick={() => {
+                  message.info("Id downloaded");
+                  console.log("here");
+                }}
+              >
                 Download File <DownloadOutlined />
               </div>
-              <div className="documentItem">
+              <div
+                className="documentItem downloadButton"
+                onClick={() => {
+                  message.info("Passport downloaded");
+                  console.log("here");
+                }}
+              >
                 Download File <DownloadOutlined />
               </div>
+              {!isBanned ? (
+                <div
+                  className="documentItem BanButton"
+                  onClick={() => {
+                    message.success("User is banned successfully");
+                    setIsBaned(true);
+                  }}
+                >
+                  Ban User
+                </div>
+              ) : (
+                <div
+                  className="documentItem BanButton"
+                  onClick={() => {
+                    message.success("User is unbanned");
+                    setIsBaned(false);
+                  }}
+                >
+                  UnBan User
+                </div>
+              )}
             </div>
           </div>
         </div>

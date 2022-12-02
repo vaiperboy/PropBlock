@@ -2,7 +2,7 @@
 
 .filter-properties {
     width: 40rem;
-    height: 55rem;
+    height: 50rem;
     border: 2px solid #3daeee;
     border-radius: 3px;
     .inner-rectangle {
@@ -29,6 +29,9 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            .filterProperty {
+                margin-bottom: 2rem;
+            }
             .inline {
                 display: flex;
                 flex-wrap: wrap;
@@ -37,17 +40,19 @@
                 .checkbox {
                 }
             }
-
             p {
                 font-family: "Poppins", sans-serif;
                 font-weight: 600;
                 font-size: 16px;
+                margin-bottom: 0.5rem;
                 color: #555555;
             }
-
             .slider {
                 position: relative;
                 top: 0;
+            }
+            .last {
+                margin-bottom: 0;
             }
         }
 

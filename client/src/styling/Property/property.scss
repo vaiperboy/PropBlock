@@ -131,6 +131,28 @@
                                 color: #ffffff;
                             }
                         }
+                        .saved {
+                            display: flex;
+                            align-items: center;
+                            cursor: pointer;
+                            gap: 0.5rem;
+                            font-size: 1.5rem;
+                            font-weight: 600;
+                            padding: 0.5rem 1rem;
+                            border: 1px solid #3daeee;
+                            background-color: rgba(#3daeee, 1);
+                            transition: all 0.3s ease;
+                            color: #ffffff;
+                            .icon {
+                                font-size: 1.5rem;
+                            }
+                            &:hover {
+                                transition: all 0.2s ease;
+                                border: 1px solid #333333;
+                                background-color: #ffffff;
+                                color: #333333;
+                            }
+                        }
                         .share {
                             display: flex;
                             align-items: center;
@@ -174,6 +196,42 @@
                 .propertyDescription {
                     margin: 2rem 0;
                     text-align: justify;
+                    min-height: 15rem;
+                }
+                .propertyFacilities {
+                    min-height: 5rem;
+                    width: 100%;
+                    // background-color: red;
+                    .heading {
+                        font-size: 2.5rem;
+                        font-weight: 550;
+                        color: #444444;
+                    }
+                    .facilitiesContainer {
+                        display: flex;
+                        margin-top: 2rem;
+                        justify-content: space-between;
+                        .column {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 2.5rem;
+                            .row {
+                                display: flex;
+                                gap: 2rem;
+                                .image {
+                                    width: 3rem;
+                                    height: 3rem;
+                                }
+                                .facilityTitle {
+                                    font-size: 1.6rem;
+                                    font-weight: 500;
+                                }
+                            }
+                            .disabled {
+                                opacity: 0.3;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -187,6 +245,25 @@
             .ownerDetails {
                 margin: 0 1rem;
                 padding: 1.5rem 0 0 0;
+                .propertyPriceSection {
+                    padding: 2rem 0;
+                    margin-bottom: 2rem;
+                    font-size: 1.7rem;
+                    color: #555;
+                    font-weight: 500;
+                    border-bottom: 1px solid rgb(189, 189, 189);
+                    padding: 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    .price {
+                        font-size: 3rem;
+                        font-weight: 500;
+                        color: #3daeee;
+                        margin: 0;
+                        padding: 0 0 1rem 0;
+                    }
+                }
                 .owner {
                     border-radius: 1rem;
                     display: flex;
@@ -194,12 +271,17 @@
                     padding: 0.5rem 1rem;
                     align-items: center;
                     padding-bottom: 1rem;
+                    margin-bottom: 3rem;
                     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                    transition: all 0.3s ease;
                     &:hover {
-                        background-color: rgba(#3daeee, 0.3);
+                        transition: all 0.3s ease;
+                        background-color: rgba(#3daeee, 0.2);
+                        cursor: pointer;
+                        transform: translateY(-0.2rem);
                     }
                     p {
-                        font-size: 1.8rem;
+                        font-size: 1.7rem;
                         font-weight: 500;
                         margin: 0;
                     }
@@ -207,22 +289,10 @@
                         width: 3.5rem;
                     }
                 }
-                .propertyPriceSection {
-                    margin: 1rem 0;
-                    font-size: 1.5rem;
-                    color: #333333;
-                    font-weight: 500;
-                    border-bottom: 2px solid #333333;
-                    padding: 0;
-                    p {
-                        margin: 0;
-                    }
-                    .price {
-                        font-size: 3rem;
-                        font-weight: 400;
-                        color: #3daeee;
-                        margin: 0;
-                    }
+                .ownerDetailsHeading {
+                    font-size: 1.8rem;
+                    font-weight: 550;
+                    margin-bottom: 1rem;
                 }
                 .userButtons {
                     display: flex;

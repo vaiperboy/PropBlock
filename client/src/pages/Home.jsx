@@ -1,6 +1,6 @@
 import "../styling/Home/Home.scss";
 import { Link } from "react-router-dom";
-import { AutoComplete, Select, InputNumber, notification } from "antd";
+import { AutoComplete, Select, InputNumber, notification, message } from "antd";
 // import { Loading } from "@web3uikit/core";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -10,9 +10,6 @@ import {
   ArrowRightOutlined,
 } from "@ant-design/icons";
 
-import realEstateImage1 from "../assets/realEstate_1-min.png";
-import realEstateImage2 from "../assets/realEstate_2-min.png";
-import realEstateImage3 from "../assets/realEstate_3-min.png";
 // import rentHome from "../assets/rent-home-100-icon-min.png";
 import rentHome from "../assets/rent_home_icon.png";
 import buyHome from "../assets/buy_home_icon.png";
@@ -21,7 +18,6 @@ import profile from "../assets/profile-min.png";
 import location_icon from "../assets/location-icon.png";
 import location_icon_blue from "../assets/location-icon-blue.png";
 import property_type_icon from "../assets/home-icon.png";
-import beds_icon from "../assets/beds-icon.svg";
 import price_tag_icon from "../assets/tag-icon.png";
 // import hero_image from "../assets/hero-section-image.png";
 import hero_image from "../assets/hero_illustration.png";
@@ -33,6 +29,7 @@ import about_logo from "../assets/about_prop.png";
 import about_logo2 from "../assets/about_prop2.png";
 import contact_us from "../assets/contact_us.png";
 import { useEffect, useState } from "react";
+import { useNavigate, createSearchParams } from "react-router-dom";
 import Zoom from "react-reveal/Zoom";
 import Fade from "react-reveal/Fade";
 import Reveal from "react-reveal/Reveal";
@@ -72,9 +69,18 @@ function Home() {
     },
   ];
 
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
-  };
+  const navigate = useNavigate()
+ const goToProperties = () => {
+  navigate(
+    {
+      pathname: "properties",
+       search: createSearchParams({
+    ...(city.length > 0) && {city: city},
+    ...(propertyType.length > 0) && {propertyType: propertyType},
+    ...(maxPrice > 0) && {maxPrice: maxPrice}
+    }).toString()
+  })
+ }
 
   const sampleProperties = [
     {
@@ -187,6 +193,7 @@ function Home() {
                   style={{
                     width: "100%",
                   }}
+                  onChange={setCity}
                   options={countryOptions}
                   placeholder="All"
                   filterOption={(inputValue, option) =>
@@ -209,7 +216,7 @@ function Home() {
                   style={{
                     width: "100%",
                   }}
-                  onChange={handleChange}
+                  onChange={setPropertyType}
                 >
                   <Option value="">All</Option>
                   <Option value="Apartment">Apartment</Option>
@@ -231,14 +238,22 @@ function Home() {
                   style={{
                     width: "100%",
                   }}
-                  defaultValue="1"
+                  onChange={setMaxPrice}
+                  defaultValue={maxPrice}
                   min="0"
                   max="10000000"
                 />
               </div>
             </div>
-            <div id="searchButton" onClick={() => {}}>
-              <SearchOutlined className="searchBarIcon" />
+            <div id="searchButton"
+             onClick={() => {
+             goToProperties()
+             }}
+             >
+              <SearchOutlined
+               className="searchBarIcon"
+                style={{color: "#ffffff"}}
+                />
             </div>
           </div>
         </div>

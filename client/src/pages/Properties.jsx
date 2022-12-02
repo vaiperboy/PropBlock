@@ -12,6 +12,7 @@ import "../styling/Properties/Properties.scss";
 import Footer from "../components/Footer";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useCallback } from "react";
 const console = require("console-browserify");
 
 const App = (props) => {
@@ -65,21 +66,21 @@ const App = (props) => {
     );
   };
 
-  const loadProperties = async () => {
+  const loadProperties = async (city, propertyType, maxPrice) => {
     setIsLoading(true);
     try {
       fetch(
         "http://localhost:9000/getAllProperties?" +
-          new URLSearchParams({
-            pageNumber: currentPageNumber,
-            city: filterValues.city,
-            minPrice: filterValues.prices.minPrice,
-            maxPrice: filterValues.prices.maxPrice,
-            propertyType: filterValues.propertyType,
-            facilities: filterValues.facilities,
-            minimumBeds: filterValues.minimumBeds,
-            minimumBaths: filterValues.minimumBaths,
-          })
+        new URLSearchParams({
+          pageNumber: currentPageNumber,
+          city: filterValues.city,
+          minPrice: filterValues.prices.minPrice,
+          maxPrice: filterValues.prices.maxPrice,
+          propertyType: filterValues.propertyType,
+          facilities: filterValues.facilities,
+          minimumBeds: filterValues.minimumBeds,
+          minimumBaths: filterValues.minimumBaths,
+        })
       )
         .then((res) => res.json())
         .then((res) => {
@@ -95,31 +96,29 @@ const App = (props) => {
         });
     } catch (err) {
       message.error("error with setting data from API");
-    } 
+    }
   };
 
   const location = useLocation()
-  const [isQueryLoading, setIsQueryLoading] = useState(true)
 
   useEffect(() => {
-      const queryParams = new URLSearchParams(location.search)
-      console.log(queryParams.get("city") !== undefined)
-      if (queryParams.get("city") !== null) handleFiltering("city", queryParams.get("city"))
-      if (queryParams.get("maxPrice") !== null) {
-        handleFiltering("prices", {
-          minPrice: filterValues.prices.minPrice,
-          maxPrice: parseInt(queryParams.get("maxPrice"))
-        })
-      } 
-      if (queryParams.get("propertyType") !== null) handleFiltering("propertyType", queryParams.get("propertyType"))
-
-      setIsQueryLoading(false)
+    const queryParams = new URLSearchParams(location.search)
+    var city = queryParams.get("city")
+    var maxPrice =queryParams.get("maxPrice")
+    var propertyType =  queryParams.get("propertyType")
+    if (city !== null) {
+      filterValues.city = city
+    } 
+    if (maxPrice !== null) {
+      filterValues.prices.maxPrice = maxPrice
+    }
+    if (propertyType !== null) {
+      filterValues.propertyType = propertyType
+    }
+    
+    loadProperties()
   }, []);
 
-  
-  useEffect(() => {
-    if (!isQueryLoading) loadProperties()
-  }, [isQueryLoading])
 
   return (
     <div className="properties-page">
@@ -129,9 +128,9 @@ const App = (props) => {
       <div className="App">
         <div className="upper-body">
           <div className="topSearchSection">
-            <SearchAvailability 
-            parentCallBack={handleFiltering}
-            filterValues={filterValues}
+            <SearchAvailability
+              parentCallBack={handleFiltering}
+              filterValues={filterValues}
             />
           </div>
         </div>
@@ -177,7 +176,7 @@ const App = (props) => {
                             className="property"
                             image={item.images[0]}
                             propertyName={item.details.propertyTitle}
-                            locationName="some where"
+                            locationName={item.details.location}
                             propertyPrice={parseInt(item.listedPrice)}
                             features={[
                               item.details.bedsNumber + " BKH",

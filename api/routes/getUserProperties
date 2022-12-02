@@ -1,0 +1,82 @@
+var express = require("express");
+require("dotenv").config();
+var Moralis = require("../modules/moralis");
+var config = require('../config');
+var helper = require("../functions/Helper");
+
+var router = express.Router();
+
+//getting all properties from Moralis
+router.get("/getUserProperties", async function (req, res, next) {
+
+    const query = new Moralis.Query("PropertiesAdded");
+    const limit = config.userPage.propertiesMaxLimit
+    const filter = helper.processFiltering(req.query)
+    var ownerAddress = req.query.ownerAddress
+    if (ownerAddress === undefined) {
+        res.status(422).send("wrong address!")
+        return
+    } else {
+        // ownerAddress = ownerAddress.toLowerCase()
+        if (!helper.isAddress(ownerAddress)) {
+            res.status(422).send("wrong address format!")
+            return
+        }
+    }
+
+
+
+    const pipeline = [
+        { limit: limit },
+        {
+            match: {
+                $expr: {
+                    $eq: ["$landlordAddress", ownerAddress]
+                }
+               
+            }
+        },
+        {
+            lookup: {
+                from: "PropertyDetails",
+                localField: "transaction_hash",
+                foreignField: "txHash",
+                as: "details"
+            }
+        },
+        {
+            project: {
+                "details.propertyTitle": 1,
+                "details.propertyDescription": 1,
+                "details.city": 1,
+                "listedPrice": 1,
+                "createdAt": 1,
+                "ipfsHash": 1,
+            }
+        },
+        {
+            addFields: {
+                numericPrice: { $toInt: "$listedPrice" }
+            }
+        }
+    ]
+
+
+    const _result = await query.aggregate(pipeline, { useMasterKey: true })
+    const result = JSON.parse(JSON.stringify(_result))
+
+    for (var i = 0; i < result.length; i++) {
+        var images = { images: await helper.getImages(result[i].ipfsHash) }
+        Object.assign(result[i], result[i], images)
+        result[i].details = result[i].details[0]
+        result[i].details.location = result[i].details.city.charAt(0).toUpperCase() + result[i].details.city.slice(1) + ", UAE"
+    }
+
+    const output = {
+        results: result
+    }
+
+    res.json(output)
+});
+
+module.exports = router;

@@ -103,7 +103,7 @@ const MyProperties = () => {
     { value: 4, label: "Security" },
     { value: 8, label: "Free WiFi" },
     { value: 16, label: "Coffee Maker" },
-    { value: 64, label: "Restaurant" },
+    { value: 64, label: "Swimming Pool" },
     { value: 128, label: "24 hour access" },
     { value: 256, label: "TV Access" },
   ]);

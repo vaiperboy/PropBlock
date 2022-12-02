@@ -18,7 +18,7 @@ class FilterProperties extends React.Component {
         { value: 4, label: "Security" },
         { value: 8, label: "Free WiFi" },
         { value: 16, label: "Coffee Maker" },
-        { value: 64, label: "Restaurant" },
+        { value: 64, label: "Swimming Pool" },
         { value: 128, label: "24 hour access" },
         { value: 256, label: "TV Access" },
       ],
@@ -40,25 +40,27 @@ class FilterProperties extends React.Component {
         <div className="inner-rectangle">
           <div className="upper-body">Filters</div>
           <div className="filter-body">
-            <p>Price</p>
-            <MultiRangeSlider
-              className="slider"
-              min={this.props.minPrice}
-              max={this.props.maxPrice}
-              onChange={({ min, max }) => {
-                //because this object calls onchange
-                //when it is contructed, i placed
-                //a check to prevent that
-                if (min != this.state.oldMin || max != this.state.oldMax) {
-                  this.props.parentCallBack("prices", {
-                    minPrice: min,
-                    maxPrice: max,
-                  });
-                  this.setState({ oldMin: min, oldMax: max });
-                }
-              }}
-            />
-            <hr></hr>
+            <div className="filterProperty">
+              <p>Price</p>
+              <MultiRangeSlider
+                className="slider"
+                min={this.props.minPrice}
+                max={this.props.maxPrice}
+                onChange={({ min, max }) => {
+                  //because this object calls onchange
+                  //when it is contructed, i placed
+                  //a check to prevent that
+                  if (min != this.state.oldMin || max != this.state.oldMax) {
+                    this.props.parentCallBack("prices", {
+                      minPrice: min,
+                      maxPrice: max,
+                    });
+                    this.setState({ oldMin: min, oldMax: max });
+                  }
+                }}
+              />
+            </div>
+            <div className="filterProperty">
             <hr></hr>
             <p>Minimum Beds</p>
             <Input
@@ -110,6 +112,7 @@ class FilterProperties extends React.Component {
             <button className="filter-loading">Loading ...</button>
           )}
         </div>
+      </div>
       </div>
     );
   }

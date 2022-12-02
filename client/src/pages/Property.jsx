@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { Image, Button, message } from "antd";
+import { Image, Button, message, Modal } from "antd";
 import {
   HeartOutlined,
   ShareAltOutlined,
@@ -18,11 +18,20 @@ import people_icon from "../assets/people-icon.svg";
 import area_icon from "../assets/area-icon.svg";
 import profile_icon from "../assets/profile-icon.png";
 import mail_icon from "../assets/mail-icon.svg";
+import coffeee_icon from "../assets/coffee_icon.png";
+import wifi_icon from "../assets/wifi_icon.png";
+import swimming_pool_icon from "../assets/swimming_icon.png";
+import tv_access_icon from "../assets/tv_icon.png";
+import security_icon from "../assets/security_icon.png";
+import parking_icon from "../assets/parking_icon.png";
+import kitchen_icon from "../assets/kitchen_icon.png";
+import access_24_icon from "../assets/24_access_icon.png";
+
 import { useMoralis, useNewMoralisObject } from "react-moralis";
 
 const console = require("console-browserify");
 
-const Property = () => {
+const Property = (props) => {
   const {
     address,
     ownerId,
@@ -61,13 +70,66 @@ const Property = () => {
   const area = "2,500";
   const price = "1,500,000";
   const ownerID = "0x0F7fe90b325C9A5837C968543E8EB1632Fa37771";
+  const emailAddress = "ahmed@gmail.com";
   const propertyObjectId = "y7dM24zgRcYAs68Hs03FMSki";
   const { save } = useNewMoralisObject("PurchaseRequest");
 
+  // state vars
   const [visible, setVisible] = useState(false);
+
+  // parking, kitchen, security, wifi, coffee, 24_access, washing, swimming, tv
+  const [freeParkingFacility, setFreeParkingFacility] = useState(false);
+  const [kitchenFacility, setKitchenFacility] = useState(false);
+  const [securityFacility, setSecurityFacility] = useState(false);
+  const [wifiFacility, setWifiFacility] = useState(false);
+  const [coffeeFacility, setCoffeeFacility] = useState(false);
+  const [access24Facility, setAccess24Facility] = useState(false);
+  const [swimmingFacility, setSwimmingFacility] = useState(false);
+  const [tvFacility, setTvFacility] = useState(false);
+
+  const [tempFacilities, setTempFacilities] = useState(5);
+  const [isPropertySaved, setIsPropertySaved] = useState(false);
+
+  const handleFacilities = (faciltiesNum) => {
+    try {
+      if (faciltiesNum & 1) {
+        setFreeParkingFacility(true); 
+      }
+      if (faciltiesNum & 2) {
+        setKitchenFacility(true);
+      }
+      if (faciltiesNum & 4) {
+        setSecurityFacility(true);
+      }
+      if (faciltiesNum & 8) {
+        setWifiFacility(true);
+      }
+      if (faciltiesNum & 16) {
+        setCoffeeFacility(true);
+      }
+      if (faciltiesNum & 64) {
+        setSwimmingFacility(true);
+      }
+      if (faciltiesNum & 128) {
+        setAccess24Facility(true);
+      }
+      if (faciltiesNum & 256) {
+        setTvFacility(true);
+      }
+
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
   useEffect(() => {
     console.log("visible", visible);
   }, [visible]);
+
+  useEffect(() => {
+    console.log("Facilities No. - ", props.facilities);
+    handleFacilities(tempFacilities);
+  }, []);
 
   const tempImageArray = [
     {
@@ -108,7 +170,7 @@ const Property = () => {
       sellerEthAddress: ownerID,
       requesterEthAddress: user.get("ethAddress"),
       propertyObjectId: propertyObjectId,
-      isPending: true
+      isPending: true,
     };
 
     save(data, {
@@ -121,6 +183,47 @@ const Property = () => {
         console.log(error);
       },
     });
+  };
+
+  const ModalInfo = () => {
+    Modal.info({
+      title: "Owner Details",
+      width: 650,
+      content: (
+        <div>
+          <p
+            style={{
+              fontWeight: "bold",
+              marginTop: "2rem",
+              fontSize: "1.5rem",
+            }}
+          >
+            Owner Address: <span style={{ fontWeight: "400" }}>{ownerID}</span>
+          </p>
+          <p
+            style={{
+              fontWeight: "bold",
+              marginTop: "2rem",
+              fontSize: "1.5rem",
+            }}
+          >
+            Email Address:{" "}
+            <span style={{ fontWeight: "400" }}>{emailAddress}</span>
+          </p>
+        </div>
+      ),
+      onOk() {},
+    });
+  };
+
+  const saveProperty = () => {
+    if (isPropertySaved) {
+      message.success("Property removed from Favorites");
+      setIsPropertySaved(false);
+    } else {
+      message.success("Property Saved to Favorites");
+      setIsPropertySaved(true);
+    }
   };
 
   const navigate = useNavigate();
@@ -201,12 +304,31 @@ const Property = () => {
               <div className="topSection">
                 <h3>About this property</h3>
                 <div className="saveAndShareButtons">
-                  <button className="save">
-                    <div className="icon">
-                      <HeartOutlined />
-                    </div>
-                    save
-                  </button>
+                  {!isPropertySaved ? (
+                    <button
+                      className="save"
+                      onClick={() => {
+                        saveProperty();
+                      }}
+                    >
+                      <div className="icon">
+                        <HeartOutlined />
+                      </div>
+                      Save
+                    </button>
+                  ) : (
+                    <button
+                      className="saved"
+                      onClick={() => {
+                        saveProperty();
+                      }}
+                    >
+                      <div className="icon">
+                        <HeartOutlined />
+                      </div>
+                      Saved
+                    </button>
+                  )}
                   <button className="share">
                     <div className="icon">
                       <ShareAltOutlined />
@@ -248,17 +370,159 @@ const Property = () => {
                 Debitis consectetur cum officia qui, libero molestias
                 asperiores. Exercitationem quia aut asperiores tenetur ab.
               </div>
+              <div className="propertyFacilities">
+                <div className="heading">Property Facilities</div>
+                <div className="facilitiesContainer">
+                  <div className="column">
+                    {freeParkingFacility ? (
+                      <div className="row">
+                        <div className="image">
+                          <img src={parking_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">Free Parking</div>
+                      </div>
+                    ) : (
+                      <div className="row disabled">
+                        <div className="image">
+                          <img src={parking_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">Free Parking</div>
+                      </div>
+                    )}
+                    {wifiFacility ? (
+                      <div className="row">
+                        <div className="image">
+                          <img src={wifi_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">Free Wifi</div>
+                      </div>
+                    ) : (
+                      <div className="row disabled">
+                        <div className="image">
+                          <img src={wifi_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">Free Wifi</div>
+                      </div>
+                    )}
+                    {swimmingFacility ? (
+                      <div className="row">
+                        <div className="image">
+                          <img
+                            src={swimming_pool_icon}
+                            alt="Free Parking Icon"
+                          />
+                        </div>
+                        <div className="facilityTitle">Swimming Pool</div>
+                      </div>
+                    ) : (
+                      <div className="row disabled">
+                        <div className="image">
+                          <img
+                            src={swimming_pool_icon}
+                            alt="Free Parking Icon"
+                          />
+                        </div>
+                        <div className="facilityTitle">Swimming Pool</div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="column">
+                    {kitchenFacility ? (
+                      <div className="row">
+                        <div className="image">
+                          <img src={kitchen_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">Kitchen</div>
+                      </div>
+                    ) : (
+                      <div className="row disabled">
+                        <div className="image">
+                          <img src={kitchen_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">Kitchen</div>
+                      </div>
+                    )}
+                    {coffeeFacility ? (
+                      <div className="row">
+                        <div className="image">
+                          <img src={coffeee_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">Coffee Maker</div>
+                      </div>
+                    ) : (
+                      <div className="row disabled">
+                        <div className="image">
+                          <img src={coffeee_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">Coffee Maker</div>
+                      </div>
+                    )}
+                    {access24Facility ? (
+                      <div className="row">
+                        <div className="image">
+                          <img src={access_24_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">24 Hour Access</div>
+                      </div>
+                    ) : (
+                      <div className="row disabled">
+                        <div className="image">
+                          <img src={access_24_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">24 Hour Access</div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="column">
+                    {securityFacility ? (
+                      <div className="row">
+                        <div className="image">
+                          <img src={security_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">Security</div>
+                      </div>
+                    ) : (
+                      <div className="row disabled">
+                        <div className="image">
+                          <img src={security_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">Security</div>
+                      </div>
+                    )}
+                    {tvFacility ? (
+                      <div className="row">
+                        <div className="image">
+                          <img src={tv_access_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">TV Access</div>
+                      </div>
+                    ) : (
+                      <div className="row disabled">
+                        <div className="image">
+                          <img src={tv_access_icon} alt="Free Parking Icon" />
+                        </div>
+                        <div className="facilityTitle">TV Access</div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div className="rightSide">
             <div className="ownerDetails">
-              <div className="owner">
+              <div className="propertyPriceSection">
+                <h1 className="price">$ {price}</h1>
+              </div>
+              <p className="ownerDetailsHeading">Owner Details</p>
+              <div
+                className="owner"
+                onClick={() => {
+                  ModalInfo();
+                }}
+              >
                 <img src={profile_icon} alt="profile_icon" />
                 <p>{ownerID.slice(0, 5) + "..." + ownerID.slice(27, 42)}</p>
-              </div>
-              <div className="propertyPriceSection">
-                <p>Property Price</p>
-                <h1 className="price">$ {price}</h1>
               </div>
               <div className="userButtons">
                 <button className="emailButton" onClick={() => {}}>

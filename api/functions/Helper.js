@@ -124,28 +124,6 @@ module.exports.getTotalPageNumbers = function(totalCount, pageSize) {
 }
 
 
-//gets extra details about the property
-module.exports.getPropertyExtraDetails = async function(txHash) {
-    return new Promise(async (resolve, reject) => {
-        var tmp = {}
-        const query = new Moralis.Query("PropertyDetails")
-        query.equalTo("txHash", txHash)
-        const _result = await query.find()
-        var result = JSON.parse(JSON.stringify(_result))
-        console.log(result)
-        if (result) {
-            result = result[0]
-            tmp  = {
-                facilities: result.facilities,
-                bedsNumber: result.bedsNumber,
-                bathsNumber: result.bathsNumber,
-                propertyTitle: result.propertyTitle,
-                propertyDescription: result.propertyDescription,
-                occupantsNumber: result.occupantsNumber
-            }
-        }
-        resolve(tmp)
-    })
-}
-
-
+module.exports.isAddress = function (address) {
+    return /^(0x)?[0-9a-f]{40}$/i.test(address)
+};
