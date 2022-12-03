@@ -65,6 +65,21 @@
                 .requestRejected {
                 }
             }
+            .agreementCompleted {
+                background-color: rgba(#3daeee, 0.2);
+                td {
+                    border-right: 1px solid rgb(230, 230, 230);
+                }
+                &:hover {
+                    background-color: rgba(#3daeee, 0.1);
+                }
+                .requestAccepted {
+                    &:hover {
+                    }
+                }
+                .requestRejected {
+                }
+            }
             .finishAgreementButton {
                 color: #fff;
                 background-color: #1db95e;

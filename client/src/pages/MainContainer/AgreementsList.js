@@ -151,6 +151,7 @@ const AgreementsList = (props) => {
       isGovernmentVerified: false,
       isOwnerCancelled: false,
       isBuyerCancelled: false,
+      isTransfered: false,
     },
     {
       key: "2",
@@ -160,6 +161,7 @@ const AgreementsList = (props) => {
       isGovernmentVerified: true,
       isOwnerCancelled: false,
       isBuyerCancelled: false,
+      isTransfered: false,
     },
     {
       key: "3",
@@ -169,6 +171,7 @@ const AgreementsList = (props) => {
       isGovernmentVerified: false,
       isOwnerCancelled: true,
       isBuyerCancelled: false,
+      isTransfered: false,
     },
     {
       key: "4",
@@ -178,6 +181,17 @@ const AgreementsList = (props) => {
       isGovernmentVerified: false,
       isOwnerCancelled: false,
       isBuyerCancelled: true,
+      isTransfered: false,
+    },
+    {
+      key: "5",
+      ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
+      propertyID: "5",
+      propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
+      isGovernmentVerified: true,
+      isOwnerCancelled: false,
+      isBuyerCancelled: false,
+      isTransfered: true,
     },
   ]);
   const [agreements, setAgreements] = useState([]);
@@ -194,9 +208,11 @@ const AgreementsList = (props) => {
   };
 
   // function run when clicked on finish agreement button
-  const completeAgreement = () => {
+  const completeAgreement = (ownerAddress, agreementId) => {
     try {
-      message.success("Agreement Completed");
+      props.toggleAgreementPaymentView(true);
+      props.setOwnerAddress(ownerAddress);
+      props.setAgreementId(agreementId);
     } catch (error) {
       console.log("error: " + error);
     }
@@ -353,6 +369,19 @@ const AgreementsList = (props) => {
                           </tr>
                         );
                       }
+                      // Agreement Completed
+                      if (item.isTransfered === true) {
+                        return (
+                          <tr key={item.key} className="agreementCompleted">
+                            <td>{shortenAddress(item.ownerAddress, 20)}</td>
+                            <td>{item.propertyID}</td>
+                            <td style={{ color: "#3daeee" }}>
+                              Agreement Completed
+                            </td>
+                            <td className="acceptAgreement">- </td>
+                          </tr>
+                        );
+                      }
                       // Complete Agreement
                       if (
                         item.isGovernmentVerified === true &&
@@ -368,7 +397,10 @@ const AgreementsList = (props) => {
                               <button
                                 className="finishAgreementButton"
                                 onClick={() => {
-                                  completeAgreement();
+                                  completeAgreement(
+                                    item.ownerAddress,
+                                    item.agreementId
+                                  );
                                 }}
                               >
                                 Finish Agreement

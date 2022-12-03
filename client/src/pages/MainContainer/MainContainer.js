@@ -15,6 +15,7 @@ import MyProfile from "./MyProfile";
 import stats from "./stats.png";
 import { useMoralis } from "react-moralis";
 import { Spin, Skeleton, Avatar, List } from "antd";
+import AgreementPayment from "./AgreementPayment";
 
 class MainContainer extends React.Component {
   constructor(props) {
@@ -36,6 +37,7 @@ class MainContainer extends React.Component {
       paymentView: false,
       profileView: false,
       settingView: false,
+      agreementPayment: false,
     },
     // isLoading: false,
     isBuyer: true,
@@ -68,6 +70,7 @@ class MainContainer extends React.Component {
         paymentView: false,
         profileView: false,
         settingView: false,
+        agreementPayment: false,
       },
     });
   };
@@ -85,6 +88,7 @@ class MainContainer extends React.Component {
         paymentView: false,
         profileView: false,
         settingView: false,
+        agreementPayment: false,
       },
     });
   };
@@ -102,6 +106,7 @@ class MainContainer extends React.Component {
         paymentView: false,
         profileView: false,
         settingView: false,
+        agreementPayment: false,
       },
     });
   };
@@ -119,6 +124,7 @@ class MainContainer extends React.Component {
         paymentView: false,
         profileView: false,
         settingView: false,
+        agreementPayment: false,
       },
     });
   };
@@ -136,6 +142,7 @@ class MainContainer extends React.Component {
         paymentView: false,
         profileView: false,
         settingView: false,
+        agreementPayment: false,
       },
     });
   };
@@ -153,6 +160,7 @@ class MainContainer extends React.Component {
         paymentView: false,
         profileView: false,
         settingView: false,
+        agreementPayment: false,
       },
     });
   };
@@ -170,6 +178,7 @@ class MainContainer extends React.Component {
         paymentView: false,
         profileView: false,
         settingView: false,
+        agreementPayment: false,
       },
     });
   };
@@ -187,6 +196,7 @@ class MainContainer extends React.Component {
         paymentView: val,
         profileView: false,
         settingView: false,
+        agreementPayment: false,
       },
     });
   };
@@ -204,6 +214,7 @@ class MainContainer extends React.Component {
         paymentView: false,
         profileView: val,
         settingView: false,
+        agreementPayment: false,
       },
     });
   };
@@ -221,6 +232,25 @@ class MainContainer extends React.Component {
         paymentView: false,
         profileView: false,
         settingView: val,
+        agreementPayment: false,
+      },
+    });
+  };
+
+  toggleAgreementPaymentView = (val) => {
+    this.setState({
+      menuState: {
+        dashboardView: false,
+        agreementView: false,
+        uploadMode: false,
+        agreementListView: false,
+        purchaseRequestView: false,
+        propertiesView: false,
+        statsView: false,
+        paymentView: false,
+        profileView: false,
+        settingView: false,
+        agreementPayment: val,
       },
     });
   };
@@ -296,12 +326,21 @@ class MainContainer extends React.Component {
                 <AgreementsList
                   isBuyer={this.state.isBuyer.toString()}
                   toggleAgreementView={this.toggleAgreementView}
+                  toggleAgreementPaymentView={this.toggleAgreementPaymentView}
                   setOwnerAddress={this.setToOwnerAddress}
                   setAgreementId={this.setToAgreementId}
                 />
               ) : null}
               {this.state.menuState.agreementView ? (
                 <AgreementView
+                  ownerAddress={this.state.ownerAddress}
+                  agreementId={this.state.agreementId}
+                />
+              ) : null}
+
+              {this.state.menuState.agreementPayment ? (
+                <AgreementPayment
+                  toggleAgreementListView={this.toggleAgreementListView}
                   ownerAddress={this.state.ownerAddress}
                   agreementId={this.state.agreementId}
                 />
