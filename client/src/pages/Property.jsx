@@ -28,7 +28,7 @@ import kitchen_icon from "../assets/kitchen_icon.png";
 import access_24_icon from "../assets/24_access_icon.png";
 import NoMatch from "./NoMatch";
 import { useMoralis, useNewMoralisObject } from "react-moralis";
-
+import Web3 from "web3";
 const console = require("console-browserify");
 
 const Property = (props) => {
@@ -53,18 +53,6 @@ const Property = (props) => {
   } = useMoralis();
 
   const [property, setProperty] = useState({})
-
-  const locationArea = "Arabian Ranches";
-  const city = "Dubai";
-  const country = "UAE";
-  const beds = "3";
-  const baths = "4";
-  const people = "5";
-  const area = "2,500";
-  const price = "1,500,000";
-  const ownerID = "0x0F7fe90b325C9A5837C968543E8EB1632Fa37771";
-  const emailAddress = "ahmed@gmail.com";
-  const propertyObjectId = "y7dM24zgRcYAs68Hs03FMSki";
   const { save } = useNewMoralisObject("PurchaseRequest");
 
   // state vars
@@ -180,11 +168,16 @@ const Property = (props) => {
   ];
 
   const requestPurchase = async () => {
+    var userAddress = Web3.utils.toChecksumAddress(user.get("ethAddress"))
+    if (userAddress == property.address) {
+      message.error("You own this property. You cannot send a request to yourself!")
+      return
+    }
+
     const users = Moralis.Object.extend("PurchaseRequest");
     const query = new Moralis.Query(users);
-    query.equalTo("requesterEthAddress", user.get("ethAddress").toLowerCase());
-    query.equalTo("propertyObjectId", propertyObjectId);
-
+    query.equalTo("requesterEthAddress", userAddress);
+    query.equalTo("propertyObjectId", objectId);
     query.limit(1);
     query.withCount();
     const results = await query.find();
@@ -195,9 +188,9 @@ const Property = (props) => {
 
     message.info("Sending request to seller!");
     const data = {
-      sellerEthAddress: ownerID,
-      requesterEthAddress: user.get("ethAddress"),
-      propertyObjectId: propertyObjectId,
+      sellerEthAddress: Web3.utils.toChecksumAddress(property.address),
+      requesterEthAddress: userAddress,
+      propertyObjectId: objectId,
       isPending: true,
     };
 
