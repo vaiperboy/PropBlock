@@ -241,45 +241,7 @@ const AgreementsList = (props) => {
 
   // runs first
   useEffect(() => {
-    async function loadData() {
-      setIsLoading(true);
-      const requests = Moralis.Object.extend("PurchaseRequest");
-      const users = Moralis.Object.extend("_Users");
-      const purchaseQuery = new Moralis.Query(requests);
-      console.log(user.get("ethAddress"));
-      purchaseQuery.equalTo(
-        "sellerEthAddress",
-        user.get("ethAddress").toLowerCase()
-      );
-      const results = await purchaseQuery.find();
-      console.log("results: " + results);
-      const tmpData = [];
-      results.forEach(async (e) => {
-        console.log("currently at: " + e.get("requesterEthAddress"));
-        const usersQuery = new Moralis.Query(users);
-        //usersQuery.limit(1);
-        //usersQuery.equalTo(
-        // "ethAddress",
-        //e.get("requesterEthAddress").toLowerCase()
-        //);
-        const usersResult = await usersQuery.find();
-        usersResult = usersResult[0];
-        tmpData.push({
-          //
-          fullName: usersResult.get("fullName"),
-          address: usersResult.get("ethAddress"),
-          propertyObjectId: e.get("propertyObjectId"),
-          dateSubmitted: e.get("createdAt"),
-          status: e.get("isAccepted"),
-        });
-      });
-      setAgreements(tmpData);
-      setIsLoading(false);
-      console.log(tmpData);
-    }
-    loadData();
-
-    // dataSourceBuyer.sort(sortByAction);
+    
   }, []);
 
   if (props.isBuyer === "true") {

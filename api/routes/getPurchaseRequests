@@ -9,7 +9,7 @@ var router = express.Router();
 //getting purchases requests for a seller
 router.get("/getPurchaseRequests", async function (req, res, next) {
   const sessionToken = req.query.sessionToken;
-  const ownerAddress = req.query.ownerAddress
+  var ownerAddress = req.query.ownerAddress
   const mode = req.query.mode.toLowerCase();
   var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
 
@@ -26,6 +26,7 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
     return
   }
 
+  ownerAddress = helper.toCheckSumAddress(ownerAddress)
   console.log("address: " + ownerAddress)
   const requestsQuery = new Moralis.Query("PurchaseRequest");
   if(mode == "seller") requestsQuery.equalTo("sellerEthAddress", ownerAddress);
@@ -37,28 +38,10 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
     //so ill just treat it as a JSON
     const result = JSON.parse(JSON.stringify(requestResult))
     const data = [];
+
     for (let i = 0; i < result.length; i++) {
       var currentResult = result[i];
-      //only return results with isBeingProcessed status
 
-      var user = {};
-      var requestorAddress = currentResult.requesterEthAddress;
-      //make local caching
-      var user = {};
-
-      for (var j = 0; j < data.length; j++) {
-        //if user exists in cache
-        if (data[j]["address"] == requestorAddress.toLowerCase()) {
-          user = {
-            fullName: data[j]["fullName"],
-            address: data[j]["address"]
-          }
-          break;
-        }
-      }
-
-      if (Object.keys(user).length === 0) user = await helper.getUser(requestorAddress)
-      
       data.push({
         key: currentResult.objectId,
         sellerAddress: currentResult.sellerEthAddress,
@@ -66,11 +49,13 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
         propertyID: currentResult.propertyObjectId,
         dateRequested: currentResult.createdAt,
         isPending: currentResult.isPending ?? true,
-        isAccepted: currentResult.isAccepted ?? false
+        isAccepted: currentResult.isAccepted ?? false,
+        agreementStarted: currentResult.agreementStarted,
       });
     }
 
     res.send(data); 
+    return
 });
 
 module.exports = router;

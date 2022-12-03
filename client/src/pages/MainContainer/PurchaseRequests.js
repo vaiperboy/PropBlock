@@ -457,7 +457,7 @@ const PurchaseRequests = (props) => {
                             key={item.key}
                             className="notBuyerFirstRowAccepted"
                           >
-                            <td>{item.requesterAddress}</td>
+                            <td>{shortenAddress(item.requesterAddress, 20)}</td>
                             <td>{item.propertyID}</td>
                             <td>{beautifyDate(item.dateRequested)}</td>
                             <td style={{ display: "flex", gap: "1rem" }}>
@@ -486,7 +486,7 @@ const PurchaseRequests = (props) => {
                             key={item.key}
                             className="notBuyerFirstRowAccepted"
                           >
-                            <td>{item.requestorAddress}</td>
+                            <td>{shortenAddress(item.requesterAddress, 20)}</td>
                             <td>{item.propertyID}</td>
                             <td>{beautifyDate(item.dateRequested)}</td>
                             {item.isAccepted ? (

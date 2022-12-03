@@ -11,11 +11,14 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^16.0.3",
+    "ethereum-checksum-address": "^0.0.8",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "ipfs-http-client": "^56.0.2",
     "jade": "~1.11.0",
     "moralis-v1": "^1.11.0",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "to-checksum-address": "^1.0.0",
+    "web3": "^1.8.1"
   }
 }
