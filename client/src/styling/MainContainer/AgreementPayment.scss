@@ -1,0 +1,105 @@
+.agreementPaymentContainer {
+    width: 100rem;
+    .backButton {
+        padding: 0.5rem 1rem;
+        background-color: #3daeee;
+        border: none;
+        border-radius: 0.5rem;
+        color: #ffffff;
+        &:hover {
+            cursor: pointer;
+            background-color: rgb(#3daeee, 0.7);
+        }
+    }
+    .agreementDetailsContainer {
+        display: flex;
+        flex-direction: column;
+        margin-top: 3rem;
+        h1 {
+            color: #3daeee;
+            font-size: 2.5rem;
+        }
+        h2 {
+            margin: 1rem 0 3rem 0;
+            font-size: 2.2rem;
+            color: #1c8ccd;
+        }
+        .breaker {
+            border-top: 1px solid #3daeee;
+            width: 61%;
+            margin-top: 1rem;
+        }
+        .paymentComplete {
+            color: #1fc72d;
+        }
+        .completeTransfer {
+            border: none;
+            font-size: 1.6rem;
+            border-radius: 0.5rem;
+            background-color: rgb(217, 42, 42);
+            padding: 0.5rem 1rem;
+            color: #ffffff;
+            &:hover {
+                cursor: pointer;
+                background-color: rgb(rgb(217, 42, 42), 0.8);
+            }
+        }
+        .completeTransfer:disabled {
+            background-color: rgb(rgb(217, 42, 42), 0.3);
+            &:hover {
+                cursor: not-allowed;
+            }
+        }
+        .payButton {
+            border: none;
+            border-radius: 0.5rem;
+            background-color: #1fc72d;
+            padding: 0.5rem 1rem;
+            color: #ffffff;
+            &:hover {
+                cursor: pointer;
+                background-color: rgb(#1fc72d, 0.8);
+            }
+        }
+        .payButton:disabled {
+            background-color: rgb(#1fc72d, 0.3);
+            &:hover {
+                cursor: not-allowed;
+            }
+        }
+        .agreementDetails {
+            display: flex;
+            justify-content: space-between;
+            width: 60%;
+            margin-bottom: 2rem;
+            align-items: center;
+            .title {
+                font-size: 1.8rem;
+                font-weight: 400;
+                color: #555;
+            }
+            .data {
+                font-size: 2rem;
+                .ant-input {
+                    &::placeholder {
+                        color: #3daeee;
+                        font-size: 1.7rem;
+                        opacity: 1;
+                        text-align: center;
+                    }
+                }
+            }
+            .paymentComplete {
+                font-size: 2rem;
+                .ant-input {
+                    &::placeholder {
+                        color: #1fc72d;
+                        font-size: 1.5rem;
+                        opacity: 1;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+}
