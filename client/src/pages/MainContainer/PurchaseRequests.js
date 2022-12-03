@@ -79,6 +79,7 @@ const PurchaseRequests = (props) => {
       .then((res) => res.json())
       .then((res) => {
         setDataSourceBuyer(res);
+        console.log(res);
       })
       .finally(() => {
         setIsLoading(false);
@@ -202,6 +203,9 @@ const PurchaseRequests = (props) => {
     try {
       let realEstateDappContract;
       let ownerAddress = user.get("ethAddress");
+      console.log("owner: ", ownerAddress);
+      console.log("buyer: ", buyerAddress);
+      return;
       const uintPropertyId = parseInt(propertyId);
 
       // checking if metamask extension is installed
@@ -454,7 +458,7 @@ const PurchaseRequests = (props) => {
                               <button
                                 className="acceptButton"
                                 onClick={() => {
-                                  processRequest(item.key, true)
+                                  processRequest(item.key, true);
                                 }}
                               >
                                 Accept
@@ -462,7 +466,7 @@ const PurchaseRequests = (props) => {
                               <button
                                 className="rejectButton"
                                 onClick={() => {
-                                  processRequest(item.key, false)
+                                  processRequest(item.key, false);
                                 }}
                               >
                                 Reject
