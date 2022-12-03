@@ -174,7 +174,8 @@ const PurchaseRequests = (props) => {
   const [accepted, setAccepted] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isFechingRequestsBuyer, setIsFetchingRequestsBuyer] = useState(false);
-  const [isFechingRequestsSeller, setIsFetchingRequestsSeller] = useState(false);
+  const [isFechingRequestsSeller, setIsFetchingRequestsSeller] =
+    useState(false);
 
   const rejectRequest = (address, propertyId) => {
     message.error(
@@ -202,9 +203,6 @@ const PurchaseRequests = (props) => {
     try {
       let realEstateDappContract;
       let ownerAddress = user.get("ethAddress");
-      console.log("owner: ", ownerAddress);
-      console.log("buyer: ", buyerAddress);
-      return;
       const uintPropertyId = parseInt(propertyId);
 
       // checking if metamask extension is installed
@@ -231,7 +229,7 @@ const PurchaseRequests = (props) => {
 
         const result = await realEstateDappContract.submitDraft(
           ownerAddress,
-          propertyId,
+          uintPropertyId,
           buyerAddress
         );
         console.log("result: ", result);
@@ -250,9 +248,9 @@ const PurchaseRequests = (props) => {
   };
 
   const beautifyDate = (date) => {
-    var d = new Date(date)
-    return d.toLocaleString()
-  }
+    var d = new Date(date);
+    return d.toLocaleString();
+  };
   window.beautifyDate = beautifyDate;
 
   // shows the buyer purchase requests section
@@ -342,7 +340,7 @@ const PurchaseRequests = (props) => {
                                 className="createAgreementDraftButton"
                                 onClick={() => {
                                   createAgreement(
-                                    item.address,
+                                    item.sellerAddress,
                                     item.propertyID
                                   );
                                 }}
