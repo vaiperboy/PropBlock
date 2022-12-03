@@ -60,7 +60,8 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
       
       data.push({
         key: currentResult.objectId,
-        address: user.address,
+        sellerAddress: currentResult.sellerEthAddress,
+        requesterAddress: currentResult.requesterEthAddress,
         propertyID: currentResult.propertyObjectId,
         dateRequested: currentResult.createdAt,
         isPending: currentResult.isPending ?? true,
