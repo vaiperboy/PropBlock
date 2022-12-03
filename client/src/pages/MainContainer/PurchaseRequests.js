@@ -203,9 +203,9 @@ const PurchaseRequests = (props) => {
   const createAgreement = async (buyerAddress, propertyId) => {
     try {
       let realEstateDappContract;
-      let ownerAddress = user.get("ethAddress");
+      let ownerAddress = Web3.utils.toChecksumAddress(user.get("ethAddress"));
+      buyerAddress = Web3.utils.toChecksumAddress(buyerAddress);
       const uintPropertyId = parseInt(propertyId);
-
       // checking if metamask extension is installed
       if (!window.ethereum) {
         message.error(
@@ -230,7 +230,7 @@ const PurchaseRequests = (props) => {
 
         const result = await realEstateDappContract.submitDraft(
           ownerAddress,
-          uintPropertyId,
+          1,
           buyerAddress
         );
         console.log("result: ", result);
