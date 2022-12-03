@@ -22,6 +22,14 @@ class PropertyListing extends React.Component {
     return str.join(".");
   }
 
+  shortenText(text, maxWords) {
+    if (maxWords < text.length) {
+      text = text.substring(0, maxWords) + "......";
+    }
+    return text;
+  }
+
+  
   toFeatures(value, maxCounter) {
     return value.slice(0, 3).map((val, idx) => {
       return (
@@ -35,12 +43,7 @@ class PropertyListing extends React.Component {
     });
   }
 
-  shortenText(text, maxWords) {
-    if (maxWords < text.length) {
-      text = text.substring(0, maxWords) + "......";
-    }
-    return text;
-  }
+  
 
   shortenAddress(text, maxWords) {
     if (maxWords < text.length && maxWords >= 18) {

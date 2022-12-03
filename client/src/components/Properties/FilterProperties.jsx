@@ -18,7 +18,7 @@ class FilterProperties extends React.Component {
         { value: 4, label: "Security" },
         { value: 8, label: "Free WiFi" },
         { value: 16, label: "Coffee Maker" },
-        { value: 64, label: "Restaurant" },
+        { value: 64, label: "Swimming Pool" },
         { value: 128, label: "24 hour access" },
         { value: 256, label: "TV Access" },
       ],
@@ -61,42 +61,43 @@ class FilterProperties extends React.Component {
               />
             </div>
             <div className="filterProperty">
-              <p>Beds</p>
-              <Input
-                label="minimum beds?"
-                name="bedsNumber"
-                onChange={(e) =>
-                  this.props.parentCallBack("minimumBeds", e.target.value)
-                }
-                type="number"
-                min="0"
-                max="20"
-              />
-            </div>
-            <div className="filterProperty">
-              <p>Baths</p>
-              <Input
-                label="minimum beds?"
-                name="bedsNumber"
-                onChange={(e) =>
-                  this.props.parentCallBack("minimumBaths", e.target.value)
-                }
-                type="number"
-                min="0"
-                max="20"
-              />
-            </div>
-            <div className="filterProperty last">
-              <p>Facilities</p>
-              <Select
-                mode="tags"
-                size={"medium"}
-                placeholder="Please select"
-                onChange={this.handleFacilities}
-                style={{ width: "100%", margin: "0 0 2rem 0" }}
-                options={this.state.facilitiesOptions}
-              />
-            </div>
+            <hr></hr>
+            <p>Minimum Beds</p>
+            <Input
+              placeholder="0"
+              label="minimum beds?"
+              name="bedsNumber"
+              onChange={(e) =>
+                this.props.parentCallBack("minimumBeds", e.target.value)
+              }
+              type="number"
+              min="0"
+              max="20"
+            />
+            <hr></hr>
+            <p>Minimum Baths</p>
+            <Input
+              placeholder="0"
+              label="minimum beds?"
+              name="bedsNumber"
+              onChange={(e) =>
+                this.props.parentCallBack("minimumBaths", e.target.value)
+              }
+              type="number"
+              min="0"
+              max="20"
+              
+            />
+            <hr></hr>
+            <p>Facilities</p>
+            <Select
+              mode="tags"
+              size={"medium"}
+              placeholder="Please select"
+              onChange={this.handleFacilities}
+              style={{ width: "100%", margin: "0 0 2rem 0" }}
+              options={this.state.facilitiesOptions}
+            />
           </div>
           {!this.props.isLoading ? (
             <button
@@ -111,6 +112,7 @@ class FilterProperties extends React.Component {
             <button className="filter-loading">Loading ...</button>
           )}
         </div>
+      </div>
       </div>
     );
   }

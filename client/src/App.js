@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import PropertyFunc from "./Functions/PropertyFunc";
 import SignUp from "./pages/Signup";
 import AgreementFunc from "./Functions/AgreementFunc";
-import Properties from "./pages/Properties_2";
+import Properties from "./pages/Properties";
 import Property from "./pages/Property";
 import NoMatch from "./pages/NoMatch";
 import Scrollbar from "smooth-scrollbar";
@@ -26,7 +26,7 @@ function App() {
   let optionsForScroll = {
     damping: "0.2",
   };
-  Scrollbar.init(document.querySelector("body"), optionsForScroll);
+  // Scrollbar.init(document.querySelector("body"), optionsForScroll);
 
   return (
     <BrowserRouter>
@@ -56,7 +56,7 @@ function App() {
           element={<HowPropBlockWorks />}
         ></Route>
         <Route path="/properties" element={<Properties />}></Route>
-        <Route path="/property/:id" element={<Property />}></Route>
+        <Route path="/property/:objectId" element={<Property />}></Route>
         <Route path="*" element={<NoMatch />}></Route>
         <Route
           exact

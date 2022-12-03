@@ -25,6 +25,7 @@ import ipfs from "../../modules/ipfs";
 import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 
 import realEstate from "../../artifacts/contracts/realEstate.sol/realEstate.json";
+import Web3 from "web3";
 const { ethers } = require("ethers");
 const { ethereum } = window;
 
@@ -103,23 +104,14 @@ const MyProperties = () => {
     { value: 4, label: "Security" },
     { value: 8, label: "Free WiFi" },
     { value: 16, label: "Coffee Maker" },
-    { value: 64, label: "Restaurant" },
+    { value: 64, label: "Swimming Pool" },
     { value: 128, label: "24 hour access" },
     { value: 256, label: "TV Access" },
   ]);
   const [facilitiesXor, setFacilitiesXor] = useState(0);
-  const samplePropertyDetails = {
-    addr: "0x6F7CBEE1098D7b5890299FA1B16b98F458926636",
-    propertyType: "villa",
-    titleDeedNo: 12344,
-    titleDeedYear: 2020,
-    streetNum: "12 Street",
-    area: 2500,
-    apartmentNum: "12A",
-    listedPrice: 1250000,
-    ipfs: "asdasdmkalksfm",
-    facilities: 1,
-  };
+  const [userProperties, setUserProperties] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+
   const sampleProperties = [
     {
       id: 1,
@@ -152,6 +144,64 @@ const MyProperties = () => {
       imageLocation: "realEstate_2-min.png",
     },
   ];
+
+
+  const fetchUserProperties = async () => {
+    try {
+      fetch(
+        "http://localhost:9000/getUserProperties?" +
+        new URLSearchParams({
+          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress"))
+        })
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          // id: 2,
+          // ownerAddress: "0xd1D3dB802977ee31062477E37a51B0BB452275f9",
+          // label: "Smart Building Apartment",
+          // city: "Dubai",
+          // country: "UAE",
+          // description: "Set in exotic landscaped gardens",
+          // price: "1,500,000",
+          // imageLocation: "realEstate_2-min.png",
+          console.log(res)
+          var tmp = []
+          for (var i = 0; i < res.results.length; i++) {
+            const item = res.results[i]
+            console.log(item)
+            tmp.push({
+              id: item.objectId,
+              ownerAddress: item.landlordAddress,
+              label: item.details.propertyTitle,
+              location: item.details.location,
+              description: item.details.propertyDescription,
+              price: item.numericPrice,
+              imageLocation: item.images[0]
+            })
+          }
+          setUserProperties(tmp)
+        })
+        .catch((err) => {
+          message.error("error with API " + err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } catch (err) {
+      message.error("error with setting data from API");
+    }
+  }
+
+
+
+  useEffect(() => {
+    setOwnerAddress(user.get("ethAddress"));
+    setEmailAddress(user.get("email"));
+    setFullName(user.get("fullName"));
+
+    fetchUserProperties()
+  }, [])
+
 
   // -------------------------------
   // Functions
@@ -406,7 +456,7 @@ const MyProperties = () => {
       ) {
         message.error(
           "Please make sure the file extension are: " +
-            extensionsAllowed.join(",")
+          extensionsAllowed.join(",")
         );
         return;
       }
@@ -460,11 +510,6 @@ const MyProperties = () => {
     setImageList(files);
   };
 
-  useEffect(() => {
-    setOwnerAddress(user.get("ethAddress"));
-    setEmailAddress(user.get("email"));
-    setFullName(user.get("fullName"));
-  }, [user]);
 
   const clearState = () => {
     setOwnerAddress("");
@@ -488,7 +533,7 @@ const MyProperties = () => {
     imageList[primaryImageIndex] = first;
   };
 
-  const printAllData = () => {};
+  const printAllData = () => { };
 
   useEffect(() => {
     console.log(primaryImageOption);
@@ -531,7 +576,7 @@ const MyProperties = () => {
             }}
           >
             <div className="property-card">
-              {sampleProperties.map((property, i) => (
+              {userProperties.map((property, i) => (
                 <Property_Card props={property} />
               ))}
               <div
@@ -639,11 +684,10 @@ const MyProperties = () => {
                                 id="InputAddress"
                                 className="ethAddressInput"
                                 name="address"
-                                placeholder={`${
-                                  ethAddress.slice(0, 6) +
+                                placeholder={`${ethAddress.slice(0, 6) +
                                   "..." +
                                   ethAddress.slice(25, 35)
-                                }`}
+                                  }`}
                                 value={ownerAddress}
                                 validation={{
                                   readOnly: true,

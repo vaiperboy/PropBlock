@@ -250,6 +250,12 @@ const PurchaseRequests = (props) => {
     }
   };
 
+  const beautifyDate = (date) => {
+    var d = new Date(date)
+    return d.toLocaleString()
+  }
+  window.beautifyDate = beautifyDate;
+
   // shows the buyer purchase requests section
   if (props.isBuyer === "true") {
     if (!isLoading) {
@@ -306,7 +312,7 @@ const PurchaseRequests = (props) => {
                           >
                             <td>{shortenAddress(item.address, 20)}</td>
                             <td>{item.propertyID}</td>
-                            <td>{item.dateRequested}</td>
+                            <td>{beautifyDate(item.dateRequested)}</td>
                             <td
                               className="requestAccepted"
                               style={{ color: "#666" }}
@@ -328,7 +334,7 @@ const PurchaseRequests = (props) => {
                           >
                             <td>{shortenAddress(item.address, 20)}</td>
                             <td>{item.propertyID}</td>
-                            <td>{item.dateRequested}</td>
+                            <td>{beautifyDate(item.dateRequested)}</td>
                             <td
                               className="requestAccepted"
                               style={{ color: "#2db32d" }}
@@ -360,7 +366,7 @@ const PurchaseRequests = (props) => {
                           >
                             <td>{shortenAddress(item.address, 20)}</td>
                             <td>{item.propertyID}</td>
-                            <td>{item.dateRequested}</td>
+                            <td>{beautifyDate(item.dateRequested)}</td>
                             <td
                               className="requestRejected"
                               style={{ color: "#FF0000" }}
@@ -453,7 +459,7 @@ const PurchaseRequests = (props) => {
                           >
                             <td>{item.address}</td>
                             <td>{item.propertyID}</td>
-                            <td>{item.dateRequested}</td>
+                            <td>{beautifyDate(item.dateRequested)}</td>
                             <td style={{ display: "flex", gap: "1rem" }}>
                               <button
                                 className="acceptButton"
@@ -482,7 +488,7 @@ const PurchaseRequests = (props) => {
                           >
                             <td>{item.address}</td>
                             <td>{item.propertyID}</td>
-                            <td>{item.dateRequested}</td>
+                            <td>{beautifyDate(item.dateRequested)}</td>
                             {item.isAccepted ? (
                               <td
                                 style={{

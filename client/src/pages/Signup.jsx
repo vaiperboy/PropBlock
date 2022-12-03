@@ -60,7 +60,7 @@ const App = () => {
   const [codeVerified, setCodeVerified] = useState(false);
   const [idDocumentsVerified, setIdDocumentsVerified] = useState(false);
   const [passportDocumentsVerified, setPassportDocumentsVerified] =
-    useState(false);
+    useState(true);
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   const [frontIdDocument, setFrontIdDocument] = useState({});

@@ -38,14 +38,15 @@ router.get("/getAllProperties", async function (req, res, next) {
                 "listedPrice_decimal": 1,
                 "listedPrice": 1,
                 "createdAt": 1,
-                "address": 1,
+                "landlordAddress": 1,
                 "ipfsHash": 1,
                 "propertyType": 1
             }
         },
         {
             addFields: {
-                numericPrice: { $toInt: "$listedPrice" }
+                numericPrice: { $toInt: "$listedPrice" },
+                address: "$landlordAddress"
             }
         },
         {
@@ -67,6 +68,9 @@ router.get("/getAllProperties", async function (req, res, next) {
                             $gte: [{$first: "$details.bedsNumber"}, filter.minimumBeds]
                         },
                         {
+                            $gte: [{$first: "$details.bathsNumber"}, filter.minimumBaths]
+                        },
+                        {
                             ...(filter.city.length > 0) && {
                                 $eq: [{$first: "$details.city"}, filter.city]
                             }
@@ -85,6 +89,7 @@ router.get("/getAllProperties", async function (req, res, next) {
     countPipeline.push({
         count: "count"
     })
+
     delete countPipeline.limit
     delete countPipeline.skip
     const countQuery = new Moralis.Query("PropertiesAdded");
@@ -98,6 +103,7 @@ router.get("/getAllProperties", async function (req, res, next) {
         var images = { images: await helper.getImages(result[i].ipfsHash) }
         Object.assign(result[i], result[i], images)
         result[i].details = result[i].details[0]
+        result[i].details.location = result[i].details.city.charAt(0).toUpperCase() + result[i].details.city.slice(1) + ", UAE"
     }
 
     const output = {
