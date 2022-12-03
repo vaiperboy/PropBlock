@@ -258,7 +258,10 @@ class MainContainer extends React.Component {
               userSelect: "text",
             }}
           >
-            <div style={{ display: "flex", marginTop: "5rem" }}>
+            <div
+              style={{ display: "flex", marginTop: "5rem" }}
+              className="main_container_inner"
+            >
               <LeftSidebar
                 setBuyer={this.setToBuyer}
                 isBuyer={this.state.isBuyer}

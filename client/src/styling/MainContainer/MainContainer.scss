@@ -11,7 +11,6 @@
 }
 .main_container {
     width: 100%;
-    max-width: 1440px;
     margin: 0px auto;
     font-family: Poppins !important;
     margin-top: 40px;
@@ -272,7 +271,6 @@
 
     .rightsidebar_container {
         margin-left: 20px;
-        max-width: 900px;
         width: 65.5vw;
         margin-bottom: 60px;
     }
@@ -843,6 +841,8 @@
 // for macbook screen size and lower
 @media screen and (max-width: 1440px) {
     .main_container {
+        max-width: 1440px;
+
         .leftsidebar_container {
             margin-left: 10rem;
         }
@@ -860,6 +860,8 @@
         }
         .rightsidebar_container {
             margin-left: 5rem;
+            max-width: 900px;
+
             .rightsidebar_subtitle {
                 margin-bottom: 0;
             }
@@ -886,6 +888,29 @@
         }
         .recent_activity_container {
             margin-top: 2rem;
+        }
+    }
+}
+
+// for desktop screen size and higher
+@media screen and (min-width: 1441px) {
+    .main_container {
+        .main_container_inner {
+            display: flex;
+            padding-left: 15vw;
+            .leftsidebar_container {
+                .buttonsContainer {
+                    button {
+                        padding: 0.8rem 4.5rem;
+                    }
+                }
+            }
+            .rightsidebar_container {
+                width: 120rem;
+            }
+        }
+        .recent_activity_container {
+            width: 77%;
         }
     }
 }

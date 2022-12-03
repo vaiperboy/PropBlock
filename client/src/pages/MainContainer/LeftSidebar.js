@@ -74,6 +74,7 @@ class LeftSidebar extends React.Component {
               justifyContent: "space-between",
               width: "100%",
             }}
+            className="buttonsContainer"
           >
             <button
               className={
