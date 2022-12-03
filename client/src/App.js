@@ -56,7 +56,7 @@ function App() {
           element={<HowPropBlockWorks />}
         ></Route>
         <Route path="/properties" element={<Properties />}></Route>
-        <Route path="/property/:id" element={<Property />}></Route>
+        <Route path="/property/:objectId" element={<Property />}></Route>
         <Route path="*" element={<NoMatch />}></Route>
         <Route
           exact

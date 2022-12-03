@@ -23,9 +23,7 @@ router.get("/getUserProperties", async function (req, res, next) {
             return
         }
     }
-
-
-
+    
     const pipeline = [
         { limit: limit },
         {
@@ -33,7 +31,6 @@ router.get("/getUserProperties", async function (req, res, next) {
                 $expr: {
                     $eq: ["$landlordAddress", ownerAddress]
                 }
-               
             }
         },
         {
@@ -52,6 +49,7 @@ router.get("/getUserProperties", async function (req, res, next) {
                 "listedPrice": 1,
                 "createdAt": 1,
                 "ipfsHash": 1,
+                "landlordAddress": 1,
             }
         },
         {

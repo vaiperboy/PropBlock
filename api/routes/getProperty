@@ -6,27 +6,76 @@ var helper = require("../functions/Helper");
 
 var router = express.Router();
 
-
 //getting all properties from Moralis
-router.get("/:id", async function(req, res, next) {
-    const objectId = req.params.id;
+router.get("/getProperty", async function (req, res, next) {
+    const query = new Moralis.Query("PropertiesAdded");
 
-    const query = new Moralis.Query("Properties");
-    query.limit(1);
-    query.equalTo("objectId", objectId);
-    const _result = await query.find();
-    if (_result.length == 0) {
-        res.sendStatus(404);
-        return;
+    const objectId = req.query.objectId
+    if (objectId == undefined || objectId.length != 24) {
+        res.status(422).send("wrong object id")
+        return
     }
 
-    //copy object to add another parameter(s)
-    var results = JSON.parse(JSON.stringify(_result));
-    for (var i = 0; i < results.length; i++) {
-        //add image link to object
-        results[i].images = await helper.getLinks(results[i].ipfsHash);
+    const pipeline = [
+        {
+            match: {
+                objectId: objectId
+            }
+        },
+        { limit: 1 },
+        {
+            lookup: {
+                from: "PropertyDetails",
+                localField: "transaction_hash",
+                foreignField: "txHash",
+                as: "details"
+            }
+        },
+        {
+            project: {
+                "details.propertyTitle": 1,
+                "details.propertyDescription": 1,
+                "details.bedsNumber": 1,
+                "details.bathsNumber": 1,
+                "details.city": 1,
+                "details.facilities": 1,
+                "details.occupantsNumber": 1,
+                "listedPrice_decimal": 1,
+                "listedPrice": 1,
+                "createdAt": 1,
+                "landlordAddress": 1,
+                "ipfsHash": 1,
+                "propertyType": 1,
+                "streetName": 1,
+                "area": 1
+            }
+        },
+        {
+            addFields: {
+                numericPrice: { $toInt: "$listedPrice" },
+                areaSize: { $toInt: "$area" },
+                address: "$landlordAddress"
+            }
+        }
+    ]
+
+
+    const _result = await query.aggregate(pipeline, { useMasterKey: true })
+    var result = JSON.parse(JSON.stringify(_result))
+    if (result.length == 0) {
+        res.status(404).send("property not found")
+        return
     }
-    res.send(results);
+
+    result = result[0]
+    var images = { images: await helper.getImages(result.ipfsHash) }
+    Object.assign(result, result, images)
+    result.details = result.details[0]
+    result.details.location = result.streetName + " - " + result.details.city.charAt(0).toUpperCase() + result.details.city.slice(1) + ", UAE"
+
+
+    res.json(result)
+    return
 });
 
 module.exports = router;
