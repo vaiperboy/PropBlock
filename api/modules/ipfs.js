@@ -16,12 +16,4 @@ const ipfs = create({
     },
 });
 
-
-
-//for retriving files
-//const _ipfs = create(new URL("https://dweb.link/api/v0"));
-//const _ipfs = create(new URL("https://ipfs.io/ipfs/"));
-
-
-//module.exports = ipfs;
 module.exports = auth;

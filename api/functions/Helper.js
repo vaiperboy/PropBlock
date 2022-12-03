@@ -4,7 +4,6 @@ var axios = require('axios');
 var Moralis = require("../modules/moralis");
 const { pageSize } = require("../config");
 
-
 //to cache the result
 var hashesDict = [];
 
@@ -76,8 +75,10 @@ module.exports.isAuthenticated = async function(sessionToken, address) {
                 resolve(false)
                 return;
             }
+            
             const _result = JSON.parse(JSON.stringify(userQueryResult))[0]
             const matchingUserAddress = _result.ethAddress
+            console.log(matchingUserAddress.toLowerCase(), address.toLowerCase())
             resolve(matchingUserAddress.toLowerCase() == address.toLowerCase())
             return
         } catch {
