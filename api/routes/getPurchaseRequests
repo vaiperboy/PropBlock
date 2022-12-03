@@ -9,9 +9,10 @@ var router = express.Router();
 //getting purchases requests for a seller
 router.get("/getPurchaseRequests", async function (req, res, next) {
   const sessionToken = req.query.sessionToken;
-  const ownerAddress = req.query.ownerAddress.toLowerCase();
+  const ownerAddress = req.query.ownerAddress
   const mode = req.query.mode.toLowerCase();
   var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
+
   if (!isLoggedIn) {
     res.status(401);
     res.send("not authenticated")
@@ -21,10 +22,11 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
   if (mode === undefined
      || ownerAddress === undefined
      || ((mode != "seller" && mode != "buyer"))) {
-    res.send(400, "wrong input")
+    res.status(422).send("wrong input")
     return
   }
 
+  console.log("address: " + ownerAddress)
   const requestsQuery = new Moralis.Query("PurchaseRequest");
   if(mode == "seller") requestsQuery.equalTo("sellerEthAddress", ownerAddress);
   else requestsQuery.equalTo("requesterEthAddress", ownerAddress);
@@ -34,7 +36,6 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
     //because moralis object is very bad
     //so ill just treat it as a JSON
     const result = JSON.parse(JSON.stringify(requestResult))
-
     const data = [];
     for (let i = 0; i < result.length; i++) {
       var currentResult = result[i];
@@ -68,6 +69,7 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
         isAccepted: currentResult.isAccepted ?? false
       });
     }
+
     res.send(data); 
 });
 

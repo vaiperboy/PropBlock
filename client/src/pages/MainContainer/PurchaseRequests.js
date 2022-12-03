@@ -15,9 +15,10 @@ import { getParsedEthersError } from "@enzoferey/ethers-error-parser";
 // importing images
 import no_data from "../../assets/no_data.png";
 import refresh_icon from "../../assets/refresh_iconx2.png";
+import Web3 from "web3";
 
 const { ethereum } = window;
-const web3 = require("web3");
+
 const { ethers } = require("ethers");
 const console = require("console-browserify");
 
@@ -54,7 +55,7 @@ const PurchaseRequests = (props) => {
         new URLSearchParams({
           mode: "seller",
           sessionToken: user.getSessionToken(),
-          ownerAddress: user.get("ethAddress"),
+          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
         })
     )
       .then((res) => res.json())
@@ -73,7 +74,7 @@ const PurchaseRequests = (props) => {
         new URLSearchParams({
           mode: "buyer",
           sessionToken: user.getSessionToken(),
-          ownerAddress: user.get("ethAddress"),
+          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
         })
     )
       .then((res) => res.json())
@@ -454,7 +455,7 @@ const PurchaseRequests = (props) => {
                             key={item.key}
                             className="notBuyerFirstRowAccepted"
                           >
-                            <td>{item.requestorAddress}</td>
+                            <td>{item.requesterAddress}</td>
                             <td>{item.propertyID}</td>
                             <td>{beautifyDate(item.dateRequested)}</td>
                             <td style={{ display: "flex", gap: "1rem" }}>
