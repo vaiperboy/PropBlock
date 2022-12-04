@@ -275,6 +275,10 @@ const AgreementsList = (props) => {
         setDataSourceBuyer(res);
         console.log(res);
       })
+      .catch((err) => {
+        message.error("API error")
+        setDataSourceBuyer([])
+      })
       .finally(() => {
         setIsLoading(false);
       });
@@ -294,6 +298,10 @@ const AgreementsList = (props) => {
       .then((res) => {
         setDataSourceBuyer(res);
         console.log(res);
+      })
+      .catch((err) => {
+        message.error("API error")
+        setDataSourceSeller([])
       })
       .finally(() => {
         setIsLoading(false);
