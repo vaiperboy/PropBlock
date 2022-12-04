@@ -30,10 +30,10 @@ const AgreementsList = (props) => {
       propertyID: "1",
       agreementId: "1",
       propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
-      areDocsUploaded: false,
-      isBeingVerfied: false,
-      notFirstTime: false,
-      isRevisionRequired: false,
+      areDocsUploaded: false, 
+      isBeingVerfied: false, 
+      notFirstTime: false, 
+      isRevisionRequired: false, 
       isGovernmentVerified: false,
       isBuyerCancelled: false,
       isOwnerCancelled: false,
@@ -195,7 +195,7 @@ const AgreementsList = (props) => {
     },
   ]);
   const [agreements, setAgreements] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
   const [uploadDocumentsView, setUploadDocumentsView] = useState(false);
 

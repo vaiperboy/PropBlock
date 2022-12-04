@@ -456,7 +456,7 @@ const PurchaseRequests = (props) => {
                             className="notBuyerFirstRowAccepted"
                           >
                             <td>{shortenAddress(item.requesterAddress, 20)}</td>
-                            <td>{item.propertyID}</td>
+                            <td><a href={"property/" + item.propertyID} target="_blank">{item.propertyID}</a></td>
                             <td>{beautifyDate(item.dateRequested)}</td>
                             <td style={{ display: "flex", gap: "1rem" }}>
                               <button
@@ -485,7 +485,7 @@ const PurchaseRequests = (props) => {
                             className="notBuyerFirstRowAccepted"
                           >
                             <td>{shortenAddress(item.requesterAddress, 20)}</td>
-                            <td>{item.propertyID}</td>
+                            <td><a href={"property/" + item.propertyID} target="_blank">{item.propertyID}</a></td>
                             <td>{beautifyDate(item.dateRequested)}</td>
                             {item.isAccepted ? (
                               <td

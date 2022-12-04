@@ -10,7 +10,7 @@ var router = express.Router();
 router.get("/getPurchaseRequests", async function (req, res, next) {
   const sessionToken = req.query.sessionToken;
   var ownerAddress = req.query.ownerAddress
-  const mode = req.query.mode.toLowerCase();
+  var mode = req.query.mode
   var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
 
   if (!isLoggedIn) {
@@ -19,15 +19,58 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
     return;
   }
 
-  if (mode === undefined
-     || ownerAddress === undefined
-     || ((mode != "seller" && mode != "buyer"))) {
+  if (mode == undefined) {
+    res.status(422).send("wrong input")
+    return
+  }
+
+  mode = mode.toLowerCase()
+
+  if (ownerAddress === undefined
+    || ((mode != "seller" && mode != "buyer"))) {
     res.status(422).send("wrong input")
     return
   }
 
   ownerAddress = helper.toCheckSumAddress(ownerAddress)
-  console.log("address: " + ownerAddress)
+
+  // const query = new Moralis.Query("PurchaseRequest");
+  // const pipeline = [
+  //   {
+  //     match: {
+  //       ...(mode == "seller") ? {
+  //         sellerEthAddress: ownerAddress
+  //       } : {
+  //         requesterEthAddress: ownerAddress
+  //       }
+  //     }
+  //   },
+  //   {
+  //     lookup: {
+  //       from: "PropertiesAdded",
+  //       localField: "propertyObjectId",
+  //       foreignField: "objectId",
+  //       as: "details"
+  //     }
+  //   },
+  //   // {
+  //   //   project: {
+  //   //     "details.propertyId" : 1,
+  //   //     "sellerEthAddress": 1,
+  //   //     "requesterEthAddress": 1,
+  //   //     "propertyObjectId": 1,
+  //   //     "createdAt": 1,
+  //   //     "isPending": 1,
+  //   //     "isAccepted": 1,
+  //   //     "agreementStarted": 1,
+  //   //   }
+  //   // }
+  // ]
+  // const _result = await query.aggregate(pipeline, {useMasterKey: true})
+  // const result = JSON.parse(JSON.stringify(_result))
+  // res.send(result)
+  // return
+
   const requestsQuery = new Moralis.Query("PurchaseRequest");
   if(mode == "seller") requestsQuery.equalTo("sellerEthAddress", ownerAddress);
   else requestsQuery.equalTo("requesterEthAddress", ownerAddress);
@@ -55,7 +98,7 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
     }
 
     res.send(data); 
-    return
+  return
 });
 
 module.exports = router;
