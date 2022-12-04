@@ -7,35 +7,52 @@ var helper = require("../functions/Helper");
 var router = express.Router();
 
 //getting all properties from Moralis
-router.get("/", async function(req, res, next) {
+router.get("/", async function (req, res, next) {
+   var mode = req.query.mode.toLowerCase()
+   var ownerAddress = req.query.ownerAddress
+   ownerAddress = helper.toCheckSumAddress(ownerAddress)
+   
    const query = new Moralis.Query("PurchaseRequest");
-   const pageNumber = parseInt(req.query.pageNumber) || 1;
    const pipeline = [
       {
-         lookup: {
-            from: "_User",
-            localField: "sellerEthAddress",
-            foreignField: "ethAddress",
-            as: "userDetails"
+         match: {
+            ...(mode == "seller") ? {
+               sellerEthAddress: ownerAddress
+            } : {
+               requesterEthAddress: ownerAddress
+            }
          }
       },
       {
-         project: {
-            "userDetails.fullName": 1,r
+         lookup: {
+            from: "PropertiesAdded",
+            localField: "propertyObjectId",
+            foreignField: "_id",
+            as: "details"
          }
-      }
+      },
+      {
+        project: {
+          "details.propertyId" : 1,
+          "sellerEthAddress": 1,
+          "requesterEthAddress": 1,
+          "propertyObjectId": 1,
+          "createdAt": 1,
+          "isPending": 1,
+          "isAccepted": 1,
+          "agreementStarted": 1,
+        }
+      },
+      {
+         match: {
+           "details": {$exists: true}
+         }
+       }
    ]
-   const _result = await query.aggregate(pipeline, {useMasterKey: true})
+   const _result = await query.aggregate(pipeline, { useMasterKey: true })
    const result = JSON.parse(JSON.stringify(_result))
-   // for (var i = 0; i < result.results.length; i++) {
-   //     console.log("getting for " + result.results[i].transaction_hash)
-   //     var extraDetails = await helper.getPropertyExtraDetails(result.results[i].transaction_hash)
-   //     var images = {images: await helper.getImages(result.results[i].ipfsHash)}
-   //     Object.assign(result.results[i], result.results[i], extraDetails, images)
-   // }
-   // result.totalPages = helper.getTotalPageNumbers(result.count, config.pageSize)
-   // res.json(result)
    res.send(result)
+   return
 });
 
 module.exports = router;

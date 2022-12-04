@@ -223,9 +223,9 @@ const MyProperties = () => {
 
   // function to add property
   const addProperty = async () => {
+    setIsCreatingProperty(true)
     try {
       let realEstateDappContract;
-      setIsCreatingProperty(true);
       // converting the data from string to int type
       const uintTitleDeedNo = parseInt(propertyTitleDeedNumber);
       const uintTitleDeedYear = parseInt(propertyTitleDeedYear);
@@ -326,9 +326,9 @@ const MyProperties = () => {
       } else {
         message.error("Error: " + parsedEthersError.errorCode);
       }
+    } finally {
+      setIsCreatingProperty(false);
     }
-
-    setIsCreatingProperty(false);
   };
 
   // function to upload via IPFS

@@ -50,6 +50,10 @@ module.exports.getImages = async function (cid) {
 //passing the address is optional
 module.exports.isAuthenticated = async function(sessionToken, address) {
     return new Promise(async (resolve, reject) => {
+        if (sessionToken === undefined) {
+            resolve(false)
+        }
+        
         try {
             var sessionQuery = new Moralis.Query("_Session");
             sessionQuery.equalTo("sessionToken", sessionToken);
@@ -65,7 +69,6 @@ module.exports.isAuthenticated = async function(sessionToken, address) {
                 resolve(true)
                 return
             }
-
             const userId = JSON.parse(JSON.stringify(result))[0].user.objectId
 
             //check _User table
@@ -77,7 +80,6 @@ module.exports.isAuthenticated = async function(sessionToken, address) {
                 resolve(false)
                 return;
             }
-            
             const _result = JSON.parse(JSON.stringify(userQueryResult))[0]
             const matchingUserAddress = _result.ethAddress
             resolve(matchingUserAddress.toLowerCase() == address.toLowerCase())

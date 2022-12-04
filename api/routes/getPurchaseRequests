@@ -34,70 +34,52 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
 
   ownerAddress = helper.toCheckSumAddress(ownerAddress)
 
-  // const query = new Moralis.Query("PurchaseRequest");
-  // const pipeline = [
-  //   {
-  //     match: {
-  //       ...(mode == "seller") ? {
-  //         sellerEthAddress: ownerAddress
-  //       } : {
-  //         requesterEthAddress: ownerAddress
-  //       }
-  //     }
-  //   },
-  //   {
-  //     lookup: {
-  //       from: "PropertiesAdded",
-  //       localField: "propertyObjectId",
-  //       foreignField: "objectId",
-  //       as: "details"
-  //     }
-  //   },
-  //   // {
-  //   //   project: {
-  //   //     "details.propertyId" : 1,
-  //   //     "sellerEthAddress": 1,
-  //   //     "requesterEthAddress": 1,
-  //   //     "propertyObjectId": 1,
-  //   //     "createdAt": 1,
-  //   //     "isPending": 1,
-  //   //     "isAccepted": 1,
-  //   //     "agreementStarted": 1,
-  //   //   }
-  //   // }
-  // ]
-  // const _result = await query.aggregate(pipeline, {useMasterKey: true})
-  // const result = JSON.parse(JSON.stringify(_result))
-  // res.send(result)
-  // return
-
-  const requestsQuery = new Moralis.Query("PurchaseRequest");
-  if(mode == "seller") requestsQuery.equalTo("sellerEthAddress", ownerAddress);
-  else requestsQuery.equalTo("requesterEthAddress", ownerAddress);
-    // requestsQuery.equalTo("isPending", true)
-    const requestResult = await requestsQuery.find();
-
-    //because moralis object is very bad
-    //so ill just treat it as a JSON
-    const result = JSON.parse(JSON.stringify(requestResult))
-    const data = [];
-
-    for (let i = 0; i < result.length; i++) {
-      var currentResult = result[i];
-
-      data.push({
-        key: currentResult.objectId,
-        sellerAddress: currentResult.sellerEthAddress,
-        requesterAddress: currentResult.requesterEthAddress,
-        propertyID: currentResult.propertyObjectId,
-        dateRequested: currentResult.createdAt,
-        isPending: currentResult.isPending ?? true,
-        isAccepted: currentResult.isAccepted ?? false,
-        agreementStarted: currentResult.agreementStarted,
-      });
+  const query = new Moralis.Query("PurchaseRequest");
+  const pipeline = [
+    {
+      match: {
+        ...(mode == "seller") ? {
+          sellerEthAddress: ownerAddress
+        } : {
+          requesterEthAddress: ownerAddress
+        }
+      }
+    },
+    {
+      lookup: {
+        from: "PropertiesAdded",
+        localField: "propertyObjectId",
+        foreignField: "_id",
+        as: "details"
+      }
+    },
+    {
+      match: {
+        "details": { $exists: true }
+      }
+    },
+    {
+      project: {
+        "details.propertyId": 1,
+        "sellerEthAddress": 1,
+        "requesterEthAddress": 1,
+        "propertyObjectId": 1,
+        "createdAt": 1,
+        "isPending": 1,
+        "isAccepted": 1,
+        "agreementStarted": 1,
+      }
+    },
+    {
+      addFields: {
+        propertyId: { $toInt: { $first: "$details.propertyId"} }
+      }
     }
+  ]
 
-    res.send(data); 
+  const _result = await query.aggregate(pipeline, { useMasterKey: true })
+  const result = JSON.parse(JSON.stringify(_result))
+  res.send(result)
   return
 });
 
