@@ -18,6 +18,9 @@ import ethereum_svg from "../assets/ethereum_svg.png";
 import smart_contract_icon from "../assets/smart_contract_icon.png";
 import smart_contract_svg from "../assets/smart_contract_svg.png";
 import bent_lines from "../assets/bent_lines.png";
+import lines_svg from "../assets/lines_svg.svg";
+// import lines_svg from "../assets/lines.svg";
+
 // screenshots
 import landing_page from "../assets/screenshots/landing_page.png";
 import signup_page from "../assets/screenshots/signup_page.png";
@@ -59,6 +62,18 @@ const HowPropBlockWorks = () => {
             </div>
           </div>
           <div className="techBehindPropBlock">
+            <img
+              src={lines_svg}
+              alt="Lines"
+              style={{
+                width: "126.2rem",
+                // height:"",
+                // height: "20rem",
+                position: "absolute",
+                zIndex: "-1",
+                margin: "0 10rem 0 10rem",
+              }}
+            />
             <h1 className="techHeading">Tech behind PropBlock</h1>
             <div className="blockchainSection">
               <div className="leftSide">

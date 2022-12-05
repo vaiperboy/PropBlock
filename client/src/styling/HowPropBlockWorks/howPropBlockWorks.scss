@@ -95,7 +95,7 @@ main {
         .techBehindPropBlock {
             display: flex;
             flex-direction: column;
-            margin-bottom: 7rem;
+            margin-bottom: 0rem;
             .techHeading {
                 font-size: 5rem;
                 color: #333;
@@ -108,7 +108,6 @@ main {
                 align-items: flex-start;
                 padding: 0 10rem 0 15rem;
                 margin: 0 auto;
-                margin-top: 7rem;
                 gap: 5rem;
                 .leftSide {
                     width: 50%;
@@ -141,7 +140,7 @@ main {
                 margin: 0 auto;
                 justify-content: space-between;
                 align-items: center;
-                margin-top: 10rem;
+                margin-top: 5rem;
                 .leftSide {
                     img {
                         width: 32rem;
