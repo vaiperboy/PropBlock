@@ -1,4 +1,5 @@
 .governmentAgreementsListContainer {
+  
   .FirstRow {
     font-size: 1.5rem;
     .waitingForUpload {
@@ -73,7 +74,21 @@
 }
 
 .rightsidebar_container {
+
   width: 1700px;
+  .applyy_button {
+    padding: 0.5rem 1rem;
+    background-color: #3daeee;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1.6rem;
+    border: unset;
+    margin-bottom: 2rem;
+    &:hover {
+      background-color: #23658c;
+      cursor: pointer;
+    }
+  }
   .agreementview {
     font-size: 12px;
     size: 12px;

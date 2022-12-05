@@ -17,6 +17,7 @@ class MainContainer extends React.Component {
     this.setUserAddress = this.setUserAddress.bind(this);
     this.setUserEmailAddress = this.setUserEmailAddress.bind(this);
     this.setUserFullName = this.setUserFullName.bind(this);
+    this.setAgreementId = this.setAgreementId.bind(this)
   }
   state = {
     menuState: {
@@ -27,10 +28,15 @@ class MainContainer extends React.Component {
       usersProfileView: false,
     },
     isLoading: true,
+    agreementId: "",
     userAddress: "",
     userFullName: "",
     userEmailAddress: "",
   };
+
+  setAgreementId = (val) => {
+    this.setState({agreementId: val});
+  }
 
   // changing to the user eth address
   setUserAddress = (val) => {
@@ -153,10 +159,13 @@ class MainContainer extends React.Component {
                 <AgreementsList
                   toggleView={this.toggleView}
                   toggleAgreementView={this.toggleAgreementView}
+                  setAgreementId={this.setAgreementId}
                 />
               ) : null}
               {this.state.menuState.agreementView ? (
-                <AgreementView toggleView={this.toggleView} />
+                <AgreementView 
+                agreementId={this.state.agreementId}
+                toggleView={this.toggleView} />
               ) : null}
               {this.state.menuState.usersView ? (
                 <Users

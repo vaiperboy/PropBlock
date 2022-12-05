@@ -65,8 +65,7 @@ const App = () => {
 
   const [frontIdDocument, setFrontIdDocument] = useState({});
   const [backIdDocument, setBackIdDocument] = useState({});
-  const [frontPassportDocument, setFrontPassportDocument] = useState({});
-  const [backPassportDocument, setBackPassportDocument] = useState({});
+  const [passportDocument, setpassportDocument] = useState({});
 
   const [isRegistering, setRegistering] = useState(false);
 
@@ -128,11 +127,6 @@ const App = () => {
           address +
           " ) already exists! Please connect a new wallet address."
         );
-        /*message.error(
-          "User with the address (" +
-            user.get("ethAddress") +
-            " ) already exists! Please connect a new wallet address."
-        );*/
       }
     } catch (error) {
       message.error("Error: " + error);
@@ -220,29 +214,13 @@ const App = () => {
   const uploadDocuments = async () => {
     return new Promise(async (resolve, reject) => {
       try {
-        const options = {
-          wrapWithDirectory: true,
-          //progress: (prog) => console.log(`[ipfs] received: ${prog}`)
-        };
-
-        const files = [
-          frontIdDocument,
-          backIdDocument,
-          frontPassportDocument,
-          backPassportDocument,
-        ];
-
-        var hash = "";
-        console.log(files);
-        for await (const result of ipfs.addAll(files, options)) {
-          console.log(result);
-          hash = result.cid._baseCache.entries().next().value[1];
-        }
-
-        resolve(hash);
+        var hashes = []
+        hashes.frontIdHash = (await ipfs.add(frontIdDocument)).path
+        hashes.backIdHash = (await ipfs.add(backIdDocument)).path
+        hashes.passportHash = (await ipfs.add()).path
+        resolve(hashes);
       } catch (error) {
-        message.error("error with IPFS: " + error);
-        resolve("");
+        reject(error)
       }
     });
   };
@@ -252,16 +230,16 @@ const App = () => {
     message.info("Registring into database....");
     try {
       message.info("Uploading documents....");
-      var ipfs = await uploadDocuments();
-      if (ipfs.length == 0) {
-        message.error("Failure in uploading documents...");
-      } else {
+      await uploadDocuments()
+      .then(async (hashes) => {
         if (!Moralis.User.current()) {
           await authenticate()
             .then(function (user) {
               user.set("fullName", fullName);
               user.set("email", email);
-              user.set("ipfsHash", ipfs);
+              user.set("frontIdHash", hashes.frontIdHash);
+              user.set("backIdHash", hashes.backIdHash);
+              user.set("passportHash", hashes.passportHash);
               user.save();
               const data = {
                 address: user.get("ethAddress"),
@@ -284,16 +262,13 @@ const App = () => {
               message.error("Couldn't authorize wallet: " + error);
             });
         }
-      }
+      })
+      .catch((err) => {
+        message.error("Failure in uploading documents...");
+      })
     } catch (error) {
       message.error("ERROR: " + error);
     }
-  };
-
-  // links to the Login Page
-  const goBackToLoginPage = () => {
-    let path = `../login`;
-    navigate(path);
   };
 
   const openNotification = () => {
@@ -400,10 +375,10 @@ const App = () => {
     if (e.target.checked) {
       var errors = [];
       var frontExtension = "";
-      if (frontPassportDocument.name == undefined) {
+      if (passportDocument.name == undefined) {
         errors.push("Please make sure to upload your file!");
       } else {
-        frontExtension = getExtension(frontPassportDocument.name);
+        frontExtension = getExtension(passportDocument.name);
         if (!checkExtension(frontExtension, extensionsAllowed))
           errors.push(
             "Make sure front passport has the following format: " +
@@ -417,11 +392,11 @@ const App = () => {
 
         //rename files
         const front = renameFile(
-          frontPassportDocument,
+          passportDocument,
           "front passport." + frontExtension
         );
         
-        setFrontPassportDocument(front);
+        setpassportDocument(front);
       } else {
         e.target.checked = false;
         setPassportDocumentsVerified(false);
@@ -621,7 +596,7 @@ const App = () => {
                       <Upload
                         value=""
                         theme="withIcon"
-                        onChange={setFrontPassportDocument}
+                        onChange={setpassportDocument}
                       />
                       <div>
                         <div className="checkBoxDiv">

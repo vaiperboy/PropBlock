@@ -32,57 +32,58 @@ const AgreementsList = (props) => {
   } = useMoralis();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [agreements, setAgreements] = useState([]);
-  const [dataSourceTemp, setdataSourceTemp] = useState([
-    {
-      key: "1",
-      buyeraddress: "0x4001A8651c51...5da60538b327b96",
-      selleraddress: "0x4001A8651c51...5da60538b327b96",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSVi",
-      status: "Pending",
-      dateRequested: "10 Nov 2022",
-      isPending: true,
-      details: {
-        areDocsUploaded: true,
-        isGovernmentVerified: false,
-        needsRevision: false,
-        isRevisionRequired: false,
-      },
-    },
-    {
-      key: "2",
-      buyeraddress: "0x4001A8651c51...5da60538b327b96",
-      selleraddress: "0x4001A8651c52...5da60538b327b95",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSki",
-      status: "Pending",
-      dateRequested: "10 Nov 2022",
-      isPending: true,
-      details: {
-        areDocsUploaded: true,
-        isGovernmentVerified: false,
-        needsRevision: false,
-        isRevisionRequired: false,
-      },
-    },
-    {
-      key: "3",
-      buyeraddress: "0x4001A8651c51...5da60538b327b96",
-      selleraddress: "0x4001A8651c53...5da60538b327b94",
-      propertyID: "y7dM24zgRcYAs68Hs03FMSsi",
-      dateRequested: "10 Nov 2022",
-      status: "Pending",
-      isPending: true,
-      details: {
-        areDocsUploaded: false,
-        isGovernmentVerified: false,
-        needsRevision: false,
-        isRevisionRequired: false,
-      },
-    },
+  const [agreementsSource, setAgreementsSource] = useState([
+    // {
+    //   key: "1",
+    //   buyeraddress: "0x4001A8651c51...5da60538b327b96",
+    //   selleraddress: "0x4001A8651c51...5da60538b327b96",
+    //   propertyID: "y7dM24zgRcYAs68Hs03FMSVi",
+    //   status: "Pending",
+    //   dateRequested: "10 Nov 2022",
+    //   isPending: true,
+    //   details: {
+    //     areDocsUploaded: true,
+    //     isGovernmentVerified: false,
+    //     needsRevision: false,
+    //     isRevisionRequired: false,
+    //   },
+    // },
+    // {
+    //   key: "2",
+    //   buyeraddress: "0x4001A8651c51...5da60538b327b96",
+    //   selleraddress: "0x4001A8651c52...5da60538b327b95",
+    //   propertyID: "y7dM24zgRcYAs68Hs03FMSki",
+    //   status: "Pending",
+    //   dateRequested: "10 Nov 2022",
+    //   isPending: true,
+    //   details: {
+    //     areDocsUploaded: true,
+    //     isGovernmentVerified: false,
+    //     needsRevision: false,
+    //     isRevisionRequired: false,
+    //   },
+    // },
+    // {
+    //   key: "3",
+    //   buyeraddress: "0x4001A8651c51...5da60538b327b96",
+    //   selleraddress: "0x4001A8651c53...5da60538b327b94",
+    //   propertyID: "y7dM24zgRcYAs68Hs03FMSsi",
+    //   dateRequested: "10 Nov 2022",
+    //   status: "Pending",
+    //   isPending: true,
+    //   details: {
+    //     areDocsUploaded: false,
+    //     isGovernmentVerified: false,
+    //     needsRevision: false,
+    //     isRevisionRequired: false,
+    //   },
+    // },
   ]);
+
 
   // function to change the view to agreement docs
   const handleAgreementDocs = (agreementID) => {
+    props.setAgreementId(agreementID)
     props.toggleAgreementView(true);
   };
 
@@ -94,47 +95,23 @@ const AgreementsList = (props) => {
     return text;
   };
 
-  const acceptRequest = (propertyId) => {
-    message.success("Request Accepted for property (" + propertyId + "...) ");
-    removeRequest(dataSourceTemp, propertyId);
-  };
-
-  const rejectRequest = (propertyId) => {
-    message.error("Request Rejected for property: " + propertyId);
-    removeRequest(dataSourceTemp, propertyId);
-  };
-
-  // removes the request with the property ID
-  const removeRequest = (arr, propertyId) => {
-    let index;
-    arr.map((request, k) => {
-      request.isPending = false;
-      if (request.propertyID === propertyId && request.isPending === true) {
-        index = k;
-      }
-      const temp = setdataSourceTemp;
-      temp[index].isPending = false;
-      setdataSourceTemp(temp);
-    });
-  };
-
   const loadAgreements = async () => {
     setIsLoading(true);
     fetch(
       "http://localhost:9000/getAllAgreements?" +
-        new URLSearchParams({
-          mode: "goverment",
-          sessionToken: user.getSessionToken(),
-          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
-        })
+      new URLSearchParams({
+        mode: "goverment",
+        sessionToken: user.getSessionToken(),
+        ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
+      })
     )
       .then((res) => res.json())
       .then((res) => {
-        setAgreements(res);
+        setAgreementsSource(res);
       })
       .catch((err) => {
         message.error("API error");
-        setAgreements([]);
+        setAgreementsSource([]);
       })
       .finally(() => {
         setIsLoading(false);
@@ -142,8 +119,10 @@ const AgreementsList = (props) => {
   };
 
   useEffect(() => {
-    message.info(user.getSessionToken());
+    loadAgreements()
   }, []);
+
+
   const [clicked, setClicked] = useState(false);
 
   if (!isLoading) {
@@ -159,12 +138,10 @@ const AgreementsList = (props) => {
                     <th width="20%">Buyer Address</th>
                     <th width="20%">Seller Address</th>
                     <th width="15%">Property ID</th>
-                    <th>Status</th>
                     <th>Date Sent</th>
                     <th>Decision</th>
                   </tr>
-                  {/* show no data icon if array is empty */}
-                  {dataSourceTemp.length === 0 && (
+                  {agreementsSource.length === 0 && (
                     <tr>
                       <td colspan="4" style={{ textAlign: "center" }}>
                         <img
@@ -175,55 +152,48 @@ const AgreementsList = (props) => {
                       </td>
                     </tr>
                   )}
-                  {dataSourceTemp.map((item) => {
-                    if (item.isPending === true) {
-                      return (
-                        <tr key={item.key} className="FirstRow">
-                          <td>{shortenAddress(item.buyeraddress, 20)}</td>
-                          <td>{shortenAddress(item.selleraddress, 20)}</td>
-                          <td>
-                            {item.propertyID.slice(0, 5) +
+                  {agreementsSource.map((item) => {
+                    return (
+                      <tr key={item.objectId} className="FirstRow">
+                        <td>{shortenAddress(item.buyerAddress, 20)}</td>
+                        <td>{shortenAddress(item.landlordAddress, 20)}</td>
+                        <td>
+                          <a href={"/property/" + item.details.propertyObjectId} target="_blank">
+                            {
+                              item.details.propertyObjectId.slice(0, 5) +
                               " ... " +
-                              item.propertyID.slice(
-                                item.propertyID.length - 3,
-                                item.propertyID.length
-                              )}
-                          </td>
-                          <td>{item.status}</td>
-                          <td>{item.dateRequested}</td>
-                          <td style={{ display: "flex", gap: "1rem" }}>
-                            {item.details.areDocsUploaded ? (
-                              !item.details.isGovernmentVerified ? (
-                                <button
-                                  className="acceptButton"
-                                  onClick={() => {
-                                    handleAgreementDocs(item.agreementObjectID);
-                                  }}
-                                >
-                                  View Documents
-                                </button>
-                              ) : (
-                                <p className="documentsVerified">
-                                  Documents are verified
-                                </p>
+                              item.details.propertyObjectId.slice(
+                                item.details.propertyObjectId.length - 3,
+                                item.details.propertyObjectId.length
                               )
+                            }
+                          </a>
+                        </td>
+                        <td>{item.createdAt}</td>
+                        <td style={{ display: "flex", gap: "1rem" }}>
+                          {item.details.areDocsUploaded ? (
+                            !item.details.isGovernmentVerified ? (
+                              <button
+                                className="acceptButton"
+                                onClick={() => {
+                                  handleAgreementDocs(item.objectId);
+                                }}
+                              >
+                                View Documents
+                              </button>
                             ) : (
-                              // <button
-                              //   className="acceptButton"
-                              //   onClick={() => {
-                              //     handleAgreementDocs(item.agreementObjectID);
-                              //   }}
-                              // >
-                              //   View Documents
-                              // </button>
-                              <p className="waitingForUpload">
-                                Waiting for seller documents
+                              <p className="documentsVerified">
+                                Documents are verified
                               </p>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    }
+                            )
+                          ) : (
+                            <p className="waitingForUpload">
+                              Waiting for seller documents
+                            </p>
+                          )}
+                        </td>
+                      </tr>
+                    );
                   })}
                 </table>
               </div>
