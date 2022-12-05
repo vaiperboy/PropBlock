@@ -254,8 +254,8 @@ const AgreementsList = (props) => {
 
   // runs first
   useEffect(() => {
-    loadBuyerAgreements()
-    loadSellerAgreements()
+    loadBuyerAgreements();
+    loadSellerAgreements();
   }, []);
 
   async function loadBuyerAgreements() {

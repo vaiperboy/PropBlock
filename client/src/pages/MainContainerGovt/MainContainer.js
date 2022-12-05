@@ -9,6 +9,7 @@ import AgreementView from "./AgreementView";
 import { Spin, Skeleton, Avatar, List } from "antd";
 import Users from "./Users";
 import UserProfile from "./UserProfile";
+import Web3 from "web3";
 
 class MainContainer extends React.Component {
   constructor(props) {
@@ -155,7 +156,7 @@ class MainContainer extends React.Component {
                 />
               ) : null}
               {this.state.menuState.agreementView ? (
-                <AgreementView toggleAgreementView={this.toggleAgreementView} />
+                <AgreementView toggleView={this.toggleView} />
               ) : null}
               {this.state.menuState.usersView ? (
                 <Users

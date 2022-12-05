@@ -1,12 +1,18 @@
 .governmentAgreementsListContainer {
   .FirstRow {
     font-size: 1.5rem;
+    .waitingForUpload {
+      color: #3daeee;
+    }
     td {
       border-right: 1px solid rgb(230, 230, 230);
     }
     &:hover {
       background-color: rgba(#9dabb3, 0.1);
       cursor: pointer;
+    }
+    .documentsVerified {
+      color: #23bb20;
     }
     .requestAccepted {
       &:hover {
@@ -71,52 +77,150 @@
   .agreementview {
     font-size: 12px;
     size: 12px;
-    background-color: red;
+  }
+  .propertyId {
+    margin-bottom: 2rem;
+    h1 {
+      font-size: 2.2rem;
+      color: rgb(214, 22, 22);
+      a {
+        text-decoration: underline;
+      }
+    }
+  }
+  .agreementUsersDetails {
+    display: flex;
+    gap: 5rem;
+    h1 {
+      font-size: 2rem;
+      color: #3daeee;
+    }
+    .user {
+      width: 50%;
+      .userDetails {
+        display: flex;
+        flex-direction: column;
+        margin: 1rem 0 2rem 0;
+        gap: 1rem;
+        .detail {
+          display: flex;
+          align-items: center;
+          margin: 0 0 0.7rem 0;
+          h3 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 400;
+            width: 50%;
+          }
+          p {
+            margin: 0;
+            background-color: rgb(255, 255, 255);
+            padding: 0.5rem 2rem;
+            border: 1px solid #333;
+            color: #3daeee;
+            border-radius: 1rem;
+            font-size: 1.6rem;
+          }
+          .downloadButton {
+            background-color: #fff;
+            border: 1px solid #3daeee;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            &:hover {
+              cursor: pointer;
+              background-color: rgb(#3daeee, 0.7);
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+  .documentSection {
+    .heading {
+      p {
+        font-size: 2rem;
+        font-weight: 500;
+        margin-top: 2rem;
+      }
+    }
+    .documentContainer {
+      display: flex;
+      flex-direction: column;
+      margin: 2rem 0 5rem 0;
+      .topSection {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 90%;
+        margin-bottom: 2rem;
+        .leftSide {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          img {
+            width: 3rem;
+          }
+          p {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 500;
+          }
+        }
+        .rightSide {
+          display: flex;
+          align-items: center;
+          align-items: center;
+          gap: 1rem;
+          h2 {
+            font-size: 1.7rem;
+            margin-bottom: 0;
+            color: #23658c;
+          }
+          .downloadButton {
+            background-color: #fff;
+            border: 1px solid #3daeee;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            &:hover {
+              cursor: pointer;
+              background-color: rgb(#3daeee, 0.7);
+              color: #fff;
+            }
+          }
+          .ant-switch {
+            background-color: #888;
+          }
+          .ant-switch-checked {
+            background-color: #3daeee;
+          }
+        }
+      }
+      .commentSection {
+        width: 90%;
+        .document_title {
+          font-size: 1.6rem;
+          color: rgb(203, 26, 26);
+        }
+      }
+    }
   }
 
-  .rightchild {
-    zoom: 85%;
-    min-width: 1350px;
-    overflow: hidden; /* will contain if #first is longer than #second */
-    .horizontalline {
-      border-top: 1px solid rgba(102, 102, 102, 0.8);
-      margin-top: 8px;
-    }
+  .horizontalline {
+    border-top: 1px solid rgb(#3daeee, 0.8);
+    margin-top: 8px;
+    width: 90%;
+
     svg {
       cursor: pointer;
     }
-    .buyerdoc {
-      width: 50%;
-      float: left; /* add this */
-      margin-right: 40px;
-      .rightPic {
-        margin-left: 10px;
-        border-radius: 50%;
-        height: 52px;
-        width: 52px;
-        border: 2px solid #00000096;
-        background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB7WOft_Yed83SLXPSHpdGxI9Ms2HQVT9q1w&usqp=CAU");
-      }
-    }
+
     .sellerdoc {
+      width: 80%;
       overflow: hidden; /* if you don't want #second to wrap below #first */
     }
     textarea {
       overflow: hidden;
-    }
-
-    .applyy_button {
-      width: 190px;
-      height: 40px;
-      background-color: #3daeee;
-      border-radius: 8px;
-      color: #ffffff;
-      font-size: 20px;
-      border: unset;
-      &:hover {
-        background-color: #23658c;
-        cursor: pointer;
-      }
     }
   }
 }
@@ -132,6 +236,20 @@
     transition: all 0.1s ease;
     cursor: pointer;
     background-color: rgb(#23bb20, 0.7);
+  }
+}
+
+.save_button {
+  padding: 0.5rem 2rem;
+  background-color: #3daeee;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 2rem;
+  border: unset;
+  margin-bottom: 2rem;
+  &:hover {
+    background-color: #23658c;
+    cursor: pointer;
   }
 }
 
@@ -208,55 +326,39 @@
   }
 
   .rightsidebar_container {
-    width: 1700px;
+    width: 100rem;
     .agreementview {
       font-size: 12px;
       size: 12px;
       background-color: red;
     }
-    .rightchild {
-      zoom: 85%;
-      min-width: 1350px;
-      overflow: hidden; /* will contain if #first is longer than #second */
-      .horizontalline {
-        border-top: 1px solid rgba(102, 102, 102, 0.8);
-        margin-top: 8px;
-      }
-      svg {
-        cursor: pointer;
-      }
-      .buyerdoc {
-        width: 50%;
-        float: left; /* add this */
-        margin-right: 40px;
-        .rightPic {
-          margin-left: 10px;
-          border-radius: 50%;
-          height: 52px;
-          width: 52px;
-          border: 2px solid #00000096;
-          background: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB7WOft_Yed83SLXPSHpdGxI9Ms2HQVT9q1w&usqp=CAU");
-        }
-      }
-      .sellerdoc {
-        overflow: hidden; /* if you don't want #second to wrap below #first */
-      }
-      textarea {
-        overflow: hidden;
-      }
+    .horizontalline {
+      border-top: 1px solid rgb(#3daeee, 0.8);
+      margin-top: 8px;
+    }
+    svg {
+      cursor: pointer;
+    }
 
-      .applyy_button {
-        width: 190px;
-        height: 40px;
-        background-color: #3daeee;
-        border-radius: 8px;
-        color: #ffffff;
-        font-size: 20px;
-        border: unset;
-        &:hover {
-          background-color: #23658c;
-          cursor: pointer;
-        }
+    .sellerdoc {
+      width: 50rem;
+      overflow: hidden; /* if you don't want #second to wrap below #first */
+    }
+    textarea {
+      overflow: hidden;
+    }
+
+    .applyy_button {
+      padding: 0.5rem 1rem;
+      background-color: #3daeee;
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 1.6rem;
+      border: unset;
+      margin-bottom: 2rem;
+      &:hover {
+        background-color: #23658c;
+        cursor: pointer;
       }
     }
   }

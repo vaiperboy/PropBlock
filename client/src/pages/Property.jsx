@@ -321,7 +321,9 @@ const Property = (props) => {
                     })}
                   </Image.PreviewGroup>
                 </div>
-                <div className="loadMoreButton">Load more</div>
+                {property.images.length > 3 && (
+                  <div className="loadMoreButton">Load more</div>
+                )}{" "}
                 <div className="aboutProperty">
                   <div className="leftSide">
                     <div className="propertyInformation">
