@@ -4,6 +4,10 @@ main {
             display: flex;
             flex-direction: column;
             height: 58rem;
+            background: linear-gradient(-45deg, rgb(#9747ff, 0.7), #9747ff, #3daeee, rgb(#3daeee, 0.7));
+            background-size: 350% 350%;
+            -webkit-animation: gradient 10s ease infinite;
+            animation: gradient 7s ease-in-out infinite;
             .text {
                 display: flex;
                 flex-direction: column;
@@ -16,31 +20,28 @@ main {
                     line-height: 6.5rem;
                     text-align: center;
                     font-weight: 500;
-                    color: #333;
+                    color: #fff;
                 }
                 h3 {
-                    font-size: 2.7rem;
-                    color: #fff;
-                    font-weight: 400;
+                    font-size: 3.5rem;
+                    color: #333;
+                    font-weight: 500;
                     position: relative;
                     text-align: center;
+                    text-transform: capitalize;
                     &::after {
                         content: "";
                         display: block;
                         margin: 0 auto;
                         width: 8rem;
                         padding-top: 5px;
-                        border-bottom: 2px solid #333;
+                        border-bottom: 3px solid #333;
                     }
                 }
             }
-            background: linear-gradient(-45deg, rgb(#9747ff, 0.7), #9747ff, #3daeee, rgb(#3daeee, 0.7));
-            background-size: 350% 350%;
-            -webkit-animation: gradient 10s ease infinite;
-            animation: gradient 7s ease-in-out infinite;
             .leftLogos {
                 #Alchemy_logo {
-                    width: 10rem;
+                    width: 15rem;
                     position: absolute;
                     top: 19rem;
                     left: 20rem;
@@ -49,7 +50,7 @@ main {
                     animation: movement 7s infinite;
                 }
                 #moralis_logo {
-                    width: 15rem;
+                    width: 18rem;
                     position: absolute;
                     top: 37rem;
                     left: 10rem;
@@ -57,7 +58,7 @@ main {
                     animation: movement 10s infinite;
                 }
                 #ethersjs_logo {
-                    width: 8rem;
+                    width: 12rem;
                     position: absolute;
                     top: 53rem;
                     left: 25rem;
@@ -67,7 +68,7 @@ main {
             }
             .rightLogos {
                 #hardhat_logo {
-                    width: 8rem;
+                    width: 11rem;
                     position: absolute;
                     top: 19rem;
                     right: 18rem;
@@ -75,7 +76,7 @@ main {
                     animation: movement-reverse 10s infinite;
                 }
                 #ipfs_logo {
-                    width: 9rem;
+                    width: 11rem;
                     position: absolute;
                     top: 34rem;
                     right: 12rem;
@@ -83,7 +84,7 @@ main {
                     animation: movement-sideways 10s infinite;
                 }
                 #ethereum_logo {
-                    width: 9rem;
+                    width: 10rem;
                     position: absolute;
                     top: 50rem;
                     right: 18rem;
@@ -98,17 +99,29 @@ main {
             margin-bottom: 0rem;
             .techHeading {
                 font-size: 5rem;
-                color: #333;
                 text-align: center;
-                margin-top: 5rem;
+                margin: 5rem 0;
+                background: linear-gradient(to right, #9747ff 20%, #3daeee 40%, #3daeee 60%, #9747ff 80%, #9747ff 100%);
+                background-size: 200% auto;
+                background-clip: text;
+                text-fill-color: transparent;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: shine 2s linear infinite;
+                @keyframes shine {
+                    to {
+                        background-position: 200% center;
+                    }
+                }
             }
             .blockchainSection {
                 display: flex;
                 justify-content: space-between;
                 align-items: flex-start;
-                padding: 0 10rem 0 15rem;
+                padding: 0 10rem 0 20rem;
                 margin: 0 auto;
                 gap: 5rem;
+                margin-top: 5rem;
                 .leftSide {
                     width: 50%;
                     .icon {
@@ -136,11 +149,11 @@ main {
             }
             .EthereumSection {
                 display: flex;
-                padding: 0 10rem 0 15rem;
+                padding: 0 18rem 0 18rem;
                 margin: 0 auto;
                 justify-content: space-between;
                 align-items: center;
-                margin-top: 5rem;
+                margin-top: 8rem;
                 .leftSide {
                     img {
                         width: 32rem;
@@ -172,7 +185,7 @@ main {
                 align-items: flex-start;
                 padding: 0 10rem 0 15rem;
                 margin: 0 auto;
-                margin-top: 12rem;
+                margin-top: 10.8rem;
                 gap: 5rem;
                 .leftSide {
                     width: 50%;
@@ -195,7 +208,7 @@ main {
                 }
                 .rightSide {
                     img {
-                        width: 45rem;
+                        width: 40rem;
                     }
                 }
             }
@@ -240,25 +253,25 @@ main {
                 }
                 .landingPageSection {
                     display: flex;
-                    padding: 0 8rem 0 12rem;
-                    justify-content: space-between;
-                    gap: 5rem;
+                    flex-direction: column;
+                    padding: 0 10rem;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 2rem;
                     margin-top: 5rem;
-                    .leftSide {
-                        width: 50rem;
-                        h1 {
-                            font-size: 3rem;
-                            color: #3daeee;
-                        }
-                        p {
-                            font-size: 1.6rem;
-                            color: #444;
-                            text-align: justify;
-                        }
+                    margin: 0 auto;
+                    h1 {
+                        font-size: 4rem;
+                        color: #3daeee;
                     }
-                    .rightSide {
-                        img {
-                        }
+                    p {
+                        font-size: 1.6rem;
+                        color: #444;
+                        text-align: justify;
+                        width: 65%;
+                    }
+                    img {
+                        width: 65%;
                     }
                 }
                 .landingPageSectionFlipped {
@@ -313,6 +326,62 @@ main {
                         img {
                         }
                     }
+                }
+                .signupPageSectionReversed {
+                    display: flex;
+                    padding: 0 8rem 0 12rem;
+                    justify-content: space-between;
+                    gap: 5rem;
+                    margin-top: 5rem;
+                    .leftSide {
+                        img {
+                        }
+                    }
+                    .rightSide {
+                        width: 50rem;
+                        h1 {
+                            font-size: 3rem;
+                            color: #3daeee;
+                        }
+                        p {
+                            font-size: 1.6rem;
+                            color: #444;
+                            .ant-steps-icon-dot {
+                                span {
+                                    font-size: 3rem;
+                                }
+                            }
+                            .ant-steps-item-description {
+                                text-align: justify;
+                            }
+                        }
+                    }
+                }
+                .breakDiv {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 20rem;
+                    margin-bottom: 5rem;
+                    background: linear-gradient(to right, #9747ff 0%, #3daeee 100%);
+                    h1 {
+                        color: #fff;
+                        font-size: 5rem;
+                        text-transform: uppercase;
+                        text-align: center;
+                        margin: 0;
+                    }
+                }
+                .breakerPagePurple {
+                    margin: 2rem 0;
+                    border-top: 2px solid #9747ff;
+                }
+                .breakerPageBlue {
+                    margin: 2rem 0;
+                    border-top: 2px solid #3daeee;
+                }
+                .last {
+                    margin-bottom: 7rem;
                 }
             }
         }

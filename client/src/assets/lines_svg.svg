@@ -1,15 +1,15 @@
-<svg width="1212" height="1467" viewBox="0 0 1212 1467" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M2.5 -0.000244141L2.5 663" stroke="#9747FF" stroke-width="3"/>
-<path d="M1.95117 1137L1.75372 1466.58" stroke="#3DAEEE" stroke-width="3"/>
-<path d="M1209.5 695L1209.47 1105.63" stroke="url(#paint0_linear_830_5764)" stroke-width="3"/>
-<line x1="16.0013" y1="676.5" x2="1194" y2="677.5" stroke="#9747FF" stroke-width="3"/>
-<path d="M1209.5 695C1209.5 688.809 1206.38 677.5 1194 677.5" stroke="#9747FF" stroke-width="3"/>
-<path d="M1209.5 1105C1209.5 1111.19 1206.38 1121 1194 1121" stroke="#3DAEEE" stroke-width="3"/>
-<path d="M2.00195 1137C2.00195 1130.81 5.12818 1121 17.502 1121" stroke="#3DAEEE" stroke-width="3"/>
-<path d="M2.5 663C2.5 668.5 4.07858 676.5 16 676.5" stroke="#9747FF" stroke-width="3"/>
-<line y1="-1.5" x2="1178" y2="-1.5" transform="matrix(-1 0 0 1 1194.53 1122.5)" stroke="#3DAEEE" stroke-width="3"/>
+<svg width="1211" height="1545" viewBox="0 0 1211 1545" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.49805 -0.000244141L2.49805 659.787" stroke="#9747FF" stroke-width="3"/>
+<path d="M1.94922 1131.49L1.76509 1545" stroke="#3DAEEE" stroke-width="3"/>
+<path d="M1209.49 691.632L1209.47 1100.27" stroke="url(#paint0_linear_830_5764)" stroke-width="3"/>
+<line y1="-1.5" x2="1178" y2="-1.5" transform="matrix(1 0.000844782 -0.00085303 1 15.998 674.714)" stroke="#9747FF" stroke-width="3"/>
+<path d="M1209.49 691.632C1209.49 685.471 1206.37 674.217 1193.99 674.217" stroke="#9747FF" stroke-width="3"/>
+<path d="M1209.49 1099.65C1209.49 1105.81 1206.37 1115.57 1193.99 1115.57" stroke="#3DAEEE" stroke-width="3"/>
+<path d="M2 1131.49C2 1125.33 5.12622 1115.57 17.5 1115.57" stroke="#3DAEEE" stroke-width="3"/>
+<path d="M2.49805 659.787C2.49805 665.26 4.07662 673.222 15.998 673.222" stroke="#9747FF" stroke-width="3"/>
+<line y1="-1.5" x2="1178" y2="-1.5" transform="matrix(-1 0 0 1 1194.52 1117.06)" stroke="#3DAEEE" stroke-width="3"/>
 <defs>
-<linearGradient id="paint0_linear_830_5764" x1="1207.03" y1="695" x2="1207.08" y2="1098" gradientUnits="userSpaceOnUse">
+<linearGradient id="paint0_linear_830_5764" x1="1207.03" y1="691.632" x2="1207.07" y2="1092.68" gradientUnits="userSpaceOnUse">
 <stop stop-color="#9747FF"/>
 <stop offset="1" stop-color="#3DAEEE"/>
 </linearGradient>

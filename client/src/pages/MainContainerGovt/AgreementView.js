@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import stats from "./stats.png";
 import "./Agreementview.scss";
-import { Switch, Input, message } from "antd";
+import { Switch, Input, message, Spin } from "antd";
 import {
   FolderViewOutlined,
   ArrowLeftOutlined,
@@ -15,7 +15,6 @@ import { useMoralis, useNewMoralisObject } from "react-moralis";
 const console = require("console-browserify");
 
 const AgreementView = (props) => {
-  
   const {
     authenticate,
     signup,
@@ -32,12 +31,12 @@ const AgreementView = (props) => {
   } = useMoralis();
 
   const { TextArea } = Input;
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
   const [nocComment, setNocComment] = useState("");
   const [mouComment, setMouComment] = useState("");
   const [titleDeedComment, setTitleDeedComment] = useState("");
-  const [agreement, setAgreement] = useState({})
-  
+  const [agreement, setAgreement] = useState({});
+
   const onChange = (checked) => {
     console.log(`switch to ${checked}`);
   };
@@ -59,16 +58,16 @@ const AgreementView = (props) => {
     setIsLoading(true);
     fetch(
       "http://localhost:9000/getAgreement?" +
-      new URLSearchParams({
-        sessionToken: user.getSessionToken(),
-        ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
-        agreementObjectId: props.agreementId,
-        mode: "goverment"
-      })
+        new URLSearchParams({
+          sessionToken: user.getSessionToken(),
+          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
+          agreementObjectId: props.agreementId,
+          mode: "goverment",
+        })
     )
       .then((res) => res.json())
       .then((res) => {
-        setAgreement(res)
+        setAgreement(res);
       })
       .catch((err) => {
         message.error("API error");
@@ -80,16 +79,27 @@ const AgreementView = (props) => {
   }
 
   useEffect(() => {
-    loadAgreement()
-  }, [])
+    loadAgreement();
+  }, []);
 
   return (
     <>
-    {
-      (isLoading) ? (
-        <>loading</>
-        ) : (
-          <div className="rightsidebar_container">
+      {isLoading ? (
+        <div
+          style={{
+            textAlign: "center",
+            width: "60%",
+            height: "50rem",
+            marginLeft: "5rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Spin size="large" style={{ margin: "0 2rem 0 0 " }} /> Loading
+        </div>
+      ) : (
+        <div className="rightsidebar_container">
           <p
             className="agreement_view_subtitle"
             style={{ marginBottom: 15, color: "#555555" }}
@@ -106,7 +116,13 @@ const AgreementView = (props) => {
           </button>
           <div className="propertyId">
             <h1>
-              Property ID - <a href={"/property/" + agreement.details.propertyObjectId} target="_blank">#{agreement.details.propertyObjectId}</a>
+              Property ID -{" "}
+              <a
+                href={"/property/" + agreement.details.propertyObjectId}
+                target="_blank"
+              >
+                #{agreement.details.propertyObjectId}
+              </a>
             </h1>
           </div>
           <div className="agreementUsersDetails">
@@ -275,10 +291,8 @@ const AgreementView = (props) => {
           </div>
           <div></div>
         </div>
-        )
-    }
+      )}
     </>
-    
   );
 };
 
