@@ -12,12 +12,6 @@ router.get("/getAllAgreements", async function (req, res, next) {
   var ownerAddress = req.query.ownerAddress;
   var mode = req.query.mode
 
-  var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
-  if (!isLoggedIn) {
-    res.send(401, "not authenticated")
-    return;
-  }
-
   if (mode == undefined) {
     res.status(422).send("wrong input")
     return
@@ -28,6 +22,12 @@ router.get("/getAllAgreements", async function (req, res, next) {
     || ((mode != "seller" && mode != "buyer" && mode != "goverment"))) {
     res.status(422).send("wrong input")
     return
+  }
+
+  var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
+  if (!isLoggedIn) {
+    res.send(401, "not authenticated")
+    return;
   }
 
   ownerAddress = helper.toCheckSumAddress(ownerAddress)
