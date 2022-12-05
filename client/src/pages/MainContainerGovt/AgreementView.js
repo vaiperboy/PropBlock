@@ -30,11 +30,16 @@ const AgreementView = (props) => {
     ...rest
   } = useMoralis();
 
+  const ipfsLink = "https://propblock.infura-ipfs.io/ipfs/"
   const { TextArea } = Input;
   const [isLoading, setIsLoading] = useState(true);
   const [nocComment, setNocComment] = useState("");
   const [mouComment, setMouComment] = useState("");
   const [titleDeedComment, setTitleDeedComment] = useState("");
+  //these state variables are switched (idk why)
+  const [nocAccepted, setNocAccepted] = useState(false)
+  const [mouAccepted, setMouAccepted] = useState(false)
+  const [titleDeedAccepted, setTitleDeedAccepted] = useState(false)
   const [agreement, setAgreement] = useState({});
 
   const onChange = (checked) => {
@@ -58,12 +63,12 @@ const AgreementView = (props) => {
     setIsLoading(true);
     fetch(
       "http://localhost:9000/getAgreement?" +
-        new URLSearchParams({
-          sessionToken: user.getSessionToken(),
-          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
-          agreementObjectId: props.agreementId,
-          mode: "goverment",
-        })
+      new URLSearchParams({
+        sessionToken: user.getSessionToken(),
+        ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
+        agreementObjectId: props.agreementId,
+        mode: "goverment",
+      })
     )
       .then((res) => res.json())
       .then((res) => {
@@ -81,6 +86,33 @@ const AgreementView = (props) => {
   useEffect(() => {
     loadAgreement();
   }, []);
+
+  const openDocument = (hash) => {
+    window.open(ipfsLink.concat(hash), '_blank').focus();
+  }
+
+  const buildResponse = () => {
+    var content = ""
+    if (!nocAccepted) content += "NOC Rejected for the following reason: " + nocComment
+    if (!mouAccepted) content += "MOU Rejected for the following reason: " + mouComment
+    if (!titleDeedAccepted) content += "Title deed Rejected for the following reason: " + titleDeedComment
+    return content
+  }
+
+  const createDecision = async () => {
+    if (!nocAccepted || !mouAccepted || !titleDeedAccepted) {
+      const agreementDocuments = Moralis.Object.extend("AgreementDocuments")
+      const docsQuery = new Moralis.Query(agreementDocuments)
+      const docsResult = await docsQuery.first()
+      docsResult.set("reasonForRejection", buildResponse())
+      docsResult.save()
+
+      const agreementStatus = Moralis.Object.extend("AgreementStatus")
+      const statusQuery = new Moralis.Query(agreementStatus)
+      const statusResult = await statusQuery.first()
+      statusResult.set("")
+    }
+  }
 
   return (
     <>
@@ -139,19 +171,19 @@ const AgreementView = (props) => {
                 </div>
                 <div className="detail">
                   <h3>View Front ID</h3>
-                  <button className="downloadButton" onClick={() => {}}>
+                  <button className="downloadButton" onClick={() => { openDocument(agreement.buyer.frontIdHash) }}>
                     View <FolderViewOutlined />
                   </button>
                 </div>
                 <div className="detail">
                   <h3>View Back ID</h3>
-                  <button className="downloadButton" onClick={() => {}}>
+                  <button className="downloadButton" onClick={() => { openDocument(agreement.buyer.backIdHash) }}>
                     View <FolderViewOutlined />
                   </button>
                 </div>
                 <div className="detail">
                   <h3>View Passport</h3>
-                  <button className="downloadButton" onClick={() => {}}>
+                  <button className="downloadButton" onClick={() => { openDocument(agreement.buyer.passportHash) }}>
                     View <FolderViewOutlined />
                   </button>
                 </div>
@@ -170,19 +202,19 @@ const AgreementView = (props) => {
                 </div>
                 <div className="detail">
                   <h3>View Front ID</h3>
-                  <button className="downloadButton" onClick={() => {}}>
+                  <button className="downloadButton" onClick={() => { openDocument(agreement.landlord.frontIdHash) }}>
                     View <FolderViewOutlined />
                   </button>
                 </div>
                 <div className="detail">
                   <h3>View Back ID</h3>
-                  <button className="downloadButton" onClick={() => {}}>
+                  <button className="downloadButton" onClick={() => { openDocument(agreement.landlord.backIdHash) }}>
                     View <FolderViewOutlined />
                   </button>
                 </div>
                 <div className="detail">
                   <h3>View Passport</h3>
-                  <button className="downloadButton" onClick={() => {}}>
+                  <button className="downloadButton" onClick={() => { openDocument(agreement.landlord.passportHash) }}>
                     View <FolderViewOutlined />
                   </button>
                 </div>
@@ -200,28 +232,34 @@ const AgreementView = (props) => {
                   <p className="document_title">NOC Uploaded</p>
                 </div>
                 <div className="rightSide">
-                  <h2>Validate Document</h2>
-                  <Switch defaultChecked={false} onChange={onChange} />
-                  <button className="downloadButton" onClick={() => {}}>
+                  <h2>Valid Document</h2>
+                  <Switch defaultChecked={false} onChange={setNocAccepted} />
+                  <button className="downloadButton" onClick={() => { openDocument(agreement.documents.nocHash) }}>
                     View <FolderViewOutlined />
                   </button>
                 </div>
               </div>
-              <div className="commentSection">
-                <p className="document_title">
-                  Reason for rejection (if applicable)
-                </p>
-                <div>
-                  <TextArea
-                    onChange={(e) => setNocComment(e.target.value)}
-                    placeholder="Enter you Noc Comment here"
-                    autoSize={{
-                      minRows: 3,
-                      maxRows: 5,
-                    }}
-                  />
-                </div>
-              </div>
+              {
+                (nocAccepted) && (
+                  <div className="commentSection">
+                    <p className="document_title">
+                      Reason for rejection
+                    </p>
+                    <div>
+                      <TextArea
+                        onChange={(e) => setNocComment(e.target.value)}
+                        placeholder="Enter you Noc Comment here"
+                        autoSize={{
+                          minRows: 3,
+                          maxRows: 5,
+                        }}
+                        readOnly={!nocAccepted}
+                      />
+                    </div>
+                  </div>
+                )
+              }
+
             </div>
             <div className="horizontalline" />
             <div className="documentContainer">
@@ -231,28 +269,34 @@ const AgreementView = (props) => {
                   <p className="document_title">MOU Uploaded</p>
                 </div>
                 <div className="rightSide">
-                  <h2>Validate Document</h2>
-                  <Switch defaultChecked={false} onChange={onChange} />
-                  <button className="downloadButton" onClick={() => {}}>
+                  <h2>Valid Document</h2>
+                  <Switch defaultChecked={false} onChange={setMouAccepted} />
+                  <button className="downloadButton" onClick={() => { openDocument(agreement.documents.mouHash) }}>
                     View <FolderViewOutlined />
                   </button>
                 </div>
               </div>
-              <div className="commentSection">
-                <p className="document_title">
-                  Reason for rejection (if applicable)
-                </p>
-                <div>
-                  <TextArea
-                    onChange={(e) => setMouComment(e.target.value)}
-                    placeholder="Enter you Noc Comment here"
-                    autoSize={{
-                      minRows: 3,
-                      maxRows: 5,
-                    }}
-                  />
-                </div>
-              </div>
+              {
+                (mouAccepted) && (
+                  <div className="commentSection">
+                    <p className="document_title">
+                      Reason for rejection
+                    </p>
+                    <div>
+                      <TextArea
+                        onChange={(e) => setMouComment(e.target.value)}
+                        placeholder="Enter you Noc Comment here"
+                        autoSize={{
+                          minRows: 3,
+                          maxRows: 5,
+                        }}
+                        readOnly={!mouAccepted}
+                      />
+                    </div>
+                  </div>
+                )
+              }
+
             </div>
             <div className="horizontalline" />
             <div className="documentContainer">
@@ -262,30 +306,36 @@ const AgreementView = (props) => {
                   <p className="document_title">Title Deed Uploaded</p>
                 </div>
                 <div className="rightSide">
-                  <h2>Validate Document</h2>
-                  <Switch defaultChecked={false} onChange={onChange} />
-                  <button className="downloadButton" onClick={() => {}}>
+                  <h2>Valid Document</h2>
+                  <Switch defaultChecked={false} onChange={setTitleDeedAccepted} />
+                  <button className="downloadButton" onClick={() => { openDocument(agreement.documents.titleDeedHash) }}>
                     View <FolderViewOutlined />
                   </button>
                 </div>
               </div>
-              <div className="commentSection">
-                <p className="document_title">
-                  Reason for rejection (if applicable)
-                </p>
-                <div>
-                  <TextArea
-                    onChange={(e) => setTitleDeedComment(e.target.value)}
-                    placeholder="Enter you Title Deed Comment here"
-                    autoSize={{
-                      minRows: 3,
-                      maxRows: 5,
-                    }}
-                  />
-                </div>
-              </div>
+              {
+                (titleDeedAccepted) && (
+                  <div className="commentSection">
+                    <p className="document_title">
+                      Reason for rejection
+                    </p>
+                    <div>
+                      <TextArea
+                        onChange={(e) => setTitleDeedComment(e.target.value)}
+                        placeholder="Enter you Title Deed Comment here"
+                        autoSize={{
+                          minRows: 3,
+                          maxRows: 5,
+                        }}
+                        readOnly={!titleDeedAccepted}
+                      />
+                    </div>
+                  </div>
+                )
+              }
+
             </div>
-            <button className="save_button" onClick={() => {}}>
+            <button className="save_button" onClick={() => { }}>
               Save <SaveOutlined />
             </button>
           </div>

@@ -11,6 +11,7 @@ const console = require("console-browserify");
 
 
 const AgreementView = (props) => {
+
   // props for uploading files
 
   const nocPropsDragger = {

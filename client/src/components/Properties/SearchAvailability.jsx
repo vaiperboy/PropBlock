@@ -116,7 +116,7 @@ const SearchAvailability = (props) => {
           />
         </div>
       </div>
-      <div id="searchButton" onClick={() => {}}>
+      <div id="searchButton" onClick={() => {props.loadProperties()}}>
         <SearchOutlined className="searchBarIcon" />
       </div>
     </div>

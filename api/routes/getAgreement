@@ -92,11 +92,21 @@ router.get("/getAgreement", async function (req, res, next) {
         }
       },
       {
+        unwind: {
+          path: "$details"
+        }
+      },
+      {
         lookup: {
           from: "AgreementDocuments",
           localField: "_id",
           foreignField: "agreementObjectId",
           as: "documents"
+        }
+      },
+      {
+        unwind: {
+          path: "$documents"
         }
       },
       {
@@ -146,6 +156,7 @@ router.get("/getAgreement", async function (req, res, next) {
           "details.isOwnerCancelled": 1,
           "details.buyerPaymentComplete": 1,
           "details.buyerPaymentComplete": 1,
+          "documents._id": 1,
           "documents.nocHash": 1,
           "documents.mouHash": 1,
           "documents.titleDeedHash": 1,
@@ -153,8 +164,14 @@ router.get("/getAgreement", async function (req, res, next) {
           "documents._updated_at": 1,
           "landlord.email": 1,
           "landlord.fullName": 1,
+          "landlord.frontIdHash": 1,
+          "landlord.backIdHash": 1,
+          "landlord.passportHash": 1,
           "buyer.email": 1,
           "buyer.fullName": 1,
+          "buyer.frontIdHash": 1,
+          "buyer.backIdHash": 1,
+          "buyer.passportHash": 1,
         }
       }
     ]
@@ -169,7 +186,6 @@ router.get("/getAgreement", async function (req, res, next) {
   }
 
   result = result[0]
-  result.details = result.details[0]
 
   res.json(result)
   return

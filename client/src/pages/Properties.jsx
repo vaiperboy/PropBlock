@@ -63,7 +63,11 @@ const App = (props) => {
     );
   };
 
-  const loadProperties = async (city, propertyType, maxPrice) => {
+  const loadProperties = async () => {
+    if (isLoading) {
+      message.error("Wait till it finishes...")
+      return
+    }
     setIsLoading(true);
     try {
       fetch(
@@ -126,6 +130,7 @@ const App = (props) => {
           <div className="topSearchSection">
             <SearchAvailability
               parentCallBack={handleFiltering}
+              loadProperties={loadProperties}
               filterValues={filterValues}
             />
           </div>
