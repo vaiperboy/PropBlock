@@ -235,14 +235,11 @@ const PurchaseRequests = (props) => {
 
         console.log("owner address ", ownerAddress)
         console.log("buyer address ", buyerAddress)
-        // const result = await realEstateDappContract.submitDraft(
-        //   ownerAddress,
-        //   propertyId,
-        //   buyerAddress
-        // );
-        var result = {
-          hash: "0x6be0cd51142be4290459af4f69357be4f1899ca967be27f67bb251fa5eed8cb5"
-        }
+        const result = await realEstateDappContract.submitDraft(
+          ownerAddress,
+          propertyId,
+          buyerAddress
+        );
 
         const purchaseRequest = Moralis.Object.extend("PurchaseRequest")
         const query = new Moralis.Query(purchaseRequest)
@@ -524,7 +521,7 @@ const PurchaseRequests = (props) => {
                               <button
                                 className="acceptButton"
                                 onClick={() => {
-                                  processRequest(item.key, true);
+                                  processRequest(item.objectId, true);
                                 }}
                               >
                                 Accept
@@ -532,7 +529,7 @@ const PurchaseRequests = (props) => {
                               <button
                                 className="rejectButton"
                                 onClick={() => {
-                                  processRequest(item.key, false);
+                                  processRequest(item.objectId, false);
                                 }}
                               >
                                 Reject

@@ -400,12 +400,10 @@ const App = () => {
     if (e.target.checked) {
       var errors = [];
       var frontExtension = "";
-      var backExtension = "";
       if (frontPassportDocument.name == undefined) {
         errors.push("Please make sure to upload your file!");
       } else {
         frontExtension = getExtension(frontPassportDocument.name);
-        backExtension = getExtension(backPassportDocument.name);
         if (!checkExtension(frontExtension, extensionsAllowed))
           errors.push(
             "Make sure front passport has the following format: " +
@@ -422,6 +420,7 @@ const App = () => {
           frontPassportDocument,
           "front passport." + frontExtension
         );
+        
         setFrontPassportDocument(front);
       } else {
         e.target.checked = false;

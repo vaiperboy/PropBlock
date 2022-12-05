@@ -258,6 +258,7 @@ const AgreementsList = (props) => {
   // runs first
   useEffect(() => {
     loadBuyerAgreements()
+    loadSellerAgreements()
   }, []);
 
   async function loadBuyerAgreements() {
@@ -296,7 +297,7 @@ const AgreementsList = (props) => {
     )
       .then((res) => res.json())
       .then((res) => {
-        setDataSourceBuyer(res);
+        setDataSourceSeller(res);
         console.log(res);
       })
       .catch((err) => {
