@@ -320,6 +320,25 @@ const PurchaseRequests = (props) => {
                           </tr>
                         );
                       }
+                      // Rejected
+                      if (item.agreementStarted === true) {
+                        return (
+                          <tr
+                            key={item.key}
+                            className="notBuyerFirstRowRejected"
+                          >
+                            <td>{shortenAddress(item.sellerAddress, 20)}</td>
+                            <td>{item.propertyID}</td>
+                            <td>{beautifyDate(item.dateRequested)}</td>
+                            <td
+                              className="requestAccepted"
+                              style={{ color: "#3daeee", fontWeight: "500" }}
+                            >
+                              Agreement Has Started
+                            </td>
+                          </tr>
+                        );
+                      }
                       // Accepted
                       if (
                         item.isAccepted === true &&
@@ -352,6 +371,7 @@ const PurchaseRequests = (props) => {
                           </tr>
                         );
                       }
+
                       // Rejected
                       if (
                         item.isAccepted === false &&

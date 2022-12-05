@@ -1,9 +1,307 @@
 main {
-    min-height: 100vh;
-    .container {
-        .left {
+    .HowToContainer {
+        .heroSection {
+            display: flex;
+            flex-direction: column;
+            height: 58rem;
+            background: linear-gradient(90deg, rgba(180, 71, 255, 0.65) 0%, rgba(61, 174, 238, 0.65) 100%);
+            .text {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin: 0 auto;
+                margin-top: 17rem;
+                h1 {
+                    width: 70rem;
+                    font-size: 5.5rem;
+                    line-height: 6.5rem;
+                    text-align: center;
+                    font-weight: 500;
+                    color: #333;
+                }
+                h3 {
+                    font-size: 2.7rem;
+                    color: #fff;
+                    font-weight: 400;
+                    position: relative;
+                    text-align: center;
+                    &::after {
+                        content: "";
+                        display: block;
+                        margin: 0 auto;
+                        width: 8rem;
+                        padding-top: 5px;
+                        border-bottom: 2px solid #333;
+                    }
+                }
+            }
+            .leftLogos {
+                #Alchemy_logo {
+                    width: 20rem;
+                    position: absolute;
+                    top: 19rem;
+                    left: 20rem;
+                }
+                #moralis_logo {
+                    width: 20rem;
+                    position: absolute;
+                    top: 37rem;
+                    left: 10rem;
+                }
+                #ethersjs_logo {
+                    width: 12rem;
+                    position: absolute;
+                    top: 53rem;
+                    left: 25rem;
+                }
+            }
+            .rightLogos {
+                #hardhat_logo {
+                    width: 10rem;
+                    position: absolute;
+                    top: 19rem;
+                    right: 18rem;
+                }
+                #ipfs_logo {
+                    width: 10rem;
+                    position: absolute;
+                    top: 34rem;
+                    right: 12rem;
+                }
+                #ethereum_logo {
+                    width: 11rem;
+                    position: absolute;
+                    top: 50rem;
+                    right: 18rem;
+                }
+            }
         }
-        .right {
+        .techBehindPropBlock {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 7rem;
+            .techHeading {
+                font-size: 5rem;
+                color: #333;
+                text-align: center;
+                margin-top: 5rem;
+            }
+            .blockchainSection {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                padding: 0 10rem 0 15rem;
+                margin: 0 auto;
+                margin-top: 7rem;
+                gap: 5rem;
+                .leftSide {
+                    width: 50%;
+                    .icon {
+                        width: fit-content;
+                        background-color: rgba(#9747ff, 0.7);
+                        padding: 1rem;
+                        border-radius: 1rem;
+                        margin-bottom: 1.5rem;
+                    }
+                    h1 {
+                        font-size: 4.5rem;
+                        margin-bottom: 1.5rem;
+                        color: #333;
+                    }
+                    p {
+                        font-size: 2rem;
+                        text-align: justify;
+                    }
+                }
+                .rightSide {
+                    img {
+                        width: 55rem;
+                    }
+                }
+            }
+            .EthereumSection {
+                display: flex;
+                padding: 0 10rem 0 15rem;
+                margin: 0 auto;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 10rem;
+                .leftSide {
+                    img {
+                        width: 32rem;
+                    }
+                }
+                .rightSide {
+                    width: 50%;
+                    .icon {
+                        width: fit-content;
+                        background-color: rgba(#9747ff, 0.7);
+                        padding: 1rem 2rem;
+                        border-radius: 1rem;
+                        margin-bottom: 1.5rem;
+                    }
+                    h1 {
+                        font-size: 4.5rem;
+                        margin-bottom: 1.5rem;
+                        color: #333;
+                    }
+                    p {
+                        font-size: 2rem;
+                        text-align: justify;
+                    }
+                }
+            }
+            .SmartContractSection {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                padding: 0 10rem 0 15rem;
+                margin: 0 auto;
+                margin-top: 12rem;
+                gap: 5rem;
+                .leftSide {
+                    width: 50%;
+                    .icon {
+                        width: fit-content;
+                        background-color: rgba(#9747ff, 0.7);
+                        padding: 1.5rem;
+                        border-radius: 1rem;
+                        margin-bottom: 1.5rem;
+                    }
+                    h1 {
+                        font-size: 4.5rem;
+                        margin-bottom: 1.5rem;
+                        color: #333;
+                    }
+                    p {
+                        font-size: 2rem;
+                        text-align: justify;
+                    }
+                }
+                .rightSide {
+                    img {
+                        width: 45rem;
+                    }
+                }
+            }
+        }
+        .userManual {
+            .headingSection {
+                background-color: rgba(#9747ff, 0.4);
+                display: flex;
+                gap: 5rem;
+                justify-content: space-between;
+                padding: 5rem 0;
+                .text {
+                    padding-left: 15rem;
+                    width: 80rem;
+                    h1 {
+                        font-size: 6.5rem;
+                        color: #333;
+                        font-weight: 600;
+                        margin-bottom: 2rem;
+                    }
+                    p {
+                        text-align: justify;
+                        font-size: 2rem;
+                        color: #fff;
+                        font-weight: 600;
+                    }
+                }
+                .styleContainer {
+                    img {
+                    }
+                }
+            }
+            .userGuide {
+                .heading {
+                    font-size: 4rem;
+                    margin-top: 4rem;
+                    text-align: center;
+                    text-transform: uppercase;
+                    background: linear-gradient(to right, #9747ff 0%, #3daeee 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                .landingPageSection {
+                    display: flex;
+                    padding: 0 8rem 0 12rem;
+                    justify-content: space-between;
+                    gap: 5rem;
+                    margin-top: 5rem;
+                    .leftSide {
+                        width: 50rem;
+                        h1 {
+                            font-size: 3rem;
+                            color: #3daeee;
+                        }
+                        p {
+                            font-size: 1.6rem;
+                            color: #444;
+                            text-align: justify;
+                        }
+                    }
+                    .rightSide {
+                        img {
+                        }
+                    }
+                }
+                .landingPageSectionFlipped {
+                    display: flex;
+                    padding: 0 8rem 0 12rem;
+                    justify-content: space-between;
+                    gap: 5rem;
+                    margin-top: 5rem;
+                    .leftSide {
+                        img {
+                        }
+                    }
+                    .rightSide {
+                        width: 50rem;
+                        h1 {
+                            font-size: 3.2rem;
+                            color: #9747ff;
+                        }
+                        p {
+                            font-size: 1.6rem;
+                            color: #444;
+                            text-align: justify;
+                        }
+                    }
+                }
+                .signupPageSection {
+                    display: flex;
+                    padding: 0 8rem 0 12rem;
+                    justify-content: space-between;
+                    gap: 5rem;
+                    margin-top: 5rem;
+                    .leftSide {
+                        width: 50rem;
+                        h1 {
+                            font-size: 3rem;
+                            background: linear-gradient(to right, #9747ff 0%, #3daeee 100%);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                        }
+                        p {
+                            font-size: 1.6rem;
+                            color: #444;
+                            .ant-steps-icon-dot {
+                                span {
+                                    font-size: 3rem;
+                                }
+                            }
+                            .ant-steps-item-description {
+                                text-align: justify;
+                            }
+                        }
+                    }
+                    .rightSide {
+                        img {
+                        }
+                    }
+                }
+            }
         }
     }
 }

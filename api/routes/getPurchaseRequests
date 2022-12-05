@@ -9,68 +9,72 @@ var router = express.Router();
 //getting purchases requests for a seller
 router.get("/getPurchaseRequests", async function (req, res, next) {
   const sessionToken = req.query.sessionToken;
-  const ownerAddress = req.query.ownerAddress
+  const ownerAddress = req.query.ownerAddress;
   const mode = req.query.mode.toLowerCase();
-  var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
+  var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress);
 
   if (!isLoggedIn) {
     res.status(401);
-    res.send("not authenticated")
+    res.send("not authenticated");
     return;
   }
 
-  if (mode === undefined
-     || ownerAddress === undefined
-     || ((mode != "seller" && mode != "buyer"))) {
-    res.status(422).send("wrong input")
-    return
+  if (
+    mode === undefined ||
+    ownerAddress === undefined ||
+    (mode != "seller" && mode != "buyer")
+  ) {
+    res.status(422).send("wrong input");
+    return;
   }
 
-  console.log("address: " + ownerAddress)
+  console.log("address: " + ownerAddress);
   const requestsQuery = new Moralis.Query("PurchaseRequest");
-  if(mode == "seller") requestsQuery.equalTo("sellerEthAddress", ownerAddress);
+  if (mode == "seller") requestsQuery.equalTo("sellerEthAddress", ownerAddress);
   else requestsQuery.equalTo("requesterEthAddress", ownerAddress);
-    // requestsQuery.equalTo("isPending", true)
-    const requestResult = await requestsQuery.find();
+  // requestsQuery.equalTo("isPending", true)
+  const requestResult = await requestsQuery.find();
 
-    //because moralis object is very bad
-    //so ill just treat it as a JSON
-    const result = JSON.parse(JSON.stringify(requestResult))
-    const data = [];
-    for (let i = 0; i < result.length; i++) {
-      var currentResult = result[i];
-      //only return results with isBeingProcessed status
+  //because moralis object is very bad
+  //so ill just treat it as a JSON
+  const result = JSON.parse(JSON.stringify(requestResult));
+  const data = [];
+  for (let i = 0; i < result.length; i++) {
+    var currentResult = result[i];
+    //only return results with isBeingProcessed status
 
-      var user = {};
-      var requestorAddress = currentResult.requesterEthAddress;
-      //make local caching
-      var user = {};
+    var user = {};
+    var requestorAddress = currentResult.requesterEthAddress;
+    //make local caching
+    var user = {};
 
-      for (var j = 0; j < data.length; j++) {
-        //if user exists in cache
-        if (data[j]["address"] == requestorAddress.toLowerCase()) {
-          user = {
-            fullName: data[j]["fullName"],
-            address: data[j]["address"]
-          }
-          break;
-        }
+    for (var j = 0; j < data.length; j++) {
+      //if user exists in cache
+      if (data[j]["address"] == requestorAddress.toLowerCase()) {
+        user = {
+          fullName: data[j]["fullName"],
+          address: data[j]["address"],
+        };
+        break;
       }
-
-      if (Object.keys(user).length === 0) user = await helper.getUser(requestorAddress)
-      
-      data.push({
-        key: currentResult.objectId,
-        sellerAddress: currentResult.sellerEthAddress,
-        requesterAddress: currentResult.requesterEthAddress,
-        propertyID: currentResult.propertyObjectId,
-        dateRequested: currentResult.createdAt,
-        isPending: currentResult.isPending ?? true,
-        isAccepted: currentResult.isAccepted ?? false
-      });
     }
 
-    res.send(data); 
+    if (Object.keys(user).length === 0)
+      user = await helper.getUser(requestorAddress);
+
+    data.push({
+      key: currentResult.objectId,
+      sellerAddress: currentResult.sellerEthAddress,
+      requesterAddress: currentResult.requesterEthAddress,
+      propertyID: currentResult.propertyObjectId,
+      dateRequested: currentResult.createdAt,
+      isPending: currentResult.isPending ?? true,
+      isAccepted: currentResult.isAccepted ?? false,
+      agreementStarted: currentResult.agreementStarted ?? false,
+    });
+  }
+
+  res.send(data);
 });
 
 module.exports = router;

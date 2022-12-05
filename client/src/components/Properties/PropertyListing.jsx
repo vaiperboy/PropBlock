@@ -29,7 +29,6 @@ class PropertyListing extends React.Component {
     return text;
   }
 
-  
   toFeatures(value, maxCounter) {
     return value.slice(0, 3).map((val, idx) => {
       return (
@@ -42,8 +41,6 @@ class PropertyListing extends React.Component {
       );
     });
   }
-
-  
 
   shortenAddress(text, maxWords) {
     if (maxWords < text.length && maxWords >= 18) {
@@ -86,7 +83,7 @@ class PropertyListing extends React.Component {
 
                   <br></br>
                   <div className="content">
-                    {this.shortenText(this.props.body, 250)}
+                    {this.shortenText(this.props.body, 50)}
                   </div>
                 </div>
                 <div className="lower-body">
