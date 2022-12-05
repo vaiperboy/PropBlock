@@ -20,13 +20,12 @@ const AgreementView = (props) => {
 
   const nocPropsDragger = {
     name: "file",
-    multiple: true,
     accept: ".pdf",
     maxCount: 1,
     onChange(info) {
-      setNocFile(info.file.originFileObj);
+      if (info.fileList.length === 0) setNocFile({});
+      else setNocFile(info.file.originFileObj);
     },
-    onRemove(e) {},
   };
 
   const mouPropsDragger = {
@@ -35,14 +34,8 @@ const AgreementView = (props) => {
     accept: ".pdf",
     maxCount: 1,
     onChange(info) {
-      let temp = [];
-      temp.push(info.file.originFileObj);
-      setMouFile(temp);
-    },
-    onRemove(e) {
-      console.log("here");
-      let temp = [];
-      setMouFile(temp);
+      if (info.fileList.length === 0) setMouFile({});
+      else setMouFile(info.file.originFileObj);
     },
   };
 
@@ -52,9 +45,9 @@ const AgreementView = (props) => {
     accept: ".pdf",
     maxCount: 1,
     onChange(info) {
-      setTitleFile(info.file.originFileObj);
+      if (info.fileList.length === 0) setTitleFile({});
+      else setTitleFile(info.file.originFileObj);
     },
-    onRemove(e) {},
   };
 
   const {
@@ -76,43 +69,36 @@ const AgreementView = (props) => {
   const [mouFile, setMouFile] = useState([]);
   const [nocFile, setNocFile] = useState([]);
   const [titleFile, setTitleFile] = useState([]);
-  const [finishButton, setFinishButton] = useState(false);
+  const [isValidated, setIsValidated] = useState(false);
+  const [agreement, setAgreement] = useState({});
+  const [isUploaded, setIsUploaded] = useState(false);
 
-  useEffect(() => {
-    let agreementId = props.agreementId;
-    async function fetchAgreementDetails(agreementId) {
-      const request = Moralis.Object.extend("AgreementsTable");
-      const agreementQuery = new Moralis.Query(request);
-      agreementQuery.equalTo("agreementId", agreementId);
-      const results = await agreementQuery.find();
-      if (results.length > 0) {
-        setPropertyId(results[0].get("propertyId"));
-      }
-      // console. results[0].get("ownerAddress")
+  const validateUpload = (e) => {
+    var errors = [];
+    console.log("here");
+    if (nocFile.name === undefined) {
+      errors.push("NoC file cannot be empty!");
     }
-    fetchAgreementDetails(agreementId);
-  }, []);
+    if (mouFile.name == undefined) {
+      errors.push("MOU file cannot be empty!");
+    }
+    if (titleFile.name == undefined) {
+      errors.push("Title Deed file cannot be empty!");
+    }
+    if (errors.length > 0) {
+      errors.forEach((e) => message.error(e));
+      setIsUploaded(false);
+      return false;
+    }
+    message.success("Files are uploaded successfully/");
+    setIsUploaded(true);
+    return true;
+  };
 
   const onCheck = (e) => {
-    setFinishButton(e.target.checked);
+    setIsValidated(e.target.checked);
   };
-  const completeUpload = () => {
-    const checked = document.getElementById("checkBox").checked;
-    if (checked) {
-      if (Object.keys(mouFile).length === 0 && mouFile.constructor === Object) {
-        console.log("mou file: empty");
-      } else {
-        console.log("mou file: ", mouFile);
-      }
-      console.log("noc file: ", nocFile);
-      console.log("title deed file: ", titleFile);
-      message.success("here");
-      return;
-    } else {
-      message.info("Note: Please check the box at the bottom to continue ");
-      return;
-    }
-  };
+
   // ------------------
   return (
     <div className="rightsidebar_container">
@@ -128,6 +114,7 @@ const AgreementView = (props) => {
           <div>
             <p className="rightsidebar_title">My Agreements</p>
             <p className="agreement_view_subtitle">
+              {/* Agreement ID - #{props.agreementId} */}
               {/* Agreement ID - #{props.agreementId} */}
               Agreement ID - #{props.agreementId}
             </p>
@@ -173,9 +160,9 @@ const AgreementView = (props) => {
             <p className="agreement_view_label">Owner’s Address</p>
             {/* <span className="agreement_view_value">{props.ownerAddress}</span> */}
             <span className="agreement_view_value">
-              {props.ownerAddress.slice(0, 10) +
+              {/* {props.ownerAddress.slice(0, 10) +
                 " ... " +
-                props.ownerAddress.slice(25, 35)}
+                props.ownerAddress.slice(25, 35)} */}
             </span>
           </div>
         </div>
@@ -255,24 +242,17 @@ const AgreementView = (props) => {
             <Checkbox onChange={onCheck} id="checkBox">
               I confirm that the above uploaded documents are valid
             </Checkbox>
-            {finishButton ? (
+            {isValidated ? (
               <button
                 onClick={() => {
-                  completeUpload();
+                  validateUpload();
                 }}
-                disabled={false}
                 className="finishButton"
               >
                 Finish
               </button>
             ) : (
-              <button
-                onClick={() => {
-                  completeUpload();
-                }}
-                disabled={false}
-                className="disabledFinishButton"
-              >
+              <button disabled={true} className="disabledFinishButton">
                 Finish
               </button>
             )}

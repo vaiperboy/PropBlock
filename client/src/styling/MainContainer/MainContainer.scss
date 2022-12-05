@@ -750,7 +750,7 @@
     }
 
     .agreementView {
-        height: 135vh;
+        height: fit-content;
         .ant-upload-list-text-container {
             width: 80%;
         }
@@ -859,6 +859,41 @@
             }
         }
         .rightsidebar_container {
+            .addPropertyBox {
+                transition: all 0.3s ease;
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+                justify-content: center;
+                align-items: center;
+                width: "fit-content";
+                height: 28rem;
+                width: 34rem;
+                border: 1px solid #3daeee;
+                margin-left: "1rem";
+                p {
+                    font-size: 2rem;
+                    color: #3daeee;
+                }
+                svg {
+                    fill: #fff;
+                    stroke: #3daeee;
+                }
+                &:hover {
+                    transition: all 0.3s ease;
+                    transform: scale(1.05);
+                    background-color: rgb(#3daeee, 0.6);
+                    cursor: pointer;
+                    color: #fff;
+                    p {
+                        color: #fff;
+                    }
+                    svg {
+                        fill: rgb(#3daeee, 0.2);
+                        stroke: #fff;
+                    }
+                }
+            }
             margin-left: 5rem;
             max-width: 900px;
 

@@ -4,7 +4,7 @@ main {
             display: flex;
             flex-direction: column;
             height: 58rem;
-            background: linear-gradient(90deg, rgba(180, 71, 255, 0.65) 0%, rgba(61, 174, 238, 0.65) 100%);
+            // background: linear-gradient(90deg, rgba(180, 71, 255, 0.65) 0%, rgba(61, 174, 238, 0.65) 100%);
             .text {
                 display: flex;
                 flex-direction: column;
@@ -35,44 +35,61 @@ main {
                     }
                 }
             }
+            background: linear-gradient(-45deg, rgb(#9747ff, 0.7), #9747ff, #3daeee, rgb(#3daeee, 0.7));
+            background-size: 350% 350%;
+            -webkit-animation: gradient 10s ease infinite;
+            animation: gradient 7s ease-in-out infinite;
             .leftLogos {
                 #Alchemy_logo {
-                    width: 20rem;
+                    width: 10rem;
                     position: absolute;
                     top: 19rem;
                     left: 20rem;
+                    overflow: hidden;
+                    opacity: 0.6;
+                    animation: movement 7s infinite;
                 }
                 #moralis_logo {
-                    width: 20rem;
+                    width: 15rem;
                     position: absolute;
                     top: 37rem;
                     left: 10rem;
+                    opacity: 0.8;
+                    animation: movement 10s infinite;
                 }
                 #ethersjs_logo {
-                    width: 12rem;
+                    width: 8rem;
                     position: absolute;
                     top: 53rem;
                     left: 25rem;
+                    opacity: 0.6;
+                    animation: movement-sideways 8s infinite;
                 }
             }
             .rightLogos {
                 #hardhat_logo {
-                    width: 10rem;
+                    width: 8rem;
                     position: absolute;
                     top: 19rem;
                     right: 18rem;
+                    opacity: 0.6;
+                    animation: movement-reverse 10s infinite;
                 }
                 #ipfs_logo {
-                    width: 10rem;
+                    width: 9rem;
                     position: absolute;
                     top: 34rem;
                     right: 12rem;
+                    opacity: 0.6;
+                    animation: movement-sideways 10s infinite;
                 }
                 #ethereum_logo {
-                    width: 11rem;
+                    width: 9rem;
                     position: absolute;
                     top: 50rem;
                     right: 18rem;
+                    opacity: 0.6;
+                    animation: movement 10s infinite;
                 }
             }
         }
@@ -279,9 +296,7 @@ main {
                         width: 50rem;
                         h1 {
                             font-size: 3rem;
-                            background: linear-gradient(to right, #9747ff 0%, #3daeee 100%);
-                            -webkit-background-clip: text;
-                            -webkit-text-fill-color: transparent;
+                            color: #3daeee;
                         }
                         p {
                             font-size: 1.6rem;
@@ -303,5 +318,69 @@ main {
                 }
             }
         }
+    }
+}
+@-webkit-keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+@keyframes movement {
+    0% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-2rem);
+    }
+    75% {
+        transform: translateY(2rem);
+    }
+    100% {
+        transform: translateY(0rem);
+    }
+}
+@keyframes movement-reverse {
+    0% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(2rem);
+    }
+    75% {
+        transform: translateY(-2rem);
+    }
+    100% {
+        transform: translateY(0rem);
+    }
+}
+@keyframes movement-sideways {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(2rem);
+    }
+    75% {
+        transform: translateX(-2rem);
+    }
+    100% {
+        transform: translateX(0rem);
     }
 }

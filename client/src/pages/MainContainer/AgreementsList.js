@@ -30,10 +30,10 @@ const AgreementsList = (props) => {
     //   propertyID: "1",
     //   agreementId: "1",
     //   propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
-    //   areDocsUploaded: false, 
-    //   isBeingVerfied: false, 
-    //   notFirstTime: false, 
-    //   isRevisionRequired: false, 
+    //   areDocsUploaded: false,
+    //   isBeingVerfied: false,
+    //   notFirstTime: false,
+    //   isRevisionRequired: false,
     //   isGovernmentVerified: false,
     //   isBuyerCancelled: false,
     //   isOwnerCancelled: false,
@@ -228,10 +228,9 @@ const AgreementsList = (props) => {
     return 0;
   }
 
-  const handleUploadDocuments = (ownerAddress, agreementId) => {
+  const handleUploadDocuments = (agreementId) => {
     try {
       setUploadDocumentsView(true);
-      props.setOwnerAddress(ownerAddress);
       props.setAgreementId(agreementId);
       props.toggleAgreementView(false);
       props.toggleAgreementView(1);
@@ -257,7 +256,8 @@ const AgreementsList = (props) => {
 
   // runs first
   useEffect(() => {
-    loadBuyerAgreements()
+    loadBuyerAgreements();
+    loadSellerAgreements();
   }, []);
 
   async function loadBuyerAgreements() {
@@ -276,8 +276,8 @@ const AgreementsList = (props) => {
         console.log(res);
       })
       .catch((err) => {
-        message.error("API error")
-        setDataSourceBuyer([])
+        message.error("API error");
+        setDataSourceBuyer([]);
       })
       .finally(() => {
         setIsLoading(false);
@@ -296,12 +296,12 @@ const AgreementsList = (props) => {
     )
       .then((res) => res.json())
       .then((res) => {
-        setDataSourceBuyer(res);
+        setDataSourceSeller(res);
         console.log(res);
       })
       .catch((err) => {
-        message.error("API error")
-        setDataSourceSeller([])
+        message.error("API error");
+        setDataSourceSeller([]);
       })
       .finally(() => {
         setIsLoading(false);
@@ -327,7 +327,7 @@ const AgreementsList = (props) => {
                   <button
                     className="refreshButton"
                     onClick={() => {
-                      loadBuyerAgreements()
+                      loadBuyerAgreements();
                     }}
                   >
                     Refresh{" "}
@@ -337,7 +337,7 @@ const AgreementsList = (props) => {
                 <div className="tableContainer">
                   <table className="buyersTable">
                     <tr>
-                      <th width="37%">Owner's Address</th>
+                      <th width="30%">Owner's Address</th>
                       <th width="13%">Property ID</th>
                       <th>Agreement Status</th>
                       <th width="25%">Action</th>
@@ -358,10 +358,22 @@ const AgreementsList = (props) => {
                       // Agreement is cancelled by the buyer
                       if (item.details.isBuyerCancelled === true) {
                         return (
-                          <tr key={item.objectId} className="agreementCancelled">
+                          <tr
+                            key={item.objectId}
+                            className="agreementCancelled"
+                          >
                             <td>{shortenAddress(item.landlordAddress, 20)}</td>
-                            <td><a href={"property/" + item.details.propertyObjectId} target="_blank">{item.details.propertyObjectId}</a></td>
-                            <td style={{ color: "#cb4335" }}>Cancelled</td>
+                            <td>
+                              <a
+                                href={
+                                  "property/" + item.details.propertyObjectId
+                                }
+                                target="_blank"
+                              >
+                                {item.details.propertyObjectId}
+                              </a>
+                            </td>
+                            <td style={{ color: "#cb4335" }}></td>
                             <td>-</td>
                           </tr>
                         );
@@ -369,9 +381,21 @@ const AgreementsList = (props) => {
                       // Agreement is cancelled by the owner of the property
                       if (item.details.isOwnerCancelled === true) {
                         return (
-                          <tr key={item.objectId} className="agreementCancelled">
+                          <tr
+                            key={item.objectId}
+                            className="agreementCancelled"
+                          >
                             <td>{shortenAddress(item.landlordAddress, 20)}</td>
-                            <td><a href={"property/" + item.details.propertyObjectId} target="_blank">{item.details.propertyObjectId}</a></td>
+                            <td>
+                              <a
+                                href={
+                                  "property/" + item.details.propertyObjectId
+                                }
+                                target="_blank"
+                              >
+                                {item.details.propertyObjectId}
+                              </a>
+                            </td>
                             <td style={{ color: "#cb4335" }}>
                               Cancelled by Owner
                             </td>
@@ -379,12 +403,49 @@ const AgreementsList = (props) => {
                           </tr>
                         );
                       }
+                      // documents are to be uploaded by the user
+                      if (item.details.areDocsUploaded === false) {
+                        return (
+                          <tr
+                            key={item.objectId}
+                            className="agreementCancelled"
+                          >
+                            <td>{shortenAddress(item.landlordAddress, 20)}</td>
+                            <td>
+                              <a
+                                href={
+                                  "property/" + item.details.propertyObjectId
+                                }
+                                target="_blank"
+                              >
+                                {item.details.propertyObjectId}
+                              </a>
+                            </td>
+                            <td style={{ color: "#3daeee" }}>
+                              Waiting for Seller Documents Upload
+                            </td>
+                            <td className="acceptAgreement">- </td>
+                          </tr>
+                        );
+                      }
                       // Agreement Completed
                       if (item.details.isTransfered === true) {
                         return (
-                          <tr key={item.objectId} className="agreementCompleted">
+                          <tr
+                            key={item.objectId}
+                            className="agreementCompleted"
+                          >
                             <td>{shortenAddress(item.landlordAddress, 20)}</td>
-                            <td><a href={"property/" + item.details.propertyObjectId} target="_blank">{item.details.propertyObjectId}</a></td>
+                            <td>
+                              <a
+                                href={
+                                  "property/" + item.details.propertyObjectId
+                                }
+                                target="_blank"
+                              >
+                                {item.details.propertyObjectId}
+                              </a>
+                            </td>
                             <td style={{ color: "#3daeee" }}>
                               Agreement Completed
                             </td>
@@ -401,7 +462,16 @@ const AgreementsList = (props) => {
                         return (
                           <tr key={item.objectId} className="agreementComplete">
                             <td>{shortenAddress(item.landlordAddress, 20)}</td>
-                            <td><a href={"property/" + item.details.propertyObjectId} target="_blank">{item.details.propertyObjectId}</a></td>
+                            <td>
+                              <a
+                                href={
+                                  "property/" + item.details.propertyObjectId
+                                }
+                                target="_blank"
+                              >
+                                {item.details.propertyObjectId}
+                              </a>
+                            </td>
                             <td style={{ color: "#2ecc71" }}>Govt. Verified</td>
                             <td className="acceptAgreement">
                               <button
@@ -426,9 +496,21 @@ const AgreementsList = (props) => {
                         item.details.isBuyerCancelled === false
                       ) {
                         return (
-                          <tr key={item.objectId} className="agreementCancelled">
+                          <tr
+                            key={item.objectId}
+                            className="agreementCancelled"
+                          >
                             <td>{shortenAddress(item.landlordAddress, 20)}</td>
-                            <td><a href={"property/" + item.details.propertyObjectId} target="_blank">{item.details.propertyObjectId}</a></td>
+                            <td>
+                              <a
+                                href={
+                                  "property/" + item.details.propertyObjectId
+                                }
+                                target="_blank"
+                              >
+                                {item.details.propertyObjectId}
+                              </a>
+                            </td>
                             <td style={{ color: "#3daeee" }}>
                               Govt. Approval Pending
                             </td>
@@ -482,7 +564,7 @@ const AgreementsList = (props) => {
                     <button
                       className="refreshButton"
                       onClick={() => {
-                        loadSellerAgreements()
+                        loadSellerAgreements();
                       }}
                     >
                       Refresh{" "}
@@ -517,9 +599,21 @@ const AgreementsList = (props) => {
                         // Agreement is cancelled by the owner of the property
                         if (item.details.isOwnerCancelled === true) {
                           return (
-                            <tr key={item.objectId} className="agreementCancelled">
+                            <tr
+                              key={item.objectId}
+                              className="agreementCancelled"
+                            >
                               <td>{shortenAddress(item.buyerAddress, 20)}</td>
-                              <td><a href={"property/" + item.details.propertyObjectId} target="_blank">{item.details.propertyObjectId}</a></td>
+                              <td>
+                                <a
+                                  href={
+                                    "property/" + item.details.propertyObjectId
+                                  }
+                                  target="_blank"
+                                >
+                                  {item.details.propertyObjectId}
+                                </a>
+                              </td>
                               <td style={{ color: "red" }}>
                                 Cancelled by Owner
                               </td>
@@ -530,9 +624,21 @@ const AgreementsList = (props) => {
                         // Agreement is cancelled by the buyer
                         if (item.details.isBuyerCancelled === true) {
                           return (
-                            <tr key={item.objectId} className="agreementCancelled">
+                            <tr
+                              key={item.objectId}
+                              className="agreementCancelled"
+                            >
                               <td>{shortenAddress(item.buyerAddress, 20)}</td>
-                              <td><a href={"property/" + item.details.propertyObjectId} target="_blank">{item.details.propertyObjectId}</a></td>
+                              <td>
+                                <a
+                                  href={
+                                    "property/" + item.details.propertyObjectId
+                                  }
+                                  target="_blank"
+                                >
+                                  {item.details.propertyObjectId}
+                                </a>
+                              </td>
                               <td style={{ color: "red" }}>Cancelled</td>
                               <td>-</td>
                             </tr>
@@ -544,9 +650,21 @@ const AgreementsList = (props) => {
                           item.details.notFirstTime === false
                         ) {
                           return (
-                            <tr key={item.objectId} className="agreementCancelled">
+                            <tr
+                              key={item.objectId}
+                              className="agreementCancelled"
+                            >
                               <td>{shortenAddress(item.buyerAddress, 20)}</td>
-                              <td><a href={"property/" + item.details.propertyObjectId} target="_blank">{item.details.propertyObjectId}</a></td>
+                              <td>
+                                <a
+                                  href={
+                                    "property/" + item.details.propertyObjectId
+                                  }
+                                  target="_blank"
+                                >
+                                  {item.details.propertyObjectId}
+                                </a>
+                              </td>
                               <td style={{ color: "#3daeee" }}>
                                 Upload Documents for agreement
                               </td>
@@ -554,10 +672,7 @@ const AgreementsList = (props) => {
                                 <buttom
                                   className="uploadDocumentsButton"
                                   onClick={() => {
-                                    handleUploadDocuments(
-                                      item.ownerAddress,
-                                      item.agreementId
-                                    );
+                                    handleUploadDocuments(item.objectId);
                                   }}
                                 >
                                   Upload Documents
@@ -573,9 +688,21 @@ const AgreementsList = (props) => {
                           item.details.isBeingVerfied === false
                         ) {
                           return (
-                            <tr key={item.objectId} className="agreementComplete">
+                            <tr
+                              key={item.objectId}
+                              className="agreementComplete"
+                            >
                               <td>{shortenAddress(item.buyerAddress, 20)}</td>
-                              <td><a href={"property/" + item.details.propertyObjectId} target="_blank">{item.details.propertyObjectId}</a></td>
+                              <td>
+                                <a
+                                  href={
+                                    "property/" + item.details.propertyObjectId
+                                  }
+                                  target="_blank"
+                                >
+                                  {item.details.propertyObjectId}
+                                </a>
+                              </td>
                               <td style={{ color: "#666666" }}>
                                 Govt. Approval Pending
                               </td>
@@ -590,9 +717,21 @@ const AgreementsList = (props) => {
                           item.details.isBeingVerfied === false
                         ) {
                           return (
-                            <tr key={item.objectId} className="agreementComplete">
+                            <tr
+                              key={item.objectId}
+                              className="agreementComplete"
+                            >
                               <td>{shortenAddress(item.buyerAddress, 20)}</td>
-                              <td><a href={"property/" + item.details.propertyObjectId} target="_blank">{item.details.propertyObjectId}</a></td>
+                              <td>
+                                <a
+                                  href={
+                                    "property/" + item.details.propertyObjectId
+                                  }
+                                  target="_blank"
+                                >
+                                  {item.details.propertyObjectId}
+                                </a>
+                              </td>
                               <td style={{ color: "#666666" }}>
                                 Govt. Approval Pending (After revision)
                               </td>
@@ -606,9 +745,21 @@ const AgreementsList = (props) => {
                           item.details.isGovernmentVerified === true
                         ) {
                           return (
-                            <tr key={item.objectId} className="agreementComplete">
+                            <tr
+                              key={item.objectId}
+                              className="agreementComplete"
+                            >
                               <td>{shortenAddress(item.buyerAddress, 20)}</td>
-                              <td><a href={"property/" + item.details.propertyObjectId} target="_blank">{item.details.propertyObjectId}</a></td>
+                              <td>
+                                <a
+                                  href={
+                                    "property/" + item.details.propertyObjectId
+                                  }
+                                  target="_blank"
+                                >
+                                  {item.details.propertyObjectId}
+                                </a>
+                              </td>
                               <td style={{ color: "#2ecc71" }}>
                                 Govt. Approved
                               </td>
@@ -624,9 +775,21 @@ const AgreementsList = (props) => {
                           item.details.isRevisionRequired === true
                         ) {
                           return (
-                            <tr key={item.objectId} className="agreementComplete">
+                            <tr
+                              key={item.objectId}
+                              className="agreementComplete"
+                            >
                               <td>{shortenAddress(item.buyerAddress, 20)}</td>
-                              <td><a href={"property/" + item.details.propertyObjectId} target="_blank">{item.details.propertyObjectId}</a></td>
+                              <td>
+                                <a
+                                  href={
+                                    "property/" + item.details.propertyObjectId
+                                  }
+                                  target="_blank"
+                                >
+                                  {item.details.propertyObjectId}
+                                </a>
+                              </td>
                               <td style={{ color: "#dc8d0f" }}>
                                 Documents Invalid - Upload valid Documents
                               </td>

@@ -5,6 +5,7 @@ import {
   Upload as UploadAntDesign,
   InputNumber,
   Select as SelectAnt,
+  Spin,
 } from "antd";
 import {
   PlusOutlined,
@@ -109,8 +110,8 @@ const MyProperties = () => {
     { value: 256, label: "TV Access" },
   ]);
   const [facilitiesXor, setFacilitiesXor] = useState(0);
-  const [userProperties, setUserProperties] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [userProperties, setUserProperties] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const sampleProperties = [
     {
@@ -145,14 +146,13 @@ const MyProperties = () => {
     },
   ];
 
-
   const fetchUserProperties = async () => {
     try {
       fetch(
         "http://localhost:9000/getUserProperties?" +
-        new URLSearchParams({
-          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress"))
-        })
+          new URLSearchParams({
+            ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
+          })
       )
         .then((res) => res.json())
         .then((res) => {
@@ -164,11 +164,11 @@ const MyProperties = () => {
           // description: "Set in exotic landscaped gardens",
           // price: "1,500,000",
           // imageLocation: "realEstate_2-min.png",
-          console.log(res)
-          var tmp = []
+          console.log(res);
+          var tmp = [];
           for (var i = 0; i < res.results.length; i++) {
-            const item = res.results[i]
-            console.log(item)
+            const item = res.results[i];
+            console.log(item);
             tmp.push({
               id: item.objectId,
               ownerAddress: item.landlordAddress,
@@ -176,10 +176,10 @@ const MyProperties = () => {
               location: item.details.location,
               description: item.details.propertyDescription,
               price: item.numericPrice,
-              imageLocation: item.images[0]
-            })
+              imageLocation: item.images[0],
+            });
           }
-          setUserProperties(tmp)
+          setUserProperties(tmp);
         })
         .catch((err) => {
           message.error("error with API " + err);
@@ -190,18 +190,15 @@ const MyProperties = () => {
     } catch (err) {
       message.error("error with setting data from API");
     }
-  }
-
-
+  };
 
   useEffect(() => {
     setOwnerAddress(user.get("ethAddress"));
     setEmailAddress(user.get("email"));
     setFullName(user.get("fullName"));
 
-    fetchUserProperties()
-  }, [])
-
+    fetchUserProperties();
+  }, []);
 
   // -------------------------------
   // Functions
@@ -223,7 +220,7 @@ const MyProperties = () => {
 
   // function to add property
   const addProperty = async () => {
-    setIsCreatingProperty(true)
+    setIsCreatingProperty(true);
     try {
       let realEstateDappContract;
       // converting the data from string to int type
@@ -455,7 +452,7 @@ const MyProperties = () => {
       ) {
         message.error(
           "Please make sure the file extension are: " +
-          extensionsAllowed.join(",")
+            extensionsAllowed.join(",")
         );
         return;
       }
@@ -509,7 +506,6 @@ const MyProperties = () => {
     setImageList(files);
   };
 
-
   const clearState = () => {
     setOwnerAddress("");
     setFullName("");
@@ -532,7 +528,7 @@ const MyProperties = () => {
     imageList[primaryImageIndex] = first;
   };
 
-  const printAllData = () => { };
+  const printAllData = () => {};
 
   useEffect(() => {
     console.log(primaryImageOption);
@@ -540,56 +536,61 @@ const MyProperties = () => {
 
   // properties view
   if (addPropertyView) {
-    return (
-      <div className="rightsidebar_container">
+    if (isLoading) {
+      return (
         <div
           style={{
-            width: "100%",
+            textAlign: "center",
+            width: "60%",
+            height: "50rem",
+            marginLeft: "5rem",
             display: "flex",
-            justifyContent: "space-between",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <div>
-            <p className="rightsidebar_title">My Properties</p>
-          </div>
+          <Spin size="large" style={{ margin: "0 2rem 0 0 " }} /> Loading
         </div>
-        <div
-          className="rightsidebar_content"
-          style={{
-            width: "100%",
-            display: "flex",
-            marginTop: 30,
-            height: "auto",
-          }}
-        >
+      );
+    } else {
+      return (
+        <div className="rightsidebar_container">
           <div
             style={{
-              height: "60px",
               width: "100%",
               display: "flex",
+              justifyContent: "space-between",
               alignItems: "center",
-              gap: "30px",
-              borderRadius: "8px",
-              flexWrap: "wrap",
             }}
           >
-            <div className="property-card">
-              {userProperties.map((property, i) => (
-                <Property_Card props={property} />
-              ))}
+            <div>
+              <p className="rightsidebar_title">My Properties</p>
+            </div>
+          </div>
+          <div
+            className="rightsidebar_content"
+            style={{
+              width: "100%",
+              display: "flex",
+              marginTop: 30,
+              height: "auto",
+            }}
+          >
+            <div
+              style={{
+                height: "60px",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                gap: "30px",
+                borderRadius: "8px",
+                flexWrap: "wrap",
+              }}
+            >
               <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "2rem ",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: "fit-content",
-                  height: "28rem",
-                  width: "34rem",
-                  border: "1px solid #3daeee",
-                  marginLeft: "1rem",
+                className="addPropertyBox"
+                onClick={() => {
+                  setAddPropertyView(false);
                 }}
               >
                 <svg
@@ -599,31 +600,26 @@ const MyProperties = () => {
                   viewBox="0 0 77 77"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  onClick={() => {
-                    setAddPropertyView(false);
-                  }}
                 >
-                  <circle
-                    cx="38.5"
-                    cy="38.5"
-                    r="38"
-                    fill="white"
-                    stroke="#3DAEEE"
-                  />
+                  <circle cx="38.5" cy="38.5" r="38" />
                   <path
                     d="M50.1667 39.6667H40.6667V49.1667H37.5V39.6667H28V36.5H37.5V27H40.6667V36.5H50.1667V39.6667Z"
                     fill="#3DAEEE"
                   />
                 </svg>
-                <p style={{ fontSize: "2rem", color: "#3daeee" }}>
-                  Add New Property
-                </p>
+                <p>Add New Property</p>
+              </div>
+              <div className="property-card">
+                {userProperties.map((property, i) => (
+                  <Property_Card props={property} />
+                ))}
               </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+
     // creating a property view
   } else {
     return (
@@ -691,10 +687,11 @@ const MyProperties = () => {
                                 id="InputAddress"
                                 className="ethAddressInput"
                                 name="address"
-                                placeholder={`${ethAddress.slice(0, 6) +
+                                placeholder={`${
+                                  ethAddress.slice(0, 6) +
                                   "..." +
                                   ethAddress.slice(25, 35)
-                                  }`}
+                                }`}
                                 value={ownerAddress}
                                 validation={{
                                   readOnly: true,

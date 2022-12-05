@@ -241,14 +241,11 @@ const PurchaseRequests = (props) => {
 
         console.log("owner address ", ownerAddress);
         console.log("buyer address ", buyerAddress);
-        // const result = await realEstateDappContract.submitDraft(
-        //   ownerAddress,
-        //   propertyId,
-        //   buyerAddress
-        // );
-        var result = {
-          hash: "0x6be0cd51142be4290459af4f69357be4f1899ca967be27f67bb251fa5eed8cb5",
-        };
+        const result = await realEstateDappContract.submitDraft(
+          ownerAddress,
+          propertyId,
+          buyerAddress
+        );
 
         const purchaseRequest = Moralis.Object.extend("PurchaseRequest");
         const query = new Moralis.Query(purchaseRequest);
@@ -344,7 +341,7 @@ const PurchaseRequests = (props) => {
                       </tr>
                     )}
                     {dataSourceBuyer.map((item) => {
-                      if (item.isPending === true) {
+                      if (item.agreementStarted === true) {
                         return (
                           <tr
                             key={item.key}
@@ -365,6 +362,34 @@ const PurchaseRequests = (props) => {
                               style={{ color: "#3daeee", fontWeight: "500" }}
                             >
                               Agreement Has Started
+                            </td>
+                          </tr>
+                        );
+                      }
+                      if (
+                        item.isPending === true &&
+                        item.agreementStarted === false
+                      ) {
+                        return (
+                          <tr
+                            key={item.key}
+                            className="notBuyerFirstRowPending"
+                          >
+                            <td>{shortenAddress(item.sellerEthAddress, 20)}</td>
+                            <td>
+                              <a
+                                href={"property/" + item.propertyObjectId}
+                                target="_blank"
+                              >
+                                {item.propertyObjectId}
+                              </a>
+                            </td>
+                            <td>{beautifyDate(item.createdAt)}</td>
+                            <td
+                              className="requestAccepted"
+                              style={{ color: "#3daeee", fontWeight: "500" }}
+                            >
+                              Pending
                             </td>
                           </tr>
                         );
@@ -407,36 +432,6 @@ const PurchaseRequests = (props) => {
                               >
                                 Create Agreement
                               </button>
-                            </td>
-                          </tr>
-                        );
-                      }
-                      //Agreement Started
-                      if (
-                        item.isAccepted === true &&
-                        item.isPending === false &&
-                        item.agreementStarted === true
-                      ) {
-                        return (
-                          <tr
-                            key={item.key}
-                            className="notBuyerFirstRowAccepted"
-                          >
-                            <td>{shortenAddress(item.sellerEthAddress, 20)}</td>
-                            <td>
-                              <a
-                                href={"property/" + item.propertyObjectId}
-                                target="_blank"
-                              >
-                                {item.propertyObjectId}
-                              </a>
-                            </td>
-                            <td>{beautifyDate(item.createdAt)}</td>
-                            <td
-                              className="requestAccepted"
-                              style={{ color: "#666" }}
-                            >
-                              Agreement Started
                             </td>
                           </tr>
                         );
