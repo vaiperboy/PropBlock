@@ -9,8 +9,8 @@ var router = express.Router();
 //getting purchases requests for a seller
 router.get("/getPurchaseRequests", async function (req, res, next) {
   const sessionToken = req.query.sessionToken;
-  const ownerAddress = req.query.ownerAddress;
-  const mode = req.query.mode.toLowerCase();
+  var ownerAddress = req.query.ownerAddress;
+  var mode = req.query.mode;
   var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress);
 
   if (!isLoggedIn) {
@@ -19,62 +19,69 @@ router.get("/getPurchaseRequests", async function (req, res, next) {
     return;
   }
 
-  if (
-    mode === undefined ||
-    ownerAddress === undefined ||
-    (mode != "seller" && mode != "buyer")
-  ) {
+  if (mode == undefined) {
     res.status(422).send("wrong input");
     return;
   }
 
-  console.log("address: " + ownerAddress);
-  const requestsQuery = new Moralis.Query("PurchaseRequest");
-  if (mode == "seller") requestsQuery.equalTo("sellerEthAddress", ownerAddress);
-  else requestsQuery.equalTo("requesterEthAddress", ownerAddress);
-  // requestsQuery.equalTo("isPending", true)
-  const requestResult = await requestsQuery.find();
+  mode = mode.toLowerCase();
 
-  //because moralis object is very bad
-  //so ill just treat it as a JSON
-  const result = JSON.parse(JSON.stringify(requestResult));
-  const data = [];
-  for (let i = 0; i < result.length; i++) {
-    var currentResult = result[i];
-    //only return results with isBeingProcessed status
-
-    var user = {};
-    var requestorAddress = currentResult.requesterEthAddress;
-    //make local caching
-    var user = {};
-
-    for (var j = 0; j < data.length; j++) {
-      //if user exists in cache
-      if (data[j]["address"] == requestorAddress.toLowerCase()) {
-        user = {
-          fullName: data[j]["fullName"],
-          address: data[j]["address"],
-        };
-        break;
-      }
-    }
-
-    if (Object.keys(user).length === 0)
-      user = await helper.getUser(requestorAddress);
-
-    data.push({
-      key: currentResult.objectId,
-      sellerAddress: currentResult.sellerEthAddress,
-      requesterAddress: currentResult.requesterEthAddress,
-      propertyID: currentResult.propertyObjectId,
-      dateRequested: currentResult.createdAt,
-      isPending: currentResult.isPending ?? true,
-      isAccepted: currentResult.isAccepted ?? false,
-      agreementStarted: currentResult.agreementStarted ?? false,
-    });
+  if (ownerAddress === undefined || (mode != "seller" && mode != "buyer")) {
+    res.status(422).send("wrong input");
+    return;
   }
 
-  res.send(data);
+  ownerAddress = helper.toCheckSumAddress(ownerAddress);
+
+  const query = new Moralis.Query("PurchaseRequest");
+  const pipeline = [
+    {
+      match: {
+        ...(mode == "seller"
+          ? {
+              sellerEthAddress: ownerAddress,
+            }
+          : {
+              requesterEthAddress: ownerAddress,
+            }),
+      },
+    },
+    {
+      lookup: {
+        from: "PropertiesAdded",
+        localField: "propertyObjectId",
+        foreignField: "_id",
+        as: "details",
+      },
+    },
+    {
+      match: {
+        details: { $exists: true },
+      },
+    },
+    {
+      project: {
+        "details.propertyId": 1,
+        sellerEthAddress: 1,
+        requesterEthAddress: 1,
+        propertyObjectId: 1,
+        createdAt: 1,
+        isPending: 1,
+        isAccepted: 1,
+        agreementStarted: 1,
+      },
+    },
+    {
+      addFields: {
+        propertyId: { $toInt: { $first: "$details.propertyId" } },
+      },
+    },
+  ];
+
+  const _result = await query.aggregate(pipeline, { useMasterKey: true });
+  const result = JSON.parse(JSON.stringify(_result));
+  res.send(result);
+  return;
 });
 
 module.exports = router;

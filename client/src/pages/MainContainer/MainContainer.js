@@ -44,6 +44,14 @@ class MainContainer extends React.Component {
     ownerAddress: "",
     agreementId: "",
   };
+ 
+
+  //reset dashboard view
+  // componentDidUpdate(prevProps, prevState, snapshopt) {
+  //   if (prevState.isBuyer !== this.state.isBuyer)  {
+  //       this.toggleDashboardView(true)
+  //     }
+  // }
 
   setToBuyer = (val) => {
     this.setState({ isBuyer: val });

@@ -41,6 +41,7 @@ router.get("/processPurchaseRequest", async function (req, res, next) {
     request.set("isAccepted", req.query.type.toLowerCase() == "accept" ? true : false)
     request.save()
     res.send("updated")
+    
     return
 });
 

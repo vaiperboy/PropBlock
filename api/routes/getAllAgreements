@@ -1,0 +1,86 @@
+var express = require("express");
+require("dotenv").config();
+var Moralis = require("../modules/moralis");
+var config = require("../config");
+var helper = require("../functions/Helper");
+
+var router = express.Router();
+
+//getting purchases requests for a seller
+router.get("/getAllAgreements", async function (req, res, next) {
+  const sessionToken = req.query.sessionToken;
+  var ownerAddress = req.query.ownerAddress;
+  var mode = req.query.mode
+
+  var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
+  if (!isLoggedIn) {
+    res.send(401, "not authenticated")
+    return;
+  }
+
+  if (mode == undefined) {
+    res.status(422).send("wrong input")
+    return
+  }
+  mode = mode.toLowerCase()
+
+  if (ownerAddress === undefined
+    || ((mode != "seller" && mode != "buyer"))) {
+    res.status(422).send("wrong input")
+    return
+  }
+
+  ownerAddress = helper.toCheckSumAddress(ownerAddress)
+
+  const query = new Moralis.Query("AgreementDrafts")
+  const pipeline = [
+    {
+      match: {
+        ...(mode == "seller") ? {
+          landlordAddress: ownerAddress
+        } : {
+          buyerAddress: ownerAddress
+        }
+      }
+    }, 
+    {
+      lookup: {
+        from: "AgreementStatus",
+        localField: "transaction_hash",
+        foreignField: "txHash",
+        as: "details"
+      }
+    },
+    {
+      match: {
+        "details.propertyObjectId": { $exists: true }
+      }
+    },
+    {
+      project: {
+        "buyerAddress": 1,
+        "landlordAddress": 1,
+        "createdAt": 1,
+        "details.propertyObjectId": 1,
+        "details.areDocsUploaded": 1,
+        "details.isBeingVerfied": 1,
+        "details.notFirstTime": 1,
+        "details.isRevisionRequired": 1,
+        "details.isGovernmentVerified": 1,
+        "details.isBuyerCancelled": 1,
+        "details.isOwnerCancelled": 1,
+        "details.buyerPaymentComplete": 1,
+      }
+    }
+  ]
+  const _result = await query.aggregate(pipeline, {useMasterKey: true})
+  const result = JSON.parse(JSON.stringify(_result))
+  for (var i = 0; i < result.length; i++) {
+    result[i].details = result[i].details[0]
+  }
+  
+  res.json(result)
+  return
+});
+
+module.exports = router;

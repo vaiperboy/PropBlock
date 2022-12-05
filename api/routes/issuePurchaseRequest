@@ -1,0 +1,43 @@
+var express = require("express");
+require("dotenv").config();
+var Moralis = require("../modules/moralis");
+var config = require("../config");
+var helper = require("../functions/Helper");
+
+var router = express.Router();
+
+//getting purchases requests for a seller
+router.get("/issuePurchaseRequest", async function (req, res, next) {
+  const sessionToken = req.query.sessionToken;
+  const propertyObjectId = req.query.propertyObjectId;
+  var ownerAddress = req.query.ownerAddress
+  var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
+
+  if (!isLoggedIn) {
+    res.status(401);
+    res.send("not authenticated")
+    return;
+  }
+
+  if (mode === undefined
+    || ownerAddress === undefined
+    || propertyObjectId === undefined
+    || ((mode != "seller" && mode != "buyer"))) {
+    res.status(422).send("wrong input")
+    return
+  }
+  ownerAddress = helper.toCheckSumAddress(ownerAddress)
+
+  var query = new Moralis.Query("PurchaseRequest")
+  query.equalTo("propertyObjectId", propertyObjectId)
+
+  const _result = await query.find()
+  var result = JSON.parse(JSON.stringify(_result))
+  for (var i = 0; i < result.length; i++) {
+
+  }
+  
+  res.send("not implemented")
+});
+
+module.exports = router;

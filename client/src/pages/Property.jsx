@@ -137,12 +137,6 @@ const Property = (props) => {
     }
   }
 
-
-
-  useEffect(() => {
-    console.log("visible", visible);
-  }, [visible]);
-
   useEffect(() => {
     fetchProperty()
   }, []);
@@ -180,8 +174,8 @@ const Property = (props) => {
     query.equalTo("propertyObjectId", objectId);
     query.limit(1);
     query.withCount();
-    const results = await query.find();
-    if (results.count > 0) {
+    const _result = await query.find();
+    if (_result.count > 0) {
       message.error("You already have a request with this seller!");
       return;
     }

@@ -3,6 +3,8 @@ var config = require('../config');
 var axios = require('axios');
 var Moralis = require("../modules/moralis");
 const { pageSize } = require("../config");
+const { toChecksumAddress } = require('ethereum-checksum-address')
+
 
 //to cache the result
 var hashesDict = [];
@@ -48,6 +50,10 @@ module.exports.getImages = async function (cid) {
 //passing the address is optional
 module.exports.isAuthenticated = async function(sessionToken, address) {
     return new Promise(async (resolve, reject) => {
+        if (sessionToken === undefined) {
+            resolve(false)
+        }
+        
         try {
             var sessionQuery = new Moralis.Query("_Session");
             sessionQuery.equalTo("sessionToken", sessionToken);
@@ -63,7 +69,6 @@ module.exports.isAuthenticated = async function(sessionToken, address) {
                 resolve(true)
                 return
             }
-
             const userId = JSON.parse(JSON.stringify(result))[0].user.objectId
 
             //check _User table
@@ -75,10 +80,8 @@ module.exports.isAuthenticated = async function(sessionToken, address) {
                 resolve(false)
                 return;
             }
-            
             const _result = JSON.parse(JSON.stringify(userQueryResult))[0]
             const matchingUserAddress = _result.ethAddress
-            console.log(matchingUserAddress.toLowerCase(), address.toLowerCase())
             resolve(matchingUserAddress.toLowerCase() == address.toLowerCase())
             return
         } catch {
@@ -128,3 +131,7 @@ module.exports.getTotalPageNumbers = function(totalCount, pageSize) {
 module.exports.isAddress = function (address) {
     return /^(0x)?[0-9a-f]{40}$/i.test(address)
 };
+
+module.exports.toCheckSumAddress = function(address) {
+    return toChecksumAddress(address)
+}
