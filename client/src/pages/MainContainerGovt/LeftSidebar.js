@@ -78,18 +78,6 @@ class LeftSidebar extends React.Component {
           <div
             className="leftsidebar_item"
             style={{
-              color: this.props.menuState.usersView ? "#3DAEEE" : "",
-            }}
-            onClick={() => {
-              this.props.toggleUsersView(true);
-            }}
-          >
-            <UserOutlined />
-            Users
-          </div>
-          <div
-            className="leftsidebar_item"
-            style={{
               color:
                 this.props.menuState.agreementView ||
                 this.props.menuState.uploadMode
@@ -121,6 +109,18 @@ class LeftSidebar extends React.Component {
               </defs>
             </svg>
             Agreements
+          </div>
+          <div
+            className="leftsidebar_item"
+            style={{
+              color: this.props.menuState.usersView ? "#3DAEEE" : "",
+            }}
+            onClick={() => {
+              this.props.toggleUsersView(true);
+            }}
+          >
+            <UserOutlined />
+            Users
           </div>
           <div
             className="leftsidebar_item disconnect_item"

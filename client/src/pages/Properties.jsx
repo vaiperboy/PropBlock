@@ -1,9 +1,7 @@
 import Navbar from "../components/Navbar";
-import React, { Component, useEffect } from "react";
-import { message, Descriptions, Typography, Spin } from "antd";
-import GridLoader from "react-spinners/GridLoader";
+import React, { useEffect } from "react";
+import { message, Spin } from "antd";
 import PropertyListing from "../components/Properties/PropertyListing";
-import SampleImage from "../assets/sample-property.png";
 import SampleWalletImage from "../assets/sample-wallet-image.png";
 import SearchAvailability from "../components/Properties/SearchAvailability";
 import FilterProperties from "../components/Properties/FilterProperties";
@@ -12,7 +10,6 @@ import "../styling/Properties/Properties.scss";
 import Footer from "../components/Footer";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useCallback } from "react";
 const console = require("console-browserify");
 
 const App = (props) => {
@@ -41,7 +38,7 @@ const App = (props) => {
 
   //to pass information from child to parent
   const handleFiltering = (_name, value) => {
-    console.log("changed " + _name + " to " + JSON.stringify(value))
+    console.log("changed " + _name + " to " + JSON.stringify(value));
     var oldState = { ...filterValues };
     oldState[_name] = value;
     setFilterValues(oldState);
@@ -71,16 +68,16 @@ const App = (props) => {
     try {
       fetch(
         "http://localhost:9000/getAllProperties?" +
-        new URLSearchParams({
-          pageNumber: currentPageNumber,
-          city: filterValues.city,
-          minPrice: filterValues.prices.minPrice,
-          maxPrice: filterValues.prices.maxPrice,
-          propertyType: filterValues.propertyType,
-          facilities: filterValues.facilities,
-          minimumBeds: filterValues.minimumBeds,
-          minimumBaths: filterValues.minimumBaths,
-        })
+          new URLSearchParams({
+            pageNumber: currentPageNumber,
+            city: filterValues.city,
+            minPrice: filterValues.prices.minPrice,
+            maxPrice: filterValues.prices.maxPrice,
+            propertyType: filterValues.propertyType,
+            facilities: filterValues.facilities,
+            minimumBeds: filterValues.minimumBeds,
+            minimumBaths: filterValues.minimumBaths,
+          })
       )
         .then((res) => res.json())
         .then((res) => {
@@ -99,26 +96,25 @@ const App = (props) => {
     }
   };
 
-  const location = useLocation()
+  const location = useLocation();
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search)
-    var city = queryParams.get("city")
-    var maxPrice =queryParams.get("maxPrice")
-    var propertyType =  queryParams.get("propertyType")
+    const queryParams = new URLSearchParams(location.search);
+    var city = queryParams.get("city");
+    var maxPrice = queryParams.get("maxPrice");
+    var propertyType = queryParams.get("propertyType");
     if (city !== null) {
-      filterValues.city = city
-    } 
+      filterValues.city = city;
+    }
     if (maxPrice !== null) {
-      filterValues.prices.maxPrice = maxPrice
+      filterValues.prices.maxPrice = maxPrice;
     }
     if (propertyType !== null) {
-      filterValues.propertyType = propertyType
+      filterValues.propertyType = propertyType;
     }
-    
-    loadProperties()
-  }, []);
 
+    loadProperties();
+  }, []);
 
   return (
     <div className="properties-page">
@@ -151,9 +147,8 @@ const App = (props) => {
                 <div
                   style={{
                     textAlign: "center",
-                    width: "60%",
-                    height: "50rem",
-                    marginLeft: "5rem",
+                    width: "70rem",
+                    height: "40rem",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",

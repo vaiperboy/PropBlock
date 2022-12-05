@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import stats from "./stats.png";
-import { FilePond, File, registerPlugin } from "react-filepond";
-import { useFiatBuy, useMoralis, useMoralisQuery } from "react-moralis";
-import { Table, message, Popconfirm, Spin } from "antd";
-import "filepond/dist/filepond.min.css";
-import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
-import FilePondPluginImagePreview from "filepond-plugin-image-preview";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import { useMoralis } from "react-moralis";
+import { message, Popconfirm, Spin } from "antd";
 import MyAgreements from "./MyAgreements";
 import no_data from "../../assets/no_data.png";
 import "../../styling/MainContainer/Agreements.scss";
@@ -15,12 +10,8 @@ import refresh_icon from "../../assets/refresh_iconx2.png";
 import Web3 from "web3";
 const console = require("console-browserify");
 
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
-
 const AgreementsList = (props) => {
   const [showAgreement, setShowAgreements] = useState(false);
-  const [currentAgreementId, setCurrentAgreementId] = useState("");
-
   const [dataSourceSeller, setDataSourceSeller] = useState([
     // upload documents - first time
     // {
@@ -194,7 +185,7 @@ const AgreementsList = (props) => {
     //   isTransfered: true,
     // },
   ]);
-  const [agreements, setAgreements] = useState([]);
+  // const [agreements, setAgreements] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [uploadDocumentsView, setUploadDocumentsView] = useState(false);
 
@@ -369,7 +360,9 @@ const AgreementsList = (props) => {
                                 {item.details.propertyObjectId}
                               </a>
                             </td>
-                            <td style={{ color: "#cb4335" }}></td>
+                            <td style={{ color: "#cb4335" }}>
+                              You Cancelled the agreement
+                            </td>
                             <td>-</td>
                           </tr>
                         );

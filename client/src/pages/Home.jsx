@@ -1,15 +1,10 @@
 import "../styling/Home/Home.scss";
 import { Link } from "react-router-dom";
-import { AutoComplete, Select, InputNumber, notification, message } from "antd";
+import { AutoComplete, Select, InputNumber, notification } from "antd";
 // import { Loading } from "@web3uikit/core";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import {
-  TagOutlined,
-  SearchOutlined,
-  ArrowRightOutlined,
-} from "@ant-design/icons";
-
+import { SearchOutlined, ArrowRightOutlined } from "@ant-design/icons";
 // import rentHome from "../assets/rent-home-100-icon-min.png";
 import rentHome from "../assets/rent_home_icon.png";
 import buyHome from "../assets/buy_home_icon.png";
@@ -28,20 +23,17 @@ import government_Of_Dubai from "../assets/Government_of_Dubai_logo.png";
 import about_logo from "../assets/about_prop.png";
 import about_logo2 from "../assets/about_prop2.png";
 import contact_us from "../assets/contact_us.png";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, createSearchParams } from "react-router-dom";
-import Zoom from "react-reveal/Zoom";
 import Fade from "react-reveal/Fade";
-import Reveal from "react-reveal/Reveal";
-import Slide from "react-reveal/Slide";
 import emailjs from "emailjs-com";
 
 const console = require("console-browserify");
 
 function Home() {
-  const[city, setCity] = useState("")
-  const[propertyType, setPropertyType] = useState("")
-  const[maxPrice, setMaxPrice] = useState(1000000)
+  const [city, setCity] = useState("");
+  const [propertyType, setPropertyType] = useState("");
+  const [maxPrice, setMaxPrice] = useState(1000000);
   const countryOptions = [
     {
       value: "Abu Dhabi",
@@ -69,18 +61,17 @@ function Home() {
     },
   ];
 
-  const navigate = useNavigate()
- const goToProperties = () => {
-  navigate(
-    {
+  const navigate = useNavigate();
+  const goToProperties = () => {
+    navigate({
       pathname: "properties",
-       search: createSearchParams({
-    ...(city.length > 0) && {city: city},
-    ...(propertyType.length > 0) && {propertyType: propertyType},
-    ...(maxPrice > 0) && {maxPrice: maxPrice}
-    }).toString()
-  })
- }
+      search: createSearchParams({
+        ...(city.length > 0 && { city: city }),
+        ...(propertyType.length > 0 && { propertyType: propertyType }),
+        ...(maxPrice > 0 && { maxPrice: maxPrice }),
+      }).toString(),
+    });
+  };
 
   const sampleProperties = [
     {
@@ -148,7 +139,7 @@ function Home() {
           <div className="dottedLine"></div>
           <div className="leftSide">
             <div>
-              <Fade left duration={1800}>
+              <Fade effect="fadeInUp" bottom duration={1000}>
                 <h1>
                   Find your dream home, <br /> the <span>Web3</span> way!
                 </h1>
@@ -158,14 +149,14 @@ function Home() {
                 </h5>
               </Fade>
 
-              <Link to="/properties" className="exploreLink">
-                <Fade left duration={2000}>
+              <Link to="/properties" bottom className="exploreLink">
+                <Fade bottom duration={1000}>
                   <button className="exploreButton">Explore</button>
                 </Fade>
               </Link>
             </div>
           </div>
-          <Fade effect="fadeInUp" duration={3500}>
+          <Fade effect="fadeInUp" duration={3000}>
             <div className="rightSide">
               <img
                 src={hero_image}
@@ -245,15 +236,16 @@ function Home() {
                 />
               </div>
             </div>
-            <div id="searchButton"
-             onClick={() => {
-             goToProperties()
-             }}
-             >
+            <div
+              id="searchButton"
+              onClick={() => {
+                goToProperties();
+              }}
+            >
               <SearchOutlined
-               className="searchBarIcon"
-                style={{color: "#ffffff"}}
-                />
+                className="searchBarIcon"
+                style={{ color: "#ffffff" }}
+              />
             </div>
           </div>
         </div>

@@ -1,5 +1,4 @@
 .governmentAgreementsListContainer {
-  
   .FirstRow {
     font-size: 1.5rem;
     .waitingForUpload {
@@ -74,7 +73,6 @@
 }
 
 .rightsidebar_container {
-
   width: 1700px;
   .applyy_button {
     padding: 0.5rem 1rem;
@@ -240,9 +238,10 @@
   }
 }
 
+// users page
 .viewUserButton {
   border: none;
-  background-color: #23bb20;
+  background-color: #3daeee;
   color: #ffffff;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
@@ -250,7 +249,7 @@
   &:hover {
     transition: all 0.1s ease;
     cursor: pointer;
-    background-color: rgb(#23bb20, 0.7);
+    background-color: rgb(#3daeee, 0.7);
   }
 }
 
