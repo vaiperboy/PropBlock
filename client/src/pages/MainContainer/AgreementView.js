@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import agreement_icon from "../../assets/agreement_icon.png";
-import { useMoralis } from "react-moralis";
+import { useMoralis, useNewMoralisObject } from "react-moralis";
 import { message, Upload, Tooltip, Checkbox } from "antd";
 import { InboxOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import ipfs from "../../modules/ipfs";
@@ -74,37 +74,23 @@ const AgreementView = (props) => {
     });
   };
 
+ 
   //upload docs via IPFS
   const uploadToIpfs = async () => {
     return new Promise(async (resolve, reject) => {
+      var hashes = {}
       try {
-        const options = {
-          wrapWithDirectory: true,
-          //progress: (prog) => console.log(`[ipfs] received: ${prog}`)
-        };
-        const files = [
-          nocFile,
-          mouFile,
-          titleFile
-        ];
-        var hash = "";
-        console.log("files to add: " + files);
-        for await (const result of ipfs.addAll(files, options)) {
-          hash = result.cid._baseCache.entries().next().value[1];
-        }
-        console.log(hash);
-        resolve(hash);
+        hashes.nocHash = (await ipfs.add(nocFile)).path
+        hashes.mouHash = (await ipfs.add(mouFile)).path
+        hashes.titleDeedHash = (await ipfs.add(titleFile)).path
+        resolve(hashes)
       } catch (error) {
         reject(error)
       }
     });
   }
 
-  const renameAllFiles = () => {
-    setNocFile(renameFile(nocFile, "NOC.pdf"))
-    setNocFile(renameFile(mouFile, "MOU.pdf"))
-    setNocFile(renameFile(titleFile, "Title Deed.pdf"))
-  }
+  window.uploadToIpfs = uploadToIpfs
 
   const validateUpload = () => {
     var errors = [];
@@ -125,6 +111,8 @@ const AgreementView = (props) => {
     return true;
   };
 
+
+  const { save } = useNewMoralisObject("AgreementDocuments");
   const [isUploading, setIsUploading] = useState(false)
   const uploadDocs = async (e) => {
     if (isUploading) {
@@ -138,15 +126,24 @@ const AgreementView = (props) => {
 
     setIsUploading(true)
     uploadToIpfs()
-      .then(async (hash) => {
-        const agreementStatus = Moralis.Object.extend("AgreementStatus")
-        const query = new Moralis.Query(agreementStatus)
-        query.equalTo("txHash", agreement.transaction_hash)
-        const result = await query.first()
-        result.set("ipfsHash", hash)
-        result.set("areDocsUploaded", true)
-        result.save()
-        message.success("Files are uploaded successfully/");
+      .then(async (hashes) => {
+        
+        const data = {
+          agreementObjectId: agreement.objectId,
+          nocHash: hashes.nocHash,
+          mouHash: hashes.mouHash,
+          titleDeedHash: hashes.titleDeedHash
+        }
+
+        save(data, {
+          onSuccess: (obj) => {
+            message.success("Documents uploaded!")
+          },
+          onError: (error) => {
+            message.error("Couldn't input documents into database!")
+          },
+        });
+
       })
       .catch((err) => {
         message.error("Issue with uploading to IPFS! " + err)

@@ -33,53 +33,142 @@ router.get("/getAllAgreements", async function (req, res, next) {
   ownerAddress = helper.toCheckSumAddress(ownerAddress)
 
   const query = new Moralis.Query("AgreementDrafts")
-  const pipeline = [
-    {
-      match: {
-        ...(mode == "seller") && {
-          landlordAddress: ownerAddress
-        },
-        ...(mode == "buyer") && {
-          buyerAddress: ownerAddress
+  let pipeline;
+  if (mode != "goverment") {
+    pipeline = [
+      {
+        match: {
+          ...(mode == "seller") && {
+            landlordAddress: ownerAddress
+          },
+          ...(mode == "buyer") && {
+            buyerAddress: ownerAddress
+          }
+        }
+      },
+      {
+        lookup: {
+          from: "AgreementStatus",
+          localField: "transaction_hash",
+          foreignField: "txHash",
+          as: "details"
+        }
+      },
+      {
+        match: {
+          "details.propertyObjectId": { $exists: true }
+        }
+      },
+      {
+        project: {
+          "buyerAddress": 1,
+          "landlordAddress": 1,
+          "createdAt": 1,
+          "details.propertyObjectId": 1,
+          "details.areDocsUploaded": 1,
+          "details.isBeingVerfied": 1,
+          "details.needsRevision": 1,
+          "details.isRevisionRequired": 1,
+          "details.isGovernmentVerified": 1,
+          "details.isBuyerCancelled": 1,
+          "details.isOwnerCancelled": 1,
+          "details.buyerPaymentComplete": 1,
+          "details.buyerPaymentComplete": 1
         }
       }
-    }, 
-    {
-      lookup: {
-        from: "AgreementStatus",
-        localField: "transaction_hash",
-        foreignField: "txHash",
-        as: "details"
+    ]
+  } else {
+    pipeline = [
+      {
+        lookup: {
+          from: "AgreementStatus",
+          localField: "transaction_hash",
+          foreignField: "txHash",
+          as: "details"
+        }
+      },
+      {
+        match: {
+          "details.propertyObjectId": { $exists: true }
+        }
+      },
+      {
+        lookup: {
+          from: "AgreementDocuments",
+          localField: "_id",
+          foreignField: "agreementObjectId",
+          as: "documents"
+        }
+      },
+      {
+        addFields: {
+          "smallLandlordAddress": { $toLower: "$landlordAddress" },
+          "smallBuyerAddress": { $toLower: "$buyerAddress" }
+        }
+      },
+      {
+        lookup: {
+          from: "_User",
+          localField: "smallLandlordAddress",
+          foreignField: "ethAddress",
+          as: "landlord"
+        }
+      },
+      {
+        unwind: {
+          path: "$landlord"
+        }
+      },
+      {
+        lookup: {
+          from: "_User",
+          localField: "smallBuyerAddress",
+          foreignField: "ethAddress",
+          as: "buyer"
+        }
+      },
+      {
+        unwind: {
+          path: "$buyer"
+        }
+      },
+      {
+        project: {
+          "buyerAddress": 1,
+          "landlordAddress": 1,
+          "createdAt": 1,
+          "details.propertyObjectId": 1,
+          "details.areDocsUploaded": 1,
+          "details.isBeingVerfied": 1,
+          "details.needsRevision": 1,
+          "details.isRevisionRequired": 1,
+          "details.isGovernmentVerified": 1,
+          "details.isBuyerCancelled": 1,
+          "details.isOwnerCancelled": 1,
+          "details.buyerPaymentComplete": 1,
+          "details.buyerPaymentComplete": 1,
+          "documents.nocHash": 1,
+          "documents.mouHash": 1,
+          "documents.titleDeedHash": 1,
+          "documents.reasonForRejection": 1,
+          "documents._updated_at": 1,
+          "landlord.email": 1,
+          "landlord.fullName": 1,
+          "buyer.email": 1,
+          "buyer.fullName": 1,
+        }
       }
-    },
-    {
-      match: {
-        "details.propertyObjectId": { $exists: true }
-      }
-    },
-    {
-      project: {
-        "buyerAddress": 1,
-        "landlordAddress": 1,
-        "createdAt": 1,
-        "details.propertyObjectId": 1,
-        "details.areDocsUploaded": 1,
-        "details.isBeingVerfied": 1,
-        "details.needsRevision": 1,
-        "details.isRevisionRequired": 1,
-        "details.isGovernmentVerified": 1,
-        "details.isBuyerCancelled": 1,
-        "details.isOwnerCancelled": 1,
-        "details.buyerPaymentComplete": 1,
-      }
-    }
-  ]
-  const _result = await query.aggregate(pipeline, {useMasterKey: true})
+    ]
+  }
+
+
+  const _result = await query.aggregate(pipeline, { useMasterKey: true })
   const result = JSON.parse(JSON.stringify(_result))
   for (var i = 0; i < result.length; i++) {
     result[i].details = result[i].details[0]
+    if (result[i].documents.length > 0) result[i].documents = result[i].documents[0]
   }
-  
+
   res.json(result)
   return
 });

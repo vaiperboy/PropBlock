@@ -8,7 +8,7 @@ import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { Table, message, Popconfirm, Spin } from "antd";
 import { useMoralis, useNewMoralisObject } from "react-moralis";
-
+import Web3 from "web3";
 import no_data from "../../assets/no_data.png";
 import AgreementView from "./AgreementView";
 import "./Agreementview.scss";
@@ -122,7 +122,7 @@ const AgreementsList = (props) => {
 
   useEffect(() => {
     message.info(user.getSessionToken())
-  }, []);
+    }, []);
   const [clicked, setClicked] = useState(false);
 
   if (table) {

@@ -35,7 +35,6 @@ module.exports.getImages = async function (cid) {
                 console.log(error);
                 return hashes;
             });
-
     }
 
     //add to cache
