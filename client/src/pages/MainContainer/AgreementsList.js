@@ -196,7 +196,6 @@ const AgreementsList = (props) => {
   ]);
   const [agreements, setAgreements] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isUploaded, setIsUploaded] = useState(false);
   const [uploadDocumentsView, setUploadDocumentsView] = useState(false);
 
   // Function to shorten the address
@@ -232,8 +231,7 @@ const AgreementsList = (props) => {
     try {
       setUploadDocumentsView(true);
       props.setAgreementId(agreementId);
-      props.toggleAgreementView(false);
-      props.toggleAgreementView(1);
+      props.toggleAgreementView(true);
     } catch (error) {
       console.log("Error: ", error);
     }
@@ -256,8 +254,8 @@ const AgreementsList = (props) => {
 
   // runs first
   useEffect(() => {
-    loadBuyerAgreements();
-    loadSellerAgreements();
+    loadBuyerAgreements()
+    loadSellerAgreements()
   }, []);
 
   async function loadBuyerAgreements() {
@@ -273,7 +271,6 @@ const AgreementsList = (props) => {
       .then((res) => res.json())
       .then((res) => {
         setDataSourceBuyer(res);
-        console.log(res);
       })
       .catch((err) => {
         message.error("API error");
@@ -297,7 +294,6 @@ const AgreementsList = (props) => {
       .then((res) => res.json())
       .then((res) => {
         setDataSourceSeller(res);
-        console.log(res);
       })
       .catch((err) => {
         message.error("API error");
@@ -647,7 +643,7 @@ const AgreementsList = (props) => {
                         // Upload documents for the agreement - first time
                         if (
                           item.details.areDocsUploaded === false &&
-                          item.details.notFirstTime === false
+                          item.details.needsRevision === false
                         ) {
                           return (
                             <tr
@@ -684,7 +680,7 @@ const AgreementsList = (props) => {
                         // Document are uploaded - first time && waiting approval
                         if (
                           item.details.areDocsUploaded === true &&
-                          item.details.notFirstTime === false &&
+                          item.details.needsRevision === false &&
                           item.details.isBeingVerfied === false
                         ) {
                           return (
@@ -713,7 +709,7 @@ const AgreementsList = (props) => {
                         // Document are uploaded - not first time && waiting approval
                         if (
                           item.details.areDocsUploaded === true &&
-                          item.details.notFirstTime === true &&
+                          item.details.needsRevision === true &&
                           item.details.isBeingVerfied === false
                         ) {
                           return (
@@ -770,7 +766,7 @@ const AgreementsList = (props) => {
                         // documents need revison
                         if (
                           item.details.areDocsUploaded === false &&
-                          item.details.notFirstTime === true &&
+                          item.details.needsRevision === true &&
                           item.details.isBeingVerfied === true &&
                           item.details.isRevisionRequired === true
                         ) {

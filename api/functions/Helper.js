@@ -48,7 +48,7 @@ module.exports.getImages = async function (cid) {
 
 //makes sure user is authenticated & with the matching address
 //passing the address is optional
-module.exports.isAuthenticated = async function(sessionToken, address) {
+module.exports.isAuthenticated = async function(sessionToken, address, requireAdmin) {
     return new Promise(async (resolve, reject) => {
         if (sessionToken === undefined) {
             resolve(false)
@@ -81,7 +81,7 @@ module.exports.isAuthenticated = async function(sessionToken, address) {
                 return;
             }
             const _result = JSON.parse(JSON.stringify(userQueryResult))[0]
-            const matchingUserAddress = _result.ethAddress
+            const matchingUserAddress = _result.ethAddress.toLowerCase()
             resolve(matchingUserAddress.toLowerCase() == address.toLowerCase())
             return
         } catch {

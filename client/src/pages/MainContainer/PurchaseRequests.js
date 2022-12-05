@@ -239,8 +239,6 @@ const PurchaseRequests = (props) => {
           signerNew
         );
 
-        console.log("owner address ", ownerAddress);
-        console.log("buyer address ", buyerAddress);
         const result = await realEstateDappContract.submitDraft(
           ownerAddress,
           propertyId,
@@ -562,7 +560,7 @@ const PurchaseRequests = (props) => {
                               <button
                                 className="acceptButton"
                                 onClick={() => {
-                                  processRequest(item.key, true);
+                                  processRequest(item.objectId, true);
                                 }}
                               >
                                 Accept
@@ -570,7 +568,7 @@ const PurchaseRequests = (props) => {
                               <button
                                 className="rejectButton"
                                 onClick={() => {
-                                  processRequest(item.key, false);
+                                  processRequest(item.objectId, false);
                                 }}
                               >
                                 Reject

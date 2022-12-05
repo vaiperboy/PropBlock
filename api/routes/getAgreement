@@ -7,43 +7,29 @@ var helper = require("../functions/Helper");
 var router = express.Router();
 
 //getting purchases requests for a seller
-router.get("/getAllAgreements", async function (req, res, next) {
+router.get("/getAgreement", async function (req, res, next) {
   const sessionToken = req.query.sessionToken;
   var ownerAddress = req.query.ownerAddress;
-  var mode = req.query.mode
+  const agreementObjectId = req.query.agreementObjectId
 
   var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
   if (!isLoggedIn) {
-    res.send(401, "not authenticated")
+    res.status(401).send("not authenticated")
     return;
   }
-
-  if (mode == undefined) {
-    res.status(422).send("wrong input")
+  if (agreementObjectId === undefined) {
+    res.status(422).send("object id is required")
     return
   }
-  mode = mode.toLowerCase()
-
-  if (ownerAddress === undefined
-    || ((mode != "seller" && mode != "buyer" && mode != "goverment"))) {
-    res.status(422).send("wrong input")
-    return
-  }
-
   ownerAddress = helper.toCheckSumAddress(ownerAddress)
 
   const query = new Moralis.Query("AgreementDrafts")
   const pipeline = [
     {
       match: {
-        ...(mode == "seller") && {
-          landlordAddress: ownerAddress
-        },
-        ...(mode == "buyer") && {
-          buyerAddress: ownerAddress
-        }
+        objectId: agreementObjectId
       }
-    }, 
+    },
     {
       lookup: {
         from: "AgreementStatus",
@@ -61,6 +47,7 @@ router.get("/getAllAgreements", async function (req, res, next) {
       project: {
         "buyerAddress": 1,
         "landlordAddress": 1,
+        "transaction_hash": 1,
         "createdAt": 1,
         "details.propertyObjectId": 1,
         "details.areDocsUploaded": 1,
@@ -74,12 +61,16 @@ router.get("/getAllAgreements", async function (req, res, next) {
       }
     }
   ]
-  const _result = await query.aggregate(pipeline, {useMasterKey: true})
-  const result = JSON.parse(JSON.stringify(_result))
-  for (var i = 0; i < result.length; i++) {
-    result[i].details = result[i].details[0]
+
+  const _result = await query.aggregate(pipeline, { useMasterKey: true })
+  var result = JSON.parse(JSON.stringify(_result))
+  if (result.length == 0) {
+    res.status(404).send("agreement not found")
+    return
   }
-  
+  result = result[0]
+  result.details = result.details[0]
+
   res.json(result)
   return
 });
