@@ -33,6 +33,7 @@ import upload_docs_page from "../assets/screenshots/upload_docs_seller_page.png"
 import stats_page from "../assets/screenshots/stats_page.png";
 import payments_page from "../assets/screenshots/payments_page.png";
 import profile_page from "../assets/screenshots/profile_page.png";
+import create_property_page from "../assets/screenshots/create_property_page.png";
 
 const { Step } = Steps;
 const HowPropBlockWorks = () => {
@@ -279,10 +280,10 @@ const HowPropBlockWorks = () => {
                 <div className="leftSide">
                   <h1>Create Property Process</h1>
                   <p>
-                    PropBlock uses Web3 login (using wallets) to log users in to
-                    the plaflorm. On the login page (user has already signed
-                    up), the user can follow the below steps to login to their
-                    account:
+                    To create a property listing on PropBlock, the user can
+                    select the 'My Properties' section and click on 'Add New
+                    Property' to create a new property. The following steps
+                    below show how a user can create a new property:
                     <Steps
                       progressDot
                       current={6}
@@ -290,18 +291,63 @@ const HowPropBlockWorks = () => {
                       style={{ marginTop: "2rem" }}
                     >
                       <Step
-                        title="Connect Wallet"
-                        description="As we can see, there is a 'Connect Wallet' button which you can click on to connect your wallet (Metamask) to the site. "
+                        title="Enter the details for the property"
+                        description="Firstly, the user needs to enter the Title deed details, followed by the various property details as well as the facilities of the property that apply."
                       />
                       <Step
-                        title="Click on 'Login' Button and Login"
-                        description="After a successfuly connection, the user can click on 'Login' which prompts the user with a Metamask request to 'Sign'. Once signed, the user is authenticated and redirected to 'Home' Page."
+                        title="Add property title, description, title deed & property images"
+                        description="In this step, the user has to provide a property title deed, property description, upload the title deed for the property (.pdf format), some images of the property and select the primary image for the property."
+                      />
+                      <Step
+                        title="Complete property creation"
+                        description="Finally, the user is required to pay for the smart contract transaction fees, since the data is stored in the smart contract as well."
                       />
                     </Steps>
                   </p>
                 </div>
                 <div className="rightSide">
-                  <img src={login_page} alt="Signup Page Screenshot" />
+                  <img
+                    src={create_property_page}
+                    alt="Signup Page Screenshot"
+                  />
+                </div>
+              </div>
+              {/* Create Property Process  */}
+              <div className="signupPageSection">
+                <div className="leftSide">
+                  <h1>Purchase a property</h1>
+                  <p>
+                    To purchase a property, there are multiple steps involved
+                    with different stakeholders such the buyer, seller (owner of
+                    the property listing) as well as the government user (who
+                    validates the documents for the property). To purchase a
+                    property, the user needs to follow the steps given below:
+                    <Steps
+                      progressDot
+                      current={6}
+                      direction="vertical"
+                      style={{ marginTop: "2rem" }}
+                    >
+                      <Step
+                        title="Send a request for a specific property"
+                        description="To start the purchase proocess, the user should select a specific property from the 'Search Page' and click on the 'Request Purchase' button to send a purchase request to the owner of the property. The purchase requests in the 'Dashboard' will be updated with a new row to and status of 'Pending' (meaning waiting for the seller's approval)."
+                      />
+                      <Step
+                        title="Once accepted by seller, user starts the agreement for the property"
+                        description="In case the seller accepts the user's (buyer) request, the user will be show the 'Create Agreement' button which allows the user to create a property agreement between the user and the seller and requires payment of Transaction Gas fees (Paid in Metamask). In case the request is rejected by the seller, the user is shown a status of 'Rejected'."
+                      />
+                      <Step
+                        title="Seller uploads required documents, gets approval from Government user & buyer pays the different Fees for property transfer"
+                        description="In this step, "
+                      />
+                    </Steps>
+                  </p>
+                </div>
+                <div className="rightSide">
+                  <img
+                    src={create_property_page}
+                    alt="Signup Page Screenshot"
+                  />
                 </div>
               </div>
             </div>

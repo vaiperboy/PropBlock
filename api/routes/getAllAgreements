@@ -93,14 +93,6 @@ router.get("/getAllAgreements", async function (req, res, next) {
         }
       },
       {
-        lookup: {
-          from: "AgreementDocuments",
-          localField: "_id",
-          foreignField: "agreementObjectId",
-          as: "documents"
-        }
-      },
-      {
         addFields: {
           "smallLandlordAddress": { $toLower: "$landlordAddress" },
           "smallBuyerAddress": { $toLower: "$buyerAddress" }
@@ -147,11 +139,6 @@ router.get("/getAllAgreements", async function (req, res, next) {
           "details.isOwnerCancelled": 1,
           "details.buyerPaymentComplete": 1,
           "details.buyerPaymentComplete": 1,
-          "documents.nocHash": 1,
-          "documents.mouHash": 1,
-          "documents.titleDeedHash": 1,
-          "documents.reasonForRejection": 1,
-          "documents._updated_at": 1,
           "landlord.email": 1,
           "landlord.fullName": 1,
           "buyer.email": 1,
@@ -166,7 +153,6 @@ router.get("/getAllAgreements", async function (req, res, next) {
   const result = JSON.parse(JSON.stringify(_result))
   for (var i = 0; i < result.length; i++) {
     result[i].details = result[i].details[0]
-    if (result[i].documents.length > 0) result[i].documents = result[i].documents[0]
   }
 
   res.json(result)
