@@ -25,7 +25,7 @@ router.get("/getAllAgreements", async function (req, res, next) {
   mode = mode.toLowerCase()
 
   if (ownerAddress === undefined
-    || ((mode != "seller" && mode != "buyer"))) {
+    || ((mode != "seller" && mode != "buyer" && mode != "goverment"))) {
     res.status(422).send("wrong input")
     return
   }
@@ -36,9 +36,10 @@ router.get("/getAllAgreements", async function (req, res, next) {
   const pipeline = [
     {
       match: {
-        ...(mode == "seller") ? {
+        ...(mode == "seller") && {
           landlordAddress: ownerAddress
-        } : {
+        },
+        ...(mode == "buyer") && {
           buyerAddress: ownerAddress
         }
       }
