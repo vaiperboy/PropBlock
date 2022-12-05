@@ -29,7 +29,6 @@ class PropertyListing extends React.Component {
     return text;
   }
 
-  
   toFeatures(value, maxCounter) {
     return value.slice(0, 3).map((val, idx) => {
       return (
@@ -42,8 +41,6 @@ class PropertyListing extends React.Component {
       );
     });
   }
-
-  
 
   shortenAddress(text, maxWords) {
     if (maxWords < text.length && maxWords >= 18) {

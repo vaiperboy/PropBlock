@@ -9,78 +9,79 @@ var router = express.Router();
 //getting purchases requests for a seller
 router.get("/getPurchaseRequests", async function (req, res, next) {
   const sessionToken = req.query.sessionToken;
-  var ownerAddress = req.query.ownerAddress
-  var mode = req.query.mode
-  var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
+  var ownerAddress = req.query.ownerAddress;
+  var mode = req.query.mode;
+  var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress);
 
   if (!isLoggedIn) {
     res.status(401);
-    res.send("not authenticated")
+    res.send("not authenticated");
     return;
   }
 
   if (mode == undefined) {
-    res.status(422).send("wrong input")
-    return
+    res.status(422).send("wrong input");
+    return;
   }
 
-  mode = mode.toLowerCase()
+  mode = mode.toLowerCase();
 
-  if (ownerAddress === undefined
-    || ((mode != "seller" && mode != "buyer"))) {
-    res.status(422).send("wrong input")
-    return
+  if (ownerAddress === undefined || (mode != "seller" && mode != "buyer")) {
+    res.status(422).send("wrong input");
+    return;
   }
 
-  ownerAddress = helper.toCheckSumAddress(ownerAddress)
+  ownerAddress = helper.toCheckSumAddress(ownerAddress);
 
   const query = new Moralis.Query("PurchaseRequest");
   const pipeline = [
     {
       match: {
-        ...(mode == "seller") ? {
-          sellerEthAddress: ownerAddress
-        } : {
-          requesterEthAddress: ownerAddress
-        }
-      }
+        ...(mode == "seller"
+          ? {
+              sellerEthAddress: ownerAddress,
+            }
+          : {
+              requesterEthAddress: ownerAddress,
+            }),
+      },
     },
     {
       lookup: {
         from: "PropertiesAdded",
         localField: "propertyObjectId",
         foreignField: "_id",
-        as: "details"
-      }
+        as: "details",
+      },
     },
     {
       match: {
-        "details": { $exists: true }
-      }
+        details: { $exists: true },
+      },
     },
     {
       project: {
         "details.propertyId": 1,
-        "sellerEthAddress": 1,
-        "requesterEthAddress": 1,
-        "propertyObjectId": 1,
-        "createdAt": 1,
-        "isPending": 1,
-        "isAccepted": 1,
-        "agreementStarted": 1,
-      }
+        sellerEthAddress: 1,
+        requesterEthAddress: 1,
+        propertyObjectId: 1,
+        createdAt: 1,
+        isPending: 1,
+        isAccepted: 1,
+        agreementStarted: 1,
+      },
     },
     {
       addFields: {
-        propertyId: { $toInt: { $first: "$details.propertyId"} }
-      }
-    }
-  ]
+        propertyId: { $toInt: { $first: "$details.propertyId" } },
+      },
+    },
+  ];
 
-  const _result = await query.aggregate(pipeline, { useMasterKey: true })
-  const result = JSON.parse(JSON.stringify(_result))
-  res.send(result)
-  return
+  const _result = await query.aggregate(pipeline, { useMasterKey: true });
+  const result = JSON.parse(JSON.stringify(_result));
+  res.send(result);
+  return;
 });
 
 module.exports = router;

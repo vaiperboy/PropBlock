@@ -79,8 +79,8 @@ const PurchaseRequests = (props) => {
         setDataSourceSeller(res);
       })
       .catch((err) => {
-        message.error("API error")
-        setDataSourceSeller([])
+        message.error("API error");
+        setDataSourceSeller([]);
       })
       .finally(() => {
         setIsLoading(false);
@@ -103,8 +103,8 @@ const PurchaseRequests = (props) => {
         console.log(res);
       })
       .catch((err) => {
-        message.error("API error")
-        setDataSourceBuyer([])
+        message.error("API error");
+        setDataSourceBuyer([]);
       })
       .finally(() => {
         setIsLoading(false);
@@ -199,15 +199,21 @@ const PurchaseRequests = (props) => {
   const [accepted, setAccepted] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isFechingRequestsBuyer, setIsFetchingRequestsBuyer] = useState(false);
-  const [isFechingRequestsSeller, setIsFetchingRequestsSeller] = useState(false);
+  const [isFechingRequestsSeller, setIsFetchingRequestsSeller] =
+    useState(false);
 
   // function to create the agreement
-  const createAgreement = async (ownerAddress, propertyId, propertyObjectId, purchaseRequestId) => {
+  const createAgreement = async (
+    ownerAddress,
+    propertyId,
+    propertyObjectId,
+    purchaseRequestId
+  ) => {
     if (isProcessing) {
       message.info("Process already in progress...");
-      return
+      return;
     }
-    setIsProcessing(true)
+    setIsProcessing(true);
     try {
       let realEstateDappContract;
       var buyerAddress = Web3.utils.toChecksumAddress(user.get("ethAddress"));
@@ -233,25 +239,23 @@ const PurchaseRequests = (props) => {
           signerNew
         );
 
-        console.log("owner address ", ownerAddress)
-        console.log("buyer address ", buyerAddress)
         const result = await realEstateDappContract.submitDraft(
           ownerAddress,
           propertyId,
           buyerAddress
         );
 
-        const purchaseRequest = Moralis.Object.extend("PurchaseRequest")
-        const query = new Moralis.Query(purchaseRequest)
-        query.equalTo("objectId", purchaseRequestId)
+        const purchaseRequest = Moralis.Object.extend("PurchaseRequest");
+        const query = new Moralis.Query(purchaseRequest);
+        query.equalTo("objectId", purchaseRequestId);
 
-        const purchaseResult = await query.first()
-        purchaseResult.set("agreementStarted",  true)
-        purchaseResult.save()
+        const purchaseResult = await query.first();
+        purchaseResult.set("agreementStarted", true);
+        purchaseResult.save();
 
         const data = {
           txHash: result.hash,
-          propertyObjectId: propertyObjectId
+          propertyObjectId: propertyObjectId,
         };
 
         save(data, {
@@ -259,10 +263,10 @@ const PurchaseRequests = (props) => {
             message.success(
               `Agreement started. Please give it few minutes to get confirmed`
             );
-            loadBuyerRequests()
+            loadBuyerRequests();
           },
           onError: (error) => {
-            message.error("Off-chain function failed!")
+            message.error("Off-chain function failed!");
           },
         });
       }
@@ -277,7 +281,7 @@ const PurchaseRequests = (props) => {
       }
       return;
     } finally {
-      setIsProcessing(false)
+      setIsProcessing(false);
     }
   };
 
@@ -335,18 +339,53 @@ const PurchaseRequests = (props) => {
                       </tr>
                     )}
                     {dataSourceBuyer.map((item) => {
-                      if (item.isPending === true) {
+                      if (item.agreementStarted === true) {
                         return (
                           <tr
                             key={item.key}
                             className="notBuyerFirstRowPending"
                           >
                             <td>{shortenAddress(item.sellerEthAddress, 20)}</td>
-                            <td><a href={"property/" + item.propertyObjectId} target="_blank">{item.propertyObjectId}</a></td>
+                            <td>
+                              <a
+                                href={"property/" + item.propertyObjectId}
+                                target="_blank"
+                              >
+                                {item.propertyObjectId}
+                              </a>
+                            </td>
                             <td>{beautifyDate(item.createdAt)}</td>
                             <td
                               className="requestAccepted"
-                              style={{ color: "#666" }}
+                              style={{ color: "#3daeee", fontWeight: "500" }}
+                            >
+                              Agreement Has Started
+                            </td>
+                          </tr>
+                        );
+                      }
+                      if (
+                        item.isPending === true &&
+                        item.agreementStarted === false
+                      ) {
+                        return (
+                          <tr
+                            key={item.key}
+                            className="notBuyerFirstRowPending"
+                          >
+                            <td>{shortenAddress(item.sellerEthAddress, 20)}</td>
+                            <td>
+                              <a
+                                href={"property/" + item.propertyObjectId}
+                                target="_blank"
+                              >
+                                {item.propertyObjectId}
+                              </a>
+                            </td>
+                            <td>{beautifyDate(item.createdAt)}</td>
+                            <td
+                              className="requestAccepted"
+                              style={{ color: "#3daeee", fontWeight: "500" }}
                             >
                               Pending
                             </td>
@@ -365,7 +404,14 @@ const PurchaseRequests = (props) => {
                             className="notBuyerFirstRowAccepted"
                           >
                             <td>{shortenAddress(item.sellerEthAddress, 20)}</td>
-                            <td><a href={"property/" + item.propertyObjectId} target="_blank">{item.propertyObjectId}</a></td>
+                            <td>
+                              <a
+                                href={"property/" + item.propertyObjectId}
+                                target="_blank"
+                              >
+                                {item.propertyObjectId}
+                              </a>
+                            </td>
                             <td>{beautifyDate(item.createdAt)}</td>
                             <td
                               className="requestAccepted"
@@ -388,29 +434,6 @@ const PurchaseRequests = (props) => {
                           </tr>
                         );
                       }
-                      //Agreement Started
-                      if (
-                        item.isAccepted === true &&
-                        item.isPending === false &&
-                        item.agreementStarted === true
-                      ) {
-                        return (
-                          <tr
-                            key={item.key}
-                            className="notBuyerFirstRowAccepted"
-                          >
-                            <td>{shortenAddress(item.sellerEthAddress, 20)}</td>
-                            <td><a href={"property/" + item.propertyObjectId} target="_blank">{item.propertyObjectId}</a></td>
-                            <td>{beautifyDate(item.createdAt)}</td>
-                            <td
-                              className="requestAccepted"
-                              style={{ color: "#666" }}
-                            >
-                              Agreement Started
-                            </td>
-                          </tr>
-                        );
-                      }
                       // Rejected
                       if (
                         item.isAccepted === false &&
@@ -422,7 +445,14 @@ const PurchaseRequests = (props) => {
                             className="notBuyerFirstRowRejected"
                           >
                             <td>{shortenAddress(item.sellerEthAddress, 20)}</td>
-                            <td><a href={"property/" + item.propertyObjectId} target="_blank">{item.propertyObjectId}</a></td>
+                            <td>
+                              <a
+                                href={"property/" + item.propertyObjectId}
+                                target="_blank"
+                              >
+                                {item.propertyObjectId}
+                              </a>
+                            </td>
                             <td>{beautifyDate(item.createdAt)}</td>
                             <td
                               className="requestRejected"
@@ -514,8 +544,17 @@ const PurchaseRequests = (props) => {
                             key={item.key}
                             className="notBuyerFirstRowAccepted"
                           >
-                            <td>{shortenAddress(item.requesterEthAddress, 20)}</td>
-                            <td><a href={"property/" + item.propertyObjectId} target="_blank">{item.propertyObjectId}</a></td>
+                            <td>
+                              {shortenAddress(item.requesterEthAddress, 20)}
+                            </td>
+                            <td>
+                              <a
+                                href={"property/" + item.propertyObjectId}
+                                target="_blank"
+                              >
+                                {item.propertyObjectId}
+                              </a>
+                            </td>
                             <td>{beautifyDate(item.createdAt)}</td>
                             <td style={{ display: "flex", gap: "1rem" }}>
                               <button
@@ -543,8 +582,17 @@ const PurchaseRequests = (props) => {
                             key={item.key}
                             className="notBuyerFirstRowAccepted"
                           >
-                            <td>{shortenAddress(item.requesterEthAddress, 20)}</td>
-                            <td><a href={"property/" + item.propertyObjectId} target="_blank">{item.propertyObjectId}</a></td>
+                            <td>
+                              {shortenAddress(item.requesterEthAddress, 20)}
+                            </td>
+                            <td>
+                              <a
+                                href={"property/" + item.propertyObjectId}
+                                target="_blank"
+                              >
+                                {item.propertyObjectId}
+                              </a>
+                            </td>
                             <td>{beautifyDate(item.createdAt)}</td>
                             {item.isAccepted ? (
                               <td
