@@ -94,6 +94,11 @@ router.get("/getAllAgreements", async function (req, res, next) {
         },
       },
       {
+        unwind: {
+          path: "$details",
+        },
+      },
+      {
         match: {
           "details.propertyObjectId": { $exists: true },
         },
@@ -154,8 +159,7 @@ router.get("/getAllAgreements", async function (req, res, next) {
   }
 
   const _result = await query.aggregate(pipeline, { useMasterKey: true });
-  const result = JSON.parse(JSON.stringify(_result));
-
+  var result = JSON.parse(JSON.stringify(_result));
   res.json(result);
   return;
 });

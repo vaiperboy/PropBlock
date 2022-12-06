@@ -148,8 +148,9 @@ const AgreementView = (props) => {
       const statusQuery = new Moralis.Query(agreementStatus)
       statusQuery.equalTo("objectId", agreement.details._id)
       const statusResult = await statusQuery.first()
-      statusResult.set("isGovermentVerified", true)
+      statusResult.set("isGovernmentVerified", true)
       statusResult.set("needsRevision", false)
+      statusResult.set("isBeingVerified", false)
       statusResult.save()
       message.info("Agreement has been ACCEPETED!")
     }

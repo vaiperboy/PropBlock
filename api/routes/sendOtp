@@ -1,0 +1,29 @@
+var express = require("express");
+require("dotenv").config();
+var Moralis = require("../modules/moralis");
+var config = require("../config");
+var helper = require("../functions/Helper");
+var router = express.Router();
+
+//getting purchases requests for a seller
+router.get("/sendOtp", async function (req, res, next) {
+    var emailAddress = req.query.emailAddress
+    var ownerAddress = req.query.ownerAddress
+
+    if (emailAddress === undefined || ownerAddress === undefined || !helper.isEmail(emailAddress)) {
+        res.status(422).send("wrong input");
+        return
+    }
+
+    var sentOtp = await helper.sendOtp(emailAddress, ownerAddress)
+    if (!sentOtp) {
+        res.status(422).send("Could not send OTP")
+        return
+    } else {
+        res.send("Sent OTP")
+        return
+    } 
+    
+});
+
+module.exports = router;

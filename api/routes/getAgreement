@@ -128,11 +128,11 @@ router.get("/getAgreement", async function (req, res, next) {
           as: "documents",
         },
       },
-      {
-        unwind: {
-          path: "$documents",
-        },
-      },
+      // {
+      //   unwind: {
+      //     path: "$documents",
+      //   },
+      // },
       {
         addFields: {
           smallLandlordAddress: { $toLower: "$landlordAddress" },
@@ -209,7 +209,10 @@ router.get("/getAgreement", async function (req, res, next) {
   }
 
   result = result[0];
-
+  if (mode == "goverment") {
+    result.documents = result.documents[result.documents.length - 1]
+  }
+  
   res.json(result);
   return;
 });

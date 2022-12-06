@@ -13,11 +13,14 @@
     "dotenv": "^16.0.3",
     "ethereum-checksum-address": "^0.0.8",
     "express": "~4.16.1",
+    "handlebars": "^4.7.7",
     "http-errors": "~1.6.3",
     "ipfs-http-client": "^56.0.2",
     "jade": "~1.11.0",
     "moralis-v1": "^1.11.0",
     "morgan": "~1.9.1",
+    "nodemailer": "^6.8.0",
+    "nodemailer-smtp-transport": "^2.7.4",
     "to-checksum-address": "^1.0.0",
     "web3": "^1.8.1"
   }

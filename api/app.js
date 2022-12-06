@@ -17,6 +17,9 @@ var getUserPropertiesRouter = require("./routes/getUserProperties")
 var getPropertyRouter = require("./routes/getProperty")
 var getAllAgreementsRouter = require("./routes/getAllAgreements")
 var getAgreementRouter = require("./routes/getAgreement")
+var getPaymentDetailsRouter = require("./routes/getPaymentDetails")
+var sendOtpRouter = require("./routes/sendOtp")
+var checkOtpRouter = require("./routes/checkOtp")
 
 var app = express();
 app.use(cors());
@@ -44,6 +47,9 @@ app.use("/", getUserPropertiesRouter)
 app.use("/", getPropertyRouter)
 app.use("/", getAllAgreementsRouter)
 app.use("/", getAgreementRouter)
+app.use("/", getPaymentDetailsRouter)
+app.use("/", sendOtpRouter)
+app.use("/", checkOtpRouter)
 
 
 //await Moralis.start({process.env.MORALIS_SERVER_URL, process.env.MORALIS_})
