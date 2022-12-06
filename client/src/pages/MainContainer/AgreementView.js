@@ -138,6 +138,8 @@ const AgreementView = (props) => {
             query.equalTo("objectId", agreement.details._id);
             const result = await query.first();
             result.set("areDocsUploaded", true);
+            result.set("isBeingVerified", true);
+            result.set("needsRevision", false);
             result.save();
             message.success("Documents uploaded!");
             props.toggleAgreementListView(true);
@@ -266,10 +268,21 @@ const AgreementView = (props) => {
                 Reason for rejection: {agreement.documents.reasonForRejection}
               </h1>
             )} */}
-            {true && (
-              <h1 style={{ color: "red", fontSize: "2rem " }}>
-                Reason for rejection: heraerlkams asdkjna
-              </h1>
+            {agreement.details.needsRevision && (
+              <div>
+                <h1
+                  style={{
+                    color: "#3daeee",
+                    fontSize: "2rem",
+                    marginTop: "2.5rem",
+                  }}
+                >
+                  Reason for rejection:{" "}
+                  <span style={{ color: "red", fontWeight: "400" }}>
+                    {agreement.documents.reasonForRejection}
+                  </span>
+                </h1>
+              </div>
             )}
             <div className="uploadAgreementDocs">
               <div className="nocUploadSection">
