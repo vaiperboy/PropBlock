@@ -143,10 +143,11 @@ const App = () => {
       if (fullName === "" || email === "") {
         errors.push("Please make sure Name & Email inputs are filled!");
       } else {
-        const nameReg = /^[a-zA-Z]+$/;
-        if (!nameReg.test(fullName)) {
-          errors.push("Error: Full Name can only contain characters");
-        }
+        // const nameReg = /^[a-zA-Z]+$/;
+        // if (!nameReg.test(fullName)) {
+        //   errors.push("Error: Full Name can only contain characters");
+        // }
+        if (fullName.length < 3) errors.push("Full name too short")
         const isValid = validateEmail(email);
         if (!isValid) {
           errors.push(
