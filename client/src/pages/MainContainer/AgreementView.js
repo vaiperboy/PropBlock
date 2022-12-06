@@ -96,10 +96,10 @@ const AgreementView = (props) => {
     if (nocFile.name === undefined) {
       errors.push("NoC file cannot be empty!");
     }
-    if (mouFile.name == undefined) {
+    if (mouFile.name === undefined) {
       errors.push("MOU file cannot be empty!");
     }
-    if (titleFile.name == undefined) {
+    if (titleFile.name === undefined) {
       errors.push("Title Deed file cannot be empty!");
     }
     if (errors.length > 0) {
@@ -132,8 +132,15 @@ const AgreementView = (props) => {
         };
 
         save(data, {
-          onSuccess: (obj) => {
+          onSuccess: async (obj) => {
+            const agreementStatus = Moralis.Object.extend("AgreementStatus");
+            const query = new Moralis.Query(agreementStatus);
+            query.equalTo("objectId", agreement.details._id);
+            const result = await query.first();
+            result.set("areDocsUploaded", true);
+            result.save();
             message.success("Documents uploaded!");
+            props.toggleAgreementListView(true);
           },
           onError: (error) => {
             message.error("Couldn't input documents into database!");

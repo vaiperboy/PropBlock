@@ -22,7 +22,7 @@ const AgreementsList = (props) => {
     //   agreementId: "1",
     //   propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
     //   areDocsUploaded: false,
-    //   isBeingVerfied: false,
+    //   isBeingVerified: false,
     //   notFirstTime: false,
     //   isRevisionRequired: false,
     //   isGovernmentVerified: false,
@@ -39,7 +39,7 @@ const AgreementsList = (props) => {
     //   agreementId: "1",
     //   propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
     //   areDocsUploaded: true,
-    //   isBeingVerfied: false,
+    //   isBeingVerified: false,
     //   notFirstTime: false,
     //   isRevisionRequired: false,
     //   isGovernmentVerified: false,
@@ -56,7 +56,7 @@ const AgreementsList = (props) => {
     //   agreementId: "1",
     //   propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
     //   areDocsUploaded: true,
-    //   isBeingVerfied: true,
+    //   isBeingVerified: true,
     //   notFirstTime: false,
     //   isRevisionRequired: false,
     //   isGovernmentVerified: true,
@@ -73,7 +73,7 @@ const AgreementsList = (props) => {
     //   agreementId: "1",
     //   propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
     //   areDocsUploaded: false,
-    //   isBeingVerfied: true,
+    //   isBeingVerified: true,
     //   notFirstTime: true,
     //   isRevisionRequired: true,
     //   isGovernmentVerified: false,
@@ -90,7 +90,7 @@ const AgreementsList = (props) => {
     //   agreementId: "1",
     //   propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
     //   areDocsUploaded: true,
-    //   isBeingVerfied: false,
+    //   isBeingVerified: false,
     //   notFirstTime: true,
     //   isRevisionRequired: false,
     //   isGovernmentVerified: false,
@@ -107,7 +107,7 @@ const AgreementsList = (props) => {
     //   agreementId: "1",
     //   propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
     //   areDocsUploaded: true,
-    //   isBeingVerfied: false,
+    //   isBeingVerified: false,
     //   notFirstTime: false,
     //   isRevisionRequired: false,
     //   isGovernmentVerified: false,
@@ -124,7 +124,7 @@ const AgreementsList = (props) => {
     //   agreementId: "1",
     //   propertyObjectId: "y7dM24zgRcYAs68Hs03FMSki",
     //   areDocsUploaded: true,
-    //   isBeingVerfied: false,
+    //   isBeingVerified: false,
     //   notFirstTime: false,
     //   isRevisionRequired: false,
     //   isGovernmentVerified: false,
@@ -674,7 +674,7 @@ const AgreementsList = (props) => {
                         if (
                           item.details.areDocsUploaded === true &&
                           item.details.needsRevision === false &&
-                          item.details.isBeingVerfied === true
+                          item.details.isBeingVerified === true
                         ) {
                           return (
                             <tr
@@ -731,7 +731,7 @@ const AgreementsList = (props) => {
                         if (
                           item.details.areDocsUploaded === true &&
                           item.details.needsRevision === true &&
-                          item.details.isBeingVerfied === false
+                          item.details.isBeingVerified === false
                         ) {
                           return (
                             <tr
@@ -769,7 +769,7 @@ const AgreementsList = (props) => {
                         if (
                           item.details.areDocsUploaded === true &&
                           item.details.needsRevision === true &&
-                          item.details.isBeingVerfied === true
+                          item.details.isBeingVerified === true
                         ) {
                           return (
                             <tr

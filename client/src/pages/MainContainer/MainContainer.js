@@ -44,7 +44,6 @@ class MainContainer extends React.Component {
     ownerAddress: "",
     agreementId: "",
   };
- 
 
   //reset dashboard view
   // componentDidUpdate(prevProps, prevState, snapshopt) {
@@ -343,6 +342,7 @@ class MainContainer extends React.Component {
                 <AgreementView
                   ownerAddress={this.state.ownerAddress}
                   agreementId={this.state.agreementId}
+                  toggleAgreementListView={this.toggleAgreementListView}
                 />
               ) : null}
 

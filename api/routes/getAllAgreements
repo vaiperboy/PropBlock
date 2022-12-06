@@ -10,73 +10,75 @@ var router = express.Router();
 router.get("/getAllAgreements", async function (req, res, next) {
   const sessionToken = req.query.sessionToken;
   var ownerAddress = req.query.ownerAddress;
-  var mode = req.query.mode
+  var mode = req.query.mode;
 
   if (mode == undefined) {
-    res.status(422).send("wrong input")
-    return
+    res.status(422).send("wrong input");
+    return;
   }
-  mode = mode.toLowerCase()
+  mode = mode.toLowerCase();
 
-  if (ownerAddress === undefined
-    || ((mode != "seller" && mode != "buyer" && mode != "goverment"))) {
-    res.status(422).send("wrong input")
-    return
-  }
-
-  var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
-  if (!isLoggedIn) {
-    res.send(401, "not authenticated")
+  if (
+    ownerAddress === undefined ||
+    (mode != "seller" && mode != "buyer" && mode != "goverment")
+  ) {
+    res.status(422).send("wrong input");
     return;
   }
 
-  ownerAddress = helper.toCheckSumAddress(ownerAddress)
+  var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress);
+  if (!isLoggedIn) {
+    res.send(401, "not authenticated");
+    return;
+  }
 
-  const query = new Moralis.Query("AgreementDrafts")
+  ownerAddress = helper.toCheckSumAddress(ownerAddress);
+
+  const query = new Moralis.Query("AgreementDrafts");
   let pipeline;
   if (mode != "goverment") {
     pipeline = [
       {
         match: {
-          ...(mode == "seller") && {
-            landlordAddress: ownerAddress
-          },
-          ...(mode == "buyer") && {
-            buyerAddress: ownerAddress
-          }
-        }
+          ...(mode == "seller" && {
+            landlordAddress: ownerAddress,
+          }),
+          ...(mode == "buyer" && {
+            buyerAddress: ownerAddress,
+          }),
+        },
       },
       {
         lookup: {
           from: "AgreementStatus",
           localField: "transaction_hash",
           foreignField: "txHash",
-          as: "details"
-        }
+          as: "details",
+        },
       },
       {
         match: {
-          "details.propertyObjectId": { $exists: true }
-        }
+          "details.propertyObjectId": { $exists: true },
+        },
       },
       {
         project: {
-          "buyerAddress": 1,
-          "landlordAddress": 1,
-          "createdAt": 1,
+          buyerAddress: 1,
+          landlordAddress: 1,
+          createdAt: 1,
           "details.propertyObjectId": 1,
           "details.areDocsUploaded": 1,
-          "details.isBeingVerfied": 1,
+          "details.isBeingVerified": 1,
           "details.needsRevision": 1,
           "details.isRevisionRequired": 1,
           "details.isGovernmentVerified": 1,
           "details.isBuyerCancelled": 1,
           "details.isOwnerCancelled": 1,
           "details.buyerPaymentComplete": 1,
-          "details.buyerPaymentComplete": 1
-        }
-      }
-    ]
+          "details.buyerPaymentComplete": 1,
+        },
+      },
+    ];
   } else {
     pipeline = [
       {
@@ -84,54 +86,54 @@ router.get("/getAllAgreements", async function (req, res, next) {
           from: "AgreementStatus",
           localField: "transaction_hash",
           foreignField: "txHash",
-          as: "details"
-        }
+          as: "details",
+        },
       },
       {
         match: {
-          "details.propertyObjectId": { $exists: true }
-        }
+          "details.propertyObjectId": { $exists: true },
+        },
       },
       {
         addFields: {
-          "smallLandlordAddress": { $toLower: "$landlordAddress" },
-          "smallBuyerAddress": { $toLower: "$buyerAddress" }
-        }
+          smallLandlordAddress: { $toLower: "$landlordAddress" },
+          smallBuyerAddress: { $toLower: "$buyerAddress" },
+        },
       },
       {
         lookup: {
           from: "_User",
           localField: "smallLandlordAddress",
           foreignField: "ethAddress",
-          as: "landlord"
-        }
+          as: "landlord",
+        },
       },
       {
         unwind: {
-          path: "$landlord"
-        }
+          path: "$landlord",
+        },
       },
       {
         lookup: {
           from: "_User",
           localField: "smallBuyerAddress",
           foreignField: "ethAddress",
-          as: "buyer"
-        }
+          as: "buyer",
+        },
       },
       {
         unwind: {
-          path: "$buyer"
-        }
+          path: "$buyer",
+        },
       },
       {
         project: {
-          "buyerAddress": 1,
-          "landlordAddress": 1,
-          "createdAt": 1,
+          buyerAddress: 1,
+          landlordAddress: 1,
+          createdAt: 1,
           "details.propertyObjectId": 1,
           "details.areDocsUploaded": 1,
-          "details.isBeingVerfied": 1,
+          "details.isBeingVerified": 1,
           "details.needsRevision": 1,
           "details.isRevisionRequired": 1,
           "details.isGovernmentVerified": 1,
@@ -143,20 +145,19 @@ router.get("/getAllAgreements", async function (req, res, next) {
           "landlord.fullName": 1,
           "buyer.email": 1,
           "buyer.fullName": 1,
-        }
-      }
-    ]
+        },
+      },
+    ];
   }
 
-
-  const _result = await query.aggregate(pipeline, { useMasterKey: true })
-  const result = JSON.parse(JSON.stringify(_result))
+  const _result = await query.aggregate(pipeline, { useMasterKey: true });
+  const result = JSON.parse(JSON.stringify(_result));
   for (var i = 0; i < result.length; i++) {
-    result[i].details = result[i].details[0]
+    result[i].details = result[i].details[0];
   }
 
-  res.json(result)
-  return
+  res.json(result);
+  return;
 });
 
 module.exports = router;

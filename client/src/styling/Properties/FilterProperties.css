@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@300;500&display=swap");
+.filter-properties {
+  width: 40rem;
+  height: 50rem;
+  border: 2px solid #3daeee;
+  border-radius: 3px;
+}
+
+.filter-properties .inner-rectangle {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 1rem 0;
+  width: 95%;
+  height: 99%;
+  padding: 0 1rem;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.filter-properties .inner-rectangle .upper-body {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 2rem;
+  color: #555555;
+  margin-left: auto;
+}
+
+.filter-properties .inner-rectangle .filter-body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.filter-properties .inner-rectangle .filter-body .filterProperty {
+  margin-bottom: 2rem;
+}
+
+.filter-properties .inner-rectangle .filter-body .inline {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.filter-properties .inner-rectangle .filter-body p {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 0.5rem;
+  color: #555555;
+}
+
+.filter-properties .inner-rectangle .filter-body .slider {
+  position: relative;
+  top: 0;
+}
+
+.filter-properties .inner-rectangle .filter-body .last {
+  margin-bottom: 0;
+}
+
+.filter-properties .inner-rectangle .filter-button:enabled {
+  width: 100%;
+  height: 4rem;
+  font-weight: 500;
+  background-color: #3daeee;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1.5rem;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.filter-properties .inner-rectangle .filter-button:enabled:hover {
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  background-color: #147ebb;
+}
+
+.filter-properties .inner-rectangle .filter-loading {
+  width: 100%;
+  height: 4rem;
+  font-weight: 500;
+  background-color: #3daeee;
+  cursor: not-allowed;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+/*# sourceMappingURL=FilterProperties.css.map */

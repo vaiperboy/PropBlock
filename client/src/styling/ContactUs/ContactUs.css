@@ -1,0 +1,191 @@
+@font-face {
+  font-family: "Harmony";
+  src: url("../../assets/Fonts/Harmony.ttf");
+}
+
+.contactUs .topSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  background-color: rgba(61, 174, 238, 0.15);
+  padding: 10rem 10rem 5rem 25rem;
+}
+
+.contactUs .topSection .leftSide {
+  padding-top: 15rem;
+}
+
+.contactUs .topSection .leftSide h1 {
+  font-size: 6rem;
+  letter-spacing: -0.1rem;
+  font-family: monospace;
+}
+
+.contactUs .topSection .leftSide p {
+  width: 80%;
+  font-size: 2rem;
+  font-family: Helvetica;
+  font-weight: 500;
+}
+
+.contactUs .topSection .leftSide .email {
+  text-decoration: underline;
+  color: #3daeee;
+}
+
+.contactUs .topSection .rightSide {
+  background-color: #ffffff;
+  padding: 7rem 5rem 7rem 5rem;
+  width: 50%;
+  margin: 3rem 0 0 2rem;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0px 0.5rem 1rem;
+          box-shadow: rgba(0, 0, 0, 0.2) 0px 0.5rem 1rem;
+}
+
+.contactUs .topSection .rightSide h1 {
+  font-size: 2.8rem;
+  letter-spacing: 0.2rem;
+  font-weight: 400;
+  color: #333;
+}
+
+.contactUs .topSection .rightSide p {
+  color: #444444;
+  font-size: 2rem;
+  margin-top: 1rem;
+}
+
+.contactUs .topSection .rightSide .fullName {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.contactUs .topSection .rightSide input,
+.contactUs .topSection .rightSide .textAreaClass {
+  margin-top: 2rem;
+  border-radius: 0.5rem;
+  padding: 1rem 2rem;
+  border: 1px solid #bcbcbc;
+  font-size: 1.5rem;
+  width: 100%;
+}
+
+.contactUs .topSection .rightSide input:active, .contactUs .topSection .rightSide input:focus,
+.contactUs .topSection .rightSide .textAreaClass:active,
+.contactUs .topSection .rightSide .textAreaClass:focus {
+  border: 1px solid #3daeee;
+  outline: none;
+  -webkit-box-shadow: rgba(61, 174, 238, 0.1) 0px 0.3rem 0.5rem;
+          box-shadow: rgba(61, 174, 238, 0.1) 0px 0.3rem 0.5rem;
+}
+
+.contactUs .topSection .rightSide input::-webkit-input-placeholder,
+.contactUs .topSection .rightSide .textAreaClass::-webkit-input-placeholder {
+  color: #333;
+  opacity: 0.5;
+}
+
+.contactUs .topSection .rightSide input:-ms-input-placeholder,
+.contactUs .topSection .rightSide .textAreaClass:-ms-input-placeholder {
+  color: #333;
+  opacity: 0.5;
+}
+
+.contactUs .topSection .rightSide input::-ms-input-placeholder,
+.contactUs .topSection .rightSide .textAreaClass::-ms-input-placeholder {
+  color: #333;
+  opacity: 0.5;
+}
+
+.contactUs .topSection .rightSide input::placeholder,
+.contactUs .topSection .rightSide .textAreaClass::placeholder {
+  color: #333;
+  opacity: 0.5;
+}
+
+.contactUs .topSection .rightSide .textAreaClass {
+  font-size: 1.7rem;
+  margin-top: 2rem;
+  border-radius: 0.5rem;
+  padding: 1rem 2rem;
+  resize: none;
+}
+
+.contactUs .topSection .rightSide .textAreaClass::-webkit-input-placeholder {
+  color: #333;
+  opacity: 0.5;
+}
+
+.contactUs .topSection .rightSide .textAreaClass:-ms-input-placeholder {
+  color: #333;
+  opacity: 0.5;
+}
+
+.contactUs .topSection .rightSide .textAreaClass::-ms-input-placeholder {
+  color: #333;
+  opacity: 0.5;
+}
+
+.contactUs .topSection .rightSide .textAreaClass::placeholder {
+  color: #333;
+  opacity: 0.5;
+}
+
+.contactUs .topSection .rightSide .disclaimer {
+  margin: 2rem 0;
+  font-size: 1.4rem;
+  color: #444444;
+  text-align: justify;
+}
+
+.contactUs .topSection .rightSide .submitMessage {
+  background-color: #3daeee;
+  border: none;
+  color: #ffffff;
+  font-size: 2rem;
+  width: 30%;
+  border-radius: 3rem;
+  border: 2px solid #3daeee;
+  padding: 0.5rem 0;
+}
+
+.contactUs .topSection .rightSide .submitMessage:hover {
+  background-color: #ffffff;
+  cursor: pointer;
+  color: #3daeee;
+}
+
+.contactUs .bottomSection {
+  background-color: rgba(61, 174, 238, 0.15);
+  padding: 10rem 0 5rem 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: center;
+}
+
+.contactUs .bottomSection h2 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+  color: #444444;
+}
+
+.contactUs .bottomSection .logosContainer img {
+  width: 15rem;
+  margin: 3rem 3rem;
+  filter: grayscale(1);
+  -webkit-filter: grayscale(100%);
+}
+/*# sourceMappingURL=ContactUs.css.map */

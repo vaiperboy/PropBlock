@@ -1,0 +1,464 @@
+main .hero-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-top: 13rem;
+}
+
+main .hero-section .text h1 {
+  font-size: 10rem;
+  font-weight: 600;
+  margin: 0 0 0 8vw;
+  color: #444444;
+}
+
+main .hero-section .text h1 span {
+  color: line;
+  background-image: linear-gradient(45deg, #3daeee, #9747ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+main .hero-section .text .lower-text {
+  margin-left: 33vw;
+  margin-top: -4.5rem;
+  color: #444444;
+}
+
+main .hero-section .vector {
+  width: 100%;
+  position: relative;
+  z-index: -1;
+  margin-top: -50rem;
+}
+
+main .hero-section .vector img {
+  width: 100%;
+}
+
+main .white-box {
+  width: 100%;
+  height: 8rem;
+  background-color: #ffffff;
+  margin-top: -8rem;
+}
+
+main .about-description {
+  margin: 1rem 9rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+main .about-description .horizontal-line {
+  height: 1px;
+  background-color: rgba(153, 153, 153, 0.8);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 95%;
+  margin: 0 auto;
+}
+
+main .about-description .middle-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 2rem 0;
+  width: 95%;
+}
+
+main .about-description .middle-section p {
+  width: 55%;
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: #555555;
+  margin-top: 1rem;
+}
+
+main .about-description .middle-section .vectical-line {
+  margin-left: 24vw;
+  height: 10rem;
+  width: 1px;
+  background-color: rgba(153, 153, 153, 0.8);
+}
+
+main .about-description .middle-section img {
+  width: 5rem;
+  margin-right: 3rem;
+}
+
+main .focus {
+  margin: 10rem 0;
+}
+
+main .focus h1 {
+  text-align: center;
+  font-size: 7rem;
+  font-weight: 500;
+  font-style: italic;
+  margin: 5rem 0;
+}
+
+main .focus h1 span {
+  color: line;
+  padding: 0 0.35rem;
+  background-image: linear-gradient(45deg, #9747ff, #3daeee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+main .focus .attributes-section {
+  width: 90%;
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 1rem;
+}
+
+main .focus .attributes-section .attribute {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+main .focus .attributes-section .attribute .image-container {
+  width: 5rem;
+  height: 5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+main .focus .attributes-section .attribute h2 {
+  margin-top: 2rem;
+  color: #9747ff;
+}
+
+main .focus .attributes-section .attribute p {
+  width: 80%;
+}
+
+main .our-story {
+  width: 90%;
+  margin: 12rem auto 5rem auto;
+}
+
+main .our-story .box {
+  background: linear-gradient(100deg, rgba(61, 174, 238, 0.7) 0%, rgba(151, 71, 255, 0.5) 100%);
+  border-radius: 5rem;
+  height: 25rem;
+}
+
+main .our-story .box h1 {
+  font-size: 5rem;
+  color: #ffffff;
+  margin-left: 6rem;
+  padding-top: 1rem;
+}
+
+main .our-story .box .stats-div {
+  margin-left: 6rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 90%;
+}
+
+main .our-story .box .stats-div .stat h3 {
+  font-size: 4rem;
+  font-style: italic;
+  font-weight: 400;
+  color: #ffffff;
+  margin: 0;
+}
+
+main .our-story .box .stats-div .stat p {
+  font-size: 2rem;
+  color: #555555;
+}
+
+main .horizontal-line {
+  height: 2px;
+  width: 90%;
+  margin: 2rem auto 4rem auto;
+  background-color: rgba(153, 153, 153, 0.6);
+}
+
+main .quote-section {
+  margin: 25rem 0 12rem 0;
+}
+
+main .quote-section h1 {
+  font-size: 3vw;
+  color: #555555;
+  text-align: center;
+  font-weight: 600;
+  width: 70%;
+  margin: 0 auto;
+  background: -webkit-gradient(linear, left top, right top, color-stop(20%, #9747ff), color-stop(40%, #3daeee), color-stop(60%, #3daeee), color-stop(80%, #9747ff), to(#9747ff));
+  background: linear-gradient(to right, #9747ff 20%, #3daeee 40%, #3daeee 60%, #9747ff 80%, #9747ff 100%);
+  background-size: 200% auto;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-animation: shine 4s linear infinite;
+          animation: shine 4s linear infinite;
+}
+
+@-webkit-keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+main .quote-section #styled-vector {
+  fill: url(#gradientColor);
+  stroke: none;
+}
+
+main .quote-section .styled-shape {
+  margin-top: -25rem;
+  position: relative;
+  z-index: -1;
+}
+
+main .quote-section .styled-shape img {
+  width: 100%;
+}
+
+main .team {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 90%;
+  margin: 0 auto;
+  margin-bottom: 10rem;
+}
+
+main .team h1 {
+  font-size: 5rem;
+  color: #444444;
+}
+
+main .team .team-cards {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  gap: 4rem;
+}
+
+main .team .team-cards .team-card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 40rem;
+  height: 40rem;
+  background-color: rgba(61, 174, 238, 0.5);
+  border-radius: 4rem;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+main .team .team-cards .team-card:hover {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  -webkit-transform: translateY(-1rem);
+          transform: translateY(-1rem);
+  scale: 1.02;
+}
+
+main .team .team-cards .team-card img {
+  width: 24rem;
+  border-radius: 50%;
+}
+
+main .team .team-cards .team-card .team-description {
+  background-color: #ffffff;
+  border-radius: 2rem;
+  width: 70%;
+  margin-top: 1.5rem;
+}
+
+main .team .team-cards .team-card .team-description h3 {
+  margin: 1rem 0 0 2rem;
+  font-weight: 600;
+}
+
+main .team .team-cards .team-card .team-description p {
+  margin: 0 0 1rem 2rem;
+}
+
+main .team .team-cards .orange {
+  background-color: rgba(151, 71, 255, 0.5);
+}
+
+main .partners {
+  width: 90%;
+  margin: 0 auto 10rem auto;
+}
+
+main .partners .container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-radius: 6rem;
+  background-color: rgba(61, 174, 238, 0.45);
+}
+
+main .partners .container .title {
+  margin-top: 4rem;
+}
+
+main .partners .container .title h1 {
+  color: #ffffff;
+  font-size: 6rem;
+  font-weight: 500;
+  text-shadow: 1px 2px #999999;
+}
+
+main .partners .container .partner-cards {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 92%;
+  margin: 0 auto 5rem auto;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+main .partners .container .partner-cards .partner-card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 2rem;
+  width: 37rem;
+  text-align: justify;
+  padding: 1rem 2rem;
+  border-radius: 3rem;
+}
+
+main .partners .container .partner-cards .partner-card:hover {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+main .partners .container .partner-cards .partner-card .image-div {
+  width: 15rem;
+}
+
+main .partners .container .partner-cards .partner-card h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0069a4;
+}
+
+main .partners .container .partner-cards .partner-card .description {
+  font-size: 1.3rem;
+}
+
+main .partners .container .partner-cards .partner-card .category {
+  border: 1px solid #444444;
+  padding: 1rem 1.5rem;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  border-radius: 3rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+@media screen and (min-width: 1441px) {
+  main .hero-section .vector img {
+    width: 100%;
+    margin-top: -6vw;
+  }
+  main .quote-section .styled-shape {
+    max-width: 120%;
+  }
+}
+/*# sourceMappingURL=About.css.map */
