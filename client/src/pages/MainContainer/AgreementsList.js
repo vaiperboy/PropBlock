@@ -470,7 +470,7 @@ const AgreementsList = (props) => {
                                 onClick={() => {
                                   completeAgreement(
                                     item.ownerAddress,
-                                    item.agreementId
+                                    item.objectId
                                   );
                                 }}
                               >

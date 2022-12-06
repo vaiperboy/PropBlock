@@ -3,9 +3,29 @@ import "../../styling/MainContainer/Agreements.scss";
 import "../../styling/MainContainer/AgreementPayment.scss";
 import { Spin, Input, Tooltip, message } from "antd";
 import { ArrowLeftOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { useMoralis, useNewMoralisObject } from "react-moralis";
+import Web3 from "web3";
 
 const AgreementPayment = (props) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [payment, setPayment] = useState({})
+  const [canPayLandlord, setCanPayLandlord] = useState(true)
+  const [canPayPropBlock, setCanPayPropBlock] = useState(false)
+  const [canPayDld, setCanPayDld] = useState(false)
+  const {
+    authenticate,
+    signup,
+    isAuthenticated,
+    isAuthenticating,
+    isUnauthenticated,
+    user,
+    account,
+    logout,
+    oralis,
+    isInitialized,
+    Moralis,
+    ...rest
+  } = useMoralis();
 
   // function to pay the owner
   const ownerPayment = () => {
@@ -44,9 +64,47 @@ const AgreementPayment = (props) => {
     }
   };
 
+  const getStatus = (canPay, isTxConfirmed) => {
+    if (canPay === false) return "Waiting on payment";
+    else {
+      if (isTxConfirmed) return "Payment complete";
+      else return "Waiting on confirmations"
+    }
+  }
+
+  async function loadPayment() {
+    setIsLoading(true);
+    fetch(
+      "http://localhost:9000/getPaymentDetails?" +
+      new URLSearchParams({
+        sessionToken: user.getSessionToken(),
+        ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
+        agreementObjectId: props.agreementId,
+      })
+    )
+      .then((res) => res.json())
+      .then((res) => {
+        setPayment(res);
+        //if user paid do not pay again
+        if (res.details.propBlockTxHash === undefined) setCanPayPropBlock(true)
+        if (res.details.dldTxHash === undefined) setCanPayDld(true)
+        if (res.details.landlordTxHash === undefined) setCanPayLandlord(true)
+      })
+      .catch((err) => {
+        message.error("API error");
+        setPayment({});
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+
   useEffect(() => {
-    setIsLoading(false);
+    loadPayment()
   }, []);
+
+
   if (isLoading) {
     return (
       <div
@@ -86,20 +144,19 @@ const AgreementPayment = (props) => {
                 <ArrowLeftOutlined /> Back
               </button>
               <div className="agreementDetailsContainer">
-                <h1>Agreement ID - #{props.agreementId}</h1>
+                <h1>Agreement ID - #{payment.objectId.slice(0, 6)}</h1>
                 {/* Owner Address */}
                 <div className="agreementDetails">
                   <div className="title">Owner Address</div>
                   <div className="data">
                     <Input
-                      placeholder={`${
-                        props.ownerAddress.slice(0, 10) +
+                      placeholder={`${payment.landlordAddress.slice(0, 10) +
                         " ... " +
-                        props.ownerAddress.slice(
-                          props.ownerAddress.length - 8,
-                          props.ownerAddress.length
+                        payment.landlordAddress.slice(
+                          payment.landlordAddress.length - 8,
+                          payment.landlordAddress.length
                         )
-                      }`}
+                        }`}
                       style={{
                         border: "1px solid #333",
                         borderRadius: "0.5rem",
@@ -112,28 +169,16 @@ const AgreementPayment = (props) => {
                 <div className="agreementDetails">
                   <div className="title">Property ID</div>
                   <div className="data">
-                    <Input
-                      placeholder={`${props.propertyId}`}
-                      style={{
-                        border: "1px solid #333",
-                        borderRadius: "0.5rem",
-                      }}
-                      disabled={true}
-                    />
-                  </div>
-                </div>
-                {/* Agreement Id */}
-                <div className="agreementDetails">
-                  <div className="title">Agreement Id</div>
-                  <div className="data">
-                    <Input
-                      placeholder={`${props.agreementId}`}
-                      style={{
-                        border: "1px solid #333",
-                        borderRadius: "0.5rem",
-                      }}
-                      disabled={true}
-                    />
+                    <a href={"/property/" + payment.details.propertyObjectId} target="_blank">
+                      <Input
+                        placeholder={`${payment.details.propertyObjectId}`}
+                        style={{
+                          border: "1px solid #333",
+                          borderRadius: "0.5rem",
+                        }}
+                        disabled={true}
+                      />
+                    </a>
                   </div>
                 </div>
                 <div className="breaker"></div>
@@ -149,7 +194,7 @@ const AgreementPayment = (props) => {
                   <div className="title">Payment Status</div>
                   <div className="data">
                     <Input
-                      placeholder={`${props.paymentOwnerStatus}`}
+                      placeholder={getStatus(canPayLandlord, payment.isLandlordTxConfirmed)}
                       style={{
                         border: "1px solid #333",
                         borderRadius: "0.5rem",
@@ -158,21 +203,7 @@ const AgreementPayment = (props) => {
                     />
                   </div>
                 </div>
-                {props.paymentOwnerStatus ? (
-                  <div className="agreementDetails">
-                    <div className="title">Complete Payment</div>
-                    <div className="paymentComplete">
-                      <Input
-                        placeholder="Payment Complete"
-                        style={{
-                          border: "1px solid #333",
-                          borderRadius: "0.5rem",
-                        }}
-                        disabled={true}
-                      />
-                    </div>
-                  </div>
-                ) : (
+                {canPayLandlord && (
                   <div className="agreementDetails">
                     <div className="title">Complete Payment</div>
                     <button
@@ -184,7 +215,9 @@ const AgreementPayment = (props) => {
                       Pay Owner
                     </button>
                   </div>
-                )}
+                )
+                }
+
                 <div className="breaker"></div>
                 <h2>
                   DLD - Government Fee Payment (4%){" "}
@@ -198,7 +231,7 @@ const AgreementPayment = (props) => {
                   <div className="title">Payment Status</div>
                   <div className="data">
                     <Input
-                      placeholder={`${props.paymentGovernmentStatus}`}
+                      placeholder={getStatus(canPayDld, payment.isDldTxConfirmed)}
                       style={{
                         border: "1px solid #333",
                         borderRadius: "0.5rem",
@@ -207,21 +240,7 @@ const AgreementPayment = (props) => {
                     />
                   </div>
                 </div>
-                {props.paymentGovernmentStatus ? (
-                  <div className="agreementDetails">
-                    <div className="title">Complete Payment</div>
-                    <div className="paymentComplete">
-                      <Input
-                        placeholder="Payment Complete"
-                        style={{
-                          border: "1px solid #333",
-                          borderRadius: "0.5rem",
-                        }}
-                        disabled={true}
-                      />
-                    </div>
-                  </div>
-                ) : (
+                {canPayDld && (
                   <div className="agreementDetails">
                     <div className="title">Complete Payment</div>
                     <button
@@ -229,7 +248,6 @@ const AgreementPayment = (props) => {
                       onClick={() => {
                         dldFeesPayment();
                       }}
-                      disabled={!props.paymentOwnerStatus}
                     >
                       Pay DLD Fees
                     </button>
@@ -248,7 +266,7 @@ const AgreementPayment = (props) => {
                   <div className="title">Payment Status</div>
                   <div className="data">
                     <Input
-                      placeholder={`${props.paymentGovernmentStatus}`}
+                      placeholder={getStatus(canPayDld, payment.isPropBlockTxConfirmed)}
                       style={{
                         border: "1px solid #333",
                         borderRadius: "0.5rem",
@@ -257,7 +275,7 @@ const AgreementPayment = (props) => {
                     />
                   </div>
                 </div>
-                {props.paymentGovernmentStatus ? (
+                {!canPayPropBlock ? (
                   <div className="agreementDetails">
                     <div className="title">Complete Payment</div>
                     <div className="paymentComplete">
@@ -279,7 +297,6 @@ const AgreementPayment = (props) => {
                       onClick={() => {
                         propBlockFeesPayment();
                       }}
-                      disabled={!props.paymentGovernmentStatus}
                     >
                       Pay PropBlock Fees
                     </button>
@@ -294,7 +311,7 @@ const AgreementPayment = (props) => {
                       onClick={() => {
                         transferProperty();
                       }}
-                      disabled={!props.propBlockFeesPayment}
+                      disabled={true}
                     >
                       Complete Transfer
                     </button>

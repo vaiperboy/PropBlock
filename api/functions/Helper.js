@@ -4,6 +4,10 @@ var axios = require('axios');
 var Moralis = require("../modules/moralis");
 const { pageSize } = require("../config");
 const { toChecksumAddress } = require('ethereum-checksum-address')
+var handlebars = require('handlebars');
+const nodemailer = require("../modules/mailer")
+var fs = require('fs');
+const path = require('path');
 
 
 //to cache the result
@@ -47,17 +51,17 @@ module.exports.getImages = async function (cid) {
 
 //makes sure user is authenticated & with the matching address
 //passing the address is optional
-module.exports.isAuthenticated = async function(sessionToken, address, requireAdmin) {
+module.exports.isAuthenticated = async function (sessionToken, address, requireAdmin) {
     return new Promise(async (resolve, reject) => {
         if (sessionToken === undefined) {
             resolve(false)
         }
-        
+
         try {
             var sessionQuery = new Moralis.Query("_Session");
             sessionQuery.equalTo("sessionToken", sessionToken);
             sessionQuery.limit(1);
-            const result = await sessionQuery.find({useMasterKey: true});
+            const result = await sessionQuery.find({ useMasterKey: true });
             if (result.length === 0) {
                 resolve(false)
                 return;
@@ -74,7 +78,7 @@ module.exports.isAuthenticated = async function(sessionToken, address, requireAd
             var userQuery = new Moralis.Query("_User")
             userQuery.equalTo("objectId", userId)
             userQuery.limit(1)
-            const userQueryResult = await userQuery.find({useMasterKey: true})
+            const userQueryResult = await userQuery.find({ useMasterKey: true })
             if (userQueryResult.length === 0) {
                 resolve(false)
                 return;
@@ -91,17 +95,17 @@ module.exports.isAuthenticated = async function(sessionToken, address, requireAd
 
 
 //caching
-module.exports.getUser = async function(address) {
+module.exports.getUser = async function (address) {
     return new Promise(async (resolve, reject) => {
         const query = new Moralis.Query("_User");
         query.equalTo("ethAddress", address.toLowerCase());
         query.limit(1);
-        var result = await query.find({useMasterKey: true});
+        var result = await query.find({ useMasterKey: true });
         var user = {};
         result.forEach((e) => {
             user = {
-            "fullName": e.get("fullName").toString(),
-            "address": e.get("ethAddress").toString()
+                "fullName": e.get("fullName").toString(),
+                "address": e.get("ethAddress").toString()
             }
         });
         resolve(user);
@@ -109,7 +113,7 @@ module.exports.getUser = async function(address) {
 }
 
 //processes the filtering parameters
-module.exports.processFiltering = function(params) {
+module.exports.processFiltering = function (params) {
     const output = {};
     output.minimumBeds = parseInt(params.minimumBeds) || 0;
     output.minimumBaths = parseInt(params.minimumBaths) || 0;
@@ -122,7 +126,7 @@ module.exports.processFiltering = function(params) {
 }
 
 //calculates the number of pages
-module.exports.getTotalPageNumbers = function(totalCount, pageSize) {
+module.exports.getTotalPageNumbers = function (totalCount, pageSize) {
     return totalCount < pageSize ? 1 : Math.ceil(totalCount / pageSize)
 }
 
@@ -131,6 +135,78 @@ module.exports.isAddress = function (address) {
     return /^(0x)?[0-9a-f]{40}$/i.test(address)
 };
 
-module.exports.toCheckSumAddress = function(address) {
+module.exports.toCheckSumAddress = function (address) {
     return toChecksumAddress(address)
 }
+
+const otpObject = Moralis.Object.extend("OtpCodes")
+
+module.exports.sendOtp = async function (emailAddress, ownerAddress) {
+    return new Promise(async (resolve, reject) => {
+        readHTMLFile(path.join(__dirname, "mailer/templates/otp.html"), async function (err, html) {
+            try {
+                var template = handlebars.compile(html)
+                //generate otp
+                var code = Math.floor(1000 + Math.random() * 9000);
+
+                //replace code in template
+                var replacements = {
+                    code: code,
+                    address: ownerAddress
+                }
+
+                var htmlToSend = template(replacements)
+                var mailOptions = {
+                    from: "noreply@propblockuowd.com",
+                    to: emailAddress,
+                    subject: "OTP Code",
+                    html: htmlToSend
+                }
+
+                const otp = new otpObject()
+                otp.save( {
+                    emailAddress: emailAddress,
+                    ownerAddress: ownerAddress,
+                    otpCode: code.toString()
+                })
+
+                await nodemailer.sendMail(mailOptions)
+                resolve(true)
+            } catch (error) {
+                reject(error)
+                return
+            }
+
+        })
+    })
+
+}
+
+module.exports.checkOtp = async function(emailAddress, ownerAddress, code) {
+    return new Promise(async (resolve, reject) => {
+        var query = new Moralis.Query("OtpCodes")
+        query.equalTo("emailAddress", emailAddress)
+        query.equalTo("ownerAddress", ownerAddress)
+        query.equalTo("code", code)
+        const _result = await query.find({useMasterKey: true})
+        const result = JSON.parse(JSON.stringify(_result))
+        resolve(result.length > 0)
+    })
+}
+
+const emailFormat = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+module.exports.isEmail = function (emailAddress) {
+    if (emailAddress !== '' && emailAddress.match(emailFormat)) { return true; }
+    return false;
+}
+
+var readHTMLFile = function (path, callback) {
+    fs.readFile(path, { encoding: 'utf-8' }, function (err, html) {
+        if (err) {
+            callback(err);
+        }
+        else {
+            callback(null, html);
+        }
+    });
+};

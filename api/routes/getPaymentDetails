@@ -1,0 +1,139 @@
+var express = require("express");
+require("dotenv").config();
+var Moralis = require("../modules/moralis");
+var config = require("../config");
+var helper = require("../functions/Helper");
+
+var router = express.Router();
+
+//getting purchases requests for a seller
+router.get("/getPaymentDetails", async function (req, res, next) {
+  const sessionToken = req.query.sessionToken;
+  var ownerAddress = req.query.ownerAddress;
+  const agreementObjectId = req.query.agreementObjectId;
+  var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress);
+
+  if (!isLoggedIn) {
+    res.status(401).send("not authenticated")
+    return;
+  }
+
+  if (agreementObjectId === undefined) {
+    res.status(422).send("wrong input")
+    return
+  }
+  ownerAddress = helper.toCheckSumAddress(ownerAddress);
+
+  const query = new Moralis.Query("AgreementDrafts");
+  var pipeline = [
+    {
+      match: {
+        objectId: agreementObjectId
+      }
+    },
+    {
+      lookup: {
+        from: "AgreementStatus",
+        localField: "transaction_hash",
+        foreignField: "txHash",
+        as: "details",
+      },
+    },
+    {
+      unwind: {
+        path: "$details",
+      },
+    },
+    {
+      lookup: {
+        from: "PropertiesAdded",
+        localField: "details.propertyObjectId",
+        foreignField: "_id",
+        as: "property"
+      }
+    },
+    {
+      unwind: {
+        path: "$property"
+      }
+    },
+    {
+      lookup: {
+        from: "EthTransactions",
+        localField: "details.propBlockHash",
+        foreignField: "hash",
+        as: "propBlockTx"
+      }
+    },
+    {
+      unwind: {
+        path: "$propBlockTx",
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      lookup: {
+        from: "EthTransactions",
+        localField: "details.dldTxHash",
+        foreignField: "hash",
+        as: "dldTx"
+      }
+    },
+    {
+      unwind: {
+        path: "$dldTx",
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      lookup: {
+        from: "EthTransactions",
+        localField: "details.landlordTxHash",
+        foreignField: "hash",
+        as: "landlordTx"
+      }
+    },
+    {
+      unwind: {
+        path: "$landlordTx",
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      addFields: {
+        numericPrice: { $toInt: "$property.listedPrice" },
+        isLandlordTxConfirmed: "$landlordTx.confirmed",
+        isPropBlockTxConfirmed: "$propBlockTx.confirmed",
+        isDldTxConfirmed: "$dldTx.confirmed"
+      }
+    },
+    {
+      project: {
+        "createdAt": 1,
+        "buyerAddress": 1,
+        "landlordAddress": 1,
+        "details.propertyObjectId": 1,
+        "details.propBlockTxHash": 1,
+        "details.landlordTxHash": 1,
+        "details.propertyObjectId": 1,
+        "numericPrice": 1,
+        "isLandlordTxConfirmed": 1,
+        "isPropBlockTxConfirmed": 1,
+        "isDldTxConfirmed": 1,
+      }
+    }
+  ]
+
+  const _result = await query.aggregate(pipeline, { useMasterKey: true });
+  var result = JSON.parse(JSON.stringify(_result));
+  if (result.length == 0) {
+    res.status(404).send("payment not found");
+    return;
+  }
+  result = result[0];
+
+  res.json(result);
+  return;
+});
+
+module.exports = router;
