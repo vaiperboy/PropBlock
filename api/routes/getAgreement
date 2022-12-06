@@ -78,10 +78,10 @@ router.get("/getAgreement", async function (req, res, next) {
       },
       {
         project: {
-          buyerAddress: 1,
-          landlordAddress: 1,
-          transaction_hash: 1,
-          createdAt: 1,
+          "buyerAddress": 1,
+          "landlordAddress": 1,
+          "transaction_hash": 1,
+          "createdAt": 1,
           "details._id": 1,
           "details.propertyObjectId": 1,
           "details.areDocsUploaded": 1,
@@ -91,6 +91,7 @@ router.get("/getAgreement", async function (req, res, next) {
           "details.isBuyerCancelled": 1,
           "details.isOwnerCancelled": 1,
           "details.buyerPaymentComplete": 1,
+          "documents.reasonForRejection": 1,
         },
       },
     ];
