@@ -58,8 +58,8 @@ router.get("/getAllAgreements", async function (req, res, next) {
       },
       {
         unwind: {
-          path: "$details"
-        }
+          path: "$details",
+        },
       },
       {
         match: {
@@ -132,9 +132,9 @@ router.get("/getAllAgreements", async function (req, res, next) {
       },
       {
         project: {
-          "buyerAddress": 1,
-          "landlordAddress": 1,
-          "createdAt": 1,
+          buyerAddress: 1,
+          landlordAddress: 1,
+          createdAt: 1,
           "details.propertyObjectId": 1,
           "details.areDocsUploaded": 1,
           "details.isBeingVerified": 1,
@@ -155,9 +155,6 @@ router.get("/getAllAgreements", async function (req, res, next) {
 
   const _result = await query.aggregate(pipeline, { useMasterKey: true });
   const result = JSON.parse(JSON.stringify(_result));
-  for (var i = 0; i < result.length; i++) {
-    result[i].details = result[i].details[0];
-  }
 
   res.json(result);
   return;

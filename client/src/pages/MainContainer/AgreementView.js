@@ -139,6 +139,7 @@ const AgreementView = (props) => {
             const result = await query.first();
             result.set("areDocsUploaded", true);
             result.set("isBeingVerified", true);
+            result.set("needsRevision", false);
             result.save();
             message.success("Documents uploaded!");
             props.toggleAgreementListView(true);
@@ -267,7 +268,7 @@ const AgreementView = (props) => {
                 Reason for rejection: {agreement.documents.reasonForRejection}
               </h1>
             )} */}
-            {true && (
+            {agreement.details.needsRevision && (
               <div>
                 <h1
                   style={{
@@ -278,7 +279,7 @@ const AgreementView = (props) => {
                 >
                   Reason for rejection:{" "}
                   <span style={{ color: "red", fontWeight: "400" }}>
-                    heraerlkams asdkjna
+                    {agreement.documents.reasonForRejection}
                   </span>
                 </h1>
               </div>
