@@ -80,10 +80,9 @@ const AgreementsList = (props) => {
     // },
   ]);
 
-
   // function to change the view to agreement docs
   const handleAgreementDocs = (agreementID) => {
-    props.setAgreementId(agreementID)
+    props.setAgreementId(agreementID);
     props.toggleAgreementView(true);
   };
 
@@ -99,11 +98,11 @@ const AgreementsList = (props) => {
     setIsLoading(true);
     fetch(
       "http://localhost:9000/getAllAgreements?" +
-      new URLSearchParams({
-        mode: "goverment",
-        sessionToken: user.getSessionToken(),
-        ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
-      })
+        new URLSearchParams({
+          mode: "goverment",
+          sessionToken: user.getSessionToken(),
+          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
+        })
     )
       .then((res) => res.json())
       .then((res) => {
@@ -119,9 +118,8 @@ const AgreementsList = (props) => {
   };
 
   useEffect(() => {
-    loadAgreements()
+    loadAgreements();
   }, []);
-
 
   const [clicked, setClicked] = useState(false);
 
@@ -158,20 +156,26 @@ const AgreementsList = (props) => {
                         <td>{shortenAddress(item.buyerAddress, 20)}</td>
                         <td>{shortenAddress(item.landlordAddress, 20)}</td>
                         <td>
-                          <a href={"/property/" + item.details.propertyObjectId} target="_blank">
-                            {
-                              item.details.propertyObjectId.slice(0, 5) +
+                          <a
+                            href={"/property/" + item.details.propertyObjectId}
+                            target="_blank"
+                          >
+                            {item.details.propertyObjectId.slice(0, 5) +
                               " ... " +
                               item.details.propertyObjectId.slice(
                                 item.details.propertyObjectId.length - 3,
                                 item.details.propertyObjectId.length
-                              )
-                            }
+                              )}
                           </a>
                         </td>
                         <td>{item.createdAt}</td>
                         <td style={{ display: "flex", gap: "1rem" }}>
-                          {item.details.areDocsUploaded ? (
+                          {item.details.isOwnerCancelled ||
+                          item.details.isBuyerCancelled ? (
+                            <p className="waitingForUpload">
+                              Agreement Cancelled
+                            </p>
+                          ) : item.details.areDocsUploaded ? (
                             !item.details.isGovernmentVerified ? (
                               <button
                                 className="acceptButton"

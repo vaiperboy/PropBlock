@@ -185,7 +185,9 @@ class LeftSidebar extends React.Component {
                 ></img>
                 <h2
                   style={{
-                    color: this.props.menuState.agreementView ? "#3DAEEE" : "",
+                    color: this.props.menuState.agreementListView
+                      ? "#3DAEEE"
+                      : "",
                   }}
                 >
                   Agreements
@@ -338,7 +340,9 @@ class LeftSidebar extends React.Component {
                 ></img>
                 <h2
                   style={{
-                    color: this.props.menuState.agreementView ? "#3DAEEE" : "",
+                    color: this.props.menuState.agreementListView
+                      ? "#3DAEEE"
+                      : "",
                   }}
                 >
                   My Agreements

@@ -1,6 +1,13 @@
 import "../styling/Home/Home.scss";
 import { Link } from "react-router-dom";
-import { AutoComplete, Select, InputNumber, notification } from "antd";
+import {
+  AutoComplete,
+  Select,
+  InputNumber,
+  notification,
+  message,
+  Spin,
+} from "antd";
 // import { Loading } from "@web3uikit/core";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -23,7 +30,7 @@ import government_Of_Dubai from "../assets/Government_of_Dubai_logo.png";
 import about_logo from "../assets/about_prop.png";
 import about_logo2 from "../assets/about_prop2.png";
 import contact_us from "../assets/contact_us.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import Fade from "react-reveal/Fade";
 import emailjs from "emailjs-com";
@@ -107,12 +114,13 @@ function Home() {
   const sendEmail = (e) => {
     e.preventDefault();
     setStatus("Submitting ...");
+    console.log("here");
     emailjs
       .sendForm(
-        "service_gmrzi7k",
+        "service_axyk4tx",
         "template_uogsaqt",
         e.target,
-        "_71PziH1OmwrfGNEc"
+        "bv92eN3KhTcjHnZL8"
       )
       .then((res) => {
         document.getElementById("myForm").reset();
@@ -129,6 +137,70 @@ function Home() {
 
     setStatus("Submit");
   };
+
+  const [properties, setProperties] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [filterValues, setFilterValues] = useState({
+    prices: {
+      minPrice: 100,
+      maxPrice: 10000000,
+    },
+    propertyType: "",
+    minimumBeds: 0,
+    minimumBaths: 0,
+    facilities: 0,
+    city: "",
+  });
+
+  const loadProperties = async () => {
+    if (isLoading) {
+      message.error("Wait till it finishes...");
+      return;
+    }
+    setIsLoading(true);
+    try {
+      fetch(
+        "http://localhost:9000/getAllProperties?" +
+          new URLSearchParams({
+            pageNumber: 1,
+            city: filterValues.city,
+            minPrice: filterValues.prices.minPrice,
+            maxPrice: filterValues.prices.maxPrice,
+            propertyType: filterValues.propertyType,
+            facilities: filterValues.facilities,
+            minimumBeds: filterValues.minimumBeds,
+            minimumBaths: filterValues.minimumBaths,
+          })
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          setProperties(res.results);
+          console.log("res ", res.results);
+        })
+        .catch((err) => {
+          message.error("error with API");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } catch (err) {
+      message.error("error with setting data from API");
+    }
+  };
+
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  const shortenText = (text, maxWords) => {
+    if (maxWords < text.length) {
+      text = text.substring(0, maxWords) + "......";
+    }
+    return text;
+  };
+  useEffect(() => {
+    loadProperties();
+  }, []);
 
   const { Option } = Select;
   return (
@@ -409,28 +481,51 @@ function Home() {
                 </div>
               </Link>
             </div>
-            <div className="properties">
-              {sampleProperties.map((property, key) => (
-                <Link className="property" to={`../property/${property.id}`}>
-                  <img
-                    src={require(`../assets/${property.imageLocation}`)}
-                    alt="real_estate_image"
-                  />
+            {isLoading ? (
+              <div
+                style={{
+                  textAlign: "center",
+                  width: "100%",
+                  height: "20rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Spin size="large" style={{ margin: "0 2rem 0 0 " }} />
+              </div>
+            ) : (
+              <div className="properties">
+                {properties.map((property, key) => (
+                  <Link
+                    className="property"
+                    to={`../property/${property.objectId}`}
+                  >
+                    <img
+                      src={`${property.images[0]}`}
+                      alt="real_estate_image"
+                    />
 
-                  <div className="propertyLabel">
-                    <h3 id={key}>{property.label}</h3>
-                    <p>
-                      {property.city}, {property.country}
-                      <img src={location_icon_blue} alt="location_icon_blue" />
-                    </p>
-                  </div>
-                  <div className="propertyDescription">
-                    {property.description}
-                  </div>
-                  <div className="propertyPrice">${property.price}</div>
-                </Link>
-              ))}
-            </div>
+                    <div className="propertyLabel">
+                      <h3 id={key}>{property.details.propertyTitle}</h3>
+                      <p>
+                        {property.details.location}
+                        <img
+                          src={location_icon_blue}
+                          alt="location_icon_blue"
+                        />
+                      </p>
+                    </div>
+                    <div className="propertyDescription">
+                      {shortenText(property.details.propertyDescription, 30)}
+                    </div>
+                    <div className="propertyPrice">
+                      ${numberWithCommas(parseInt(property.listedPrice))}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </Fade>
         {/* <div className="breakLine"></div> */}
