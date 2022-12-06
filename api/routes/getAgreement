@@ -54,6 +54,19 @@ router.get("/getAgreement", async function (req, res, next) {
         }
       },
       {
+        lookup: {
+          from: "AgreementDocuments",
+          localField: "_id",
+          foreignField: "agreementObjectId",
+          as: "documents"
+        }
+      },
+      {
+        unwind: {
+          path: "$documents"
+        }
+      },
+      {
         project: {
           "buyerAddress": 1,
           "landlordAddress": 1,
@@ -68,6 +81,7 @@ router.get("/getAgreement", async function (req, res, next) {
           "details.isBuyerCancelled": 1,
           "details.isOwnerCancelled": 1,
           "details.buyerPaymentComplete": 1,
+          "documents.reasonForRejection": 1,
         }
       }
     ]
