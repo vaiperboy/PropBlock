@@ -1,0 +1,195 @@
+.searchBar {
+  margin-top: 1rem;
+  width: 100%;
+  border: 2px solid #3daeee;
+  height: 11rem;
+  border-radius: 0.5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.searchBar .horizontal_line {
+  width: 4px;
+  margin: 0 1rem;
+  height: 75%;
+  background-color: rgba(85, 85, 85, 0.6);
+}
+
+.searchBar .locationFilter {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 50rem;
+  padding: 0 0 2rem 0;
+}
+
+.searchBar .locationFilter .filterDiv {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin: 1.5rem;
+}
+
+.searchBar .locationFilter .filterDiv label {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.searchBar .locationFilter .inputDiv {
+  margin: 0 auto;
+  width: 90%;
+}
+
+.searchBar .propertyTypeFilter {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 40rem;
+  padding: 0 0 2rem 0;
+}
+
+.searchBar .propertyTypeFilter .filterDiv {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin: 1.5rem 1rem;
+}
+
+.searchBar .propertyTypeFilter .filterDiv label {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.searchBar .propertyTypeFilter .inputDiv {
+  margin: 0 auto;
+  width: 92%;
+}
+
+.searchBar .bedsFilter {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 25rem;
+  padding: 0 0 2rem 0;
+}
+
+.searchBar .bedsFilter .filterDiv {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin: 1.5rem 1rem;
+}
+
+.searchBar .bedsFilter .filterDiv label {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.searchBar .bedsFilter .inputDiv {
+  margin: 0 auto;
+  width: 90%;
+}
+
+.searchBar .priceFilter {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 25rem;
+  padding: 0 0 2rem 0;
+}
+
+.searchBar .priceFilter .filterDiv {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin: 1.5rem 1rem;
+}
+
+.searchBar .priceFilter .filterDiv label {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.searchBar .priceFilter .inputDiv {
+  margin: 0 auto;
+  width: 90%;
+}
+
+.searchBar #searchButton {
+  width: 10rem;
+  background-color: #3daeee;
+  height: 5.5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 1rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.searchBar #searchButton:hover {
+  background-color: rgba(61, 174, 238, 0.7);
+}
+
+.searchBar #searchButton .searchBarIcon {
+  font-size: 3rem;
+}
+/*# sourceMappingURL=SearchAvailability.css.map */

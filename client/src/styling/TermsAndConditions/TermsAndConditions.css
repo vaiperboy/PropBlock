@@ -1,0 +1,56 @@
+.termsAndConditions .topSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 50rem;
+}
+
+.termsAndConditions .topSection .leftSide {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 15rem 15rem 0 20rem;
+}
+
+.termsAndConditions .topSection .leftSide h1 {
+  font-size: 4rem;
+  color: #3daeee;
+}
+
+.termsAndConditions .topSection .leftSide p {
+  text-align: justify;
+}
+
+.termsAndConditions .topSection .rightSide {
+  padding: 5rem 0 0 5rem;
+  width: 70%;
+}
+
+.termsAndConditions .topSection .rightSide img {
+  width: 43rem;
+}
+
+.termsAndConditions .termsSection {
+  margin-top: -10rem;
+  margin-bottom: 5rem;
+  padding: 0 30rem 0 20rem;
+  text-align: justify;
+}
+
+.termsAndConditions .termsSection h1 {
+  margin: 0 0 3rem 0;
+  color: #2093d6;
+}
+
+.termsAndConditions .termsSection .heading {
+  font-weight: 600;
+  margin: 1rem 0;
+}
+/*# sourceMappingURL=TermsAndConditions.css.map */

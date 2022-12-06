@@ -1,0 +1,135 @@
+.properties-page .App .upper-body {
+  margin: 0 auto;
+  width: 70%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.properties-page .App .upper-body .ant-select {
+  margin-bottom: 2rem;
+  background-color: red;
+}
+
+.properties-page .body {
+  display: inline-block;
+}
+
+.properties-page .body .real-body {
+  width: 80%;
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: 7rem;
+}
+
+.properties-page .body .real-body .right-body {
+  margin-left: 70px;
+}
+
+.properties-page .body .real-body .right-body .queries-count {
+  display: inline;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  margin-left: 1rem;
+  color: #555555;
+}
+
+.properties-page .body .real-body .left-body {
+  width: 432px;
+  height: 600px;
+}
+
+.properties-page .body .real-body .property-listing {
+  width: 100%;
+}
+
+.properties-page .body .real-body .property-listing .resultsText {
+  margin-top: -3.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.7rem;
+}
+
+.properties-page .body .real-body .property-listing .propertyCards {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+.properties-page .body .real-body .property-listing .propertyCards .property {
+  width: 70rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 10rem;
+}
+
+.properties-page .body .real-body .property-listing .propertyCards .property #property-image {
+  width: 25rem;
+  padding: 1rem;
+}
+
+.properties-page .body .real-body .property-listing .propertyCards .property .address-box {
+  width: 24rem;
+  height: 2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+  margin-top: 10rem;
+}
+
+.properties-page .body .real-body .property-listing .propertyCards .property .address-box #walletImage {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0;
+}
+
+.properties-page .body .real-body .property-listing .propertyCards .property .address-box #walletAddress {
+  color: #3daeee;
+  margin-left: 4rem;
+}
+
+.properties-page .body .real-body .property-listing .propertyCards .property .property-button {
+  margin: 1rem;
+}
+
+.properties-page .body .real-body .page-numbers {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 30px;
+}
+
+.properties-page .container {
+  text-align: center;
+}
+
+.properties-page .loader-container {
+  margin-top: 50px;
+  text-align: center;
+}
+/*# sourceMappingURL=Properties.css.map */

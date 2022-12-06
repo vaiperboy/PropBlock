@@ -1,0 +1,501 @@
+.propertyStyling {
+  width: 86%;
+  margin: 0 auto 10rem auto;
+}
+
+.propertyStyling .backButton {
+  background-color: #3daeee;
+  border: none;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 0.7rem 1.5rem;
+  border-radius: 0.5rem;
+  color: #ffffff;
+  cursor: pointer;
+  margin: 3rem 0 1rem 0;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.propertyStyling .backButton:hover {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  background-color: rgba(61, 174, 238, 0.8);
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
+}
+
+.propertyStyling .titleSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.propertyStyling .titleSection .propertyTitle {
+  font-size: 3rem;
+  font-weight: 500;
+  color: #444444;
+}
+
+.propertyStyling .titleSection .propertyLocation {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0 0 2rem 0;
+}
+
+.propertyStyling .titleSection .propertyLocation img {
+  width: 2.2rem;
+  height: 2.2rem;
+  margin-right: 1rem;
+}
+
+.propertyStyling .titleSection .propertyLocation .locationDetails {
+  color: #3daeee;
+  margin: 0;
+}
+
+.propertyStyling .titleSection .propertyLocation p {
+  cursor: pointer;
+  margin: 0 0 0 5rem;
+  text-decoration: underline;
+  color: #3daeee;
+}
+
+.propertyStyling .imagesSection {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 2fr 1fr;
+      grid-template-columns: 2fr 1fr;
+  -ms-grid-rows: 2fr 2fr;
+      grid-template-rows: 2fr 2fr;
+  -webkit-column-gap: 1rem;
+          column-gap: 1rem;
+  row-gap: 1rem;
+  width: 100%;
+  height: 54rem;
+}
+
+.propertyStyling .imagesSection #firstImage {
+  -ms-grid-row: 1;
+      grid-row-start: 1;
+  grid-row-end: 3;
+  width: 100%;
+  height: 100%;
+}
+
+.propertyStyling .imagesSection #firstImage img {
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.propertyStyling .imagesSection #propertyImages {
+  width: 100%;
+  height: 25rem;
+}
+
+.propertyStyling .imagesSection #propertyImages img {
+  height: 25rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.propertyStyling .loadMoreButton {
+  background-color: #f6f6f6;
+  border: 1px solid #333333;
+  padding: 0.5rem 1.5rem;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  position: absolute;
+  margin: -5.5rem 0 0 112rem;
+  pointer-events: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.propertyStyling .loadMoreButton:hover {
+  background-color: red;
+}
+
+.propertyStyling .aboutProperty {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 2rem;
+}
+
+.propertyStyling .aboutProperty .leftSide {
+  width: 82rem;
+  padding: 1rem 1rem 0 0;
+  margin-right: 1rem;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .topSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .topSection h3 {
+  margin: 0;
+  font-size: 3rem;
+  color: #444444;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .topSection .saveAndShareButtons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 1rem;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .topSection .saveAndShareButtons .save {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border: 1px solid #333333;
+  background-color: #ffffff;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .topSection .saveAndShareButtons .save .icon {
+  font-size: 1.5rem;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .topSection .saveAndShareButtons .save:hover {
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  background-color: #3daeee;
+  color: #ffffff;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .topSection .saveAndShareButtons .saved {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border: 1px solid #3daeee;
+  background-color: #3daeee;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  color: #ffffff;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .topSection .saveAndShareButtons .saved .icon {
+  font-size: 1.5rem;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .topSection .saveAndShareButtons .saved:hover {
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  border: 1px solid #333333;
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .topSection .saveAndShareButtons .share {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  cursor: pointer;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border: 1px solid #333333;
+  background-color: #ffffff;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .topSection .saveAndShareButtons .share .icon {
+  font-size: 1.5rem;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .topSection .saveAndShareButtons .share:hover {
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  background-color: #3daeee;
+  color: #ffffff;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .propertyFeatures {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-top: 2rem;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .propertyFeatures .infoSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .propertyFeatures .infoSection p {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 0 1rem;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .propertyDescription {
+  margin: 2rem 0;
+  text-align: justify;
+  min-height: 15rem;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .propertyFacilities {
+  min-height: 5rem;
+  width: 100%;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .propertyFacilities .heading {
+  font-size: 2.5rem;
+  font-weight: 550;
+  color: #444444;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .propertyFacilities .facilitiesContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 2rem;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .propertyFacilities .facilitiesContainer .column {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 2.5rem;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .propertyFacilities .facilitiesContainer .column .row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 2rem;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .propertyFacilities .facilitiesContainer .column .row .image {
+  width: 3rem;
+  height: 3rem;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .propertyFacilities .facilitiesContainer .column .row .facilityTitle {
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.propertyStyling .aboutProperty .leftSide .propertyInformation .propertyFacilities .facilitiesContainer .column .disabled {
+  opacity: 0.3;
+}
+
+.propertyStyling .aboutProperty .rightSide {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  width: 41rem;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding: 1rem 2rem 4rem 2rem;
+  border: 1px solid #333333;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails {
+  margin: 0 1rem;
+  padding: 1.5rem 0 0 0;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .propertyPriceSection {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+  font-size: 1.7rem;
+  color: #555;
+  font-weight: 500;
+  border-bottom: 1px solid #bdbdbd;
+  padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 1rem;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .propertyPriceSection .price {
+  font-size: 3rem;
+  font-weight: 500;
+  color: #3daeee;
+  margin: 0;
+  padding: 0 0 1rem 0;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .owner {
+  border-radius: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-bottom: 1rem;
+  margin-bottom: 3rem;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .owner:hover {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  background-color: rgba(61, 174, 238, 0.2);
+  cursor: pointer;
+  -webkit-transform: translateY(-0.2rem);
+          transform: translateY(-0.2rem);
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .owner p {
+  font-size: 1.7rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .owner img {
+  width: 3.5rem;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .ownerDetailsHeading {
+  font-size: 1.8rem;
+  font-weight: 550;
+  margin-bottom: 1rem;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .userButtons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 1rem;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .userButtons .emailButton {
+  width: 50%;
+  background-color: #ffffff;
+  border: 2px solid #3daeee;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 500;
+  color: #3daeee;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 0.5rem;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .userButtons .emailButton p {
+  margin: 0;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .userButtons .emailButton:hover {
+  background-color: #f7f7f7;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .userButtons .emailButton img {
+  width: 3rem;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .userButtons .requestPurchaseButton {
+  width: 100%;
+  background-color: #3daeee;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 2rem;
+  font-weight: 500;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.propertyStyling .aboutProperty .rightSide .ownerDetails .userButtons .requestPurchaseButton:hover {
+  background-color: rgba(61, 174, 238, 0.8);
+}
+
+@media only screen and (min-width: 1441px) {
+  .imagesSection {
+    min-height: 70rem;
+  }
+}
+/*# sourceMappingURL=property.css.map */

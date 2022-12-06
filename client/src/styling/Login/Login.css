@@ -1,0 +1,201 @@
+.loginPage {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+}
+
+.loginPage .leftSide {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 45%;
+  height: 55rem;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#a3c9de));
+  background-image: linear-gradient(to bottom, #ffffff, #a3c9de);
+}
+
+.loginPage .leftSide .illustrationDiv {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.loginPage .leftSide .illustrationDiv img {
+  width: 55rem;
+}
+
+.loginPage .rightSide {
+  width: 55%;
+  height: 55rem;
+  background-color: #ffffff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding-left: 2rem;
+}
+
+.loginPage .rightSide div {
+  margin: 3rem 0;
+}
+
+.loginPage .rightSide h1 {
+  font-size: 4rem;
+  padding-left: 2rem;
+  color: #3daeee;
+}
+
+.loginPage .rightSide .loginSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 0 0 0 2rem;
+  gap: 0.5rem;
+}
+
+.loginPage .rightSide .loginSection p {
+  color: #333333;
+  font-weight: normal;
+  font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.loginPage .rightSide .loginSection .connectWalletButton {
+  border: none;
+  cursor: pointer;
+  outline: none;
+  width: 50%;
+  height: 4rem;
+  font-family: "Roboto Mono", monospace;
+  font-size: 1.8rem;
+  -webkit-transform: translate(0);
+          transform: translate(0);
+  background-image: linear-gradient(45deg, #2bc0e4, #9747ff);
+  border-radius: 5px;
+  -webkit-box-shadow: 0 22px 44px rgba(128, 128, 128, 0.1);
+          box-shadow: 0 22px 44px rgba(128, 128, 128, 0.1);
+  -webkit-transition: -webkit-box-shadow 0.25s;
+  transition: -webkit-box-shadow 0.25s;
+  transition: box-shadow 0.25s;
+  transition: box-shadow 0.25s, -webkit-box-shadow 0.25s;
+  border: none;
+}
+
+.loginPage .rightSide .loginSection .connectWalletButton .text {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(45deg, #2bc0e4, #9747ff);
+}
+
+.loginPage .rightSide .loginSection .connectWalletButton .text {
+  text-align: center;
+  background-image: linear-gradient(-45deg, #2bc0e4, #9747ff);
+}
+
+.loginPage .rightSide .loginSection .connectWalletButton img {
+  width: 3rem;
+}
+
+.loginPage .rightSide .loginSection .connectWalletButton:after {
+  content: "";
+  border-radius: 4px;
+  position: absolute;
+  margin: 2px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+  background: white;
+}
+
+.loginPage .rightSide .loginSection .connectWalletButton:hover {
+  background-image: linear-gradient(-45deg, #2bc0e4, #9747ff);
+  -webkit-box-shadow: 0 12px 24px rgba(61, 174, 238, 0.15);
+          box-shadow: 0 12px 24px rgba(61, 174, 238, 0.15);
+}
+
+.loginPage .rightSide .loginSection .disconnectWalletButton {
+  width: 50%;
+  height: 4.5rem;
+  font-size: 2rem;
+  font-family: "Roboto Mono", monospace;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  -webkit-transform: translate(0);
+          transform: translate(0);
+  background-image: linear-gradient(45deg, #2bc0e4, #9747ff);
+  border-radius: 5px;
+  -webkit-box-shadow: 0 22px 44px rgba(128, 128, 128, 0.1);
+          box-shadow: 0 22px 44px rgba(128, 128, 128, 0.1);
+  -webkit-transition: -webkit-box-shadow 0.25s;
+  transition: -webkit-box-shadow 0.25s;
+  transition: box-shadow 0.25s;
+  transition: box-shadow 0.25s, -webkit-box-shadow 0.25s;
+  border: none;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.loginPage .rightSide .loginSection .disconnectWalletButton .text {
+  color: white;
+}
+
+.loginPage .rightSide .loginSection .disconnectWalletButton:hover {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  background-image: linear-gradient(45deg, rgba(43, 192, 228, 0.8), rgba(151, 71, 255, 0.9));
+  -webkit-box-shadow: 0 12px 24px rgba(61, 174, 238, 0.15);
+          box-shadow: 0 12px 24px rgba(61, 174, 238, 0.15);
+}
+
+.loginPage .rightSide .loginSection .linkToSignUpPage {
+  font-size: 1.4rem;
+  margin: 1rem 0 2rem 0;
+}
+
+.loginPage .rightSide .loginSection .loginButton {
+  background-color: #3daeee;
+  color: #ffffff;
+  width: 50%;
+  height: 3.5rem;
+  font-size: 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  font-weight: 500;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.loginPage .rightSide .loginSection .loginButton:hover {
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  -webkit-transform: translateY(-1px);
+          transform: translateY(-1px);
+  -webkit-box-shadow: 0 3px 8px rgba(51, 51, 51, 0.3);
+          box-shadow: 0 3px 8px rgba(51, 51, 51, 0.3);
+}
+/*# sourceMappingURL=Login.css.map */

@@ -1,0 +1,178 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@300;500&display=swap");
+.property-listing .property-button {
+  position: absolute;
+  right: 0;
+  top: 75%;
+  margin: 2rem 0;
+  font-weight: 500;
+  background-color: #3daeee;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-family: "poppins";
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 1.5rem 2rem;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  -webkit-box-shadow: 0px 4px 13px #85c3e6;
+  box-shadow: 0px 4px 13px #85c3e6;
+  -webkit-transition: all ease 0.2s;
+  transition: all ease 0.2s;
+}
+
+.property-listing .property-button:hover {
+  -webkit-transition: all ease 0.2s;
+  transition: all ease 0.2s;
+  scale: 1.05;
+  -webkit-transform: translateY(-0.2rem);
+  transform: translateY(-0.2rem);
+  background-color: #2994d2;
+  cursor: pointer;
+}
+
+.property-listing .dot {
+  width: 7px;
+  height: 7px;
+  background-color: #555555;
+  margin-top: 8px;
+  margin-right: 5px;
+  margin-left: 5px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.property-listing .rectangle {
+  border: 1px solid;
+  border-radius: 9px;
+  -webkit-box-shadow: 0px 0px 4px 1px #d4d4d4;
+          box-shadow: 0px 0px 4px 1px #d4d4d4;
+  height: 23rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  position: relative;
+}
+
+.property-listing .property {
+  width: 98%;
+  height: 90%;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.property-listing #property-image {
+  width: 30%;
+  height: 100%;
+}
+
+.property-listing .right-child {
+  margin-left: 10px;
+  width: 70%;
+}
+
+.property-listing #propertyName {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  color: #444444;
+}
+
+.property-listing #locationName {
+  float: left;
+  margin-left: 3px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #3daeee;
+}
+
+.property-listing .property-inline {
+  float: left;
+  width: 100%;
+}
+
+.property-listing p {
+  margin-bottom: 0px;
+}
+
+.property-listing .link {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 12px;
+  color: #0075b7;
+  margin-left: 4px;
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+}
+
+.property-listing #propertyPrice {
+  position: absolute;
+  right: 1%;
+  top: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 26px;
+  color: #3daeee;
+}
+
+.property-listing #favImg {
+  position: absolute;
+  right: 1%;
+  top: 1;
+  height: 20px;
+  width: 19px;
+}
+
+.property-listing .property-upper-body {
+  display: inline-block;
+  color: #555555;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.property-listing .features {
+  color: #555555;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.property-listing .content {
+  margin-top: 5px;
+  color: #555555;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.property-listing .address-box {
+  padding: 16px 0px 16px 16px;
+  border: 1px solid #bcc0c4;
+  border-radius: 10px;
+  width: 251px;
+  height: 48px;
+  position: absolute;
+  bottom: 1%;
+}
+
+.property-listing .property #walletImage {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 8%;
+  bottom: 0;
+}
+
+.property-listing .property #walletAddress {
+  position: absolute;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+}
+/*# sourceMappingURL=PropertyListing.css.map */

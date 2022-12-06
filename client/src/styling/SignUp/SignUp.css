@@ -1,0 +1,529 @@
+.signup {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  min-height: 83rem;
+}
+
+.signup .leftSide {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 45%;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#a3c9de));
+  background-image: linear-gradient(to bottom, #ffffff, #a3c9de);
+}
+
+.signup .leftSide .illustrationDiv {
+  margin-top: 5rem;
+}
+
+.signup .leftSide .illustrationDiv img {
+  width: 65rem;
+  -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
+}
+
+.signup .rightSide {
+  overflow: auto;
+  width: 55%;
+  padding: 0 0 6rem 0;
+  background-color: #ffffff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding-left: 2rem;
+}
+
+.signup .rightSide div {
+  margin: 2rem 0;
+}
+
+.signup .rightSide h1 {
+  font-size: 3rem;
+  padding-left: 2rem;
+  color: #3daeee;
+}
+
+.signup .rightSide .signupSection {
+  height: 1px;
+  min-height: 40rem;
+  width: 90%;
+  padding-left: 2rem;
+}
+
+.signup .rightSide .signupSection li {
+  background-color: #3daeee;
+  border: #3daeee;
+}
+
+.signup .rightSide .signupSection li svg {
+  fill: white;
+}
+
+.signup .rightSide .signupSection ol {
+  margin: 0;
+}
+
+.signup .rightSide .signupSection ol span {
+  background-color: rgba(61, 174, 238, 0.3);
+}
+
+.signup .rightSide .signupSection .nextButton {
+  background-color: #3daeee;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 2rem;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  margin-top: 2rem;
+  font-weight: 500;
+  color: #ffffff;
+  text-align: left;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.signup .rightSide .signupSection .nextButton:hover {
+  background-color: #5ab6eb;
+}
+
+.signup .rightSide .signupSection .prevButton {
+  background-color: #3daeee;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  font-weight: 500;
+  color: #ffffff;
+  text-align: left;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-bottom: 2rem;
+}
+
+.signup .rightSide .signupSection .prevButton:hover {
+  background-color: #5ab6eb;
+}
+
+.signup .rightSide .signupSection #step-1 {
+  margin: 0;
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain {
+  width: 95%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: left;
+  margin: 0;
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain .fullName {
+  margin: 0;
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain .email {
+  margin: 0;
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain .connectWalletButton {
+  border: none;
+  cursor: pointer;
+  outline: none;
+  margin: 1.5rem 0 0 0;
+  width: 50%;
+  height: 4rem;
+  font-family: "Roboto Mono", monospace;
+  font-size: 1.5rem;
+  -webkit-transform: translate(0);
+          transform: translate(0);
+  background-image: linear-gradient(45deg, #2bc0e4, #9747ff);
+  border-radius: 0.6rem;
+  -webkit-box-shadow: 0 22px 44px rgba(128, 128, 128, 0.1);
+          box-shadow: 0 22px 44px rgba(128, 128, 128, 0.1);
+  -webkit-transition: -webkit-box-shadow 0.25s;
+  transition: -webkit-box-shadow 0.25s;
+  transition: box-shadow 0.25s;
+  transition: box-shadow 0.25s, -webkit-box-shadow 0.25s;
+  border: none;
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain .connectWalletButton .text {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(45deg, #2bc0e4, #9747ff);
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain .connectWalletButton .text {
+  text-align: center;
+  background-image: linear-gradient(-45deg, #2bc0e4, #9747ff);
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain .connectWalletButton img {
+  width: 3rem;
+  margin-left: 1rem;
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain .connectWalletButton:after {
+  content: "";
+  border-radius: 4px;
+  position: absolute;
+  margin: 2px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+  background: white;
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain .connectWalletButton:hover {
+  background-image: linear-gradient(-45deg, #2bc0e4, #9747ff);
+  -webkit-box-shadow: 0 12px 24px rgba(61, 174, 238, 0.15);
+          box-shadow: 0 12px 24px rgba(61, 174, 238, 0.15);
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain .disconnectWalletButton {
+  width: 50%;
+  height: 4rem;
+  font-size: 1.5rem;
+  font-family: "Roboto Mono", monospace;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  -webkit-transform: translate(0);
+          transform: translate(0);
+  background-image: linear-gradient(45deg, #2bc0e4, #9747ff);
+  border-radius: 0.6rem;
+  -webkit-box-shadow: 0 22px 44px rgba(128, 128, 128, 0.1);
+          box-shadow: 0 22px 44px rgba(128, 128, 128, 0.1);
+  -webkit-transition: -webkit-box-shadow 0.25s;
+  transition: -webkit-box-shadow 0.25s;
+  transition: box-shadow 0.25s;
+  transition: box-shadow 0.25s, -webkit-box-shadow 0.25s;
+  border: none;
+  color: #ffffff;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain .disconnectWalletButton .text {
+  color: white;
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain .disconnectWalletButton:hover {
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  background-image: linear-gradient(45deg, rgba(43, 192, 228, 0.8), rgba(151, 71, 255, 0.9));
+  -webkit-box-shadow: 0 12px 24px rgba(61, 174, 238, 0.15);
+          box-shadow: 0 12px 24px rgba(61, 174, 238, 0.15);
+}
+
+.signup .rightSide .signupSection #step-1 .SignUpMain .linkToLoginPage {
+  margin: 0.5rem 0;
+  font-size: 1.3rem;
+}
+
+.signup .rightSide .signupSection #step-2 {
+  margin: 5.3rem 0 0 0;
+}
+
+.signup .rightSide .signupSection #step-2 div {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+  text-align: left;
+  margin: 0;
+}
+
+.signup .rightSide .signupSection #step-2 div .verify-code {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  padding: 1rem 0 3rem 0;
+}
+
+.signup .rightSide .signupSection #step-2 div .verify-code input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.signup .rightSide .signupSection #step-2 div #codeSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.signup .rightSide .signupSection #step-2 div h2 {
+  font-size: 2rem;
+  font-weight: 500;
+  color: #3daeee;
+  margin-top: 0;
+}
+
+.signup .rightSide .signupSection #step-2 div p {
+  font-size: 1.5rem;
+}
+
+.signup .rightSide .signupSection #step-2 div .resendEmailButton {
+  background-color: #ffffff;
+  padding: 0;
+  border: none;
+  text-align: left;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #00aeff;
+}
+
+.signup .rightSide .signupSection #step-2 div .emailSection {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  gap: 2rem;
+}
+
+.signup .rightSide .signupSection #step-2 div .emailSection .skipButton {
+  background-color: #3daeee;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 2rem;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  margin-top: 2rem;
+  font-weight: 500;
+  color: #ffffff;
+  text-align: left;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.signup .rightSide .signupSection #step-2 div .emailSection .skipButton:hover {
+  background-color: #5ab6eb;
+}
+
+.signup .rightSide .signupSection #step-3 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+  margin: 2rem 0 0 0;
+  text-align: left;
+}
+
+.signup .rightSide .signupSection #step-3 div {
+  margin: 0;
+}
+
+.signup .rightSide .signupSection #step-3 div h2 {
+  font-size: 2rem;
+  color: #3daeee;
+  margin-top: 0;
+}
+
+.signup .rightSide .signupSection #step-3 div p {
+  font-size: 1.5rem;
+}
+
+.signup .rightSide .signupSection #step-3 label {
+  margin-top: 2rem;
+}
+
+.signup .rightSide .signupSection #step-3 label span {
+  font-size: 1.5rem;
+}
+
+.signup .rightSide .signupSection #step-3 .nextButton {
+  margin: 1rem 0 2rem 0;
+}
+
+.signup .rightSide .signupSection #step-4 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+  margin: 2rem 0 0 0;
+  text-align: left;
+}
+
+.signup .rightSide .signupSection #step-4 div {
+  margin: 0;
+}
+
+.signup .rightSide .signupSection #step-4 div h2 {
+  font-size: 2rem;
+  color: #3daeee;
+  margin-top: 0;
+}
+
+.signup .rightSide .signupSection #step-4 div p {
+  font-size: 1.5rem;
+}
+
+.signup .rightSide .signupSection #step-4 label {
+  margin-top: 2rem;
+}
+
+.signup .rightSide .signupSection #step-4 label span {
+  font-size: 1.5rem;
+}
+
+.signup .rightSide .signupSection #step-4 .nextButton {
+  margin: 1rem 0 2rem 0;
+}
+
+.signup .rightSide .signupSection #step-5 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+  margin: 2rem 0 0 0;
+  text-align: left;
+}
+
+.signup .rightSide .signupSection #step-5 div {
+  margin: 0;
+}
+
+.signup .rightSide .signupSection #step-5 div h2 {
+  font-size: 2rem;
+  color: #3daeee;
+  margin-top: 0;
+}
+
+.signup .rightSide .signupSection #step-5 div .termsDiv {
+  border-radius: 1rem;
+  height: 40rem;
+  font-size: 1.2rem;
+  border: 1px solid rgba(51, 51, 51, 0.3);
+  padding: 2rem;
+  margin-top: 2rem;
+  text-align: justify;
+  overflow: auto;
+}
+
+.signup .rightSide .signupSection #step-5 div .termsDiv h1 {
+  color: #333333;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+}
+
+.signup .rightSide .signupSection #step-5 div .termsDiv .heading {
+  font-weight: bold;
+  color: #333333;
+}
+
+.signup .rightSide .signupSection #step-5 div .termsDiv .terms li {
+  background-color: #ffffff;
+}
+
+.signup .rightSide .signupSection #step-5 label {
+  margin-top: 2rem;
+}
+
+.signup .rightSide .signupSection #step-5 label span {
+  font-size: 1.5rem;
+}
+
+.signup .rightSide .signupSection #step-5 .nextButton {
+  margin: 1rem 0 2rem 0;
+}
+
+.signup .rightSide .signupSection #step-5 .termsSectionBottom {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.signup .rightSide .signupSection .checkBoxDiv {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 2rem 0;
+}
+
+.signup .rightSide .signupSection .checkBoxDiv p {
+  margin: 0;
+  padding: 0;
+}
+
+.signup .rightSide .signupSection .checkBoxDiv input[type="checkbox"] {
+  margin-right: 1rem;
+  width: 2rem;
+  height: 2rem;
+}
+
+@media screen and (min-width: 1441px) {
+  .signup .leftSide {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+}
+/*# sourceMappingURL=SignUp.css.map */
