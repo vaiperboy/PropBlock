@@ -152,7 +152,7 @@ contract realEstate is Ownable {
     // MAIN FUNCTIONS OF THE CONTRACT
 
     /*  @dev - creates a new property for a landlord && (Adds landlord if not exists) && landlordsPropertyCounter++
-        @filters - landlordExists 
+        @filters - none
         @params - landlordAddress, streetName, area, apartmentNum, listedPrice
     */ 
     function createPropertyListing(address payable _landlordAddress, string memory _propertyType, uint _titleDeedNo, uint _titleDeedYear, string memory _streetName, uint _area, string memory _apartmentNum, uint _listedPrice, string memory _ipfsHash )
@@ -172,6 +172,16 @@ contract realEstate is Ownable {
         // adds property to the list of lands owned by a landlord
         landlordProperties[_landlordAddress][counter] = Property(counter, _propertyType, _titleDeedNo, _titleDeedYear, _streetName, _area, _apartmentNum, _listedPrice, true, _ipfsHash);  
         emit newPropertyAdded(_landlordAddress, counter, _titleDeedNo, _titleDeedYear, _propertyType, _streetName, _area, _apartmentNum, _listedPrice, _ipfsHash );
+    }
+
+    /*  @dev - gets the counter for landlords
+        @filters - none
+        @params - landlordAddress
+    */ 
+    function getLandlordCounter (address _landlordAddress) 
+    public view 
+    returns(uint) {
+        return(landlordsPropertyCounter[_landlordAddress]);
     }
 
     /*  @dev - gets the listed price for an existing property for a landlord
@@ -234,16 +244,6 @@ contract realEstate is Ownable {
         return landlordProperties[_landlordAddress][_propertyId].valid; 
     }
 
-    /*  @dev - gets the counter for landlords
-        @filters - none
-        @params - landlordAddress
-    */ 
-    function getLandlordCounter (address _landlordAddress) 
-    public view 
-    returns(uint) {
-        return(landlordsPropertyCounter[_landlordAddress]);
-    }
-
     /*  @dev - transfers a property from the landlord to the buyer && landlordsPropertyCounter-- && buyerCounter++
         @filters - landlordExists, propertyExists
         @params - landlordAddress, streetName, area, apartmentNum, listedPrice
@@ -254,7 +254,13 @@ contract realEstate is Ownable {
     landlordExists(_buyerAddress) 
     propertyExists(_landlordAddress, _propertyID) 
     {
-        require(msg.sender == _landlordAddress, "You cannot transfer the property! Only the owner can transfer the property.");
+        // If the buyer does not exist
+        if (landLordsMap[_buyerAddress] == 0) {
+            landlordsPropertyCounter[_buyerAddress] = 0;
+            landlordsCounter ++;
+               // adds landlord to list of landlords
+            landLordsMap[_buyerAddress] = landlordsCounter;
+        } 
         require(_landlordAddress != _buyerAddress, "You cannot transfer the property to the same address! Buyer and Landlord Address should be different.");
         // increment buyer's counter 
         landlordsPropertyCounter[_buyerAddress]++;
@@ -286,14 +292,13 @@ contract realEstate is Ownable {
         emit amountTransfered(_landlordAddress, _amount);
     }
 
-    /*  @dev - transfers the amount from the contract to the a landlord address
+    /*  @dev - transfers the amount from the contract to the landlord address
         @filters - onlyOwner, landlordExists
         @params - landlordAddress, amount
     */ 
     function transferAmount(address payable _landlordAddress, uint _amount) 
     public payable
     onlyOwner
-    landlordExists(_landlordAddress) 
     {
         // transfer amount from contract to landlord
         (bool sent, ) = _landlordAddress.call{value: _amount}("");
