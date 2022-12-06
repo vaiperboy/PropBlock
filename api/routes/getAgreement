@@ -15,18 +15,18 @@ router.get("/getAgreement", async function (req, res, next) {
   var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress)
 
   if (!isLoggedIn) {
-    res.send(401, "not authenticated")
+    res.status(401).send("not authenticated")
     return;
   }
 
   if (agreementObjectId === undefined || mode === undefined) {
-    res.send(422, "wrong input")
+    res.status(422).send("wrong input")
     return
   }
 
   mode = mode.toLowerCase()
   if (mode != "seller" && mode != "goverment") {
-    res.send(422, "wrong mode")
+    res.status(422).send("wrong mode")
   }
 
   ownerAddress = helper.toCheckSumAddress(ownerAddress)
