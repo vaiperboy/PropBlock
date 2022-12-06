@@ -264,7 +264,7 @@ const MyProperties = () => {
 
         const result = await realEstateDappContract.createPropertyListing(
           ownerAddress,
-          propertyType,
+          propertyType.toLowerCase(),
           uintTitleDeedNo,
           uintTitleDeedYear,
           propertyStreet,
@@ -290,15 +290,17 @@ const MyProperties = () => {
         }
 
         message.info("Adding extra details");
+        const docHash= (await ipfs.add(titleDeedFile)).result
         const data = {
           txHash: result.hash,
           facilities: facilitiesXor,
-          city: propertyCity,
+          city: propertyCity.toLowerCase(),
           bedsNumber: bedNumber,
           bathsNumber: bathNumber,
           propertyTitle: propertyTitle,
           propertyDescription: propertyDescription,
           occupantsNumber: occupancyNum,
+          titleDeedHash: docHash
         };
 
         save(data, {
