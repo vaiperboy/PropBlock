@@ -60,7 +60,7 @@ router.get("/getPaymentDetails", async function (req, res, next) {
     {
       lookup: {
         from: "EthTransactions",
-        localField: "details.propBlockHash",
+        localField: "details.propBlockTxHash",
         foreignField: "hash",
         as: "propBlockTx"
       }

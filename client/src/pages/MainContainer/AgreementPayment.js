@@ -178,6 +178,7 @@ const AgreementPayment = (props) => {
         signer
       );
 
+
       const uintPropertyId = parseInt(propertyId);
       const ownerAddress = Web3.utils.toChecksumAddress(owner);
       const buyerAddress = Web3.utils.toChecksumAddress(buyer);
@@ -191,9 +192,16 @@ const AgreementPayment = (props) => {
       console.log("Txhash: ", txHash);
 
       // do the off-chain stuff here
-
+      message.success("You now own this property!")
+      var query = new Moralis.Query("PropertiesAdded")
+      query.equalTo("objectId", payment.details.propertyObjectId)
+      var result = await query.first()
+      result.set("landlordAddress", buyerAddress)
+      result.save()
     } catch (error) {
       message.error("Error: ", error);
+      console.log(error)
+      console.log("error occured")
     }
   };
 
@@ -475,7 +483,7 @@ const AgreementPayment = (props) => {
                           payment.property.propertyId
                         );
                       }}
-                      disabled={(!canPayDld && !canPayLandlord && !canPayPropBlock)}
+                      disabled={(canPayDld || canPayLandlord || canPayPropBlock)}
                     >
                       Complete Transfer
                     </button>
