@@ -289,7 +289,6 @@ const PurchaseRequests = (props) => {
     var d = new Date(date);
     return d.toLocaleString();
   };
-  window.beautifyDate = beautifyDate;
 
   // shows the buyer purchase requests section
   if (props.isBuyer === "true") {

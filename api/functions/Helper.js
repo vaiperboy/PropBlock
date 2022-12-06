@@ -187,7 +187,7 @@ module.exports.checkOtp = async function(emailAddress, ownerAddress, code) {
         var query = new Moralis.Query("OtpCodes")
         query.equalTo("emailAddress", emailAddress)
         query.equalTo("ownerAddress", ownerAddress)
-        query.equalTo("code", code)
+        query.equalTo("otpCode", code)
         const _result = await query.find({useMasterKey: true})
         const result = JSON.parse(JSON.stringify(_result))
         resolve(result.length > 0)

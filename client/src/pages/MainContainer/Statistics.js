@@ -38,16 +38,17 @@ const Statistics = () => {
     ...rest
   } = useMoralis();
 
+  
   // fetching the properties, transactions & agreements
   useEffect(() => {
     setIsLoading(true);
     // fetching the number of concurrent agreements for the user
     const fetchNumOfAgreements = async () => {
-      const request = Moralis.Object.extend("AgreementsTable");
+      const request = Moralis.Object.extend("AgreementDrafts");
       const agreementQuery = new Moralis.Query(request);
       const address = user.get("ethAddress");
-      const ownerAddress = await Web3.utils.toChecksumAddress(address);
-      agreementQuery.equalTo("ownerAddress", ownerAddress);
+      const ownerAddress = Web3.utils.toChecksumAddress(address);
+      agreementQuery.equalTo("buyerAddress", ownerAddress);
       const results = await agreementQuery.find();
       if (results.length > 0) {
         setNumOfAgreements(results.length);
@@ -83,7 +84,6 @@ const Statistics = () => {
       } else {
         setNumOfTransactions(0);
       }
-      console.log("transactions no. : " + numOfTransactions);
     };
     // fetching the gas used by the user per day
     const fetchGasUsedByDay = async () => {
@@ -141,7 +141,6 @@ const Statistics = () => {
       let twoWeeksAgo;
       oneWeekAgo = new Date(today.getTime() - 60 * 60 * 24 * 7 * 1000);
       twoWeeksAgo = new Date(today.getTime() - 60 * 60 * 24 * 14 * 1000);
-      console.log("one week ago date: " + oneWeekAgo);
       if (results.length > 0) {
         for (let i = 0; i < results.length; i++) {
           let date = new Date(results[i].get("createdAt").toString());

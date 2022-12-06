@@ -60,7 +60,7 @@ router.get("/getPaymentDetails", async function (req, res, next) {
     {
       lookup: {
         from: "EthTransactions",
-        localField: "details.propBlockHash",
+        localField: "details.propBlockTxHash",
         foreignField: "hash",
         as: "propBlockTx"
       }
@@ -112,10 +112,12 @@ router.get("/getPaymentDetails", async function (req, res, next) {
         "createdAt": 1,
         "buyerAddress": 1,
         "landlordAddress": 1,
+        "details._id": 1,
         "details.propertyObjectId": 1,
+        "details.dldTxHash": 1,
         "details.propBlockTxHash": 1,
         "details.landlordTxHash": 1,
-        "details.propertyObjectId": 1,
+        "property.propertyId": 1,
         "numericPrice": 1,
         "isLandlordTxConfirmed": 1,
         "isPropBlockTxConfirmed": 1,

@@ -3,9 +3,29 @@ import noPayment from "./noPayment.png";
 import { Spin, message } from "antd";
 import "../../styling/MainContainer/Agreements.scss";
 import refresh_icon from "../../assets/refresh_iconx2.png";
+import { useMoralis, useNewMoralisObject } from "react-moralis";
+import Web3 from "web3";
+
 const console = require("console-browserify");
 
 const MyPayments = () => {
+
+  const {
+    authenticate,
+    signup,
+    isAuthenticated,
+    isAuthenticating,
+    isUnauthenticated,
+    user,
+    account,
+    logout,
+    oralis,
+    isInitialized,
+    Moralis,
+    ...rest
+  } = useMoralis();
+
+
   // vars
   const [isLoading, setIsLoading] = useState(false);
   const [payments, setPayments] = useState([
@@ -26,17 +46,41 @@ const MyPayments = () => {
       confirm: true,
     },
   ]);
+
+  const beautifyDate = (date) => {
+    var d = new Date(date);
+    return d.toLocaleString();
+  };
+
+
   const fetchPayments = async () => {
     setIsLoading(true);
 
     // fetch payments
-
+    const address = user.get("ethAddress");
+    var query = new Moralis.Query("EthTransactions")
+    query.equalTo("from_address", address)
+    const _result = await query.find()
+    var result = JSON.parse(JSON.stringify(_result))
+    var tmp = []
+    for (var i = 0; i < result.length; i++) {
+      var res = result[i]
+      console.log(res)
+      tmp.push(
+        {
+          key: res.objectId,
+          txHash: res.hash,
+          dateCreated: beautifyDate(res.createdAt),
+          confirm: res.confirmed
+        }
+      )
+    }
+    setPayments(tmp)
     setIsLoading(false);
   };
 
   useEffect(() => {
     fetchPayments();
-    console.log("payments length: ", payments.length);
   }, []);
 
   if (isLoading) {

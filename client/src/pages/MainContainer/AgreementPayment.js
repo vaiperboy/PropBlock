@@ -12,7 +12,7 @@ const console = require("console-browserify");
 const AgreementPayment = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [payment, setPayment] = useState({});
-  const [canPayLandlord, setCanPayLandlord] = useState(true);
+  const [canPayLandlord, setCanPayLandlord] = useState(false);
   const [canPayPropBlock, setCanPayPropBlock] = useState(false);
   const [canPayDld, setCanPayDld] = useState(false);
   const {
@@ -31,11 +31,12 @@ const AgreementPayment = (props) => {
   } = useMoralis();
 
   // function to pay the owner
-  const ownerPayment = async (propertyValue) => {
+  const ownerPayment = async () => {
     try {
-      message.info("Payment to owner function");
+      var propertyValue = payment.numericPrice
       // converting to number to hex encoded value
-      const hexValue = Web3.utils.toHex(propertyValue + "00000000000000000");
+      // const hexValue = Web3.utils.toHex(propertyValue + "00000000000000000");
+      const hexValue = Web3.utils.toHex(propertyValue + "00000000");
 
       // get the connect account from Metamask
       const accounts = await window.ethereum.request({
@@ -48,30 +49,38 @@ const AgreementPayment = (props) => {
           params: [
             {
               from: accounts[0],
-              to: "0xD93602922ee643F733f16CA00FEd0698766b4Ed9",
+              to: Web3.utils.toChecksumAddress(payment.landlordAddress),
               value: hexValue,
             },
           ],
         })
         .then(
-          (txHash) => console.log(txHash)
-
+          async (txHash) => {
+            message.success("You paid to Owner. Give it few minutes to get confirmed")
+            const query = new Moralis.Query("AgreementStatus")
+            query.equalTo("objectId", payment.details._id)
+            const agreementStatus = await query.first()
+            agreementStatus.set("landlordTxHash", txHash)
+            agreementStatus.save()
+            setCanPayLandlord(false)
+          }
           // do the off-chain stuff here
         )
-        .catch((error) => console.error);
+        .catch((error) => message.error(error));
     } catch (error) {
       message.error("Error: ", error);
     }
   };
 
   // function to pay the DLD fees
-  const dldFeesPayment = async (propertyValue) => {
+  const dldFeesPayment = async () => {
     try {
-      message.info("Payment of DLD fees to government");
+      var propertyValue = payment.numericPrice
       // get 4% of the property price
       const fourPercentValue = parseInt(propertyValue) * 0.04;
       // converting to number to hex encoded value
-      const hexValue = Web3.utils.toHex(fourPercentValue + "000000000000");
+      // const hexValue = Web3.utils.toHex(fourPercentValue + "000000000000");
+      const hexValue = Web3.utils.toHex(propertyValue + "00000000");
 
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
@@ -83,30 +92,38 @@ const AgreementPayment = (props) => {
           params: [
             {
               from: accounts[0],
-              to: "0xD93602922ee643F733f16CA00FEd0698766b4Ed9",
+              to: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
               value: hexValue,
             },
           ],
         })
         .then(
-          (txHash) => console.log(txHash)
-
+          async (txHash) => {
+            message.success("You paid to DLD. Give it few minutes to get confirmed")
+            const query = new Moralis.Query("AgreementStatus")
+            query.equalTo("objectId", payment.details._id)
+            const agreementStatus = await query.first()
+            agreementStatus.set("dldTxHash", txHash)
+            agreementStatus.save()
+            setCanPayDld(false)
+          }
           // do the off-chain stuff here
         )
-        .catch((error) => console.error);
+        .catch((error) => message.error(error));
     } catch (error) {
       message.error("Error: ", error);
     }
   };
 
-  // function to pay the DLD fees
-  const propBlockFeesPayment = async (propertyValue) => {
+  // function to pay the PropBlock fees
+  const propBlockFeesPayment = async () => {
     try {
-      message.info("Payment of PropBlock Fees");
+      var propertyValue = payment.numericPrice
       // get 1% of the property price
       const onePercentValue = parseInt(propertyValue) * 0.01;
       // converting to number to hex encoded value
-      const hexValue = Web3.utils.toHex(onePercentValue + "000000000000");
+      // const hexValue = Web3.utils.toHex(onePercentValue + "000000000000");
+      const hexValue = Web3.utils.toHex(propertyValue + "00000000");
 
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
@@ -118,17 +135,24 @@ const AgreementPayment = (props) => {
           params: [
             {
               from: accounts[0],
-              to: "0xD93602922ee643F733f16CA00FEd0698766b4Ed9",
+              to: "0x4001A8651c51a799ED5808ae45da60538b327b96",
               value: hexValue,
             },
           ],
         })
         .then(
-          (txHash) => console.log(txHash)
-
+          async (txHash) => {
+            message.success("You paid to PropBlock. Give it few minutes to get confirmed")
+            const query = new Moralis.Query("AgreementStatus")
+            query.equalTo("objectId", payment.details._id)
+            const agreementStatus = await query.first()
+            agreementStatus.set("propBlockTxHash", txHash)
+            agreementStatus.save()
+            setCanPayPropBlock(false)
+          }
           // do the off-chain stuff here
         )
-        .catch((error) => console.error);
+        .catch((error) => message.error(error));
     } catch (error) {
       message.error("Error: ", error);
     }
@@ -138,7 +162,6 @@ const AgreementPayment = (props) => {
   //  payment of all the fees
   const transferProperty = async (owner, buyer, propertyId) => {
     try {
-      message.info("Transfer Property Function");
       // performing the contract function
       const API_KEY = process.env.REACT_APP_API_KEY;
       const API_URL = `https://eth-goerli.g.alchemy.com/v2/${API_KEY}`;
@@ -155,6 +178,7 @@ const AgreementPayment = (props) => {
         signer
       );
 
+
       const uintPropertyId = parseInt(propertyId);
       const ownerAddress = Web3.utils.toChecksumAddress(owner);
       const buyerAddress = Web3.utils.toChecksumAddress(buyer);
@@ -162,14 +186,22 @@ const AgreementPayment = (props) => {
       // calling the contract address
       const txHash = await realEstateContract.transferProperty(
         ownerAddress,
-        propertyId,
+        uintPropertyId,
         buyerAddress
       );
       console.log("Txhash: ", txHash);
 
       // do the off-chain stuff here
+      message.success("You now own this property!")
+      var query = new Moralis.Query("PropertiesAdded")
+      query.equalTo("objectId", payment.details.propertyObjectId)
+      var result = await query.first()
+      result.set("landlordAddress", buyerAddress)
+      result.save()
     } catch (error) {
       message.error("Error: ", error);
+      console.log(error)
+      console.log("error occured")
     }
   };
 
@@ -204,7 +236,7 @@ const AgreementPayment = (props) => {
   };
 
   const getStatus = (canPay, isTxConfirmed) => {
-    if (canPay === undefined || canPay === false) return "Waiting on payment";
+    if (canPay === true) return "Waiting on payment";
     else {
       if (isTxConfirmed) return "Payment complete";
       else return "Waiting on confirmations";
@@ -215,15 +247,16 @@ const AgreementPayment = (props) => {
     setIsLoading(true);
     fetch(
       "http://localhost:9000/getPaymentDetails?" +
-        new URLSearchParams({
-          sessionToken: user.getSessionToken(),
-          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
-          agreementObjectId: props.agreementId,
-        })
+      new URLSearchParams({
+        sessionToken: user.getSessionToken(),
+        ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
+        agreementObjectId: props.agreementId,
+      })
     )
       .then((res) => res.json())
       .then((res) => {
         setPayment(res);
+
         //if user paid do not pay again
         if (res.details.propBlockTxHash === undefined) setCanPayPropBlock(true);
         if (res.details.dldTxHash === undefined) setCanPayDld(true);
@@ -241,6 +274,7 @@ const AgreementPayment = (props) => {
   useEffect(() => {
     loadPayment();
   }, []);
+
 
   if (isLoading) {
     return (
@@ -287,14 +321,13 @@ const AgreementPayment = (props) => {
                   <div className="title">Owner Address</div>
                   <div className="data">
                     <Input
-                      placeholder={`${
-                        payment.landlordAddress.slice(0, 10) +
+                      placeholder={`${payment.landlordAddress.slice(0, 10) +
                         " ... " +
                         payment.landlordAddress.slice(
                           payment.landlordAddress.length - 8,
                           payment.landlordAddress.length
                         )
-                      }`}
+                        }`}
                       style={{
                         border: "1px solid #333",
                         borderRadius: "0.5rem",
@@ -353,7 +386,7 @@ const AgreementPayment = (props) => {
                     <button
                       className="payButton"
                       onClick={() => {
-                        ownerPayment();
+                        ownerPayment(payment.numericPrice);
                       }}
                     >
                       Pay Owner
@@ -424,32 +457,18 @@ const AgreementPayment = (props) => {
                     />
                   </div>
                 </div>
-                {!canPayPropBlock ? (
+                {canPayPropBlock && (
                   <div className="agreementDetails">
-                    <div className="title">Complete Payment</div>
-                    <div className="paymentComplete">
-                      <Input
-                        placeholder="Payment Complete"
-                        style={{
-                          border: "1px solid #333",
-                          borderRadius: "0.5rem",
-                        }}
-                        disabled={true}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="agreementDetails">
-                    <div className="title">Complete Payment</div>
-                    <button
-                      className="payButton"
-                      onClick={() => {
-                        propBlockFeesPayment();
-                      }}
-                    >
-                      Pay PropBlock Fees
-                    </button>
-                  </div>
+                  <div className="title">Complete Payment</div>
+                  <button
+                    className="payButton"
+                    onClick={() => {
+                      propBlockFeesPayment();
+                    }}
+                  >
+                    Pay PropBlock Fees
+                  </button>
+                </div>
                 )}
                 <div className="breaker"></div>
                 <h2>Complete Property Transfer </h2>
@@ -458,9 +477,13 @@ const AgreementPayment = (props) => {
                     <button
                       className="completeTransfer"
                       onClick={() => {
-                        transferProperty();
+                        transferProperty(
+                          payment.landlordAddress,
+                          payment.buyerAddress,
+                          payment.property.propertyId
+                        );
                       }}
-                      disabled={true}
+                      disabled={(canPayDld || canPayLandlord || canPayPropBlock)}
                     >
                       Complete Transfer
                     </button>
