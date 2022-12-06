@@ -148,6 +148,18 @@ const MyPayments = () => {
     } else {
       return (
         <div className="rightsidebar_container">
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <p className="rightsidebar_title">My Payments</p>
+            </div>
+          </div>
           <div className="paymentsContainer">
             <div className="refreshSection">
               <button
