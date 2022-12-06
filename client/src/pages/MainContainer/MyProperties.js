@@ -156,14 +156,6 @@ const MyProperties = () => {
       )
         .then((res) => res.json())
         .then((res) => {
-          // id: 2,
-          // ownerAddress: "0xd1D3dB802977ee31062477E37a51B0BB452275f9",
-          // label: "Smart Building Apartment",
-          // city: "Dubai",
-          // country: "UAE",
-          // description: "Set in exotic landscaped gardens",
-          // price: "1,500,000",
-          // imageLocation: "realEstate_2-min.png",
           console.log(res);
           var tmp = [];
           for (var i = 0; i < res.results.length; i++) {
@@ -263,8 +255,8 @@ const MyProperties = () => {
         }
 
         const result = await realEstateDappContract.createPropertyListing(
-          ownerAddress,
-          propertyType,
+          Web3.utils.toChecksumAddress(user.get("ethAddress")),
+          propertyType.toLowerCase(),
           uintTitleDeedNo,
           uintTitleDeedYear,
           propertyStreet,
@@ -290,15 +282,17 @@ const MyProperties = () => {
         }
 
         message.info("Adding extra details");
+        const docHash = (await ipfs.add(titleDeedFile)).path;
         const data = {
           txHash: result.hash,
           facilities: facilitiesXor,
-          city: propertyCity,
+          city: propertyCity.toLowerCase(),
           bedsNumber: bedNumber,
           bathsNumber: bathNumber,
           propertyTitle: propertyTitle,
           propertyDescription: propertyDescription,
           occupantsNumber: occupancyNum,
+          titleDeedHash: docHash,
         };
 
         save(data, {
@@ -321,7 +315,8 @@ const MyProperties = () => {
           "Error: You rejected the transaction. Please accept the transaction to continue the agreement."
         );
       } else {
-        message.error("Error: " + parsedEthersError.errorCode);
+        message.error("Error in uploading....");
+        console.log(error);
       }
     } finally {
       setIsCreatingProperty(false);
