@@ -49,6 +49,11 @@ router.get("/getAgreement", async function (req, res, next) {
         }
       },
       {
+        unwind: {
+          path: "$details"
+        }
+      },
+      {
         match: {
           "details.propertyObjectId": { $exists: true }
         }
@@ -74,9 +79,8 @@ router.get("/getAgreement", async function (req, res, next) {
           "createdAt": 1,
           "details.propertyObjectId": 1,
           "details.areDocsUploaded": 1,
-          "details.isBeingVerfied": 1,
+          "details.isBeingVerified": 1,
           "details.needsRevision": 1,
-          "details.isRevisionRequired": 1,
           "details.isGovernmentVerified": 1,
           "details.isBuyerCancelled": 1,
           "details.isOwnerCancelled": 1,
@@ -101,13 +105,13 @@ router.get("/getAgreement", async function (req, res, next) {
         }
       },
       {
-        match: {
-          "details.propertyObjectId": { $exists: true }
+        unwind: {
+          path: "$details"
         }
       },
       {
-        unwind: {
-          path: "$details"
+        match: {
+          "details.propertyObjectId": { $exists: true }
         }
       },
       {
@@ -160,11 +164,11 @@ router.get("/getAgreement", async function (req, res, next) {
           "buyerAddress": 1,
           "landlordAddress": 1,
           "createdAt": 1,
+          "details._id": 1,
           "details.propertyObjectId": 1,
           "details.areDocsUploaded": 1,
-          "details.isBeingVerfied": 1,
+          "details.isBeingVerified": 1,
           "details.needsRevision": 1,
-          "details.isRevisionRequired": 1,
           "details.isGovernmentVerified": 1,
           "details.isBuyerCancelled": 1,
           "details.isOwnerCancelled": 1,

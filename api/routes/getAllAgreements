@@ -55,6 +55,11 @@ router.get("/getAllAgreements", async function (req, res, next) {
         }
       },
       {
+        unwind: {
+          path: "$details"
+        }
+      },
+      {
         match: {
           "details.propertyObjectId": { $exists: true }
         }
@@ -66,9 +71,8 @@ router.get("/getAllAgreements", async function (req, res, next) {
           "createdAt": 1,
           "details.propertyObjectId": 1,
           "details.areDocsUploaded": 1,
-          "details.isBeingVerfied": 1,
+          "details.isBeingVerified": 1,
           "details.needsRevision": 1,
-          "details.isRevisionRequired": 1,
           "details.isGovernmentVerified": 1,
           "details.isBuyerCancelled": 1,
           "details.isOwnerCancelled": 1,
@@ -136,9 +140,8 @@ router.get("/getAllAgreements", async function (req, res, next) {
           "createdAt": 1,
           "details.propertyObjectId": 1,
           "details.areDocsUploaded": 1,
-          "details.isBeingVerfied": 1,
+          "details.isBeingVerified": 1,
           "details.needsRevision": 1,
-          "details.isRevisionRequired": 1,
           "details.isGovernmentVerified": 1,
           "details.isBuyerCancelled": 1,
           "details.isOwnerCancelled": 1,

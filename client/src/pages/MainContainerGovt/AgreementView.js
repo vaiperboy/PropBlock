@@ -116,25 +116,46 @@ const AgreementView = (props) => {
     return title
   }
 
+
+  const [isProcessing, setIsProcessing] = useState(false)
   const createDecision = async () => {
+    if (isProcessing) {
+      message.error("Process already in progress!")
+      return
+    }
+
+    setIsProcessing(true)
     if (!nocAccepted || !mouAccepted || !titleDeedAccepted) {
+      //rejecting
       const agreementDocuments = Moralis.Object.extend("AgreementDocuments")
       const docsQuery = new Moralis.Query(agreementDocuments)
+      docsQuery.equalTo("objectId", agreement.documents._id)
       const docsResult = await docsQuery.first()
       docsResult.set("reasonForRejection", buildResponse())
       docsResult.save()
 
       const agreementStatus = Moralis.Object.extend("AgreementStatus")
       const statusQuery = new Moralis.Query(agreementStatus)
+      statusQuery.equalTo("objectId", agreement.details._id)
       const statusResult = await statusQuery.first()
-      statusResult.set("")
+      statusResult.set("needsRevision", true)
+      statusResult.set("isBeingVerified", false)
+      statusResult.save()
+      message.info("Agreement has been REJECTED!")
+    } else {
+      //accepting
+      const agreementStatus = Moralis.Object.extend("AgreementStatus")
+      const statusQuery = new Moralis.Query(agreementStatus)
+      statusQuery.equalTo("objectId", agreement.details._id)
+      const statusResult = await statusQuery.first()
+      statusResult.set("isGovermentVerified", true)
+      statusResult.set("needsRevision", false)
+      statusResult.save()
+      message.info("Agreement has been ACCEPETED!")
     }
-  }
 
-  const confirm = (e) => {
-    console.log(e);
-    message.success('Click on Yes');
-  };
+    setIsProcessing(false)
+  }
 
   return (
     <>
@@ -286,7 +307,6 @@ const AgreementView = (props) => {
                           minRows: 3,
                           maxRows: 5,
                         }}
-                        readOnly={!nocAccepted}
                       />
                     </div>
                   </div>
@@ -323,7 +343,6 @@ const AgreementView = (props) => {
                           minRows: 3,
                           maxRows: 5,
                         }}
-                        readOnly={!mouAccepted}
                       />
                     </div>
                   </div>
@@ -360,7 +379,6 @@ const AgreementView = (props) => {
                           minRows: 3,
                           maxRows: 5,
                         }}
-                        readOnly={!titleDeedAccepted}
                       />
                     </div>
                   </div>
@@ -370,7 +388,7 @@ const AgreementView = (props) => {
             </div>
             <Popconfirm
               title={buildPopconfirmTitle()}
-              onConfirm={confirm}
+              onConfirm={() => createDecision()}
               okText="Yes"
               cancelText="No"
             >
