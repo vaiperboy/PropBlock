@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import agreement_icon from "../../assets/agreement_icon.png";
 import { useMoralis, useNewMoralisObject } from "react-moralis";
-import { message, Upload, Tooltip, Checkbox } from "antd";
+import { message, Upload, Tooltip, Checkbox, Spin } from "antd";
 import { InboxOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import ipfs from "../../modules/ipfs";
 import Web3 from "web3";
@@ -193,7 +193,19 @@ const AgreementView = (props) => {
   return (
     <div>
       {isLoading ? (
-        <p>loading</p>
+        <div
+          style={{
+            textAlign: "center",
+            width: "60%",
+            height: "50rem",
+            marginLeft: "5rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Spin size="large" style={{ margin: "0 2rem 0 0 " }} /> Loading
+        </div>
       ) : (
         <div className="rightsidebar_container">
           <div className="agreementView">
