@@ -135,7 +135,7 @@ const Login2 = () => {
       <Navbar />
       <div className="loginPage">
         <div className="leftSide">
-          <Fade left duration={1000}>
+          <Fade effect="fadeInUp" duration={2000}>
             <div className="illustrationDiv">
               <img src={login_illustration} alt="man illustration" />
             </div>

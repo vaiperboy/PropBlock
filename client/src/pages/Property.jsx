@@ -201,7 +201,7 @@ const Property = (props) => {
   const ModalInfo = () => {
     if (isLoading) return;
     Modal.info({
-      title: "",
+      title: "Property Owner Details",
       width: 650,
       content: (
         <div>
@@ -603,10 +603,10 @@ const Property = (props) => {
                         </p>
                       </div>
                       <div className="userButtons">
-                        <button className="emailButton" onClick={() => {}}>
+                        {/* <button className="emailButton" onClick={() => {}}>
                           <p>Email</p>
                           <img src={mail_icon} alt="mail_icon" />
-                        </button>
+                        </button> */}
                         <button
                           className="requestPurchaseButton"
                           onClick={requestPurchase}

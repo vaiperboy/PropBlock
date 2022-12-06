@@ -219,7 +219,7 @@ const App = () => {
         hashes.passportHash = (await ipfs.add(passportDocument)).path
         resolve(hashes);
       } catch (error) {
-        reject(error)
+        reject(error);
       }
     });
   };
@@ -230,41 +230,41 @@ const App = () => {
     try {
       message.info("Uploading documents....");
       await uploadDocuments()
-      .then(async (hashes) => {
-        if (!Moralis.User.current()) {
-          await authenticate()
-            .then(function (user) {
-              user.set("fullName", fullName);
-              user.set("email", email);
-              user.set("frontIdHash", hashes.frontIdHash);
-              user.set("backIdHash", hashes.backIdHash);
-              user.set("passportHash", hashes.passportHash);
-              user.save();
-              const data = {
-                address: user.get("ethAddress"),
-              };
+        .then(async (hashes) => {
+          if (!Moralis.User.current()) {
+            await authenticate()
+              .then(function (user) {
+                user.set("fullName", fullName);
+                user.set("email", email);
+                user.set("frontIdHash", hashes.frontIdHash);
+                user.set("backIdHash", hashes.backIdHash);
+                user.set("passportHash", hashes.passportHash);
+                user.save();
+                const data = {
+                  address: user.get("ethAddress"),
+                };
 
-              save(data, {
-                onSuccess: (obj) => {
-                  //message.info("New object created with objectId: " + obj.id);
-                  accountCreated();
-                  setRegistering(false);
-                },
-                onError: (error) => {
-                  //message.error("Failed to create new object, with error code: " + error.message);
-                  message.error("Failure in registering account");
-                  logout().then();
-                },
+                save(data, {
+                  onSuccess: (obj) => {
+                    //message.info("New object created with objectId: " + obj.id);
+                    accountCreated();
+                    setRegistering(false);
+                  },
+                  onError: (error) => {
+                    //message.error("Failed to create new object, with error code: " + error.message);
+                    message.error("Failure in registering account");
+                    logout().then();
+                  },
+                });
+              })
+              .catch(function (error) {
+                message.error("Couldn't authorize wallet: " + error);
               });
-            })
-            .catch(function (error) {
-              message.error("Couldn't authorize wallet: " + error);
-            });
-        }
-      })
-      .catch((err) => {
-        message.error("Failure in uploading documents...");
-      })
+          }
+        })
+        .catch((err) => {
+          message.error("Failure in uploading documents...");
+        });
     } catch (error) {
       message.error("ERROR: " + error);
     }
@@ -394,7 +394,7 @@ const App = () => {
           passportDocument,
           "front passport." + frontExtension
         );
-        
+
         setpassportDocument(front);
       } else {
         e.target.checked = false;
@@ -414,7 +414,7 @@ const App = () => {
       <Navbar signedIn2={isAuthenticated} />
       <div className="signup">
         <div className="leftSide">
-          <Fade left duration={1000}>
+          <Fade effect="fadeInUp" duration={2000}>
             <div className="illustrationDiv">
               <img src={signup_illustration} alt="man illustration" />
             </div>

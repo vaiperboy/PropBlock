@@ -22,10 +22,10 @@ const ContactUs = () => {
     setStatus("Submitting ...");
     emailjs
       .sendForm(
-        "service_gmrzi7k",
+        "service_axyk4tx",
         "template_uogsaqt",
         e.target,
-        "_71PziH1OmwrfGNEc"
+        "bv92eN3KhTcjHnZL8"
       )
       .then((res) => {
         document.getElementById("myForm").reset();

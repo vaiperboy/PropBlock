@@ -674,7 +674,7 @@ const AgreementsList = (props) => {
                         if (
                           item.details.areDocsUploaded === true &&
                           item.details.needsRevision === false &&
-                          item.details.isBeingVerfied === false
+                          item.details.isBeingVerfied === true
                         ) {
                           return (
                             <tr
@@ -694,35 +694,6 @@ const AgreementsList = (props) => {
                               </td>
                               <td style={{ color: "#666666" }}>
                                 Govt. Approval Pending
-                              </td>
-                              <td> - </td>
-                            </tr>
-                          );
-                        }
-                        // Document are uploaded - not first time && waiting approval
-                        if (
-                          item.details.areDocsUploaded === true &&
-                          item.details.needsRevision === true &&
-                          item.details.isBeingVerfied === false
-                        ) {
-                          return (
-                            <tr
-                              key={item.objectId}
-                              className="agreementComplete"
-                            >
-                              <td>{shortenAddress(item.buyerAddress, 20)}</td>
-                              <td>
-                                <a
-                                  href={
-                                    "property/" + item.details.propertyObjectId
-                                  }
-                                  target="_blank"
-                                >
-                                  {item.details.propertyObjectId}
-                                </a>
-                              </td>
-                              <td style={{ color: "#666666" }}>
-                                Govt. Approval Pending (After revision)
                               </td>
                               <td> - </td>
                             </tr>
@@ -758,10 +729,9 @@ const AgreementsList = (props) => {
                         }
                         // documents need revison
                         if (
-                          item.details.areDocsUploaded === false &&
+                          item.details.areDocsUploaded === true &&
                           item.details.needsRevision === true &&
-                          item.details.isBeingVerfied === true &&
-                          item.details.isRevisionRequired === true
+                          item.details.isBeingVerfied === false
                         ) {
                           return (
                             <tr
@@ -783,16 +753,47 @@ const AgreementsList = (props) => {
                                 Documents Invalid - Upload valid Documents
                               </td>
                               <td>
-                                <buttom className="uploadDocumentsButton">
+                                <buttom
+                                  className="uploadDocumentsButton"
+                                  onClick={() => {
+                                    handleUploadDocuments(item.objectId);
+                                  }}
+                                >
                                   Upload Documents
                                 </buttom>
                               </td>
                             </tr>
                           );
                         }
-                        // docs are uploaded but rejected && needs revision
-
-                        // docs uploaded but needs revision
+                        // Document are uploaded - not first time && waiting approval
+                        if (
+                          item.details.areDocsUploaded === true &&
+                          item.details.needsRevision === true &&
+                          item.details.isBeingVerfied === true
+                        ) {
+                          return (
+                            <tr
+                              key={item.objectId}
+                              className="agreementComplete"
+                            >
+                              <td>{shortenAddress(item.buyerAddress, 20)}</td>
+                              <td>
+                                <a
+                                  href={
+                                    "property/" + item.details.propertyObjectId
+                                  }
+                                  target="_blank"
+                                >
+                                  {item.details.propertyObjectId}
+                                </a>
+                              </td>
+                              <td style={{ color: "#666666" }}>
+                                Govt. Approval Pending (After revision)
+                              </td>
+                              <td> - </td>
+                            </tr>
+                          );
+                        }
                       })}
                     </table>
                   </div>
