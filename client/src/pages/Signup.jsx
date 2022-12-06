@@ -59,8 +59,7 @@ const App = () => {
   const [isValidated, setIsValidated] = useState(false);
   const [codeVerified, setCodeVerified] = useState(false);
   const [idDocumentsVerified, setIdDocumentsVerified] = useState(false);
-  const [passportDocumentsVerified, setPassportDocumentsVerified] =
-    useState(true);
+  const [passportDocumentsVerified, setPassportDocumentsVerified] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   const [frontIdDocument, setFrontIdDocument] = useState({});
@@ -217,7 +216,7 @@ const App = () => {
         var hashes = []
         hashes.frontIdHash = (await ipfs.add(frontIdDocument)).path
         hashes.backIdHash = (await ipfs.add(backIdDocument)).path
-        hashes.passportHash = (await ipfs.add()).path
+        hashes.passportHash = (await ipfs.add(passportDocument)).path
         resolve(hashes);
       } catch (error) {
         reject(error)

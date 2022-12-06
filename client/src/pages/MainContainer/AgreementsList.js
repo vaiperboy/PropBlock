@@ -13,7 +13,7 @@ const console = require("console-browserify");
 const AgreementsList = (props) => {
   const [showAgreement, setShowAgreements] = useState(false);
   const [dataSourceSeller, setDataSourceSeller] = useState([
-    // upload documents - first time
+    // has to upload documents - first time
     // {
     //   key: "1",
     //   ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
