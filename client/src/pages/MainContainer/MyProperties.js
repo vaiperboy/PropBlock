@@ -282,18 +282,16 @@ const MyProperties = () => {
         }
 
         message.info("Adding extra details");
-        const docHash = (await ipfs.add(titleDeedFile)).path;
+        const docHash = (await ipfs.add(titleDeedFile)).path
         const data = {
-          txHash: result.hash,
           facilities: facilitiesXor,
-          city: propertyCity.toLowerCase(),
           bedsNumber: bedNumber,
           bathsNumber: bathNumber,
           propertyTitle: propertyTitle,
           propertyDescription: propertyDescription,
           occupantsNumber: occupancyNum,
           titleDeedHash: docHash,
-        };
+        }
 
         save(data, {
           onSuccess: (obj) => {

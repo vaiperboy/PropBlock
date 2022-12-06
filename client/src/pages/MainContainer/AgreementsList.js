@@ -13,7 +13,7 @@ const console = require("console-browserify");
 const AgreementsList = (props) => {
   const [showAgreement, setShowAgreements] = useState(false);
   const [dataSourceSeller, setDataSourceSeller] = useState([
-    // upload documents - first time
+    // has to upload documents - first time
     // {
     //   key: "1",
     //   ownerAddress: "0x7ca510fB48358e4FFeD5d761DE3479f546Ba7d3C",
@@ -243,21 +243,17 @@ const AgreementsList = (props) => {
     ...rest
   } = useMoralis();
 
-  // runs first
-  useEffect(() => {
-    loadBuyerAgreements();
-    loadSellerAgreements();
-  }, []);
+
 
   async function loadBuyerAgreements() {
     setIsLoading(true);
     fetch(
       "http://localhost:9000/getAllAgreements?" +
-        new URLSearchParams({
-          mode: "buyer",
-          sessionToken: user.getSessionToken(),
-          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
-        })
+      new URLSearchParams({
+        mode: "buyer",
+        sessionToken: user.getSessionToken(),
+        ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
+      })
     )
       .then((res) => res.json())
       .then((res) => {
@@ -276,11 +272,11 @@ const AgreementsList = (props) => {
     setIsLoading(true);
     fetch(
       "http://localhost:9000/getAllAgreements?" +
-        new URLSearchParams({
-          mode: "seller",
-          sessionToken: user.getSessionToken(),
-          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
-        })
+      new URLSearchParams({
+        mode: "seller",
+        sessionToken: user.getSessionToken(),
+        ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
+      })
     )
       .then((res) => res.json())
       .then((res) => {
@@ -294,6 +290,12 @@ const AgreementsList = (props) => {
         setIsLoading(false);
       });
   }
+
+  // runs first
+  useEffect(() => {
+    loadBuyerAgreements();
+    loadSellerAgreements();
+  }, []);
 
   if (props.isBuyer === "true") {
     if (!isLoading) {
@@ -699,10 +701,12 @@ const AgreementsList = (props) => {
                             </tr>
                           );
                         }
-                        // documents are uploaded and approved
+                        // documents are approved && waiting for buyer payment
                         if (
                           item.details.areDocsUploaded === true &&
-                          item.details.isGovernmentVerified === true
+                          item.details.isGovernmentVerified === true 
+                          && item.details.buyerPaymentComplete === false
+
                         ) {
                           return (
                             <tr
@@ -721,12 +725,43 @@ const AgreementsList = (props) => {
                                 </a>
                               </td>
                               <td style={{ color: "#2ecc71" }}>
-                                Govt. Approved
+                                Govt. Approved - Waiting for Buyer's Payment
                               </td>
                               <td> - </td>
                             </tr>
                           );
                         }
+                        // documents are approved && buyer payment complete
+                        if (
+                          item.details.areDocsUploaded === true &&
+                          item.details.isGovernmentVerified === true 
+                           && item.details.buyerPaymentComplete === true
+
+                        ) {
+                          return (
+                            <tr
+                              key={item.objectId}
+                              className="agreementComplete"
+                            >
+                              <td>{shortenAddress(item.buyerAddress, 20)}</td>
+                              <td>
+                                <a
+                                  href={
+                                    "property/" + item.details.propertyObjectId
+                                  }
+                                  target="_blank"
+                                >
+                                  {item.details.propertyObjectId}
+                                </a>
+                              </td>
+                              <td style={{ color: "#2ecc71" }}>
+                                Agreement finished!
+                              </td>
+                              <td> - </td>
+                            </tr>
+                          );
+                        }
+
                         // documents need revison
                         if (
                           item.details.areDocsUploaded === true &&
@@ -794,6 +829,7 @@ const AgreementsList = (props) => {
                             </tr>
                           );
                         }
+
                       })}
                     </table>
                   </div>
@@ -807,7 +843,7 @@ const AgreementsList = (props) => {
       if (showAgreement) {
         try {
           return <MyAgreements />;
-        } catch (error) {}
+        } catch (error) { }
       } else
         return (
           <div

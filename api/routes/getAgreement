@@ -15,18 +15,18 @@ router.get("/getAgreement", async function (req, res, next) {
   var isLoggedIn = await helper.isAuthenticated(sessionToken, ownerAddress);
 
   if (!isLoggedIn) {
-    res.send(401, "not authenticated");
+    res.status(401).send("not authenticated")
     return;
   }
 
   if (agreementObjectId === undefined || mode === undefined) {
-    res.send(422, "wrong input");
-    return;
+    res.status(422).send("wrong input")
+    return
   }
 
   mode = mode.toLowerCase();
   if (mode != "seller" && mode != "goverment") {
-    res.send(422, "wrong mode");
+    res.status(422).send("wrong mode")
   }
 
   ownerAddress = helper.toCheckSumAddress(ownerAddress);
@@ -54,26 +54,44 @@ router.get("/getAgreement", async function (req, res, next) {
         },
       },
       {
+        unwind: {
+          path: "$details"
+        }
+      },
+      {
         match: {
           "details.propertyObjectId": { $exists: true },
         },
       },
       {
+        lookup: {
+          from: "AgreementDocuments",
+          localField: "_id",
+          foreignField: "agreementObjectId",
+          as: "documents"
+        }
+      },
+      {
+        unwind: {
+          path: "$documents"
+        }
+      },
+      {
         project: {
-          buyerAddress: 1,
-          landlordAddress: 1,
-          transaction_hash: 1,
-          createdAt: 1,
+          "buyerAddress": 1,
+          "landlordAddress": 1,
+          "transaction_hash": 1,
+          "createdAt": 1,
           "details._id": 1,
           "details.propertyObjectId": 1,
           "details.areDocsUploaded": 1,
           "details.isBeingVerified": 1,
           "details.needsRevision": 1,
-          "details.isRevisionRequired": 1,
           "details.isGovernmentVerified": 1,
           "details.isBuyerCancelled": 1,
           "details.isOwnerCancelled": 1,
           "details.buyerPaymentComplete": 1,
+          "documents.reasonForRejection": 1,
         },
       },
     ];
@@ -149,14 +167,14 @@ router.get("/getAgreement", async function (req, res, next) {
       },
       {
         project: {
-          buyerAddress: 1,
-          landlordAddress: 1,
-          createdAt: 1,
+          "buyerAddress": 1,
+          "landlordAddress": 1,
+          "createdAt": 1,
+          "details._id": 1,
           "details.propertyObjectId": 1,
           "details.areDocsUploaded": 1,
           "details.isBeingVerified": 1,
           "details.needsRevision": 1,
-          "details.isRevisionRequired": 1,
           "details.isGovernmentVerified": 1,
           "details.isBuyerCancelled": 1,
           "details.isOwnerCancelled": 1,

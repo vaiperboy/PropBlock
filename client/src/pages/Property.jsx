@@ -158,6 +158,10 @@ const Property = (props) => {
   // ];
 
   const requestPurchase = async () => {
+    if (!isAuthenticated) {
+      message.error("You have to be logged in to preform this!");
+      return
+    }
     var userAddress = Web3.utils.toChecksumAddress(user.get("ethAddress"));
     if (userAddress == property.address) {
       message.error(

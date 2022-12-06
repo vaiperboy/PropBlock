@@ -98,11 +98,11 @@ const AgreementsList = (props) => {
     setIsLoading(true);
     fetch(
       "http://localhost:9000/getAllAgreements?" +
-        new URLSearchParams({
-          mode: "goverment",
-          sessionToken: user.getSessionToken(),
-          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
-        })
+      new URLSearchParams({
+        mode: "goverment",
+        sessionToken: user.getSessionToken(),
+        ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
+      })
     )
       .then((res) => res.json())
       .then((res) => {
@@ -171,24 +171,30 @@ const AgreementsList = (props) => {
                         <td>{item.createdAt}</td>
                         <td style={{ display: "flex", gap: "1rem" }}>
                           {item.details.isOwnerCancelled ||
-                          item.details.isBuyerCancelled ? (
+                            item.details.isBuyerCancelled ? (
                             <p className="waitingForUpload">
                               Agreement Cancelled
                             </p>
                           ) : item.details.areDocsUploaded ? (
-                            !item.details.isGovernmentVerified ? (
-                              <button
-                                className="acceptButton"
-                                onClick={() => {
-                                  handleAgreementDocs(item.objectId);
-                                }}
-                              >
-                                View Documents
-                              </button>
-                            ) : (
-                              <p className="documentsVerified">
-                                Documents are verified
+                            item.details.needsRevision ? (
+                              <p className="waitingForUpload">
+                                Waiting for new seller documents
                               </p>
+                            ) : (
+                              !item.details.isGovernmentVerified ? (
+                                <button
+                                  className="acceptButton"
+                                  onClick={() => {
+                                    handleAgreementDocs(item.objectId);
+                                  }}
+                                >
+                                  View Documents
+                                </button>
+                              ) : (
+                                <p className="documentsVerified">
+                                  Documents are verified
+                                </p>
+                              )
                             )
                           ) : (
                             <p className="waitingForUpload">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import stats from "./stats.png";
 import "./Agreementview.scss";
-import { Switch, Input, message, Spin } from "antd";
+import { Switch, Input, message, Spin, Popconfirm } from "antd";
 import {
   FolderViewOutlined,
   ArrowLeftOutlined,
@@ -36,7 +36,7 @@ const AgreementView = (props) => {
   const [nocComment, setNocComment] = useState("");
   const [mouComment, setMouComment] = useState("");
   const [titleDeedComment, setTitleDeedComment] = useState("");
-  //these state variables are switched (idk why)
+
   const [nocAccepted, setNocAccepted] = useState(false)
   const [mouAccepted, setMouAccepted] = useState(false)
   const [titleDeedAccepted, setTitleDeedAccepted] = useState(false)
@@ -87,31 +87,74 @@ const AgreementView = (props) => {
     loadAgreement();
   }, []);
 
+
   const openDocument = (hash) => {
     window.open(ipfsLink.concat(hash), '_blank').focus();
   }
 
   const buildResponse = () => {
     var content = ""
-    if (!nocAccepted) content += "NOC Rejected for the following reason: " + nocComment
-    if (!mouAccepted) content += "MOU Rejected for the following reason: " + mouComment
-    if (!titleDeedAccepted) content += "Title deed Rejected for the following reason: " + titleDeedComment
+    if (!nocAccepted) content += "NOC Rejected for the following reason: " + nocComment + ". "
+    if (!mouAccepted) content += "MOU Rejected for the following reason: " + mouComment + ". "
+    if (!titleDeedAccepted) content += "Title deed Rejected for the following reason: " + titleDeedComment + ". "
     return content
   }
 
+  const buildPopconfirmTitle = () => {
+    let title;
+    var content = []
+    if (!nocAccepted) content.push("NOC")
+    if (!mouAccepted) content.push("MOU")
+    if (!titleDeedAccepted) content.push("Title Deed")
+
+    if (content.length > 0) {
+      title = "Are you sure you want to reject "
+      if (content.length == 1) title += "the submitted " + content[0] + " document?"
+      else title += "these " + content.length + " submitted documents: (" + content.join(", ") +")?"
+    }
+    else title = "Are you sure you want to accept all these 3 documents?"
+    return title
+  }
+
+
+  const [isProcessing, setIsProcessing] = useState(false)
   const createDecision = async () => {
+    if (isProcessing) {
+      message.error("Process already in progress!")
+      return
+    }
+
+    setIsProcessing(true)
     if (!nocAccepted || !mouAccepted || !titleDeedAccepted) {
+      //rejecting
       const agreementDocuments = Moralis.Object.extend("AgreementDocuments")
       const docsQuery = new Moralis.Query(agreementDocuments)
+      docsQuery.equalTo("objectId", agreement.documents._id)
       const docsResult = await docsQuery.first()
       docsResult.set("reasonForRejection", buildResponse())
       docsResult.save()
 
       const agreementStatus = Moralis.Object.extend("AgreementStatus")
       const statusQuery = new Moralis.Query(agreementStatus)
+      statusQuery.equalTo("objectId", agreement.details._id)
       const statusResult = await statusQuery.first()
-      statusResult.set("")
+      statusResult.set("needsRevision", true)
+      statusResult.set("isBeingVerified", false)
+      statusResult.save()
+      message.info("Agreement has been REJECTED!")
+    } else {
+      //accepting
+      const agreementStatus = Moralis.Object.extend("AgreementStatus")
+      const statusQuery = new Moralis.Query(agreementStatus)
+      statusQuery.equalTo("objectId", agreement.details._id)
+      const statusResult = await statusQuery.first()
+      statusResult.set("isGovermentVerified", true)
+      statusResult.set("needsRevision", false)
+      statusResult.save()
+      message.info("Agreement has been ACCEPETED!")
     }
+
+    setIsProcessing(false)
   }
 
   return (
@@ -157,6 +200,9 @@ const AgreementView = (props) => {
               </a>
             </h1>
           </div>
+          <div>
+            Created on: {agreement.createdAt}
+          </div>
           <div className="agreementUsersDetails">
             <div className="user">
               <h1>Buyer's Details</h1>
@@ -168,6 +214,10 @@ const AgreementView = (props) => {
                 <div className="detail">
                   <h3>Address</h3>
                   <p>#{shortenAddress(agreement.buyerAddress)}</p>
+                </div>
+                <div className="detail">
+                  <h3>Email</h3>
+                  <p>{agreement.buyer.email}</p>
                 </div>
                 <div className="detail">
                   <h3>View Front ID</h3>
@@ -199,6 +249,10 @@ const AgreementView = (props) => {
                 <div className="detail">
                   <h3>Address</h3>
                   <p>#{shortenAddress(agreement.landlordAddress)}</p>
+                </div>
+                <div className="detail">
+                  <h3>Email</h3>
+                  <p>{agreement.landlord.email}</p>
                 </div>
                 <div className="detail">
                   <h3>View Front ID</h3>
@@ -240,7 +294,7 @@ const AgreementView = (props) => {
                 </div>
               </div>
               {
-                (nocAccepted) && (
+                (!nocAccepted || nocAccepted === undefined) && (
                   <div className="commentSection">
                     <p className="document_title">
                       Reason for rejection
@@ -253,11 +307,10 @@ const AgreementView = (props) => {
                           minRows: 3,
                           maxRows: 5,
                         }}
-                        readOnly={!nocAccepted}
                       />
                     </div>
                   </div>
-                )
+                ) 
               }
 
             </div>
@@ -277,7 +330,7 @@ const AgreementView = (props) => {
                 </div>
               </div>
               {
-                (mouAccepted) && (
+                (!mouAccepted || mouAccepted === undefined) && (
                   <div className="commentSection">
                     <p className="document_title">
                       Reason for rejection
@@ -290,7 +343,6 @@ const AgreementView = (props) => {
                           minRows: 3,
                           maxRows: 5,
                         }}
-                        readOnly={!mouAccepted}
                       />
                     </div>
                   </div>
@@ -314,7 +366,7 @@ const AgreementView = (props) => {
                 </div>
               </div>
               {
-                (titleDeedAccepted) && (
+                (!titleDeedAccepted || titleDeedAccepted === undefined) && (
                   <div className="commentSection">
                     <p className="document_title">
                       Reason for rejection
@@ -327,7 +379,6 @@ const AgreementView = (props) => {
                           minRows: 3,
                           maxRows: 5,
                         }}
-                        readOnly={!titleDeedAccepted}
                       />
                     </div>
                   </div>
@@ -335,9 +386,17 @@ const AgreementView = (props) => {
               }
 
             </div>
-            <button className="save_button" onClick={() => { }}>
-              Save <SaveOutlined />
-            </button>
+            <Popconfirm
+              title={buildPopconfirmTitle()}
+              onConfirm={() => createDecision()}
+              okText="Yes"
+              cancelText="No"
+            >
+              <button className="save_button">
+                Save <SaveOutlined />
+              </button>
+            </Popconfirm>
+
           </div>
           <div></div>
         </div>
