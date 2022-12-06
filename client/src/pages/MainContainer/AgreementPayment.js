@@ -5,13 +5,16 @@ import { Spin, Input, Tooltip, message } from "antd";
 import { ArrowLeftOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { useMoralis, useNewMoralisObject } from "react-moralis";
 import Web3 from "web3";
+import realEstate from "../../artifacts/contracts/realEstate.sol/realEstate.json";
+const { ethers } = require("ethers");
+const console = require("console-browserify");
 
 const AgreementPayment = (props) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [payment, setPayment] = useState({})
-  const [canPayLandlord, setCanPayLandlord] = useState(true)
-  const [canPayPropBlock, setCanPayPropBlock] = useState(false)
-  const [canPayDld, setCanPayDld] = useState(false)
+  const [payment, setPayment] = useState({});
+  const [canPayLandlord, setCanPayLandlord] = useState(true);
+  const [canPayPropBlock, setCanPayPropBlock] = useState(false);
+  const [canPayDld, setCanPayDld] = useState(false);
   const {
     authenticate,
     signup,
@@ -28,27 +31,104 @@ const AgreementPayment = (props) => {
   } = useMoralis();
 
   // function to pay the owner
-  const ownerPayment = () => {
+  const ownerPayment = async (propertyValue) => {
     try {
       message.info("Payment to owner function");
+      // converting to number to hex encoded value
+      const hexValue = Web3.utils.toHex(propertyValue + "00000000000000000");
+
+      // get the connect account from Metamask
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+
+      window.ethereum
+        .request({
+          method: "eth_sendTransaction",
+          params: [
+            {
+              from: accounts[0],
+              to: "0xD93602922ee643F733f16CA00FEd0698766b4Ed9",
+              value: hexValue,
+            },
+          ],
+        })
+        .then(
+          (txHash) => console.log(txHash)
+
+          // do the off-chain stuff here
+        )
+        .catch((error) => console.error);
     } catch (error) {
       message.error("Error: ", error);
     }
   };
 
   // function to pay the DLD fees
-  const dldFeesPayment = () => {
+  const dldFeesPayment = async (propertyValue) => {
     try {
       message.info("Payment of DLD fees to government");
+      // get 4% of the property price
+      const fourPercentValue = parseInt(propertyValue) * 0.04;
+      // converting to number to hex encoded value
+      const hexValue = Web3.utils.toHex(fourPercentValue + "000000000000");
+
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+
+      window.ethereum
+        .request({
+          method: "eth_sendTransaction",
+          params: [
+            {
+              from: accounts[0],
+              to: "0xD93602922ee643F733f16CA00FEd0698766b4Ed9",
+              value: hexValue,
+            },
+          ],
+        })
+        .then(
+          (txHash) => console.log(txHash)
+
+          // do the off-chain stuff here
+        )
+        .catch((error) => console.error);
     } catch (error) {
       message.error("Error: ", error);
     }
   };
 
   // function to pay the DLD fees
-  const propBlockFeesPayment = () => {
+  const propBlockFeesPayment = async (propertyValue) => {
     try {
       message.info("Payment of PropBlock Fees");
+      // get 1% of the property price
+      const onePercentValue = parseInt(propertyValue) * 0.01;
+      // converting to number to hex encoded value
+      const hexValue = Web3.utils.toHex(onePercentValue + "000000000000");
+
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+
+      window.ethereum
+        .request({
+          method: "eth_sendTransaction",
+          params: [
+            {
+              from: accounts[0],
+              to: "0xD93602922ee643F733f16CA00FEd0698766b4Ed9",
+              value: hexValue,
+            },
+          ],
+        })
+        .then(
+          (txHash) => console.log(txHash)
+
+          // do the off-chain stuff here
+        )
+        .catch((error) => console.error);
     } catch (error) {
       message.error("Error: ", error);
     }
@@ -56,39 +136,98 @@ const AgreementPayment = (props) => {
 
   // function to transfer the property from owner to buyer after
   //  payment of all the fees
-  const transferProperty = (owner, buyer, propertyId) => {
+  const transferProperty = async (owner, buyer, propertyId) => {
     try {
       message.info("Transfer Property Function");
+      // performing the contract function
+      const API_KEY = process.env.REACT_APP_API_KEY;
+      const API_URL = `https://eth-goerli.g.alchemy.com/v2/${API_KEY}`;
+      const PRIVATE_KEY = process.env.REACT_APP_PRIVATE_KEY;
+      const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
+
+      const provider = new ethers.providers.JsonRpcProvider(API_URL);
+      // Signer - this represents an Ethereum account that has the ability to sign transactions.
+      const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+      // Contract - this is an Ethers.js object that represents a specific contract deployed on-chain.
+      const realEstateContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        realEstate.abi,
+        signer
+      );
+
+      const uintPropertyId = parseInt(propertyId);
+      const ownerAddress = Web3.utils.toChecksumAddress(owner);
+      const buyerAddress = Web3.utils.toChecksumAddress(buyer);
+
+      // calling the contract address
+      const txHash = await realEstateContract.transferProperty(
+        ownerAddress,
+        propertyId,
+        buyerAddress
+      );
+      console.log("Txhash: ", txHash);
+
+      // do the off-chain stuff here
     } catch (error) {
       message.error("Error: ", error);
     }
   };
 
+  // transfer eth to smart contract
+  const transferToContaract = async (ethValue) => {
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      // converting to number to hex encoded value
+      const hexValue = Web3.utils.toHex(ethValue + "000000000000");
+
+      window.ethereum
+        .request({
+          method: "eth_sendTransaction",
+          params: [
+            {
+              from: accounts[0],
+              to: "0xD93602922ee643F733f16CA00FEd0698766b4Ed9",
+              value: hexValue,
+            },
+          ],
+        })
+        .then(
+          (txHash) => console.log(txHash)
+          // do the off-chain stuff here
+        )
+        .catch((error) => console.error);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
   const getStatus = (canPay, isTxConfirmed) => {
-    if (canPay === false) return "Waiting on payment";
+    if (canPay === undefined || canPay === false) return "Waiting on payment";
     else {
       if (isTxConfirmed) return "Payment complete";
-      else return "Waiting on confirmations"
+      else return "Waiting on confirmations";
     }
-  }
+  };
 
   async function loadPayment() {
     setIsLoading(true);
     fetch(
       "http://localhost:9000/getPaymentDetails?" +
-      new URLSearchParams({
-        sessionToken: user.getSessionToken(),
-        ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
-        agreementObjectId: props.agreementId,
-      })
+        new URLSearchParams({
+          sessionToken: user.getSessionToken(),
+          ownerAddress: Web3.utils.toChecksumAddress(user.get("ethAddress")),
+          agreementObjectId: props.agreementId,
+        })
     )
       .then((res) => res.json())
       .then((res) => {
         setPayment(res);
         //if user paid do not pay again
-        if (res.details.propBlockTxHash === undefined) setCanPayPropBlock(true)
-        if (res.details.dldTxHash === undefined) setCanPayDld(true)
-        if (res.details.landlordTxHash === undefined) setCanPayLandlord(true)
+        if (res.details.propBlockTxHash === undefined) setCanPayPropBlock(true);
+        if (res.details.dldTxHash === undefined) setCanPayDld(true);
+        if (res.details.landlordTxHash === undefined) setCanPayLandlord(true);
       })
       .catch((err) => {
         message.error("API error");
@@ -99,11 +238,9 @@ const AgreementPayment = (props) => {
       });
   }
 
-
   useEffect(() => {
-    loadPayment()
+    loadPayment();
   }, []);
-
 
   if (isLoading) {
     return (
@@ -150,13 +287,14 @@ const AgreementPayment = (props) => {
                   <div className="title">Owner Address</div>
                   <div className="data">
                     <Input
-                      placeholder={`${payment.landlordAddress.slice(0, 10) +
+                      placeholder={`${
+                        payment.landlordAddress.slice(0, 10) +
                         " ... " +
                         payment.landlordAddress.slice(
                           payment.landlordAddress.length - 8,
                           payment.landlordAddress.length
                         )
-                        }`}
+                      }`}
                       style={{
                         border: "1px solid #333",
                         borderRadius: "0.5rem",
@@ -169,7 +307,10 @@ const AgreementPayment = (props) => {
                 <div className="agreementDetails">
                   <div className="title">Property ID</div>
                   <div className="data">
-                    <a href={"/property/" + payment.details.propertyObjectId} target="_blank">
+                    <a
+                      href={"/property/" + payment.details.propertyObjectId}
+                      target="_blank"
+                    >
                       <Input
                         placeholder={`${payment.details.propertyObjectId}`}
                         style={{
@@ -194,7 +335,10 @@ const AgreementPayment = (props) => {
                   <div className="title">Payment Status</div>
                   <div className="data">
                     <Input
-                      placeholder={getStatus(canPayLandlord, payment.isLandlordTxConfirmed)}
+                      placeholder={getStatus(
+                        canPayLandlord,
+                        payment.isLandlordTxConfirmed
+                      )}
                       style={{
                         border: "1px solid #333",
                         borderRadius: "0.5rem",
@@ -215,8 +359,7 @@ const AgreementPayment = (props) => {
                       Pay Owner
                     </button>
                   </div>
-                )
-                }
+                )}
 
                 <div className="breaker"></div>
                 <h2>
@@ -231,7 +374,10 @@ const AgreementPayment = (props) => {
                   <div className="title">Payment Status</div>
                   <div className="data">
                     <Input
-                      placeholder={getStatus(canPayDld, payment.isDldTxConfirmed)}
+                      placeholder={getStatus(
+                        canPayDld,
+                        payment.isDldTxConfirmed
+                      )}
                       style={{
                         border: "1px solid #333",
                         borderRadius: "0.5rem",
@@ -246,7 +392,7 @@ const AgreementPayment = (props) => {
                     <button
                       className="payButton"
                       onClick={() => {
-                        dldFeesPayment();
+                        dldFeesPayment(100);
                       }}
                     >
                       Pay DLD Fees
@@ -266,7 +412,10 @@ const AgreementPayment = (props) => {
                   <div className="title">Payment Status</div>
                   <div className="data">
                     <Input
-                      placeholder={getStatus(canPayDld, payment.isPropBlockTxConfirmed)}
+                      placeholder={getStatus(
+                        canPayDld,
+                        payment.isPropBlockTxConfirmed
+                      )}
                       style={{
                         border: "1px solid #333",
                         borderRadius: "0.5rem",

@@ -1,3 +1,6 @@
+a {
+  text-decoration: underline;
+}
 .purchaseRequestsContainer {
   .refreshSection {
     display: flex;
@@ -20,9 +23,6 @@
   .ant-table-header {
   }
   table {
-    a {
-     text-decoration: underline; 
-    }
     width: 100vw;
     th {
       background-color: rgb(#3daeee, 0.5);
