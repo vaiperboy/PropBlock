@@ -251,16 +251,15 @@ contract realEstate is Ownable {
     function transferProperty(address payable _landlordAddress, uint _propertyID, address payable _buyerAddress) 
     public payable
     landlordExists(_landlordAddress) 
-    landlordExists(_buyerAddress) 
     propertyExists(_landlordAddress, _propertyID) 
     {
         // If the buyer does not exist
         if (landLordsMap[_buyerAddress] == 0) {
             landlordsPropertyCounter[_buyerAddress] = 0;
-            landlordsCounter ++;
+            landlordsCounter++;
                // adds landlord to list of landlords
             landLordsMap[_buyerAddress] = landlordsCounter;
-        } 
+        }
         require(_landlordAddress != _buyerAddress, "You cannot transfer the property to the same address! Buyer and Landlord Address should be different.");
         // increment buyer's counter 
         landlordsPropertyCounter[_buyerAddress]++;
@@ -269,8 +268,6 @@ contract realEstate is Ownable {
         landlordProperties[_buyerAddress][buyerCounter] = landlordProperties[_landlordAddress][_propertyID];
         // remove the property from landlordProperties
         delete landlordProperties[_landlordAddress][_propertyID];
-        // decrement landlord's counter 
-        landlordsPropertyCounter[_landlordAddress]--;
         emit propertTransfered(_landlordAddress, _buyerAddress, _propertyID, landlordProperties[_buyerAddress][buyerCounter].listedPrice);
     }
 
