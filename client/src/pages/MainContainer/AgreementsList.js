@@ -419,8 +419,9 @@ const AgreementsList = (props) => {
                           </tr>
                         );
                       }
+                      
                       // Agreement Completed
-                      if (item.details.isTransfered === true) {
+                      if (item.details.buyerPaymentComplete === true) {
                         return (
                           <tr
                             key={item.objectId}

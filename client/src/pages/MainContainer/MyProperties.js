@@ -266,7 +266,6 @@ const MyProperties = () => {
           ipfsHash
         );
 
-        console.log(result.hash);
         // OFF-Chain function goes here
         // ----------------------------
         //facilities, beds#, tx Hash, occup#, baths#, propertyTitle, proeprtyDescription
@@ -285,12 +284,14 @@ const MyProperties = () => {
         const docHash = (await ipfs.add(titleDeedFile)).path
         const data = {
           facilities: facilitiesXor,
+          city: propertyCity,
           bedsNumber: bedNumber,
           bathsNumber: bathNumber,
           propertyTitle: propertyTitle,
           propertyDescription: propertyDescription,
           occupantsNumber: occupancyNum,
           titleDeedHash: docHash,
+          txHash: result.hash
         }
 
         save(data, {

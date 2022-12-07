@@ -54,11 +54,6 @@ router.get("/getAgreement", async function (req, res, next) {
         },
       },
       {
-        unwind: {
-          path: "$details"
-        }
-      },
-      {
         match: {
           "details.propertyObjectId": { $exists: true },
         },
@@ -73,7 +68,8 @@ router.get("/getAgreement", async function (req, res, next) {
       },
       {
         unwind: {
-          path: "$documents"
+          path: "$documents",
+          preserveNullAndEmptyArrays: true
         }
       },
       {

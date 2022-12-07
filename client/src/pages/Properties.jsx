@@ -136,7 +136,6 @@ const App = (props) => {
           </div>
         </div>
         <div className="body">
-          <>{JSON.stringify(filterValues)}</>
           <div className="real-body">
             <div className="left-body">
               <FilterProperties

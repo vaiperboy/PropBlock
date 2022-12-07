@@ -17,6 +17,7 @@ import metamask from "../assets/icons8-metamask-logo-96-min.png";
 import { useEffect } from "react";
 import ipfs from "../modules/ipfs";
 import Fade from "react-reveal/Fade";
+import Web3 from "web3";
 
 // import { ArrowLeftOutlined } from "@ant-design/icons";
 const console = require("console-browserify");
@@ -85,15 +86,6 @@ const App = () => {
     ...rest
   } = useMoralis();
   let navigate = useNavigate();
-
-  // disconnects the metamask wallet
-  const disconnectWallet = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      message.error("Error: ", error);
-    }
-  };
 
   // check if email
   const emailAlreadyExists = async (email) => {
@@ -272,17 +264,44 @@ const App = () => {
     }
   };
 
-  const openNotification = () => {
-    notification["success"]({
-      message: "New code sent successfully!",
-      description:
-        "A new confirmation code was sent to your email successfully. Please note the code and enter the code below to continue.",
-      onClick: () => {},
-      style: {
-        backgroundColor: "#ffffff",
-      },
-    });
+  const sendOtp = async () => {
+    fetch(
+      "http://localhost:9000/sendOtp?" +
+      new URLSearchParams({
+        ownerAddress: Web3.utils.toChecksumAddress(userAddress),
+        emailAddress: email,
+      })
+    )
+      .then((res) => {
+        if (res.status == 200) message.success("OTP sent! Check your email")
+        else message.error("Couldn't send OTP....")
+      })
+      .catch((err) => {
+        message.error("API error");
+      })
   };
+
+  const checkOtp = async() => {
+    fetch(
+      "http://localhost:9000/checkOtp?" +
+      new URLSearchParams({
+        ownerAddress: Web3.utils.toChecksumAddress(userAddress),
+        emailAddress: email,
+        code: otpCode,
+      })
+    )
+      .then((res) => {
+        if (res.status == 200) setCodeVerified(true)
+        else {
+          message.error(res.body())
+          setCodeVerified(false)
+        }
+      })
+      .catch((err) => {
+        message.error("Possibly OTP expired or invalid");
+        setCodeVerified(false)
+      })
+  }
 
   const accountCreated = async () => {
     message.success(
@@ -292,26 +311,26 @@ const App = () => {
     navigate("/login");
   };
 
-  const checkOTPCode = async (code) => {
-    // Returns a random integer from 0 to 9:
-    let num1 = Math.floor(Math.random() * 10);
-    let num2 = Math.floor(Math.random() * 10);
-    let num3 = Math.floor(Math.random() * 10);
-    let num4 = Math.floor(Math.random() * 10);
-    let otp =
-      num1.toString() + num2.toString() + num3.toString() + num4.toString();
-    if (code === "1112") {
-      message.success("Code Validated Successfully!");
-      setCodeVerified(true);
-      return;
-    } else {
-      message.error(
-        "Invalid OTP Code entered! Please enter the correct code to continue"
-      );
-      setCodeVerified(false);
-    }
-    console.log("code", code);
-  };
+  // const checkOTPCode = async (code) => {
+  //   // Returns a random integer from 0 to 9:
+  //   let num1 = Math.floor(Math.random() * 10);
+  //   let num2 = Math.floor(Math.random() * 10);
+  //   let num3 = Math.floor(Math.random() * 10);
+  //   let num4 = Math.floor(Math.random() * 10);
+  //   let otp =
+  //     num1.toString() + num2.toString() + num3.toString() + num4.toString();
+  //   if (code === "1112") {
+  //     message.success("Code Validated Successfully!");
+  //     setCodeVerified(true);
+  //     return;
+  //   } else {
+  //     message.error(
+  //       "Invalid OTP Code entered! Please enter the correct code to continue"
+  //     );
+  //     setCodeVerified(false);
+  //   }
+  //   console.log("code", code);
+  // };
 
   const getExtension = (file) => {
     return file.slice(((file.lastIndexOf(".") - 1) >>> 0) + 2);
@@ -347,12 +366,12 @@ const App = () => {
         if (!checkExtension(frontExtension, extensionsAllowed))
           errors.push(
             "Make sure front ID has the following format: " +
-              extensionsAllowed.join(", ")
+            extensionsAllowed.join(", ")
           );
         if (!checkExtension(backExtension, extensionsAllowed))
           errors.push(
             "Make sure back ID has the following format: " +
-              extensionsAllowed.join(", ")
+            extensionsAllowed.join(", ")
           );
       }
       if (errors.length == 0) {
@@ -383,7 +402,7 @@ const App = () => {
         if (!checkExtension(frontExtension, extensionsAllowed))
           errors.push(
             "Make sure front passport has the following format: " +
-              extensionsAllowed.join(", ")
+            extensionsAllowed.join(", ")
           );
       }
 
@@ -406,10 +425,21 @@ const App = () => {
     } else setPassportDocumentsVerified(false);
   };
 
+  const alreadLoggedIn = async () => {
+    message.success(
+      "You are already logged in"
+    );
+    navigate("/");
+  };
+
+
+  
   useEffect(() => {
-    console.log("is wallet connected: ", walletConnected);
-    console.log("isauthenticated: ", isAuthenticated);
+    if (isAuthenticated && userAddress == "") {
+      alreadLoggedIn()
+    }
   }, [isAuthenticated]);
+
 
   return (
     <div>
@@ -515,7 +545,7 @@ const App = () => {
                           instead.
                         </div>
                         {isValidated && (
-                          <button id="next" className="nextButton">
+                          <button id="next" className="nextButton" onClick={() => sendOtp()}>
                             Next
                           </button>
                         )}
@@ -544,14 +574,14 @@ const App = () => {
                       <button
                         className="resendEmailButton"
                         onClick={() => {
-                          openNotification();
+                          sendOtp();
                         }}
                       >
                         Resend Code
                       </button>
                       <Button
                         onClick={() => {
-                          checkOTPCode(otpCode);
+                          checkOtp(otpCode);
                         }}
                         text="Submit"
                         theme="colored"
