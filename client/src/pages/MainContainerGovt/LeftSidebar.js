@@ -110,7 +110,7 @@ class LeftSidebar extends React.Component {
             </svg>
             Agreements
           </div>
-          <div
+          {/* <div
             className="leftsidebar_item"
             style={{
               color: this.props.menuState.usersView ? "#3DAEEE" : "",
@@ -121,7 +121,7 @@ class LeftSidebar extends React.Component {
           >
             <UserOutlined />
             Users
-          </div>
+          </div> */}
           <div
             className="leftsidebar_item disconnect_item"
             style={{ color: "red", position: "absolute", bottom: 0 }}

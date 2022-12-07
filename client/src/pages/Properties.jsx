@@ -164,10 +164,21 @@ const App = (props) => {
               ) : (
                 <>
                   <div class="property-listing">
-                    <p className="resultsText">
-                      Search result:
-                      <p className="queries-count">{totalResult} properties</p>
-                    </p>
+                    {totalResult === 0 ? (
+                      <p className="resultsText" style={{ width: "50rem" }}>
+                        Search 0:
+                        <p className="queries-count">
+                          {totalResult} properties
+                        </p>
+                      </p>
+                    ) : (
+                      <p className="resultsText">
+                        Search result:
+                        <p className="queries-count">
+                          {totalResult} properties
+                        </p>
+                      </p>
+                    )}
                     <div className="propertyCards">
                       {properties.map((item) => {
                         return (
@@ -191,8 +202,18 @@ const App = (props) => {
                       })}
                     </div>
                   </div>
-
-                  <div className="page-numbers">{constructPagesCount()}</div>
+                  {totalResult === 0 ? (
+                    <div
+                      className="page-numbers"
+                      style={{ marginTop: "10rem" }}
+                    >
+                      <h1 style={{ color: "#3daeee" }}>
+                        No Properties matching found!
+                      </h1>
+                    </div>
+                  ) : (
+                    <div className="page-numbers">{constructPagesCount()}</div>
+                  )}
                 </>
               )}
             </div>
