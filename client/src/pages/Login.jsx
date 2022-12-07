@@ -17,7 +17,6 @@ import MoralisType from "moralis-v1";
 import Fade from "react-reveal/Fade";
 import { useEffect } from "react";
 
-
 const console = require("console-browserify");
 const { ethers } = require("ethers");
 const { ethereum } = window;
@@ -133,19 +132,15 @@ const Login2 = () => {
   };
 
   const alreadLoggedIn = async () => {
-    message.success(
-      "You are already logged in"
-    );
+    message.success("You are already logged in");
     navigate("/");
   };
 
   useEffect(() => {
-    if (isAuthenticated && userAddress == "") {
-      alreadLoggedIn()
+    if (isAuthenticated && userAddress === "") {
+      alreadLoggedIn();
     }
   }, [isAuthenticated]);
-
-
 
   return (
     <div>

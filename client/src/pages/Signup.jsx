@@ -139,7 +139,7 @@ const App = () => {
         // if (!nameReg.test(fullName)) {
         //   errors.push("Error: Full Name can only contain characters");
         // }
-        if (fullName.length < 3) errors.push("Full name too short")
+        if (fullName.length < 3) errors.push("Full name too short");
         const isValid = validateEmail(email);
         if (!isValid) {
           errors.push(
@@ -267,41 +267,41 @@ const App = () => {
   const sendOtp = async () => {
     fetch(
       "http://localhost:9000/sendOtp?" +
-      new URLSearchParams({
-        ownerAddress: Web3.utils.toChecksumAddress(userAddress),
-        emailAddress: email,
-      })
+        new URLSearchParams({
+          ownerAddress: Web3.utils.toChecksumAddress(userAddress),
+          emailAddress: email,
+        })
     )
       .then((res) => {
-        if (res.status == 200) message.success("OTP sent! Check your email")
-        else message.error("Couldn't send OTP....")
+        if (res.status == 200) message.success("OTP sent! Check your email");
+        else message.error("Couldn't send OTP....");
       })
       .catch((err) => {
         message.error("API error");
-      })
+      });
   };
 
-  const checkOtp = async() => {
+  const checkOtp = async () => {
     fetch(
       "http://localhost:9000/checkOtp?" +
-      new URLSearchParams({
-        ownerAddress: Web3.utils.toChecksumAddress(userAddress),
-        emailAddress: email,
-        code: otpCode,
-      })
+        new URLSearchParams({
+          ownerAddress: Web3.utils.toChecksumAddress(userAddress),
+          emailAddress: email,
+          code: otpCode,
+        })
     )
       .then((res) => {
-        if (res.status == 200) setCodeVerified(true)
+        if (res.status == 200) setCodeVerified(true);
         else {
-          message.error(res.body())
-          setCodeVerified(false)
+          message.error(res.body());
+          setCodeVerified(false);
         }
       })
       .catch((err) => {
         message.error("Possibly OTP expired or invalid");
-        setCodeVerified(false)
-      })
-  }
+        setCodeVerified(false);
+      });
+  };
 
   const accountCreated = async () => {
     message.success(
@@ -366,12 +366,12 @@ const App = () => {
         if (!checkExtension(frontExtension, extensionsAllowed))
           errors.push(
             "Make sure front ID has the following format: " +
-            extensionsAllowed.join(", ")
+              extensionsAllowed.join(", ")
           );
         if (!checkExtension(backExtension, extensionsAllowed))
           errors.push(
             "Make sure back ID has the following format: " +
-            extensionsAllowed.join(", ")
+              extensionsAllowed.join(", ")
           );
       }
       if (errors.length == 0) {
@@ -402,7 +402,7 @@ const App = () => {
         if (!checkExtension(frontExtension, extensionsAllowed))
           errors.push(
             "Make sure front passport has the following format: " +
-            extensionsAllowed.join(", ")
+              extensionsAllowed.join(", ")
           );
       }
 
@@ -426,20 +426,15 @@ const App = () => {
   };
 
   const alreadLoggedIn = async () => {
-    message.success(
-      "You are already logged in"
-    );
+    message.success("You are already logged in");
     navigate("/");
   };
 
-
-  
   useEffect(() => {
-    if (isAuthenticated && userAddress == "") {
-      alreadLoggedIn()
+    if (isAuthenticated && userAddress === "") {
+      alreadLoggedIn();
     }
   }, [isAuthenticated]);
-
 
   return (
     <div>
@@ -545,7 +540,11 @@ const App = () => {
                           instead.
                         </div>
                         {isValidated && (
-                          <button id="next" className="nextButton" onClick={() => sendOtp()}>
+                          <button
+                            id="next"
+                            className="nextButton"
+                            onClick={() => sendOtp()}
+                          >
                             Next
                           </button>
                         )}

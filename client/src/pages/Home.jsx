@@ -174,7 +174,8 @@ function Home() {
       )
         .then((res) => res.json())
         .then((res) => {
-          setProperties(res.results);
+          setProperties(res.results.slice(0, 3));
+
           console.log("res ", res.results);
         })
         .catch((err) => {

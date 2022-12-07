@@ -57,7 +57,9 @@ class PropertyListing extends React.Component {
           <div className="property">
             <img id="property-image" src={this.props.image} alt="Real estate" />
             <div className="right-child">
-              <p id="propertyName">{this.shortenText(this.props.propertyName, 20)}</p>
+              <p id="propertyName">
+                {this.shortenText(this.props.propertyName, 15)}
+              </p>
               <div className="inline">
                 <img
                   style={{ float: "left" }}

@@ -206,7 +206,7 @@ const Aboutus = () => {
                 <img src={vishal_image} alt="Team_card_image" />
                 <div className="team-description">
                   <h3>Vishal Baheti</h3>
-                  <p>Junior Frontend Dev</p>
+                  <p>Project Ideation & Business Lead, UX Flow</p>
                 </div>
               </div>
             </Fade>
