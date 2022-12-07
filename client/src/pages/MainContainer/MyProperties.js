@@ -253,7 +253,6 @@ const MyProperties = () => {
           message.error("Could not upload files via IPFS!");
           return;
         }
-
         const result = await realEstateDappContract.createPropertyListing(
           Web3.utils.toChecksumAddress(user.get("ethAddress")),
           propertyType.toLowerCase(),
@@ -281,7 +280,7 @@ const MyProperties = () => {
         }
 
         message.info("Adding extra details");
-        const docHash = (await ipfs.add(titleDeedFile)).path
+        const docHash = (await ipfs.add(titleDeedFile)).path;
         const data = {
           facilities: facilitiesXor,
           city: propertyCity,
@@ -291,8 +290,8 @@ const MyProperties = () => {
           propertyDescription: propertyDescription,
           occupantsNumber: occupancyNum,
           titleDeedHash: docHash,
-          txHash: result.hash
-        }
+          txHash: result.hash,
+        };
 
         save(data, {
           onSuccess: (obj) => {

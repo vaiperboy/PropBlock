@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/ahmed/Desktop/Sultan/Web dev/PropBlock_13_Nov/PropBlock_13_Nov/server/contracts/realEstate.sol": {
-      "lastModificationDate": 1670369594932,
-      "contentHash": "26c4c256978af7f0034ed286ae75d08c",
+      "lastModificationDate": 1670377915387,
+      "contentHash": "232cb7e84f0e56229f8e6c3921814b3d",
       "sourceName": "contracts/realEstate.sol",
       "solcConfig": {
         "version": "0.8.9",
