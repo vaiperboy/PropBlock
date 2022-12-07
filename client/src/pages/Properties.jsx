@@ -65,8 +65,8 @@ const App = (props) => {
 
   const loadProperties = async () => {
     if (isLoading) {
-      message.error("Wait till it finishes...")
-      return
+      message.error("Wait till it finishes...");
+      return;
     }
     setIsLoading(true);
     try {
@@ -136,7 +136,6 @@ const App = (props) => {
           </div>
         </div>
         <div className="body">
-          <>{JSON.stringify(filterValues)}</>
           <div className="real-body">
             <div className="left-body">
               <FilterProperties

@@ -147,11 +147,9 @@ const HowPropBlockWorks = () => {
                 <div className="text">
                   <h1>User Manual</h1>
                   <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Pariatur fugiat enim aspernatur laborum culpa tempora
-                    similique. Magnam porro eum consequuntur officiis
-                    accusantium. Cumque, aliquam enim. Nam aliquid iusto vero
-                    voluptas velit.
+                    ‘PropBlock’ has been designed with the objective of
+                    facilitating the end to end transaction of the purchase/sale
+                    of real estate properties in UAE with the use of blockchain
                   </p>
                 </div>
               </Fade>
@@ -333,12 +331,6 @@ const HowPropBlockWorks = () => {
                 <Fade effect="fadeInUp" bottom duration={700}>
                   <h1>Landing Page</h1>
                   <img src={landing_page} alt="Screenshot of home page" />
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Corrupti omnis, laudantium debitis repudiandae ex numquam
-                    atque excepturi iusto animi, aliquam placeat ipsam sapiente,
-                    at quo quae fugit sequi a? Earum.
-                  </p>
                 </Fade>
               </div>
               {/* Search Properties Page  */}
@@ -350,12 +342,6 @@ const HowPropBlockWorks = () => {
                     src={search_page}
                     alt="Screenshot of MyProperties page"
                   />
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Corrupti omnis, laudantium debitis repudiandae ex numquam
-                    atque excepturi iusto animi, aliquam placeat ipsam sapiente,
-                    at quo quae fugit sequi a? Earum.
-                  </p>
                 </Fade>
               </div>
               <div className="breakerPageBlue"></div>
@@ -364,16 +350,6 @@ const HowPropBlockWorks = () => {
                 <Fade effect="fadeInUp" bottom duration={700}>
                   <h1>User Dashboard</h1>
                   <img src={dashboad_page} alt="Screenshot of Dashboard page" />
-                  <p>
-                    Once the user is authenticated successfully, the user can
-                    click on the profile icon in the top-right part of the
-                    Navbar and select 'Dashboard' from the options. Upon
-                    clicking on the button, the user is redirected to the
-                    'Dashboard' section which has two main divisions, the
-                    'Buyer' section and the 'Seller' section where the user can
-                    access different functionalities such as create property,
-                    view purchase requests, etc.
-                  </p>
                 </Fade>
               </div>
               <div className="breakerPagePurple"></div>
@@ -385,12 +361,6 @@ const HowPropBlockWorks = () => {
                     src={myproperties_page}
                     alt="Screenshot of MyProperties page"
                   />
-                  <p>
-                    From the left Menu, the user can select 'My Properties' and
-                    see the properties the s/he has created. The user can also
-                    create a property by click on the 'Add New Property' Button
-                    next to the properties.
-                  </p>
                 </Fade>
               </div>
               <div className="breakerPageBlue"></div>
@@ -403,12 +373,6 @@ const HowPropBlockWorks = () => {
                     alt="Screenshot of Buyer Purchase Requests page"
                     style={{ width: "55%" }}
                   />
-                  <p style={{ width: "55%" }}>
-                    From the left Menu, the user can select 'My Properties' and
-                    see the properties the s/he has created. The user can also
-                    create a property by click on the 'Add New Property' Button
-                    next to the properties.
-                  </p>
                 </Fade>
               </div>
               <div className="breakerPagePurple"></div>
@@ -421,12 +385,6 @@ const HowPropBlockWorks = () => {
                     alt="Screenshot of Seller Purchase Requests page"
                     style={{ width: "55%" }}
                   />
-                  <p style={{ width: "55%" }}>
-                    From the left Menu, the user can select 'My Properties' and
-                    see the properties the s/he has created. The user can also
-                    create a property by click on the 'Add New Property' Button
-                    next to the properties.
-                  </p>
                 </Fade>
               </div>
               <div className="breakerPageBlue"></div>
@@ -439,12 +397,6 @@ const HowPropBlockWorks = () => {
                     alt="Screenshot of Buyer Agreements page"
                     style={{ width: "55%" }}
                   />
-                  <p style={{ width: "55%" }}>
-                    From the left Menu, the user can select 'My Properties' and
-                    see the properties the s/he has created. The user can also
-                    create a property by click on the 'Add New Property' Button
-                    next to the properties.
-                  </p>
                 </Fade>
               </div>
               <div className="breakerPagePurple"></div>
@@ -457,12 +409,6 @@ const HowPropBlockWorks = () => {
                     alt="Screenshot of Seller Agreements page"
                     style={{ width: "55%" }}
                   />
-                  <p style={{ width: "55%" }}>
-                    From the left Menu, the user can select 'My Properties' and
-                    see the properties the s/he has created. The user can also
-                    create a property by click on the 'Add New Property' Button
-                    next to the properties.
-                  </p>
                 </Fade>
               </div>
               <div className="breakerPageBlue"></div>
@@ -475,12 +421,6 @@ const HowPropBlockWorks = () => {
                     alt="Screenshot of Upload Property Documents Page "
                     style={{ width: "55%" }}
                   />
-                  <p style={{ width: "55%" }}>
-                    From the left Menu, the user can select 'My Properties' and
-                    see the properties the s/he has created. The user can also
-                    create a property by click on the 'Add New Property' Button
-                    next to the properties.
-                  </p>
                 </Fade>
               </div>
               <div className="breakerPagePurple"></div>
@@ -493,12 +433,6 @@ const HowPropBlockWorks = () => {
                     alt="Screenshot of User Statistics page"
                     style={{ width: "55%" }}
                   />
-                  <p style={{ width: "55%" }}>
-                    From the left Menu, the user can select 'My Properties' and
-                    see the properties the s/he has created. The user can also
-                    create a property by click on the 'Add New Property' Button
-                    next to the properties.
-                  </p>
                 </Fade>
               </div>
               <div className="breakerPageBlue"></div>
@@ -511,12 +445,6 @@ const HowPropBlockWorks = () => {
                     alt="Screenshot of User Payment Page"
                     style={{ width: "55%" }}
                   />
-                  <p style={{ width: "55%" }}>
-                    From the left Menu, the user can select 'My Properties' and
-                    see the properties the s/he has created. The user can also
-                    create a property by click on the 'Add New Property' Button
-                    next to the properties.
-                  </p>
                 </Fade>
               </div>
               <div className="breakerPagePurple"></div>
@@ -529,12 +457,6 @@ const HowPropBlockWorks = () => {
                     alt="Screenshot of User Profile page"
                     style={{ width: "55%" }}
                   />
-                  <p style={{ width: "55%" }}>
-                    From the left Menu, the user can select 'My Properties' and
-                    see the properties the s/he has created. The user can also
-                    create a property by click on the 'Add New Property' Button
-                    next to the properties.
-                  </p>
                 </Fade>
               </div>
               <div className="last"></div>
