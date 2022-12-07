@@ -158,6 +158,12 @@ const AgreementView = (props) => {
     setIsProcessing(false)
   }
 
+  const beautifyDate = (date) => {
+    var d = new Date(date);
+    return d.toLocaleString();
+  };
+
+
   return (
     <>
       {isLoading ? (
@@ -182,6 +188,12 @@ const AgreementView = (props) => {
           >
             Agreement ID - #{agreement.objectId.slice(0, 6)}
           </p>
+          <p
+          className="agreement_view_subtitle"
+            style={{ marginBottom: 15, color: "#555555" }}
+          > 
+            Created on: {beautifyDate(agreement.createdAt)}
+          </p>
           <button
             className="applyy_button"
             onClick={() => {
@@ -200,9 +212,6 @@ const AgreementView = (props) => {
                 #{agreement.details.propertyObjectId}
               </a>
             </h1>
-          </div>
-          <div>
-            Created on: {agreement.createdAt}
           </div>
           <div className="agreementUsersDetails">
             <div className="user">

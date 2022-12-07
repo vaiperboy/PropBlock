@@ -15,6 +15,8 @@ import login_svg from "../assets/login-image-min.png";
 import metamask from "../assets/icons8-metamask-logo-96-min.png";
 import MoralisType from "moralis-v1";
 import Fade from "react-reveal/Fade";
+import { useEffect } from "react";
+
 
 const console = require("console-browserify");
 const { ethers } = require("ethers");
@@ -129,6 +131,21 @@ const Login2 = () => {
     await sleep(1500);
     navigate("/");
   };
+
+  const alreadLoggedIn = async () => {
+    message.success(
+      "You are already logged in"
+    );
+    navigate("/");
+  };
+
+  useEffect(() => {
+    if (isAuthenticated && userAddress == "") {
+      alreadLoggedIn()
+    }
+  }, [isAuthenticated]);
+
+
 
   return (
     <div>

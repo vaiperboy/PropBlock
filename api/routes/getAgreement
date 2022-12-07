@@ -54,11 +54,6 @@ router.get("/getAgreement", async function (req, res, next) {
         },
       },
       {
-        unwind: {
-          path: "$details",
-        },
-      },
-      {
         match: {
           "details.propertyObjectId": { $exists: true },
         },
@@ -74,8 +69,8 @@ router.get("/getAgreement", async function (req, res, next) {
       {
         unwind: {
           path: "$documents",
-          preserveNullAndEmptyArrays: true,
-        },
+          preserveNullAndEmptyArrays: true
+        }
       },
       {
         project: {
@@ -129,11 +124,6 @@ router.get("/getAgreement", async function (req, res, next) {
           as: "documents",
         },
       },
-      // {
-      //   unwind: {
-      //     path: "$documents",
-      //   },
-      // },
       {
         addFields: {
           smallLandlordAddress: { $toLower: "$landlordAddress" },

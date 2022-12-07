@@ -8,8 +8,11 @@ import Web3 from "web3";
 import realEstate from "../../artifacts/contracts/realEstate.sol/realEstate.json";
 const { ethers } = require("ethers");
 const console = require("console-browserify");
+const { ethereum } = window;
+
 
 const AgreementPayment = (props) => {
+  const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
   const [isLoading, setIsLoading] = useState(true);
   const [payment, setPayment] = useState({});
   const [canPayLandlord, setCanPayLandlord] = useState(false);
@@ -163,33 +166,30 @@ const AgreementPayment = (props) => {
   const transferProperty = async (owner, buyer, propertyId) => {
     try {
       // performing the contract function
-      const API_KEY = process.env.REACT_APP_API_KEY;
-      const API_URL = `https://eth-goerli.g.alchemy.com/v2/${API_KEY}`;
-      const PRIVATE_KEY = process.env.REACT_APP_PRIVATE_KEY;
-      const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS;
-
-      const provider = new ethers.providers.JsonRpcProvider(API_URL);
-      // Signer - this represents an Ethereum account that has the ability to sign transactions.
-      const signer = new ethers.Wallet(PRIVATE_KEY, provider);
-      // Contract - this is an Ethers.js object that represents a specific contract deployed on-chain.
-      const realEstateContract = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        realEstate.abi,
-        signer
-      );
-
-
       const uintPropertyId = parseInt(propertyId);
       const ownerAddress = Web3.utils.toChecksumAddress(owner);
       const buyerAddress = Web3.utils.toChecksumAddress(buyer);
 
+
+
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+      // connected
+      //set up transaction parameters
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const walletAddress = accounts[0]; // first account in MetaMask
+      const signerNew = provider.getSigner(walletAddress);
+      var realEstateDappContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        realEstate.abi,
+        signerNew
+      );
+
       // calling the contract address
-      const txHash = await realEstateContract.transferProperty(
+      const txHash = await realEstateDappContract.transferProperty(
         ownerAddress,
         uintPropertyId,
         buyerAddress
       );
-      console.log("Txhash: ", txHash);
 
       // do the off-chain stuff here
       message.success("You now own this property!")
@@ -198,6 +198,14 @@ const AgreementPayment = (props) => {
       var result = await query.first()
       result.set("landlordAddress", buyerAddress)
       result.save()
+
+      {
+        const query = new Moralis.Query("AgreementStatus")
+        query.equalTo("objectId", payment.details._id)
+        const agreementStatus = await query.first()
+        agreementStatus.set("buyerPaymentComplete", true)
+        agreementStatus.save()
+      }
     } catch (error) {
       message.error("Error: ", error);
       console.log(error)
@@ -446,7 +454,7 @@ const AgreementPayment = (props) => {
                   <div className="data">
                     <Input
                       placeholder={getStatus(
-                        canPayDld,
+                        canPayPropBlock,
                         payment.isPropBlockTxConfirmed
                       )}
                       style={{
@@ -459,16 +467,16 @@ const AgreementPayment = (props) => {
                 </div>
                 {canPayPropBlock && (
                   <div className="agreementDetails">
-                  <div className="title">Complete Payment</div>
-                  <button
-                    className="payButton"
-                    onClick={() => {
-                      propBlockFeesPayment();
-                    }}
-                  >
-                    Pay PropBlock Fees
-                  </button>
-                </div>
+                    <div className="title">Complete Payment</div>
+                    <button
+                      className="payButton"
+                      onClick={() => {
+                        propBlockFeesPayment();
+                      }}
+                    >
+                      Pay PropBlock Fees
+                    </button>
+                  </div>
                 )}
                 <div className="breaker"></div>
                 <h2>Complete Property Transfer </h2>
@@ -483,7 +491,8 @@ const AgreementPayment = (props) => {
                           payment.property.propertyId
                         );
                       }}
-                      disabled={(canPayDld || canPayLandlord || canPayPropBlock)}
+                      // disabled={(canPayDld || canPayLandlord || canPayPropBlock)}
+                      disabled={(!payment.isDldTxConfirmed || !payment.isLandlordTxConfirmed || !payment.isPropBlockTxConfirmed)}
                     >
                       Complete Transfer
                     </button>
