@@ -454,7 +454,7 @@ const AgreementPayment = (props) => {
                   <div className="data">
                     <Input
                       placeholder={getStatus(
-                        canPayDld,
+                        canPayPropBlock,
                         payment.isPropBlockTxConfirmed
                       )}
                       style={{
